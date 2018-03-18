@@ -18,7 +18,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="//harold.me/home/harold/Pictures/Selection_021.png">
 <meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-18/61809116.jpg">
-<meta property="og:updated_time" content="2018-03-18T14:32:03.083Z">
+<meta property="og:updated_time" content="2018-03-18T14:37:13.039Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于Hive">
 <meta name="twitter:description" content="本篇博客主要来自于本人学习&amp;lt;&amp;lt;Hadoop权威指南&amp;gt;&amp;gt;Hive部分的笔记和一些理解  Hive是构建在Hadoop上的数据仓库框架,它把SQL查询转换为一系列在Hadoop集群上运行的作业,它的数据组织为表,元数据(eg.表模式)存储在metastore数据库中. metastore默认模本式为运行在本机上. Hive shell环境HiveQL是Hive的查询语言,类似">
@@ -280,18 +280,12 @@
 </blockquote>
 <p> Hive并不检查数据文件中的桶是否和表定义中的桶一致,无论是通的数量还是用来划分的列, 如果不匹配会 ,查询时会碰到错误或未定义的结果.<br> 将一个没有划分桶的数据集users填充进分桶后的表的步骤如下:</p>
 <blockquote>
-<ol>
-<li><code>SET hive.enforce.bucketing=true;</code> 这样Hive就知道用表中声明的数量来创建桶</li>
-<li><code>INSERT OVERWRITE TABLE bucketed_users SELECT * FROM users;</code>Insert 即可</li>
-</ol>
+<p><code>SET hive.enforce.bucketing=true;</code> 这样Hive就知道用表中声明的数量来创建桶<br><code>INSERT OVERWRITE TABLE bucketed_users SELECT * FROM users;</code>Insert 即可</p>
 </blockquote>
 </li>
 </ul>
 <p>物理上,每个桶就是表目录中的一个文件,一个作业产生的桶(输出文件)和reduce任务个数相同.</p>
-<p>用TABLESAMPLE子句对表取样:</p>
-<blockquote>
-<p><code>SELECT * FROM bucketed_users TABLESAMPLE(BUCKET 1 OUT OF 4 ON id);</code><br>和<br>‘SELECT * FROM users TABLESAMPLE(BUCKET 1 OUT OF 4 ON id);’</p>
-</blockquote>
+<p>用TABLESAMPLE子句对表取样:<br><code>SELECT * FROM bucketed_users TABLESAMPLE(BUCKET 1 OUT OF 4 ON id);</code><br>和<br><code>SELECT * FROM users TABLESAMPLE(BUCKET 1 OUT OF 4 ON id);</code></p>
 <p>得到的结果一样.</p>
 <p><strong>存储格式</strong></p>
 <p> Hive从两个维度对表的存储进行管理:</p>
@@ -453,12 +447,18 @@ OK
 <p>UDAD必须是org.apache.hadoop.hive.ql.exec.UDAF的子类(UDAF类已经过时弃用了，现在是实现GenericUDAFResolver2接口,请看本博客另一篇相关的文内容), 且包含一个或多个嵌套的实现了Org.apache.hadoop.hive.ql.exec.UDAFEvaluator的<em>静态类</em>.</p>
 <p>一个计算函数必须实现以下五个方法:</p>
 <ul>
-<li>init() : 负责初始化计算函数并设置他的内部状态</li>
-<li>inerate() : 每次对一个新值进行聚集计算都会调用此方法,iterate()接受的参数和Hive中被调用函数的参数是对应的.</li>
-<li>terminate() : Hive需要部分聚集结果时会调用此方法,这个方法必须返回一个封装了聚集计算当前状态的对象.</li>
-<li>merge()方法 : 在Hive合并两个部分聚集值时会调用merge()方法.该方法接受一个对象作为输入,其类型必须和terminatePartial()方法的返回类型一致.</li>
-<li>terminate()方法 : Hive需要最终聚集结果时会调用此方法</li>
-<li>计算流程见下图:<br><img src="http://p5s7d12ls.bkt.clouddn.com/18-3-18/61809116.jpg" alt=""></li>
+<li><p>init() : 负责初始化计算函数并设置他的内部状态</p>
+</li>
+<li><p>inerate() : 每次对一个新值进行聚集计算都会调用此方法,iterate()接受的参数和Hive中被调用函数的参数是对应的.</p>
+</li>
+<li><p>terminate() : Hive需要部分聚集结果时会调用此方法,这个方法必须返回一个封装了聚集计算当前状态的对象.</p>
+</li>
+<li><p>merge()方法 : 在Hive合并两个部分聚集值时会调用merge()方法.该方法接受一个对象作为输入,其类型必须和terminatePartial()方法的返回类型一致.</p>
+</li>
+<li><p>terminate()方法 : Hive需要最终聚集结果时会调用此方法</p>
+</li>
+<li><p>计算流程见下图:<br><img src="http://p5s7d12ls.bkt.clouddn.com/18-3-18/61809116.jpg" alt=""></p>
+</li>
 </ul>
 
       
