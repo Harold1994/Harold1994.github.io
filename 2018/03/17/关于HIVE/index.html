@@ -18,7 +18,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="//harold.me/home/harold/Pictures/Selection_021.png">
 <meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-18/61809116.jpg">
-<meta property="og:updated_time" content="2018-03-18T14:13:50.218Z">
+<meta property="og:updated_time" content="2018-03-18T14:32:03.083Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于Hive">
 <meta name="twitter:description" content="本篇博客主要来自于本人学习&amp;lt;&amp;lt;Hadoop权威指南&amp;gt;&amp;gt;Hive部分的笔记和一些理解  Hive是构建在Hadoop上的数据仓库框架,它把SQL查询转换为一系列在Hadoop集群上运行的作业,它的数据组织为表,元数据(eg.表模式)存储在metastore数据库中. metastore默认模本式为运行在本机上. Hive shell环境HiveQL是Hive的查询语言,类似">
@@ -257,14 +257,14 @@
 </li>
 <li><p>外部表</p>
 <blockquote>
-<p>创建表示需要指明外部数据的位置,定义时Hive不会检查外部位置是否存在,故可以在创建表之后再创建数据<br>`create external table external_table (dummy STRING) LOCATION ‘/user/harold/external_table’;<br>丢弃外部表时,Hive只会删除元数据,不会删除数据</p>
+<p>创建表示需要指明外部数据的位置,定义时Hive不会检查外部位置是否存在,故可以在创建表之后再创建数据<br><code>create external table external_table (dummy STRING) LOCATION /user/harold/external_table</code>;<br>丢弃外部表时,Hive只会删除元数据,不会删除数据</p>
 </blockquote>
 </li>
 </ul>
 <p><strong>分区和桶</strong><br>Hive把表组织成<em>分区</em>,使用分区可以加快数据分片的查询速度.表或分区可以进一部分为桶(bucket)它会为数据提供额外的结构以获得更高效的查询处理.</p>
-<ol>
-<li>分区 : 分区使得表对限制到某个特定范围的数据的查询变得非常高效(比如按照日期分区),只需扫描查询范围内分区中的文件,而且不会影响大范围查询的执行.一个表可以以多个维度分区,即进行子分区.</li>
-</ol>
+<ul>
+<li><em>分区</em> : 分区使得表对限制到某个特定范围的数据的查询变得非常高效(比如按照日期分区),只需扫描查询范围内分区中的文件,而且不会影响大范围查询的执行.一个表可以以多个维度分区,即进行子分区.</li>
+</ul>
 <p>分区是在创建表时用PARTITIONED BY子句定义的:</p>
 <blockquote>
 <p><code>CREATE TABLE logs (ts BIGINT, line STRING) PARTITIONED BY (dt STRING, country      STRING);</code></p>
@@ -273,12 +273,12 @@
 <blockquote>
 <p><code>LOAD DATA LOCAL INPATH &#39;input/hive/partitions/file1&#39; INTO TABLE logs PARTITION (dt=&#39;2001-01-01&#39;, country=&#39;GB&#39;);</code><br><code>SHOW PARTITON logs;</code> 可以展示表中的分区</p>
 </blockquote>
-<ol>
-<li><p>桶<br> 将表或分区组织成桶的理由:</p>
+<ul>
+<li><p><em>桶</em> :<br>  将表或分区组织成桶的理由:</p>
 <blockquote>
-<p>. 获得高效的查询处理效率<br>. 使取样更高效<br>创建被划分成桶的表:<br><code>CREATE TABLE bucketed_users (id INT, name STRING) CLUSTERED BY (id) INTO 4 BUCKETS;</code><br>桶中的数据可以根据一个列或者多个列排序,这样对每个桶的连接变成了高效的归并排序,提升了map端连接的效率:<br><code>CREATE TABLE bucketed_users (id INT, name STRING) CLUSTERED BY (id) SORTED BY (id) INTO 4 BUCKETS;</code></p>
+<p>. 获得高效的查询处理效率<br>. 使取样更高效<br>创建被划分成桶的表:<br><code>CREATE TABLE bucketed_users (id INT, name STRING) CLUSTERED BY (id) INTO 4 BUCKETS;</code><br> 桶中的数据可以根据一个列或者多个列排序,这样对每个桶的连接变成了高效的归并排序,提升了map端连接的效率:<br><code>CREATE TABLE bucketed_users (id INT, name STRING) CLUSTERED BY (id) SORTED BY (id) INTO 4 BUCKETS;</code></p>
 </blockquote>
-<p>Hive并不检查数据文件中的桶是否和表定义中的桶一致,无论是通的数量还是用来划分的列, 如果不匹配会 ,查询时会碰到错误或未定义的结果.<br>将一个没有划分桶的数据集users填充进分桶后的表的步骤如下:</p>
+<p> Hive并不检查数据文件中的桶是否和表定义中的桶一致,无论是通的数量还是用来划分的列, 如果不匹配会 ,查询时会碰到错误或未定义的结果.<br> 将一个没有划分桶的数据集users填充进分桶后的表的步骤如下:</p>
 <blockquote>
 <ol>
 <li><code>SET hive.enforce.bucketing=true;</code> 这样Hive就知道用表中声明的数量来创建桶</li>
@@ -286,7 +286,7 @@
 </ol>
 </blockquote>
 </li>
-</ol>
+</ul>
 <p>物理上,每个桶就是表目录中的一个文件,一个作业产生的桶(输出文件)和reduce任务个数相同.</p>
 <p>用TABLESAMPLE子句对表取样:</p>
 <blockquote>
@@ -450,7 +450,8 @@ OK
 <figure class="highlight plain"><figcaption><span>JAR</span><a href="/path/hive-example.jar;```">link</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;```CREATE TEMPORARY FUNCTION strip AS &apos;com.hadoopbook.hive.Strip&apos;;</span><br></pre></td></tr></table></figure>
 </blockquote>
 <p><strong>写UDAF</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.hadoop.hive.ql.exec.UDAF;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hive.ql.exec.UDAFEvaluator;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.IntWritable;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Maximum</span> <span class="keyword">extends</span> <span class="title">UDAF</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MaximumIntUDAFEvaluator</span> <span class="keyword">implements</span> <span class="title">UDAFEvaluator</span></span>&#123;</span><br><span class="line">        <span class="keyword">private</span> IntWritable result;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            result = <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">iterate</span><span class="params">(IntWritable value)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (value == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (result == <span class="keyword">null</span>) &#123;</span><br><span class="line">                result = <span class="keyword">new</span> IntWritable(value.get());</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                result.set(Math.max(result.get(), value.get()));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> IntWritable <span class="title">terminatePartial</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">merge</span><span class="params">(IntWritable other)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> iterate(other);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> IntWritable <span class="title">terminate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>UDAD必须是org.apache.hadoop.hive.ql.exec.UDAF的子类(UDAF类已经过时弃用了，现在是实现GenericUDAFResolver2接口,请看本博客另一篇相关的文内容), 且包含一个或多个嵌套的实现了Org.apache.hadoop.hive.ql.exec.UDAFEvaluator的<em>静态类</em>.<br>一个计算函数必须实现以下五个方法:</p>
+<p>UDAD必须是org.apache.hadoop.hive.ql.exec.UDAF的子类(UDAF类已经过时弃用了，现在是实现GenericUDAFResolver2接口,请看本博客另一篇相关的文内容), 且包含一个或多个嵌套的实现了Org.apache.hadoop.hive.ql.exec.UDAFEvaluator的<em>静态类</em>.</p>
+<p>一个计算函数必须实现以下五个方法:</p>
 <ul>
 <li>init() : 负责初始化计算函数并设置他的内部状态</li>
 <li>inerate() : 每次对一个新值进行聚集计算都会调用此方法,iterate()接受的参数和Hive中被调用函数的参数是对应的.</li>
