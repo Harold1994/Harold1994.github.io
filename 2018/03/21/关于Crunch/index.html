@@ -6,15 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//harold.me">
-  <title>Archives: 2018 | Harold的博客</title>
+  <title>关于Crunch | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Harold的博客">
-<meta property="og:url" content="//harold.me/archives/2018/index.html">
+  <meta name="description" content="本篇文章主要来自&amp;lt;&amp;lt;Hadoop权威指南&amp;gt;&amp;gt;Crunch部分学习笔记  Crunch使用来写MapReduce管线的高层API,它注重程序员友好的JAVA类型和旧式的纯JAVA对象,还有一组丰富的数据变换操作和多级管线.因为Crunch位于上层,故Crunch管线是高度可组合的,可以把常用功能提取到库中给其他程序重用.Crunch不依赖于MapReduce,也可以用Spa">
+<meta name="keywords" content="Hadoop,大数据,Crunch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于Crunch">
+<meta property="og:url" content="//harold.me/2018/03/21/关于Crunch/index.html">
 <meta property="og:site_name" content="Harold的博客">
+<meta property="og:description" content="本篇文章主要来自&amp;lt;&amp;lt;Hadoop权威指南&amp;gt;&amp;gt;Crunch部分学习笔记  Crunch使用来写MapReduce管线的高层API,它注重程序员友好的JAVA类型和旧式的纯JAVA对象,还有一组丰富的数据变换操作和多级管线.因为Crunch位于上层,故Crunch管线是高度可组合的,可以把常用功能提取到库中给其他程序重用.Crunch不依赖于MapReduce,也可以用Spa">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-21/79771268.jpg">
+<meta property="og:updated_time" content="2018-03-21T02:22:14.065Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Harold的博客">
+<meta name="twitter:title" content="关于Crunch">
+<meta name="twitter:description" content="本篇文章主要来自&amp;lt;&amp;lt;Hadoop权威指南&amp;gt;&amp;gt;Crunch部分学习笔记  Crunch使用来写MapReduce管线的高层API,它注重程序员友好的JAVA类型和旧式的纯JAVA对象,还有一组丰富的数据变换操作和多级管线.因为Crunch位于上层,故Crunch管线是高度可组合的,可以把常用功能提取到库中给其他程序重用.Crunch不依赖于MapReduce,也可以用Spa">
+<meta name="twitter:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-21/79771268.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Harold的博客" type="application/atom+xml">
   
@@ -160,36 +167,159 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-关于Crunch" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/03/21/关于Crunch/" class="archive-article-date">
-  	<time datetime="2018-03-21T02:20:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-21</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/03/21/关于Crunch/">关于Crunch</a>
+    <h1 class="article-title" itemprop="name">
+      关于Crunch
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2018/03/21/关于Crunch/" class="archive-article-date">
+  	<time datetime="2018-03-21T02:20:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>本篇文章主要来自&lt;&lt;Hadoop权威指南&gt;&gt;Crunch部分学习笔记</p>
+</blockquote>
+<p>Crunch使用来写MapReduce管线的高层API,它注重程序员友好的JAVA类型和旧式的纯JAVA对象,还有一组丰富的数据变换操作和多级管线.因为Crunch位于上层,故Crunch管线是高度可组合的,可以把常用功能提取到库中给其他程序重用.Crunch不依赖于MapReduce,也可以用Spark作为分布式引擎来运行Crunch管线.<br>  <a id="more"></a></p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>以如下实例引出基本概念:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.crunch.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.crunch.fn.Aggregators;</span><br><span class="line"><span class="keyword">import</span> org.apache.crunch.impl.mr.MRPipeline;</span><br><span class="line"><span class="keyword">import</span> org.apache.crunch.io.To;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> org.apache.crunch.types.writable.Writables.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MaxTemperatureCrunch</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (args.length != <span class="number">2</span>) &#123;</span><br><span class="line">            System.err.printf(<span class="string">"Usage: MaxtemperatureCrunch &lt;input&gt; &lt;output&gt;"</span>);</span><br><span class="line">            System.exit(-<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Pipeline pipeline = <span class="keyword">new</span> MRPipeline(MaxTemperatureCrunch.class);</span><br><span class="line">        PCollection&lt;String&gt; records = pipeline.readTextFile(args[<span class="number">0</span>]);</span><br><span class="line">        PTable&lt;String, Integer&gt; yearTemperatures = records.parallelDo(toYearTemPairFn(), tableOf(strings(), ints()));</span><br><span class="line">        PTable&lt;String, Integer&gt; maxTemps = yearTemperatures.groupByKey().combineValues(Aggregators.MAX_INTS());</span><br><span class="line">        maxTemps.write(To.textFile(args[<span class="number">1</span>]));</span><br><span class="line">        PipelineResult result = pipeline.done();</span><br><span class="line">        System.exit(result.succeeded() ? <span class="number">0</span> : <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> DoFn&lt;String, Pair&lt;String, Integer&gt;&gt; toYearTemPairFn() &#123;</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">new</span> DoFn&lt;String, Pair&lt;String, Integer&gt;&gt;() &#123;</span><br><span class="line">           NcdcRecordParser parser = <span class="keyword">new</span> NcdcRecordParser();</span><br><span class="line">           <span class="meta">@Override</span></span><br><span class="line">           <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">process</span><span class="params">(String input, Emitter&lt;Pair&lt;String, Integer&gt;&gt; emitter)</span> </span>&#123;</span><br><span class="line">               parser.parse(input);</span><br><span class="line">               <span class="keyword">if</span> (parser.isValidTemperature()) &#123;</span><br><span class="line">                   emitter.emit(Pair.of(parser.getYear(), parser.getAirTemperature()));</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>先构建Crunch pipline对象,代表希望运行的计算, pipeline可以有多个阶段,即具有多个输入,输出,分支和迭代都是有可能的.</p>
+<p>使用MapReduce运行管线,因此创建MRPipeline,也可使用MemPipeline在内存中运行管线或者SparkPipeline运行在Spark中.</p>
+<p>Pipeline.readTextFile()可以将文本文件转换为String类型的PCollection对象,每个String代表一行文本.</p>
+</blockquote>
+<blockquote>
+<p>PCollection&lt; S &gt;是最基本的Crunch数据类型,表示由S型元素组成的<em>不可修改</em>且<em>无序</em>的分布式集合,可被视为非物化的Collection,因为<em>它的元素没有被读取到内存</em>.Crunch对PCollection做各种操作并产生一个新的PCollection.<br>PCollection.parallellDo()为PCollection中的<em>每个元素</em>都执行某种操作,返回一个PCollection.<br>&lt; T &gt; PCollection &lt; T &gt; parallelDo(DoFn &lt; S, T &gt; var1, PType &lt; T &gt; var2);第二个参数PType&lt; T &gt;向Crunch传递有关T的java以及如何序列化该类型的信息<br>PTable &lt; K,V &gt;是一个扩展的PCollection,它是由键值对构成的分布式multi-map,可以具有重复键值对.<br>PTable.GroupBy执行的是MR的shuffle操作,按键对表分组,返回PGroupedTable &lt; K,V &gt;,它的combineValues()方法能把一个键的所有值聚合起来,就像MR中reducer做的那样.<br>管线的最后一步操作就是调用write()将表写入文件,write()输入就是通过静态工厂TO的textFile方法创建的一个文本文件对象,实际上使用了TextOutputFormat格式来完成这个操作.<br>为了执行管线,必须调用done()方法,程序阻塞直至管线执行完毕.</p>
+</blockquote>
+<h2 id="Crunch核心API"><a href="#Crunch核心API" class="headerlink" title="Crunch核心API"></a>Crunch核心API</h2><p><strong>基本操作</strong></p>
+<ul>
+<li><p>union() : 对两个PCollection进行”并集”操作(如果两个PCollection中有相同的元素,这个元素在union后会出现多次),进行union()操作时他们必须由同一管线创建,并且具有相同的类型.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PCollection&lt;Integer&gt; a = MemPipeline.collectionOf(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line">PCollection&lt;Integer&gt; b = MemPipeline.collectionOf(<span class="number">2</span>);</span><br><span class="line">PCollection&lt;Integer&gt; c = a.union(b);</span><br><span class="line">assertEquals(<span class="string">"&#123;2,1,2,3&#125;"</span>, dump(c));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>parallelDo() : 为输入的PCollection&lt; S &gt;中的每个元素调用某个函数,并返回包含该调用结果的一个新的输出PCollection<t>.</t></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">PCollection&lt;String&gt; a = MemPipeline.collectionOf(<span class="string">"cherry"</span>, <span class="string">"apple"</span>, <span class="string">"banana"</span>);</span><br><span class="line">PCollection&lt;Integer&gt; b = a.parallelDo(<span class="keyword">new</span> MapFn&lt;String, Integer&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">map</span><span class="params">(String input)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> input.length();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;, ints());</span><br><span class="line">assertEquals(<span class="string">"&#123;6,5,6&#125;"</span>, dump(b));</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>parallelDo常用来过滤在后续步骤中不需要的数据,Crunch专门提供了filter()方法,参数是一个特殊DoFn,为FilterFn,只用实现accept()即可只是是否保留该数据到输出中,他的方法签名没有PType,因为输入与输出类型相同.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">PCollection&lt;String&gt; a = MemPipeline.collectionOf(<span class="string">"cherry"</span>, <span class="string">"apple"</span>, <span class="string">"banana"</span>);</span><br><span class="line">PCollection&lt;String&gt; b = a.filter(<span class="keyword">new</span> FilterFn&lt;String&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">accept</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> s.length() %<span class="number">2</span> == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">assertEquals(<span class="string">"&#123;cherry,banana&#125;"</span>, dump(b));</span><br></pre></td></tr></table></figure></p>
+<p>从由某些值构成的PCollection中提取键已形成一个PTable是常见操作,Crunch为此提供了by()方法,参数是MapFn()&lt; S, K &gt;,将值映S射成键K.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">PCollection&lt;String&gt; a = MemPipeline.typedCollectionOf(strings(), <span class="string">"cherry"</span>, <span class="string">"apple"</span>,</span><br><span class="line">        <span class="string">"banana"</span>);</span><br><span class="line">PTable&lt;Integer,String&gt; b = a.by(<span class="keyword">new</span> MapFn&lt;String, Integer&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">map</span><span class="params">(String input)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> input.length();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;, ints());</span><br><span class="line">assertEquals(<span class="string">"&#123;(6,cherry),(5,apple),(6,banana)&#125;"</span>, dump(b));</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>groupByKey() : 把PTable&lt; K,V &gt;中具有相同键的所有值聚合起来,可以看做MR中的混洗操作,返回PGroupedTable&lt; K,V &gt;,Crunch可以根据表的大小为groupByKey()设置分区数量,也可以通过重载groupBYKey(int i)指定分区数量.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PGroupedTable&lt;Integer,String&gt; c = b.groupByKey();</span><br><span class="line">assertEquals(<span class="string">"&#123;(5,[apple]),(6,[cherry,banana])&#125;"</span>, dump(c));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>combineValues() : 最常见以组合函数CombineFn&lt; K,V &gt;作为输入,CombineFn&lt; K,V &gt;是<figure class="highlight plain"><figcaption><span>Pair<k,v>>```的简写,返回一个```PTable<k,v>```</k,v></k,v></span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">```java</span><br><span class="line">        PTable&lt;Integer, String&gt; d = c.combineValues(new CombineFn&lt;Integer, String&gt;() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void process(Pair&lt;Integer, Iterable&lt;String&gt;&gt; integerIterablePair, Emitter&lt;Pair&lt;Integer, String&gt;&gt; emitter) &#123;</span><br><span class="line">                StringBuilder sb = new StringBuilder();</span><br><span class="line">                for (Iterator i = integerIterablePair.second().iterator(); i.hasNext(); ) &#123;</span><br><span class="line">                    sb.append(i.next());</span><br><span class="line">                    if(i.hasNext())</span><br><span class="line">                        sb.append(&quot;;&quot;);</span><br><span class="line">                &#125;</span><br><span class="line">                emitter.emit(Pair.of(integerIterablePair.first(), sb.toString()));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        assertEquals(&quot;&#123;(5,apple),(6,cherry;banana)&#125;&quot;, dump(d));</span><br></pre></td></tr></table></figure></p>
+</li>
+</ul>
+<p>由于没有对键进行改变,可以使用重载的combineValues(),以Aggregator对象作为输入,仅对值进行操作,可以使用Aggregators内置的Aggregator实现操作,比如之前的Aggregators.MAX_INTS().<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PTable&lt;Integer, String&gt; e = c.combineValues(Aggregators.STRING_CONCAT(<span class="string">";"</span>,<span class="keyword">false</span>));</span><br><span class="line">assertEquals(<span class="string">"&#123;(5,apple),(6,cherry;banana)&#125;"</span>, dump(e));</span><br></pre></td></tr></table></figure></p>
+<p>想要聚合PGroupedTable中的值并返回一个与被分组的值的类型不同的结果,可用mapValues()实现,<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">PTable&lt;Integer, Integer&gt; f = c.mapValues(<span class="keyword">new</span> MapFn&lt;Iterable&lt;String&gt;, Integer&gt;() &#123;</span><br><span class="line">           <span class="meta">@Override</span></span><br><span class="line">           <span class="function"><span class="keyword">public</span> Integer <span class="title">map</span><span class="params">(Iterable&lt;String&gt; strings)</span> </span>&#123;</span><br><span class="line">               <span class="keyword">return</span> Iterables.size(strings);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;,ints());</span><br><span class="line">       assertEquals(<span class="string">"&#123;(5,1),(6,2)&#125;"</span>, dump(f));</span><br></pre></td></tr></table></figure></p>
+<p>combineValues()可被当作MR的combiner来运行,而mapValues()被解释为ParallelDo()操作,只能在reduce端运行.</p>
+<p><strong>类型</strong></p>
+<p>每个PCollection&lt; S &gt;都有一个关联的类PType&lt; S &gt;,用于封装有关PCollection中的元素类型的信息,也给出了从持久化存储器读取到PCollection的序列化格式和反方向的序列化格式.<br>两个PType家族,用哪个取决于管线的文件格式,都可用于文本文件:</p>
+<ol>
+<li>Hadoop Writables: 顺序文件</li>
+<li>Avro: Avro数据文件</li>
+</ol>
+<p>PCollection使用的PType在PCollection创建时指定,有时隐式指定,例如读取文本文件时使用默认的Writables.</p>
+<p><em>记录和元组</em><br>记录record : 通过名称来访问字段的类,用记录写的Crunch程序更易于理解和阅读<br>元组tuple : 通过位置来访问字段的类,用于少量元素组成元组的便捷类:Pair&lt; K,V &gt;, Tuple3&lt; V1, V2, V3 &gt;等</p>
+<p>在Crunch管线中使用记录的便捷方式是定义一个字段能够被Avro Reflect序列化的,和一个无参构造器.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WeatherRecord</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> year;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> temperature;</span><br><span class="line">    <span class="keyword">private</span> String stationId;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">WeatherRecord</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">WeatherRecord</span><span class="params">(<span class="keyword">int</span> year, <span class="keyword">int</span> temperature, String stationId)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.year = year;</span><br><span class="line">        <span class="keyword">this</span>.temperature = temperature;</span><br><span class="line">        <span class="keyword">this</span>.stationId = stationId;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样就可以从PCollection&lt; String &gt;生成PCollection&lt; WeatherRecord &gt;,并利用parallelDo()将每一行文本解析到WeatherRecord中:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">PCollection&lt;String&gt; lines = pipeline.read(From.textFile(inputPath));</span><br><span class="line">PCollection&lt;WeatherRecord&gt; records = lines.parallelDo(<span class="keyword">new</span> DoFn&lt;String, WeatherRecord&gt;() &#123;</span><br><span class="line">        NcdcRecordParser parser = <span class="keyword">new</span> NcdcRecordParser();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">process</span><span class="params">(String s, Emitter&lt;WeatherRecord&gt; emitter)</span> </span>&#123;</span><br><span class="line">        parser.parse(s);</span><br><span class="line">        <span class="keyword">if</span>(parser.isValidTemperature()) &#123;</span><br><span class="line">            emitter.emit(<span class="keyword">new</span> WeatherRecord(parser.getYearInt(), parser.getAirTemperature(), parser.getStationId()));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;, Avros.records(WeatherRecord.class));</span><br><span class="line"><span class="comment">//按照字段定义的顺序对记录排序</span></span><br><span class="line">PCollection&lt;WeatherRecord&gt; sortedREcords = Sort.sort(records);</span><br></pre></td></tr></table></figure></p>
+<p>上段代码末尾Avro.records()方法为Avro Reflect数据类型返回了一个Crunch PType.</p>
+<p><strong>源和目标</strong></p>
+<ul>
+<li><p>读取源<br>Crunch管线的起点是一个或多个Source&lt; T &gt;实例,它们指明了输入数据的存储位置和PType<t>,读取文本用readTextFile就可以,但是其他类型的数据源则需要使用read()方法,以Source<t>对象为输入,From类是各种文件源静态工厂方法的集合,用作为read()的参数.</t></t></p>
+<blockquote>
+</blockquote>
+<p>Crunch的数据源包括:</p>
+<ul>
+<li>From.textFile(inputPath)</li>
+<li>From.AvroFile(inputPath, Avros.records())</li>
+<li>From.SequenceFile(inputPath, Writable(), Writable())</li>
+<li>AvroParquetFileSource</li>
+<li>FromHbase.table() 等.</li>
+</ul>
+</li>
+<li><p>写入文件<br>在写入目标时调用PCollection.write()方法,传入Traget即可,可以通过TO类的静态工厂方法来选择文件类型</p>
+</li>
+<li><p>输入已存在<br>如果目标文件已经存在,再调用write()方法时会引发错误, 除非在write()方法中传入参数Target.WriteMode.OVERWRITE.</p>
+<blockquote>
+<p>写入模式:</p>
+<ul>
+<li>OVERWRITE:管线运行前删除已存在文件</li>
+<li>APPEND:在输出目录下新建文件,保留旧文件,通过文件名区分新旧文件</li>
+<li>CHECKPOINT:将当前工作保存在一个文件中,从而使新馆先可从检查电而不是管线起点开始执行.</li>
+</ul>
+</blockquote>
+</li>
+<li><p>组合的源和目标<br>希望一个文件即作为写入目标又作为读取的源,在AT类中有一些静态方法可用于创建SourceTarget实例.</p>
+</li>
+</ul>
+<p><strong>函数</strong></p>
+<ul>
+<li><p>函数序列化<br>Crunch在管线执行时将所有DoFn实例都被序列化到一个文件中,并通过Hadoop分布式缓存机制将文件分发给各任务节点,然后任务本身饭序列化,使得能被调用.因此,需要确保自己的DoFn实现能通过标准的Java序列化机制进行序列化.<br>如果DoFn作为内部类被定义在没有实现Serializable的外部类中,会出现问题.<br>如果函数依赖于一个以实例变量形式表示的非序列化状态,且他的类没有被Serializable,这种情况下将该实例标为transient(瞬态),从而不会序列化该状态.</p>
+</li>
+<li><p>对象重用<br>在MR中,reducer的值迭代器中的对象是可重用的,其目的是为了提高效率,对于PGroupedTable的conbineValues()和mapValues()方法的迭代器来说,Crunch有相同的行为.因此想要在迭代器外部引用一个对象,就应当复制该对象,以避免对象标识错误.</p>
+<blockquote>
+<p>可重用:<a href="http://blog.csdn.net/fxdaniel/article/details/50255197" target="_blank" rel="noopener">reduce方法会反复执行多次，但key和value相关的对象只有两个，reduce会反复重用这两个对象。所以如果要保存key或者value的结果，只能将其中的值取出另存或者重新clone一个对象（例如Text store = new Text(value) 或者 String a = value.toString()），而不能直接赋引用。因为引用从始至终都是指向同一个对象，你如果直接保存它们，那最后它们都指向最后一个输入记录。会影响最终计算结果而出错。</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;K,V&gt; PTable&lt;K,Collection&lt;V&gt;&gt; uniqueValues(PTable&lt;K, V&gt; table) &#123;</span><br><span class="line">       PTypeFamily tf = table.getTypeFamily();</span><br><span class="line">       <span class="keyword">final</span> PType&lt;V&gt; valueType = table.getValueType();</span><br><span class="line">       <span class="keyword">return</span> table.groupByKey().mapValues(<span class="string">"unique"</span>, <span class="keyword">new</span> MapFn&lt;Iterable&lt;V&gt;, Collection&lt;V&gt;&gt;() &#123;</span><br><span class="line">           <span class="meta">@Override</span></span><br><span class="line">           <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initialize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">               valueType.initialize(getConfiguration());<span class="comment">//初始化PType使其能够访问配置以执行复制操作</span></span><br><span class="line">           &#125;</span><br><span class="line">           <span class="meta">@Override</span></span><br><span class="line">           <span class="function"><span class="keyword">public</span> Collection&lt;V&gt; <span class="title">map</span><span class="params">(Iterable&lt;V&gt; vs)</span> </span>&#123;</span><br><span class="line">               Set&lt;V&gt; collected = <span class="keyword">new</span> HashSet&lt;V&gt;();</span><br><span class="line">               <span class="keyword">for</span>(V value : vs)&#123;</span><br><span class="line">                   collected.add(valueType.getDetachedValue(value));<span class="comment">//PType.getDetachedValue()复制JAVA类.</span></span><br><span class="line">               &#125;</span><br><span class="line">               <span class="keyword">return</span> collected;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;,tf.collections(table.getValueType()));</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ul>
+<p><strong>物化</strong></p>
+<p>物化(Materlization)是让PCollection中的值变得可用的过程,只有物化后的值才能被程序读取<br>物化最直接的方法是调用PCollection.materialize(),它返回了一个Iterable集合.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Pipeline pipeline = <span class="keyword">new</span> MRPipeline(getClass());</span><br><span class="line">   PCollection&lt;String&gt; lines = pipeline.readTextFile(inputPath);</span><br><span class="line">   PCollection&lt;String&gt; lower = lines.parallelDo(<span class="keyword">new</span> ToLowerFn(), strings());</span><br><span class="line"></span><br><span class="line">   Iterable&lt;String&gt; materialized = lower.materialize();</span><br><span class="line">   <span class="keyword">for</span> (String s : materialized) &#123; <span class="comment">// pipeline从这个位置开始执行</span></span><br><span class="line">     System.out.println(s);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p> 调用materlize并不会导致管线执行,只有从Iterable中创建一个Iterator后,Crunch才执行管线,执行完毕后才执行迭代操作.</p>
+<ul>
+<li><p>PObject<br>物化PCollection的另一种方式是使用PObject,PObject<t>是一个被标记为future的对象,程序在创建PObject时,类型为T的值得计算可能还未完成.计算结果调用getValue()方法获取,计算完成之前他会一直处于阻塞状态.</t></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Pipeline pipeline = <span class="keyword">new</span> MRPipeline(getClass());</span><br><span class="line">PCollection&lt;String&gt; lines = pipeline.readTextFile(inputPath);</span><br><span class="line">PCollection&lt;String&gt; lower = lines.parallelDo(<span class="keyword">new</span> ToLowerFn(), strings());</span><br><span class="line"></span><br><span class="line">PObject&lt;Collection&lt;String&gt;&gt; po = lower.asCollection();</span><br><span class="line"><span class="keyword">for</span> (String s : po.getValue()) &#123; <span class="comment">// pipeline is run</span></span><br><span class="line">  System.out.println(s);</span><br><span class="line">&#125;</span><br><span class="line">assertEquals(expectedContent, po.getValue());</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">"About to call done()"</span>);</span><br><span class="line">PipelineResult result = pipeline.done();</span><br></pre></td></tr></table></figure>
+<p> asCollection()方法将PCollection<t>变换为普通的Java Collection<t>.</t></t></p>
+</li>
+</ul>
+<h2 id="管线执行"><a href="#管线执行" class="headerlink" title="管线执行"></a>管线执行</h2><p>管线构建期间,Crunch会建立一个内部执行计划,每个计划都是由PCollection操作构成的一个有向无环图,每个计划内的PCollection都与产生它的操作之间存在引用关系,另外,每个PCollection都有一个内部状态,用于记录他是否已被物化.<br><strong>运行管线</strong><br>调用Pipeline.run()可以显式执行管线操作,步骤:<br>优化处理,将执行计划分为若干阶段 –&gt; 执行优化计划中的各阶段,使得到的PCololection物化(此时可能会得到中间文件) –&gt; 向调用者返回PipelineResult对象,包含每个阶段的信息以及管线是否成功.<br>clean()清除物化PCollection时创建的临时中间文件.<br>done() = 先run()后clean()<br>runAsync()是run()的配对方法,它在管线启动后立刻返回,返回类型是PipelineExecution,它实现了Future&lt; PiplineResult &gt;.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pipeline.writeTextFile(table, tmpDir.getFileName(<span class="string">"output"</span>));</span><br><span class="line">PipelineExecution execution = pipeline.runAsync();</span><br><span class="line">PipelineResult result = execution.get();</span><br><span class="line">assertTrue(result.succeeded());</span><br></pre></td></tr></table></figure></p>
+<p><strong>停止管线</strong><br>为了正确停止管线,需要异步启动该管线,以保留对PipelineExecution对象的引用.<br><figure class="highlight plain"><figcaption><span>execution </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">这种情况调用kill()方法并等待其完成即可关闭管线.这样管线在此之前运行在这个集群上的所有作业都将被杀死</span><br><span class="line">```java</span><br><span class="line">execution.kill();</span><br><span class="line">execution.waitUntilDone();</span><br></pre></td></tr></table></figure></p>
+<p><strong>查看Crunch计划</strong><br>通过 PipelineExecution.getPlanDotFile()可以获得一个以字符串形式表现的管线操作图的DOT文件.<br>另一种在隐式运行的管线中获取操作图的方式是将DOT文件的表示存储在作业配置中,一边在管线执行完后检查.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">PCollection&lt;String&gt; lines = pipeline.readTextFile(inputPath);</span><br><span class="line">PCollection&lt;String&gt; lower = lines.parallelDo(<span class="string">"lower"</span>, <span class="keyword">new</span> ToLowerFn(), strings());</span><br><span class="line">PTable&lt;String, Long&gt; counts = lower.count();</span><br><span class="line">PTable&lt;Long, String&gt; inverseCounts = counts.parallelDo(<span class="string">"inverse"</span>, <span class="keyword">new</span> InversePairFn&lt;String, Long&gt;(), tableOf(longs(), strings()));</span><br><span class="line">PTable&lt;Long, Integer&gt; hist = inverseCounts.groupByKey().mapValues(<span class="string">"count values"</span>, <span class="keyword">new</span> CountValuesFn&lt;String&gt;(), ints());</span><br><span class="line">hist.write(To.textFile(outputPath), Target.WriteMode.OVERWRITE);</span><br><span class="line">PipelineExecution execution = pipeline.runAsync();</span><br><span class="line">String dot = execution.getPlanDotFile();</span><br><span class="line">Files.write(dot, dotFile(), Charsets.UTF_8);</span><br><span class="line">execution.waitUntilDone();</span><br><span class="line">pipeline.done();</span><br></pre></td></tr></table></figure></p>
+<p>用命令<code>dot -Tpng -O *.dot</code>将.dot文件转换为.png文件<br><img src="http://p5s7d12ls.bkt.clouddn.com/18-3-21/79771268.jpg" alt=""></p>
+<p>每个GBK操作将作为MapReduce的混洗步骤实现</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/alipay.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -209,65 +339,106 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://harold.me/2018/03/21/关于Crunch/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/03/17/关于HIVE/" class="archive-article-date">
-  	<time datetime="2018-03-17T03:43:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-17</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2018/03/17/关于HIVE/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">关于Hive</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/03/17/关于HIVE/">关于Hive</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hive</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
+
+  
 
 
           </div>
@@ -290,8 +461,8 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
