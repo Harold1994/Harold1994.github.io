@@ -18,7 +18,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-21/37375528.jpg">
 <meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-21/16805306.jpg">
-<meta property="og:updated_time" content="2018-03-21T14:50:26.263Z">
+<meta property="og:updated_time" content="2018-03-21T14:52:01.762Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于HBase">
 <meta name="twitter:description" content="HBase是一个在HDFS上开发的面向列的分布式数据库,可以用来实时的随机访问超大规模数据集,它自底向上的进行构建,能够简单的通过增加节点来达到线性扩展,HBase不是关系型数据库,不支持SQL,它能在廉价的硬件构成的集群上管理超大规模的稀疏表. 相关概念应用将数据存放在带标签的表中,表格的”单元格”由行和列的坐标交叉决定,是有版本的,版本号默认是自动分配的,为插入单元格的时间戳.单元格内容是未解">
@@ -189,7 +189,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>HBase是一个在HDFS上开发的面向列的分布式数据库,可以用来实时的随机访问超大规模数据集,它自底向上的进行构建,能够简单的通过增加节点来达到线性扩展,HBase不是关系型数据库,不支持SQL,它能在廉价的硬件构成的集群上管理超大规模的稀疏表.</p>
-<h2 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h2><p>应用将数据存放在带标签的表中,表格的”单元格”由行和列的坐标交叉决定,是<em>有版本</em>的,版本号默认是自动分配的,为插入单元格的时间戳.单元格内容是未解释的字节数组.<br><a id="more"></a></p>
+<h2 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h2><p>应用将数据存放在带标签的表中,表格的”单元格”由行和列的坐标交叉决定,是<em>有版本</em>的,版本号默认是自动分配的,为插入单元格的时间戳.单元格内容是未解释的字节数组.<br> <a id="more"></a></p>
 <p><img src="http://p5s7d12ls.bkt.clouddn.com/18-3-21/37375528.jpg" alt=""></p>
 <p>表中行的键也是字节数组,行根据行的键进行排序,排序根据字节序进行,所有对表的访问都要通过表的主键,HBase不支持表中的其他列建立索引.<br>行中的列被分为列族,同一个列族成员具有相同的前缀,info:format和info:geo都是列族info的成员,列族前缀必须是”可打印的”,修饰符可以是任意字节,列族和修饰符用(:)分隔.</p>
 <p>一个表的<em>列族</em>必须作为表模式的定义一部分<em>预先给出</em>,但<em>列组成员</em>可以随后按需加入.物理上,所有的<em>列族成员</em>都一起存放在文件系统中,HBase更确切地说是面向列族的存储器.调优和存储都是在列族层面上进行的,所以最好使所有列族成员有相同的访问模式和大小特征.<br><em>区域</em><br>HBase自动将表水平划分为区域,每个区域由表中行的子集构成,每个区域由他所属于的表,它包含的第一行和最后一行(不包括这行)来表示.一开始一个表只有一个区域,当区域大小超出设定的阈值是便会在某行的边界上分成<em>两个大小基本相同的新分区</em>,区域是在HBase集群上分布数据最小的单位,因为太大而无法存放在单台服务器上的表会被放到服务器集群上,每个节点负责管理所有区域的一个子集.在线的所有区域按次序排列就构成了表的所有内容.</p>
