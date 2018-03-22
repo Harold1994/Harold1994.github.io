@@ -162,6 +162,82 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-记录一道笔试算法题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/22/记录一道笔试算法题/">记录一道笔试算法题</a>
+    </h1>
+  
+
+        
+        <a href="/2018/03/22/记录一道笔试算法题/" class="archive-article-date">
+  	<time datetime="2018-03-22T14:54:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天师兄笔试的时候遇到一道算法题,一开始直接看结果没有想明白,后来才觉得原来这么简单,但是还是比较考验思维,做个记录,留着以后看:</p>
+<p>题目:在一个圆上画n个点,将这个圆n等分,每次连两个点,问最多可以画出多少条线段使得这些线段不相交.</p>
+<p>思路:首先将所有的点顺接起来构成一个n边形,再从中取一个点和其他所有的点连起来,这样就又有n-1条边,且互不相交,但是n-1条边里和出发点相邻的两点连成的边已经在第一次的n条边里算进去了,因此要减去2,再多花的话都会相交,因此最终结果是n+n-1-2=2*n-3</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/03/22/记录一道笔试算法题/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-关于HBase" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -270,7 +346,7 @@
         <blockquote>
 <p>本篇文章主要来自&lt;&lt;Hadoop权威指南&gt;&gt;Crunch部分学习笔记</p>
 </blockquote>
-<p>Crunch使用来写MapReduce管线的高层API,它注重程序员友好的JAVA类型和旧式的纯JAVA对象,还有一组丰富的数据变换操作和多级管线.因为Crunch位于上层,故Crunch管线是高度可组合的,可以把常用功能提取到库中给其他程序重用.Crunch不依赖于MapReduce,也可以用Spark作为分布式引擎来运行Crunch管线.<br>
+<p>Crunch是用来写MapReduce管线的高层API,它注重程序员友好的JAVA类型和旧式的纯JAVA对象,还有一组丰富的数据变换操作和多级管线.因为Crunch位于上层,故Crunch管线是高度可组合的,可以把常用功能提取到库中给其他程序重用.Crunch不依赖于MapReduce,也可以用Spark作为分布式引擎来运行Crunch管线.<br>
         
           <a class="article-more-a" href="/2018/03/21/关于Crunch/#more">more >></a>
         
@@ -534,6 +610,10 @@ MathJax.Hub.Queue(function() {
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Hadoop</a>
