@@ -162,6 +162,105 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-动态规划算法面试题-硬币组合问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/23/动态规划算法面试题-硬币组合问题/">动态规划算法面试题----硬币组合问题</a>
+    </h1>
+  
+
+        
+        <a href="/2018/03/23/动态规划算法面试题-硬币组合问题/" class="archive-article-date">
+  	<time datetime="2018-03-23T15:02:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>师兄做腾讯春季实习生笔试题目算法第二道题目,小明有2^k个硬币各两个,如1,1,2,2,4,4,8,8…,给定一个币值n,问小明有多少种方法从自己已有的硬币中组合出n.</p>
+<p>第一眼看到这个题目有两个想法,要么用二进制的方式解决,要么用动态规划解决,二进制的办法现场没想出来,试着用动态规划解,开始想的是自底向上的解法,写了一小段代码,可以输出一部分解,方案不完备,晚上回来系统的写一下此类问题的解法.</p>
+<p>先看一下典型的币值组合问题的描述:</p>
+<blockquote>
+</blockquote>
+<p>In England the currency is made up of pound, £, and pence, p, and there are eight coins in general circulation:</p>
+<blockquote>
+<p>   1p, 2p, 5p, 10p, 20p, 50p, £1 (100p) and £2 (200p).</p>
+</blockquote>
+<blockquote>
+<p>It is possible to make £2 in the following way:</p>
+</blockquote>
+<blockquote>
+<p>   1×£1 + 1×50p + 2×20p + 1×5p + 1×2p + 3×1p</p>
+</blockquote>
+<blockquote>
+<p>How many different ways can £2 be made using any number of coins?</p>
+</blockquote>
+<p>不难发现,这是一道完全背包问题,第i种硬币i最多可以被选择<code>sum/coin[i]</code>个,我们用<code>dp[i][sum]</code>表示用前i种硬币构成sum的所有组合数,用<code>Xi</code>表示第i种硬币被选择的数量,<code>Vi</code>表示第i种硬币的币值,以最后一种硬币被选择的数量来写递归公式:</p>
+<blockquote>
+<p><code>sum = X1*V1 + X2*V2 + ... +  0*V8</code><br><code>sum = X1*V1 + X2*V2 + ... +  1*V8</code><br><code>sum = X1*V1 + X2*V2 + ... +  2*V8</code><br><code>...</code><br><code>sum = X1*V1 + X2*V2 + ... +  (sum/V8)*V8</code></p>
+</blockquote>
+<p>可以看出,前i种硬币组合出sum的组合数量等于当第i种硬币取0,1,2…sum/Vi时,前i-1种硬币组合出sum-(Xi*Vi)的组合数之和,<br>因此状态转移方程是 :<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dp[i][sum] = dp[i-<span class="number">1</span>][sum-<span class="number">0</span>*Vi] + dp[i-<span class="number">1</span>][sum-<span class="number">1</span>*Vi] + ... + dp[i-<span class="number">1</span>][sum-(sum/Vi)*Vi]</span><br></pre></td></tr></table></figure></p>
+<p>当sum=0时,只有一种可能组成sum,因此<code>dp[i][0]=0</code><br>如果我们用二位数组表示dp[i][sum], 我们发现第i行的值全部依赖与i-1行的值，所以我们可以逐行求解该数组。如果前0种硬币要组成sum，我们规定为dp[0][sum] = 0.</p>
+<p>代码:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Scanner scanner = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">      <span class="keyword">int</span> sum = scanner.nextInt();</span><br><span class="line">      <span class="keyword">int</span> [] coin = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">5</span>,<span class="number">10</span>,<span class="number">20</span>,<span class="number">50</span>,<span class="number">100</span>,<span class="number">200</span>&#125;;</span><br><span class="line">      <span class="keyword">int</span> [][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">8</span>][sum+<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i&lt;=sum; i++)</span><br><span class="line">          dp[<span class="number">0</span>][i] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; <span class="number">8</span>; i++)</span><br><span class="line">          dp[i][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i&lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">          <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j&lt;=sum; j++)&#123;</span><br><span class="line">              dp[i][j] = <span class="number">0</span>;</span><br><span class="line">              <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt;= j/coin[i-<span class="number">1</span>]; k++)</span><br><span class="line">                  dp[i][j] += dp[i-<span class="number">1</span>][j-k*coin[i-<span class="number">1</span>]];</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      System.out.println(dp[<span class="number">7</span>][sum]);</span><br></pre></td></tr></table></figure></p>
+<p>现在让我们回到一开始的题目中,笔试题中每种硬币最多只能选两次,因此我们需要对上面代码的k添加K&lt;=2的约束.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CoinCombination</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Scanner scanner = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">        <span class="keyword">int</span> sum = scanner.nextInt();</span><br><span class="line">        <span class="keyword">int</span> e = (<span class="keyword">int</span>) (Math.log(sum) / Math.log(<span class="number">2</span>));<span class="comment">//计算sum是2的几次方</span></span><br><span class="line">        <span class="keyword">int</span> coinType = e + <span class="number">2</span>;<span class="comment">//此处+2是为了能够将最后一种硬币计算进去,否则后面循环会少算,因为dp[i][j]表示的是前i个硬币组合成j的数目.</span></span><br><span class="line">        <span class="keyword">int</span> coin[] = <span class="keyword">new</span> <span class="keyword">int</span>[coinType];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; coinType; i++) &#123; <span class="comment">//构造coin[]</span></span><br><span class="line">            coin[i] = (<span class="keyword">int</span>) Math.pow(<span class="number">2</span>, i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[coinType][sum + <span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= sum; i++)</span><br><span class="line">            dp[<span class="number">0</span>][i] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; coinType; i++)</span><br><span class="line">            dp[i][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; coinType; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= sum; j++) &#123;</span><br><span class="line">                dp[i][j] = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt;= j / coin[i - <span class="number">1</span>] &amp;&amp; k &lt;= <span class="number">2</span>; k++)<span class="comment">//此处添加K&lt;=2的约束</span></span><br><span class="line">                    dp[i][j] += dp[i - <span class="number">1</span>][j - k * coin[i - <span class="number">1</span>]];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(dp[e + <span class="number">1</span>][sum]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/03/23/动态规划算法面试题-硬币组合问题/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-记录一道笔试算法题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -612,6 +711,10 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Hadoop</a>
               </li>
              
@@ -629,10 +732,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Hive</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
               </li>
             
             <div class="clearfix"></div>

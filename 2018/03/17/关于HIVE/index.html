@@ -18,7 +18,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="//harold.me/home/harold/Pictures/Selection_021.png">
 <meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-18/61809116.jpg">
-<meta property="og:updated_time" content="2018-03-22T14:18:55.836Z">
+<meta property="og:updated_time" content="2018-03-22T15:05:48.262Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于Hive">
 <meta name="twitter:description" content="本篇博客主要来自于本人学习&amp;lt;&amp;lt;Hadoop权威指南&amp;gt;&amp;gt;Hive部分的笔记和一些理解  Hive是构建在Hadoop上的数据仓库框架,它把SQL查询转换为一系列在Hadoop集群上运行的作业,它的数据组织为表,元数据(eg.表模式)存储在metastore数据库中. metastore默认模本式为运行在本机上. Hive shell环境HiveQL是Hive的查询语言,类似">
@@ -458,7 +458,7 @@ OK
 </li>
 <li><p>inerate() : 每次对一个新值进行聚集计算都会调用此方法,iterate()接受的参数和Hive中被调用函数的参数是对应的.</p>
 </li>
-<li><p>terminatePartial() : Hive需要部分聚集结果时会调用此方法,这个方法必须返回一个封装了聚集计算当前状态的对象.</p>
+<li><p>terminate() : Hive需要部分聚集结果时会调用此方法,这个方法必须返回一个封装了聚集计算当前状态的对象.</p>
 </li>
 <li><p>merge()方法 : 在Hive合并两个部分聚集值时会调用merge()方法.该方法接受一个对象作为输入,其类型必须和terminatePartial()方法的返回类型一致.</p>
 </li>
@@ -737,6 +737,10 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Hadoop</a>
               </li>
              
@@ -754,10 +758,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Hive</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
               </li>
             
             <div class="clearfix"></div>
