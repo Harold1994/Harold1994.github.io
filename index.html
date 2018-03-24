@@ -186,19 +186,7 @@
 <p>第一眼看到这个题目有两个想法,要么用二进制的方式解决,要么用动态规划解决,二进制的办法现场没想出来,试着用动态规划解,开始想的是自底向上的解法,写了一小段代码,可以输出一部分解,方案不完备,晚上回来系统的写一下此类问题的解法.</p>
 <p>先看一下典型的币值组合问题的描述:</p>
 <blockquote>
-</blockquote>
-<p>In England the currency is made up of pound, £, and pence, p, and there are eight coins in general circulation:</p>
-<blockquote>
-<p>   1p, 2p, 5p, 10p, 20p, 50p, £1 (100p) and £2 (200p).</p>
-</blockquote>
-<blockquote>
-<p>It is possible to make £2 in the following way:</p>
-</blockquote>
-<blockquote>
-<p>   1×£1 + 1×50p + 2×20p + 1×5p + 1×2p + 3×1p</p>
-</blockquote>
-<blockquote>
-<p>How many different ways can £2 be made using any number of coins?</p>
+<p>In England the currency is made up of pound, £, and pence, p, and there are eight coins in general circulation:<br>   1p, 2p, 5p, 10p, 20p, 50p, £1 (100p) and £2 (200p).<br>It is possible to make £2 in the following way:<br>   1×£1 + 1×50p + 2×20p + 1×5p + 1×2p + 3×1p<br>How many different ways can £2 be made using any number of coins?</p>
 </blockquote>
 <p>不难发现,这是一道完全背包问题,第i种硬币i最多可以被选择<code>sum/coin[i]</code>个,我们用<code>dp[i][sum]</code>表示用前i种硬币构成sum的所有组合数,用<code>Xi</code>表示第i种硬币被选择的数量,<code>Vi</code>表示第i种硬币的币值,以最后一种硬币被选择的数量来写递归公式:</p>
 <blockquote>
