@@ -6,15 +6,33 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//harold.me">
-  <title>Harold的博客</title>
+  <title>用hadoop构建豆瓣图书推荐系统 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Harold的博客">
-<meta property="og:url" content="//harold.me/index.html">
+  <meta name="description" content="《Hadoop权威指南》已经通读一遍，对于分布式数据处理大致有一些概念，从网上找一个合适的项目练练手，此博客记录了我基于张丹大神的电影推荐系统手搓的豆瓣图书推荐系统，Hadoop版本为2.8.0，爬虫用python scrapy框架来写。 一、推荐系统概述 互联网已经普及到了今天，更加上机器学习和大数据的浪潮火爆，几乎我们接触的所有网站、App等都会用到推荐系统，比如淘宝的猜你喜欢，头条的新闻推送">
+<meta name="keywords" content="大数据， Hadoop,爬虫">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用hadoop构建豆瓣图书推荐系统">
+<meta property="og:url" content="//harold.me/2018/03/28/用hadoop构建豆瓣图书推荐系统/index.html">
 <meta property="og:site_name" content="Harold的博客">
+<meta property="og:description" content="《Hadoop权威指南》已经通读一遍，对于分布式数据处理大致有一些概念，从网上找一个合适的项目练练手，此博客记录了我基于张丹大神的电影推荐系统手搓的豆瓣图书推荐系统，Hadoop版本为2.8.0，爬虫用python scrapy框架来写。 一、推荐系统概述 互联网已经普及到了今天，更加上机器学习和大数据的浪潮火爆，几乎我们接触的所有网站、App等都会用到推荐系统，比如淘宝的猜你喜欢，头条的新闻推送">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-28/78005679.jpg">
+<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-28/71568403.jpg">
+<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-28/97798258.jpg">
+<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-28/19253791.jpg">
+<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-28/9400783.jpg">
+<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-28/22519877.jpg">
+<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-28/60596269.jpg">
+<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-28/51842026.jpg">
+<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-28/27264349.jpg">
+<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-28/96688878.jpg">
+<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-28/61332065.jpg">
+<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-28/51973032.jpg">
+<meta property="og:updated_time" content="2018-03-28T15:31:59.387Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Harold的博客">
+<meta name="twitter:title" content="用hadoop构建豆瓣图书推荐系统">
+<meta name="twitter:description" content="《Hadoop权威指南》已经通读一遍，对于分布式数据处理大致有一些概念，从网上找一个合适的项目练练手，此博客记录了我基于张丹大神的电影推荐系统手搓的豆瓣图书推荐系统，Hadoop版本为2.8.0，爬虫用python scrapy框架来写。 一、推荐系统概述 互联网已经普及到了今天，更加上机器学习和大数据的浪潮火爆，几乎我们接触的所有网站、App等都会用到推荐系统，比如淘宝的猜你喜欢，头条的新闻推送">
+<meta name="twitter:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-28/78005679.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Harold的博客" type="application/atom+xml">
   
@@ -160,16 +178,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-用hadoop构建豆瓣图书推荐系统" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-用hadoop构建豆瓣图书推荐系统" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/28/用hadoop构建豆瓣图书推荐系统/">用hadoop构建豆瓣图书推荐系统</a>
+    <h1 class="article-title" itemprop="name">
+      用hadoop构建豆瓣图书推荐系统
     </h1>
   
 
@@ -231,6 +247,32 @@
       
 
       
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/alipay.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
     </div>
     <div class="article-info article-info-index">
       
@@ -253,16 +295,75 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/28/用hadoop构建豆瓣图书推荐系统/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://harold.me/2018/03/28/用hadoop构建豆瓣图书推荐系统/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2018/03/24/今日头条2018春季实习生笔试题-BFS两道/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">今日头条2018春季实习生笔试题----BFS两道</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -282,495 +383,14 @@
 
 
 
-
   
-    <article id="post-今日头条2018春季实习生笔试题-BFS两道" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/24/今日头条2018春季实习生笔试题-BFS两道/">今日头条2018春季实习生笔试题----BFS两道</a>
-    </h1>
   
 
-        
-        <a href="/2018/03/24/今日头条2018春季实习生笔试题-BFS两道/" class="archive-article-date">
-  	<time datetime="2018-03-24T13:27:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-24</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>帮师姐做笔试,先留坑,有空填<br>一道字符串<br>一道上台阶</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/24/今日头条2018春季实习生笔试题-BFS两道/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-动态规划算法面试题-硬币组合问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/23/动态规划算法面试题-硬币组合问题/">动态规划算法面试题----硬币组合问题</a>
-    </h1>
   
 
-        
-        <a href="/2018/03/23/动态规划算法面试题-硬币组合问题/" class="archive-article-date">
-  	<time datetime="2018-03-23T15:02:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>师兄做腾讯春季实习生笔试题目算法第二道题目,小明有2^k个硬币各两个,如1,1,2,2,4,4,8,8…,给定一个币值n,问小明有多少种方法从自己已有的硬币中组合出n.</p>
-<p>第一眼看到这个题目有两个想法,要么用二进制的方式解决,要么用动态规划解决,二进制的办法现场没想出来,试着用动态规划解,开始想的是自底向上的解法,写了一小段代码,可以输出一部分解,方案不完备,晚上回来系统的写一下此类问题的解法.<br>
-        
-          <a class="article-more-a" href="/2018/03/23/动态规划算法面试题-硬币组合问题/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/23/动态规划算法面试题-硬币组合问题/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-记录一道笔试算法题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/22/记录一道笔试算法题/">记录一道笔试算法题</a>
-    </h1>
   
 
-        
-        <a href="/2018/03/22/记录一道笔试算法题/" class="archive-article-date">
-  	<time datetime="2018-03-22T14:54:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>今天师兄笔试的时候遇到一道算法题,一开始直接看结果没有想明白,后来才觉得原来这么简单,但是还是比较考验思维,做个记录,留着以后看:</p>
-<p>题目:在一个圆上画n个点,将这个圆n等分,每次连两个点,问最多可以画出多少条线段使得这些线段不相交.</p>
-<p>思路:首先将所有的点顺接起来构成一个n边形,再从中取一个点和其他所有的点连起来,这样就又有n-1条边,且互不相交,但是n-1条边里和出发点相邻的两点连成的边已经在第一次的n条边里算进去了,因此要减去2,再多花的话都会相交,因此最终结果是n+n-1-2=2*n-3</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/22/记录一道笔试算法题/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-关于HBase" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/21/关于HBase/">关于HBase</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/21/关于HBase/" class="archive-article-date">
-  	<time datetime="2018-03-21T02:32:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>HBase是一个在HDFS上开发的面向列的分布式数据库,可以用来实时的随机访问超大规模数据集,它自底向上的进行构建,能够简单的通过增加节点来达到线性扩展,HBase不是关系型数据库,不支持SQL,它能在廉价的硬件构成的集群上管理超大规模的稀疏表.</p>
-<h2 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h2><p>应用将数据存放在带标签的表中,表格的”单元格”由行和列的坐标交叉决定,是<em>有版本</em>的,版本号默认是自动分配的,为插入单元格的时间戳.单元格内容是未解释的字节数组.<br>
-        
-          <a class="article-more-a" href="/2018/03/21/关于HBase/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">HBase</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/21/关于HBase/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-关于Crunch" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/21/关于Crunch/">关于Crunch</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/21/关于Crunch/" class="archive-article-date">
-  	<time datetime="2018-03-21T02:20:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>本篇文章主要来自&lt;&lt;Hadoop权威指南&gt;&gt;Crunch部分学习笔记</p>
-</blockquote>
-<p>Crunch是用来写MapReduce管线的高层API,它注重程序员友好的JAVA类型和旧式的纯JAVA对象,还有一组丰富的数据变换操作和多级管线.因为Crunch位于上层,故Crunch管线是高度可组合的,可以把常用功能提取到库中给其他程序重用.Crunch不依赖于MapReduce,也可以用Spark作为分布式引擎来运行Crunch管线.<br>
-        
-          <a class="article-more-a" href="/2018/03/21/关于Crunch/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Crunch</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/21/关于Crunch/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-关于HIVE" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/17/关于HIVE/">关于Hive</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/17/关于HIVE/" class="archive-article-date">
-  	<time datetime="2018-03-17T03:43:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>本篇博客主要来自于本人学习&lt;&lt;Hadoop权威指南&gt;&gt;Hive部分的笔记和一些理解</p>
-</blockquote>
-<p>Hive是构建在Hadoop上的数据仓库框架,它把SQL查询转换为一系列在Hadoop集群上运行的作业,它的数据组织为表,元数据(eg.表模式)存储在metastore数据库中. metastore默认模本式为运行在本机上.</p>
-<h2 id="Hive-shell环境"><a href="#Hive-shell环境" class="headerlink" title="Hive shell环境"></a>Hive shell环境</h2><p>HiveQL是Hive的查询语言,类似Mysql,运行方式有:<br>
-        
-          <a class="article-more-a" href="/2018/03/17/关于HIVE/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hive</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/17/关于HIVE/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
 
 
@@ -793,8 +413,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
