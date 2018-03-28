@@ -9,7 +9,7 @@
   <title>用hadoop构建豆瓣图书推荐系统 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="《Hadoop权威指南》已经通读一遍，对于分布式数据处理大致有一些概念，从网上找一个合适的项目练练手，此博客记录了我基于张丹大神的电影推荐系统手搓的豆瓣图书推荐系统，Hadoop版本为2.8.0，爬虫用python scrapy框架来写。 一、推荐系统概述 互联网已经普及到了今天，更加上机器学习和大数据的浪潮火爆，几乎我们接触的所有网站、App等都会用到推荐系统，比如淘宝的猜你喜欢，头条的新闻推送">
-<meta name="keywords" content="大数据， Hadoop,爬虫">
+<meta name="keywords" content="大数据， Hadoop,爬虫,协同过滤">
 <meta property="og:type" content="article">
 <meta property="og:title" content="用hadoop构建豆瓣图书推荐系统">
 <meta property="og:url" content="//harold.me/2018/03/28/用hadoop构建豆瓣图书推荐系统/index.html">
@@ -28,7 +28,7 @@
 <meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-28/96688878.jpg">
 <meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-28/61332065.jpg">
 <meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-3-28/51973032.jpg">
-<meta property="og:updated_time" content="2018-03-28T15:31:59.387Z">
+<meta property="og:updated_time" content="2018-03-28T15:34:41.250Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="用hadoop构建豆瓣图书推荐系统">
 <meta name="twitter:description" content="《Hadoop权威指南》已经通读一遍，对于分布式数据处理大致有一些概念，从网上找一个合适的项目练练手，此博客记录了我基于张丹大神的电影推荐系统手搓的豆瓣图书推荐系统，Hadoop版本为2.8.0，爬虫用python scrapy框架来写。 一、推荐系统概述 互联网已经普及到了今天，更加上机器学习和大数据的浪潮火爆，几乎我们接触的所有网站、App等都会用到推荐系统，比如淘宝的猜你喜欢，头条的新闻推送">
@@ -191,7 +191,7 @@
 
         
         <a href="/2018/03/28/用hadoop构建豆瓣图书推荐系统/" class="archive-article-date">
-  	<time datetime="2018-03-28T07:26:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-28</time>
+  	<time datetime="2018-03-28T15:33:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-28</time>
 </a>
         
       </header>
@@ -200,7 +200,7 @@
       
         <p>《Hadoop权威指南》已经通读一遍，对于分布式数据处理大致有一些概念，从网上找一个合适的项目练练手，此博客记录了我基于<a href="http://blog.fens.me/hadoop-mapreduce-recommend/" target="_blank" rel="noopener">张丹大神的电影推荐系统</a>手搓的豆瓣图书推荐系统，Hadoop版本为2.8.0，爬虫用python scrapy框架来写。</p>
 <p><strong>一、推荐系统概述</strong></p>
-<p>互联网已经普及到了今天，更加上机器学习和大数据的浪潮火爆，几乎我们接触的所有网站、App等都会用到推荐系统，比如淘宝的猜你喜欢，头条的新闻推送等等。<br>常见的推荐原理有：</p>
+<p>互联网已经普及到了今天，更加上机器学习和大数据的浪潮火爆，几乎我们接触的所有网站、App等都会用到推荐系统，比如淘宝的猜你喜欢，头条的新闻推送等等。<br><a id="more"></a><br>常见的推荐原理有：</p>
 <blockquote>
 <p><em>基于用户基本信息的推荐</em> : 例如可以根据用户的性别、职业、 年龄、 所在地等信息向他推荐感兴趣或者相关的内容<br><em>基于物品/内容基本信息推荐</em> ： 根据物品的类型、来源、主题等信息推荐<br><em>协同推荐</em> ： 协同过滤算法通过计算用户之间或者物品之间的相关性来进行推荐</p>
 </blockquote>
@@ -287,6 +287,10 @@
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">爬虫</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">协同过滤</a>
         		</li>
       		
 		</ul>
@@ -525,6 +529,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">大数据， Hadoop</a>
               </li>
              
@@ -533,7 +541,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
+                <a href="javascript:void(0)" class="js-tag color5">协同过滤</a>
               </li>
             
             <div class="clearfix"></div>
