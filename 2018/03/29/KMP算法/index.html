@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//harold.me">
-  <title>Tag: Crunch | Harold的博客</title>
+  <title>KMP算法 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Harold的博客">
-<meta property="og:url" content="//harold.me/tags/Crunch/index.html">
+  <meta name="description" content="在编辑文本程序过程中，经常需要在文本中找到某个模式的所有出现位置。典型情况是，一段正在被编辑的文本构成一个文件，而所要搜寻的模式是用户正在输入的特定的关键字。有效的解决这个问题的算法叫做字符串匹配算法，该算法能极大提高编辑文本程序时的响应效率。 KMP算法是一种改进的字符串匹配算法，它的关键是利用匹配失败后的信息，尽量减少模式串与主串的匹配次数以达到快速匹配的目的。我们以一道字符串匹配的题目来学习">
+<meta name="keywords" content="算法,字符串匹配">
+<meta property="og:type" content="article">
+<meta property="og:title" content="KMP算法">
+<meta property="og:url" content="//harold.me/2018/03/29/KMP算法/index.html">
 <meta property="og:site_name" content="Harold的博客">
+<meta property="og:description" content="在编辑文本程序过程中，经常需要在文本中找到某个模式的所有出现位置。典型情况是，一段正在被编辑的文本构成一个文件，而所要搜寻的模式是用户正在输入的特定的关键字。有效的解决这个问题的算法叫做字符串匹配算法，该算法能极大提高编辑文本程序时的响应效率。 KMP算法是一种改进的字符串匹配算法，它的关键是利用匹配失败后的信息，尽量减少模式串与主串的匹配次数以达到快速匹配的目的。我们以一道字符串匹配的题目来学习">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-29T14:31:21.434Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Harold的博客">
+<meta name="twitter:title" content="KMP算法">
+<meta name="twitter:description" content="在编辑文本程序过程中，经常需要在文本中找到某个模式的所有出现位置。典型情况是，一段正在被编辑的文本构成一个文件，而所要搜寻的模式是用户正在输入的特定的关键字。有效的解决这个问题的算法叫做字符串匹配算法，该算法能极大提高编辑文本程序时的响应效率。 KMP算法是一种改进的字符串匹配算法，它的关键是利用匹配失败后的信息，尽量减少模式串与主串的匹配次数以达到快速匹配的目的。我们以一道字符串匹配的题目来学习">
   
     <link rel="alternative" href="/atom.xml" title="Harold的博客" type="application/atom+xml">
   
@@ -160,68 +165,199 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-KMP算法" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/03/21/关于Crunch/" class="archive-article-date">
-  	<time datetime="2018-03-21T02:20:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-21</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/03/21/关于Crunch/">关于Crunch</a>
+    <h1 class="article-title" itemprop="name">
+      KMP算法
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2018/03/29/KMP算法/" class="archive-article-date">
+  	<time datetime="2018-03-29T12:28:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在编辑文本程序过程中，经常需要在文本中找到某个模式的所有出现位置。典型情况是，一段正在被编辑的文本构成一个文件，而所要搜寻的模式是用户正在输入的特定的关键字。有效的解决这个问题的算法叫做字符串匹配算法，该算法能极大提高编辑文本程序时的响应效率。</p>
+<p>KMP算法是一种改进的字符串匹配算法，它的关键是利用匹配失败后的信息，尽量减少模式串与主串的匹配次数以达到快速匹配的目的。我们以一道字符串匹配的题目来学习KMP算法。<br>  <a id="more"></a><br><strong><em>题目：</em></strong><br>对于一个非空字符串，判断其是否可由一个子字符串重复多次组成。字符串只包含小写字母且长度不超过10000。<br><strong>样例1</strong>：<br><em>输入</em> “abab”<br><em>输出</em> True</p>
+<h2 id="样例解释：输入可由”ab”重复两次组成"><a href="#样例解释：输入可由”ab”重复两次组成" class="headerlink" title="样例解释：输入可由”ab”重复两次组成"></a><em>样例解释：</em>输入可由”ab”重复两次组成</h2><p><strong>样例2</strong>：<br><em>输入</em> “aba”<br><em>输出</em> False</p>
+<p><strong><em>思路1：</em></strong><br>笔者在看到题的第一眼产生的想法是非常质朴的遍历，枚举出字符串所有长度为lenSub的子串，然后将字符串分割成长度为lenSub的串，挨个与字串比较，如果相同则返回true，否则返回false</p>
+<p><strong><em>代码1</em></strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">strStr</span><span class="params">(String source)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = source.length();</span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=source.length()/<span class="number">2</span>; i++) &#123;</span><br><span class="line">           String substr = source.substring(<span class="number">0</span>,i);</span><br><span class="line">           <span class="keyword">boolean</span> flag = <span class="keyword">true</span>;</span><br><span class="line">           <span class="keyword">if</span> ((n-i) % i == <span class="number">0</span>)&#123;</span><br><span class="line">               <span class="keyword">int</span> div = n/i;</span><br><span class="line">               String other = <span class="keyword">null</span>;</span><br><span class="line">               <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">1</span>; j&lt;div; j++)&#123;</span><br><span class="line">                   other = source.substring(i*j,i*j+i);</span><br><span class="line">                   <span class="keyword">if</span> (!other.equals(substr)) &#123;</span><br><span class="line">                       flag = <span class="keyword">false</span>;</span><br><span class="line">                       <span class="keyword">break</span>;</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;</span><br><span class="line">               <span class="keyword">if</span> (flag == <span class="keyword">true</span>)</span><br><span class="line">                   <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong><em>思路2：KMP算法</em></strong><br>由kmp算法中的next数组实现。</p>
+<ol>
+<li>字符串s的下标从0到n-1，n为字符串长度，记s(i)表示s的第i位字符，s(i,j)表示从s的第i位到第j位的子字符串，若i&gt;j，则s(i,j)=””(空串）。</li>
+<li><p>next数组的定义为：next(i)=p，表示p为小于i且满足s(0 , p) = s(i-p , i)的最大的p，如果不存在这样的p，则next(i) = -1，显然next(0) = -1。我们可以用O(n)的时间计算出next数组。假设我们已知next(0)，next(1)，……，next(i-1) ，现在要求next(i)，不妨设next(i-1) = j0，则由next数组定义可知s(0 , j0) = s(i-1-j0 , i-1)。</p>
+<ul>
+<li><p>若s(j0+1) = s(i)，则结合s(0 , j0) = s(i-1-j0 , i-1)可知s(0 , j0+1) = s(i - (j0+1) , i)，由此可知，next(i)=j0+1。</p>
+</li>
+<li><p>若s(j0+1)!=s(i)但s(next(j0)+1)=s(i)，记j1=next(j0)，则s(j1+1)=s(i)，由next数组的定义，s(0 , j1) = s(j0 - j1 , j0) = s(i - 1 - j1 , i - 1)，即s(0，j1) = s(i - 1 - j1 , i - 1)，由假设s(j1+1) = s(i)，则s(0 , j1+1) = s(i - (j1+1) , i)，故next(i) = j1+1。</p>
+</li>
+<li><p>同前两步的分析，如果我们能找到一个k，使得对于所有小于k的k0，s(j(k0)+1)!=s(i)，但有s(j(k)+1) = s(i)，则由next数组的定义可以得到next(i)=j(k)+1，否则需进一步考虑j(k+1) = next(j(k))，如果我们找不到这样的k，则next(i)=-1。</p>
+</li>
+</ul>
+</li>
+<li><p>对于字符串s，如果j满足，0&lt;=j&lt;=n-1，且s(0，j) = s(n-1-j，n-1)，令k=n-1-j，若k整除n，不妨设n=mk，则s(0，(m-1)k - 1) = s(k，mk - 1)，即s(0，k-1) = s(k，2k-1) = …… = s((m-1)k - 1，mk - 1)，即s满足题设条件。故要判断s是否为重复子串组成，只需找到满足上述条件的j，且k整除n，即说明s满足条件，否则不满足。</p>
+</li>
+<li><p>利用已算出的next(n-1)，令k=n-1-next(n-1)，由c可知，若k整除n，且k&lt;n，则s满足条件，否则不满足。上述算法的复杂度可证明为O(n)。</p>
+</li>
+</ol>
+<p><strong><em>代码2</em></strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">KMP</span><span class="params">(String source)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> l = source.length();</span><br><span class="line">        <span class="keyword">int</span> [] next = <span class="keyword">new</span> <span class="keyword">int</span>[l];</span><br><span class="line">        next[<span class="number">0</span>] = -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> i, j=-<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt; l; i++) &#123;</span><br><span class="line">            <span class="keyword">while</span> (j &gt;= <span class="number">0</span> &amp;&amp; source.charAt(i) != source.charAt(j+<span class="number">1</span>)) &#123;</span><br><span class="line">                j = next[j];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (source.charAt(i) == source.charAt(j+<span class="number">1</span>)) &#123;</span><br><span class="line">                j++;</span><br><span class="line">            &#125;</span><br><span class="line">            next[i] = j;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> lenSub = l-<span class="number">1</span>-next[l - <span class="number">1</span>];</span><br><span class="line">        <span class="keyword">return</span> lenSub != l &amp;&amp; l%lenSub == <span class="number">0</span> ? <span class="number">1</span> : -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/alipay.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Crunch</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">字符串匹配</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://harold.me/2018/03/29/KMP算法/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2018/03/28/用hadoop构建豆瓣图书推荐系统/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">用hadoop构建豆瓣图书推荐系统</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -244,9 +380,9 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
