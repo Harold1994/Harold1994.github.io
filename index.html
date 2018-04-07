@@ -162,6 +162,213 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-MySQL查漏补缺（二）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/04/MySQL查漏补缺（二）/">MySQL查漏补缺（二）</a>
+    </h1>
+  
+
+        
+        <a href="/2018/04/04/MySQL查漏补缺（二）/" class="archive-article-date">
+  	<time datetime="2018-04-04T14:55:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>在GROUP BY语句后使用WITH ROLLUP，在所有查询结果后会增加一条记录，计算查询出的所有记录的总和</li>
+<li>使用WITH ROLLUP时，不能同时使用ORDER BY子句排序，两者相互排斥</li>
+<li>使用LIMIT限制查询结果的数量，<code>LIMIT [位置偏移量（默认为0），] 行数</code>，偏移量表示从哪一行开始显示</li>
+<li>COUNT(*)计算表中总的行数，不管某列是否有空值，COUNT（字段名）会忽略字段列中的空值</li>
+<li>SUM（）函数计算时会忽略NULL的行</li>
+<li>MAX()和MIN()都不仅可以查找数据类型，还可以用于字符类型</li>
+<li>连接查询条件：两个或多个列表存在相同意义的字段</li>
+<li>在一个连接查询中，如果涉及到的两个表都为一个表，称为自连接查询，自连接是特殊的内连接。两表相同时，用AS取别名防止二义性</li>
+<li>
+        
+          <a class="article-more-a" href="/2018/04/04/MySQL查漏补缺（二）/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/04/04/MySQL查漏补缺（二）/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-《区块链原理、设计与应用》读书摘要" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/03/《区块链原理、设计与应用》读书摘要/">《区块链原理、设计与应用》读书摘要</a>
+    </h1>
+  
+
+        
+        <a href="/2018/04/03/《区块链原理、设计与应用》读书摘要/" class="archive-article-date">
+  	<time datetime="2018-04-03T06:41:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>实验室项目需要了解区块链的有关原理和技术，将自己的读书摘要记录到此处</p>
+<h2 id="一、技术核心概览"><a href="#一、技术核心概览" class="headerlink" title="一、技术核心概览"></a>一、技术核心概览</h2><p><strong>定义与原理</strong><br>中本聪：区块链是用于记录比特币交易账目历史的数据结构<br>Wikipedia：将区块链类比为一种分布式数据库技术，通过维护数据快的链式结构，维持持续增长的、不可篡改的数据记录<br><strong>基本原理</strong><br>交易transaction：一次对账本的操作，导致账本状态的一次改变<br>区块block：计算一段时间内发生的所有交易和状态结果，是对当前账本状态的一次共识<br>链chain：由区块按照发生顺序串联而成，是整个账本状态变化的日志记录</p>
+<p>假设存在一个分布式账本，只允许添加、不允许删除。账本底层是数据结构一个线性链表，链表由一个个区块串联而成，后继区块记录前导区块的Hash值，新数据要加入，必须放到一个新的区块中，而这个块是否合法，可以通过计算哈希值的方式快速检验出来<br><img src="http://p5s7d12ls.bkt.clouddn.com/18-4-3/47102201.jpg" alt=""><br>工作量证明PoW:基于算力寻找nonce串的共识机制</p>
+<p><strong>技术演化和分类</strong><br>智能合约smart contract:提供除了货币交易外更灵活的合约功能，执行更复杂的操作<br><img src="http://p5s7d12ls.bkt.clouddn.com/18-4-3/43523210.jpg" alt=""></p>
+<p>基于区块链的分布式账本特点：<br>1.维护一条不断增长的链，只能添加记录，发生过的记录不可修改<br>2.去中心化，或多中心化，无需集中控制而能达成共识，实现上尽量采用分布式<br>3.通过密码学的机制确保交易无法被抵赖和破坏，尽量保护用户信息和记录的隐私性</p>
+<p><em>分类</em>：</p>
+<ul>
+<li>公有链; 任何人可以参与使用和维护<br><em>进一步引入许可机制，可实现：</em></li>
+<li>私有链：由集中管理者进行管理限制，只有少数人可以使用，信息不公开</li>
+<li>联盟链：介于其他两者之间，有若干组织一起维护一条区块链，该区块链的使用必须带有权限的限制访问，相关信息会得到保护，如供应链或银行联盟</li>
+</ul>
+<h2 id="二、分布式系统核心问题"><a href="#二、分布式系统核心问题" class="headerlink" title="二、分布式系统核心问题"></a>二、分布式系统核心问题</h2><p><strong>一致性问题</strong><br><em>一致性</em>指对于分布式系统中的多个服务节点，给定一系列操作，在约定协议的保障下，试图使得他们对处理结果达成“某种程度”的认同<br><em>一致性要求</em>：<br>1.可终止性：一致的结果能在有限时间内完成<br>2.约同性：不同节点最终完成决策的结果是相同的<br>3.合法性：决策的结果必须是某个节点提出的提案<br><strong>共识算法</strong><br>共识算法解决的是对某个提案大家达成一致意见的过程<br>非拜占庭错误：出现错误但不会伪造信息的情况<br>拜占庭错误：伪造信息恶意响应的情况，对应节点为拜占庭节点<br>共识算法：<br>解决非拜占庭错误CTF：Paxos、Paft等<br>解决拜占庭错误BFT：pbft,PoW等<br><strong>FLP不可能原理</strong><br>在网络可靠，但允许节点失败的最小化异步模型系统中，不存在一個可以解决一致性问题的确定性共识算法<br><strong>CAP原理</strong><br>分布式计算系统不可能同时确保三个特性：一致性、可用性和分区容忍性，设计中往往需要弱化对某个特性的保证。</p>
+<blockquote>
+<p>一致性：任何操作都是原子的，发生在后面的事件能看到前面时间发生导致的结果<br>可用性：在有限时间内，任何非失败节点都能应答请求<br>分区容忍性：网络可能发生分区，节点之间通信不可保障</p>
+</blockquote>
+<p><strong>Paxos算法</strong><br>基于“两阶段提交“算法并进行泛化扩展，基本原理是将节点分为三种逻辑角色，在实现上一个人可以担任多个角色：</p>
+<ul>
+<li>Proposer提案者：提树一个提案，等待大家批准为结案，一般客户端担任此角色</li>
+<li>Accepter接受者：负责对提案进行投票，接受提案，一般服务器担任此角色</li>
+<li>Learner学习者：获取批准结果，并帮忙传播，不参与投票过程，可能为客户端或者服务器端</li>
+</ul>
+<p><em>算法约束</em>：</p>
+<ul>
+<li>Safey约束:保证决议是对的，无歧义的，不会出现错误情况</li>
+<li>LIveness约束：保证决议过程能在有限时间内完成</li>
+</ul>
+<p><em>两阶段提交</em><br>准备阶段：</p>
+<blockquote>
+<ol>
+<li>提案者发送自己计划提交的提案的编号到多个接受者，试探是否可以锁定多个接收者的支持。</li>
+<li>接受者时刻保留收到过的提案的最大编号和接受的最大提案，如果收到的提案号比目前保留的最大的提案号还大，更新当前最大提案号，并说明不再接受小于最大提案号的提案</li>
+</ol>
+</blockquote>
+<p>提交阶段：</p>
+<blockquote>
+<p>1.提案者如果收到大多数的回复，则可准备发出带有刚才提案号的接受消息。如果收到的回复中不带有新的提案，说明锁定成功。则使用自己的提案内容，如果返回中有提案内容，则替换提案值为返回中编号最大的提案值。如果没有收到足够的回复，则需要再次发出请求。</p>
+<ol>
+<li>接受者收到”接受消息“后，如果发现提案号不小于已接受的最大提案号，则接受该提案，并更新接受的最大提案。</li>
+</ol>
+</blockquote>
+<p><strong>Raft算法</strong><br>　在Raft中，任何时候一个服务器可以扮演下面角色之一：</p>
+<pre><code>Leader: 处理所有客户端交互，日志复制等，一般一次只有一个Leader.
+Follower: 类似选民，完全被动
+Candidate候选人: 类似Proposer律师，可以被选为一个新的领导人。
+</code></pre><p>Raft阶段分为两个，首先是选举过程，然后在选举出来的领导人带领进行正常操作，比如日志复制等</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">区块链</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/04/03/《区块链原理、设计与应用》读书摘要/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-MySQL查漏补缺（一）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -823,94 +1030,10 @@
 
 
   
-    <article id="post-关于HIVE" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/17/关于HIVE/">关于Hive</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/17/关于HIVE/" class="archive-article-date">
-  	<time datetime="2018-03-17T03:43:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>本篇博客主要来自于本人学习&lt;&lt;Hadoop权威指南&gt;&gt;Hive部分的笔记和一些理解</p>
-</blockquote>
-<p>Hive是构建在Hadoop上的数据仓库框架,它把SQL查询转换为一系列在Hadoop集群上运行的作业,它的数据组织为表,元数据(eg.表模式)存储在metastore数据库中. metastore默认模本式为运行在本机上.</p>
-<h2 id="Hive-shell环境"><a href="#Hive-shell环境" class="headerlink" title="Hive shell环境"></a>Hive shell环境</h2><p>HiveQL是Hive的查询语言,类似Mysql,运行方式有:<br>
-        
-          <a class="article-more-a" href="/2018/03/17/关于HIVE/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hive</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/17/关于HIVE/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
   
 
 
@@ -1035,6 +1158,14 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">算法</a>
               </li>
              
@@ -1043,11 +1174,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
               </li>
              
               <li class="article-tag-list-item">
