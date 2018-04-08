@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="//harold.me">
   <title>MySQL查漏补缺（三） | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="视图：虚拟表，从数据库中的一个或多个表中导出来的表，还可以在已定义视图的基础上定义。 视图中看到的数据只是存放在基本表中的数据，若基本表数据发生变化，则这种变化可以自动反映到视图中。 创建视图： 1234CREATE [OR REPLACE] [ALGORITHM = &amp;#123;UNDEFINED | MERGE | TEMPTABLE&amp;#125;]		VIEW view_name [(col">
+  <meta name="description" content="视图：虚拟表，从数据库中的一个或多个表中导出来的表，还可以在已定义视图的基础上定义。 视图中看到的数据只是存放在基本表中的数据，若基本表数据发生变化，则这种变化可以自动反映到视图中。 创建视图：1234CREATE [OR REPLACE] [ALGORITHM = &amp;#123;UNDEFINED | MERGE | TEMPTABLE&amp;#125;]		VIEW view_name [(colu">
 <meta name="keywords" content="数据库,MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL查漏补缺（三）">
 <meta property="og:url" content="//harold.me/2018/04/08/MySQL查漏补缺（三）/index.html">
 <meta property="og:site_name" content="Harold的博客">
-<meta property="og:description" content="视图：虚拟表，从数据库中的一个或多个表中导出来的表，还可以在已定义视图的基础上定义。 视图中看到的数据只是存放在基本表中的数据，若基本表数据发生变化，则这种变化可以自动反映到视图中。 创建视图： 1234CREATE [OR REPLACE] [ALGORITHM = &amp;#123;UNDEFINED | MERGE | TEMPTABLE&amp;#125;]		VIEW view_name [(col">
+<meta property="og:description" content="视图：虚拟表，从数据库中的一个或多个表中导出来的表，还可以在已定义视图的基础上定义。 视图中看到的数据只是存放在基本表中的数据，若基本表数据发生变化，则这种变化可以自动反映到视图中。 创建视图：1234CREATE [OR REPLACE] [ALGORITHM = &amp;#123;UNDEFINED | MERGE | TEMPTABLE&amp;#125;]		VIEW view_name [(colu">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-08T12:11:40.239Z">
+<meta property="og:updated_time" content="2018-04-08T12:13:36.030Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL查漏补缺（三）">
-<meta name="twitter:description" content="视图：虚拟表，从数据库中的一个或多个表中导出来的表，还可以在已定义视图的基础上定义。 视图中看到的数据只是存放在基本表中的数据，若基本表数据发生变化，则这种变化可以自动反映到视图中。 创建视图： 1234CREATE [OR REPLACE] [ALGORITHM = &amp;#123;UNDEFINED | MERGE | TEMPTABLE&amp;#125;]		VIEW view_name [(col">
+<meta name="twitter:description" content="视图：虚拟表，从数据库中的一个或多个表中导出来的表，还可以在已定义视图的基础上定义。 视图中看到的数据只是存放在基本表中的数据，若基本表数据发生变化，则这种变化可以自动反映到视图中。 创建视图：1234CREATE [OR REPLACE] [ALGORITHM = &amp;#123;UNDEFINED | MERGE | TEMPTABLE&amp;#125;]		VIEW view_name [(colu">
   
     <link rel="alternative" href="/atom.xml" title="Harold的博客" type="application/atom+xml">
   
@@ -188,11 +188,12 @@
         <ul>
 <li>视图：虚拟表，从数据库中的一个或多个表中导出来的表，还可以在已定义视图的基础上定义。</li>
 <li>视图中看到的数据只是存放在基本表中的数据，若基本表数据发生变化，则这种变化可以自动反映到视图中。</li>
-<li><p>创建视图：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> [<span class="keyword">OR</span> <span class="keyword">REPLACE</span>] [ALGORITHM = &#123;UNDEFINED | <span class="keyword">MERGE</span> | TEMPTABLE&#125;]</span><br><span class="line">		<span class="keyword">VIEW</span> view_name [(column_list)]</span><br><span class="line">    	<span class="keyword">AS</span> SELECT_statement</span><br><span class="line">    	[<span class="keyword">WITH</span> [<span class="keyword">CASCADED</span> | <span class="keyword">LOCAL</span>] <span class="keyword">CHECK</span> <span class="keyword">OPTION</span>]</span><br></pre></td></tr></table></figure>
-<pre><code>&lt;!-- more--&gt;
-</code></pre><p>REPLACE表示替换已有视图，WITH [CASCADED | LOCAL] CHECK OPTION表示视图在更新时保证在视图的权限范围之内。CASCADE（级联的）为默认值，表示视图更新时要满足所有相关视图和表的条件;LOCAL表示更新时满足该视图本身定义的条件即可。<br>视图选择的算法有三种，UNDEFINED表示MySQL将自动选择算法;MERGE表示将使用的视图语句与视图定义合并起来，使得视图定义的某一部分取代语句对应的部分;TEMPTABLE表示将视图结果存入临时表，然后用临时表执行语句。</p>
+<li>创建视图：<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> [<span class="keyword">OR</span> <span class="keyword">REPLACE</span>] [ALGORITHM = &#123;UNDEFINED | <span class="keyword">MERGE</span> | TEMPTABLE&#125;]</span><br><span class="line">		<span class="keyword">VIEW</span> view_name [(column_list)]</span><br><span class="line">    	<span class="keyword">AS</span> SELECT_statement</span><br><span class="line">    	[<span class="keyword">WITH</span> [<span class="keyword">CASCADED</span> | <span class="keyword">LOCAL</span>] <span class="keyword">CHECK</span> <span class="keyword">OPTION</span>]</span><br></pre></td></tr></table></figure>
 </li>
+</ul>
+<a id="more"></a>
+<p>REPLACE表示替换已有视图，WITH [CASCADED | LOCAL] CHECK OPTION表示视图在更新时保证在视图的权限范围之内。CASCADE（级联的）为默认值，表示视图更新时要满足所有相关视图和表的条件;LOCAL表示更新时满足该视图本身定义的条件即可。<br>视图选择的算法有三种，UNDEFINED表示MySQL将自动选择算法;MERGE表示将使用的视图语句与视图定义合并起来，使得视图定义的某一部分取代语句对应的部分;TEMPTABLE表示将视图结果存入临时表，然后用临时表执行语句。</p>
+<ul>
 <li>默认情况下，将在当前数据库创建新视图。要在给定数据库创建视图，创建时应将名称指定为：db_name.view_name</li>
 <li>查看视图：<code>DESCRIBE 视图名</code>，<code>SHOW TABLE STATUS LIKE &#39;视图名&#39;</code>，<code>SHOW CREATE VIEW 视图名</code></li>
 <li><code>SELECT * FROM information_schema.views</code>,MySQL中，information_schema数据库中的views表中存储了所有视图的定义，可以查看视图的详细信息。</li>
