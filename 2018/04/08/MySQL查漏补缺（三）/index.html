@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//harold.me">
-  <title>Tag: HBase | Harold的博客</title>
+  <title>MySQL查漏补缺（三） | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Harold的博客">
-<meta property="og:url" content="//harold.me/tags/HBase/index.html">
+  <meta name="description" content="视图：虚拟表，从数据库中的一个或多个表中导出来的表，还可以在已定义视图的基础上定义。 视图中看到的数据只是存放在基本表中的数据，若基本表数据发生变化，则这种变化可以自动反映到视图中。 创建视图： 1234CREATE [OR REPLACE] [ALGORITHM = &amp;#123;UNDEFINED | MERGE | TEMPTABLE&amp;#125;]		VIEW view_name [(col">
+<meta name="keywords" content="数据库,MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL查漏补缺（三）">
+<meta property="og:url" content="//harold.me/2018/04/08/MySQL查漏补缺（三）/index.html">
 <meta property="og:site_name" content="Harold的博客">
+<meta property="og:description" content="视图：虚拟表，从数据库中的一个或多个表中导出来的表，还可以在已定义视图的基础上定义。 视图中看到的数据只是存放在基本表中的数据，若基本表数据发生变化，则这种变化可以自动反映到视图中。 创建视图： 1234CREATE [OR REPLACE] [ALGORITHM = &amp;#123;UNDEFINED | MERGE | TEMPTABLE&amp;#125;]		VIEW view_name [(col">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-08T12:11:40.239Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Harold的博客">
+<meta name="twitter:title" content="MySQL查漏补缺（三）">
+<meta name="twitter:description" content="视图：虚拟表，从数据库中的一个或多个表中导出来的表，还可以在已定义视图的基础上定义。 视图中看到的数据只是存放在基本表中的数据，若基本表数据发生变化，则这种变化可以自动反映到视图中。 创建视图： 1234CREATE [OR REPLACE] [ALGORITHM = &amp;#123;UNDEFINED | MERGE | TEMPTABLE&amp;#125;]		VIEW view_name [(col">
   
     <link rel="alternative" href="/atom.xml" title="Harold的博客" type="application/atom+xml">
   
@@ -160,68 +165,239 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-MySQL查漏补缺（三）" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/03/21/关于HBase/" class="archive-article-date">
-  	<time datetime="2018-03-21T02:32:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-21</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/03/21/关于HBase/">关于HBase</a>
+    <h1 class="article-title" itemprop="name">
+      MySQL查漏补缺（三）
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2018/04/08/MySQL查漏补缺（三）/" class="archive-article-date">
+  	<time datetime="2018-04-07T16:05:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>视图：虚拟表，从数据库中的一个或多个表中导出来的表，还可以在已定义视图的基础上定义。</li>
+<li>视图中看到的数据只是存放在基本表中的数据，若基本表数据发生变化，则这种变化可以自动反映到视图中。</li>
+<li><p>创建视图：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> [<span class="keyword">OR</span> <span class="keyword">REPLACE</span>] [ALGORITHM = &#123;UNDEFINED | <span class="keyword">MERGE</span> | TEMPTABLE&#125;]</span><br><span class="line">		<span class="keyword">VIEW</span> view_name [(column_list)]</span><br><span class="line">    	<span class="keyword">AS</span> SELECT_statement</span><br><span class="line">    	[<span class="keyword">WITH</span> [<span class="keyword">CASCADED</span> | <span class="keyword">LOCAL</span>] <span class="keyword">CHECK</span> <span class="keyword">OPTION</span>]</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;!-- more--&gt;
+</code></pre><p>REPLACE表示替换已有视图，WITH [CASCADED | LOCAL] CHECK OPTION表示视图在更新时保证在视图的权限范围之内。CASCADE（级联的）为默认值，表示视图更新时要满足所有相关视图和表的条件;LOCAL表示更新时满足该视图本身定义的条件即可。<br>视图选择的算法有三种，UNDEFINED表示MySQL将自动选择算法;MERGE表示将使用的视图语句与视图定义合并起来，使得视图定义的某一部分取代语句对应的部分;TEMPTABLE表示将视图结果存入临时表，然后用临时表执行语句。</p>
+</li>
+<li>默认情况下，将在当前数据库创建新视图。要在给定数据库创建视图，创建时应将名称指定为：db_name.view_name</li>
+<li>查看视图：<code>DESCRIBE 视图名</code>，<code>SHOW TABLE STATUS LIKE &#39;视图名&#39;</code>，<code>SHOW CREATE VIEW 视图名</code></li>
+<li><code>SELECT * FROM information_schema.views</code>,MySQL中，information_schema数据库中的views表中存储了所有视图的定义，可以查看视图的详细信息。</li>
+<li>修改视图：<blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> [<span class="keyword">OR</span> <span class="keyword">REPLACE</span>] [ALGORITHM = &#123;UNDEFINED | <span class="keyword">MERGE</span> | TEMPTABLE&#125;]</span><br><span class="line">		<span class="keyword">VIEW</span> view_name [(column_list)]</span><br><span class="line">    	<span class="keyword">AS</span> SELECT_statement</span><br><span class="line">    	[<span class="keyword">WITH</span> [<span class="keyword">CASCADED</span> | <span class="keyword">LOCAL</span>] <span class="keyword">CHECK</span> <span class="keyword">OPTION</span>]</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> [ALGORITHM = &#123;UNDEFINED | <span class="keyword">MERGE</span> | TEMPTABLE&#125;]</span><br><span class="line">		<span class="keyword">VIEW</span> view_name [(column_list)]</span><br><span class="line">    	<span class="keyword">AS</span> SELECT_statement</span><br><span class="line">    	[<span class="keyword">WITH</span> [<span class="keyword">CASCADED</span> | <span class="keyword">LOCAL</span>] <span class="keyword">CHECK</span> <span class="keyword">OPTION</span>]</span><br></pre></td></tr></table></figure>
+</blockquote>
+<ul>
+<li>更新视图：<code>UPDATE 视图名 SET col_name = val</code>,<code>DELETE FROM 视图名 WHERE condition_expr</code></li>
+<li>当视图中包含如下内容时，视图的更新不能被执行：<blockquote>
+<ol>
+<li>视图中不包含基表中被定义为非空的列</li>
+<li>在定义视图的SELECT语句后的字段列表中使用了数学表达式</li>
+<li>在定义视图的SELECT语句后的字段列表中使用了聚合函数</li>
+<li>在定义视图的SELECT语句中使用了DISTINCT，UNION，TOP，GROUP BY或HAVING子句</li>
+</ol>
+</blockquote>
+</li>
+<li><p>删除视图：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">VIEW</span> [<span class="keyword">IF</span> <span class="keyword">EXISTS</span>]</span><br><span class="line">	view_name [,view_name] ...</span><br><span class="line">    [RESTRICT | <span class="keyword">CASCADE</span>]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>触发器是个特殊的存储过程，不需要CALL语句来调用，只要当一个预定义的事件发生时，就会被自动调用，可以查询其他表。</p>
+</li>
+<li>创建触发器：<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TRIGGER</span> trigger_name trigger_time trigger_event</span><br><span class="line"><span class="keyword">ON</span> tb1_name <span class="keyword">FOR</span> <span class="keyword">EACH</span> <span class="keyword">ROW</span> trigger_stmt</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>trigger_time标识触发时机，可指定为before或after;trigger_event标识触发事件，包括INSERT，UPDATE，DELETE;tb1_name指明在哪张表上建立触发器;trigger_stmt是触发器程序体。可以为单条语句，也可以使用BEGIN和END作为开始和结束执行多条语句。</p>
+<ul>
+<li>实例：</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; CREATE TRIGGER ins_sum BEFORE INSERT ON account</span><br><span class="line">    -&gt; for each row SET @SUM=@SUM+NEW.amount;</span><br><span class="line">Query OK, 0 rows affected (0.01 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; set @SUM=0</span><br><span class="line">    -&gt; ;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; INSERT INTO account values(1,1.00),(2,2.00);</span><br><span class="line">Query OK, 2 rows affected (0.00 sec)</span><br><span class="line">Records: 2  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; select @SUM;</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">| @SUM |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">| 3.00 |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<p>使用OLD和NEW关键字，能够访问受触发程序影响的行中的列（OLD和NEW不区分大小写），可以使用OLD.col_name来引用更新前的某一行的列，也能使用NEW.col_name来引用更新后的行中的列。</p>
+<ul>
+<li>查看触发器：<code>SHOW TRIGGERSV</code>，<code>SELECT * FROM INFORMATION_SCHEMA.TRIGGERS WHERE condition</code></li>
+<li>删除触发器：<code>DROP TRIGGER [schema_name.]trigger_name</code></li>
+<li>对于相同的表，相同的事件只能创建一个触发器</li>
+<li><p>用CREATE USER创建新用户：</p>
+  <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> user_sprcification</span><br><span class="line">    [, user_specification] ...</span><br><span class="line"></span><br><span class="line">user_specification:</span><br><span class="line">    <span class="keyword">user</span>@host</span><br><span class="line">    [</span><br><span class="line">        <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> [<span class="keyword">PASSWORD</span>] <span class="string">'password'</span></span><br><span class="line">      |	<span class="keyword">IDENTIFIED</span> <span class="keyword">WITH</span> auth_plugin [<span class="keyword">AS</span> <span class="string">'auth_string'</span>]</span><br><span class="line">    ]</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>这样创建的账户没有任何权限，如果添加的账户已经存在则会返回一个错误。[PASSWORD]表示使用哈希值设置密码。host表示允许登陆的用户主机名称，默认为%，即对所有主机开放访问权限。如果用户不需要密码登陆，则可以省略<code>IDENTIFIED  BY</code>语句。IDENTIFIED WITH为用户指定一个身份验证插件，与IDENTIFIED BY 互斥。</p>
+<ul>
+<li><p>GRANT创建用户同时授权：</p>
+  <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GRANT</span> <span class="keyword">privileges</span> <span class="keyword">ON</span> db.table</span><br><span class="line"><span class="keyword">TO</span> <span class="keyword">user</span>@host [<span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'password'</span>] [, <span class="keyword">user</span> [<span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'password'</span>]]</span><br><span class="line">[<span class="keyword">WITH</span> <span class="keyword">GRANT</span> <span class="keyword">OPTION</span>];</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>直接操作MySQL用户表创建用户：</p>
+  <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> mysql.user(Host,<span class="keyword">User</span>,<span class="keyword">Password</span>,[privilegelist])</span><br><span class="line"><span class="keyword">VALUES</span> (<span class="string">'host'</span>,<span class="string">'username'</span>,<span class="keyword">PASSWORD</span>(<span class="string">'password'</span>),privilegevaluelist)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除用户：<code>DROP USER user</code> ，DROP USER不能自动关闭任何打开的用户对话，如果用户有打开的回话，此时取消用户，命令不会生效，直到对话关闭后生效。</p>
+</li>
+<li>删除用户2： <code>DELETE FROM MySQL。user WHERE host=&#39;hostname&#39; and user = &#39;username&#39;</code></li>
+</ul>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/alipay.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">HBase</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://harold.me/2018/04/08/MySQL查漏补缺（三）/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2018/04/04/MySQL查漏补缺（二）/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">MySQL查漏补缺（二）</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -254,9 +430,9 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
