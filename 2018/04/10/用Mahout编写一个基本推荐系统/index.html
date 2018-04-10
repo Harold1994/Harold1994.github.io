@@ -6,20 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//harold.me">
-  <title>MySQL查漏补缺（二） | Harold的博客</title>
+  <title>用Mahout编写一个基本推荐系统 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="在GROUP BY语句后使用WITH ROLLUP，在所有查询结果后会增加一条记录，计算查询出的所有记录的总和 使用WITH ROLLUP时，不能同时使用ORDER BY子句排序，两者相互排斥 使用LIMIT限制查询结果的数量，LIMIT [位置偏移量（默认为0），] 行数，偏移量表示从哪一行开始显示 COUNT(*)计算表中总的行数，不管某列是否有空值，COUNT（字段名）会忽略字段列中的空值">
-<meta name="keywords" content="数据库,MySQL">
+  <meta name="description" content="Mahout是一个机器学习Java类库的集合用于完成各种任务，如分类、评价性的聚类和模式挖掘等。相对于Weka和RapidMIner等库，Mahout真正是为大规模数据集设计的，它的算法用Hadoop环境。我们将使用Slope On推荐算法，它基于协同过滤方法，因为在Mahout0.9之后已经没有此方法，因此需要在pom文件中指定0.8版本。">
+<meta name="keywords" content="大数据,推荐系统， Mahout， Hadoop">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MySQL查漏补缺（二）">
-<meta property="og:url" content="//harold.me/2018/04/04/MySQL查漏补缺（二）/index.html">
+<meta property="og:title" content="用Mahout编写一个基本推荐系统">
+<meta property="og:url" content="//harold.me/2018/04/10/用Mahout编写一个基本推荐系统/index.html">
 <meta property="og:site_name" content="Harold的博客">
-<meta property="og:description" content="在GROUP BY语句后使用WITH ROLLUP，在所有查询结果后会增加一条记录，计算查询出的所有记录的总和 使用WITH ROLLUP时，不能同时使用ORDER BY子句排序，两者相互排斥 使用LIMIT限制查询结果的数量，LIMIT [位置偏移量（默认为0），] 行数，偏移量表示从哪一行开始显示 COUNT(*)计算表中总的行数，不管某列是否有空值，COUNT（字段名）会忽略字段列中的空值">
+<meta property="og:description" content="Mahout是一个机器学习Java类库的集合用于完成各种任务，如分类、评价性的聚类和模式挖掘等。相对于Weka和RapidMIner等库，Mahout真正是为大规模数据集设计的，它的算法用Hadoop环境。我们将使用Slope On推荐算法，它基于协同过滤方法，因为在Mahout0.9之后已经没有此方法，因此需要在pom文件中指定0.8版本。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-07T15:58:49.036Z">
+<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-4-10/23573009.jpg">
+<meta property="og:updated_time" content="2018-04-10T03:25:39.383Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MySQL查漏补缺（二）">
-<meta name="twitter:description" content="在GROUP BY语句后使用WITH ROLLUP，在所有查询结果后会增加一条记录，计算查询出的所有记录的总和 使用WITH ROLLUP时，不能同时使用ORDER BY子句排序，两者相互排斥 使用LIMIT限制查询结果的数量，LIMIT [位置偏移量（默认为0），] 行数，偏移量表示从哪一行开始显示 COUNT(*)计算表中总的行数，不管某列是否有空值，COUNT（字段名）会忽略字段列中的空值">
+<meta name="twitter:title" content="用Mahout编写一个基本推荐系统">
+<meta name="twitter:description" content="Mahout是一个机器学习Java类库的集合用于完成各种任务，如分类、评价性的聚类和模式挖掘等。相对于Weka和RapidMIner等库，Mahout真正是为大规模数据集设计的，它的算法用Hadoop环境。我们将使用Slope On推荐算法，它基于协同过滤方法，因为在Mahout0.9之后已经没有此方法，因此需要在pom文件中指定0.8版本。">
+<meta name="twitter:image" content="http://p5s7d12ls.bkt.clouddn.com/18-4-10/23573009.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Harold的博客" type="application/atom+xml">
   
@@ -171,149 +173,33 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-MySQL查漏补缺（二）" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-用Mahout编写一个基本推荐系统" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      MySQL查漏补缺（二）
+      用Mahout编写一个基本推荐系统
     </h1>
   
 
         
-        <a href="/2018/04/04/MySQL查漏补缺（二）/" class="archive-article-date">
-  	<time datetime="2018-04-04T14:55:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-04</time>
+        <a href="/2018/04/10/用Mahout编写一个基本推荐系统/" class="archive-article-date">
+  	<time datetime="2018-04-10T01:44:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-10</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <ul>
-<li>在GROUP BY语句后使用WITH ROLLUP，在所有查询结果后会增加一条记录，计算查询出的所有记录的总和</li>
-<li>使用WITH ROLLUP时，不能同时使用ORDER BY子句排序，两者相互排斥</li>
-<li>使用LIMIT限制查询结果的数量，<code>LIMIT [位置偏移量（默认为0），] 行数</code>，偏移量表示从哪一行开始显示</li>
-<li>COUNT(*)计算表中总的行数，不管某列是否有空值，COUNT（字段名）会忽略字段列中的空值</li>
-<li>SUM（）函数计算时会忽略NULL的行</li>
-<li>MAX()和MIN()都不仅可以查找数据类型，还可以用于字符类型</li>
-<li>连接查询条件：两个或多个列表存在相同意义的字段</li>
-<li>在一个连接查询中，如果涉及到的两个表都为一个表，称为自连接查询，自连接是特殊的内连接。两表相同时，用AS取别名防止二义性</li>
-<li><a id="more"></a></li>
-<li>子查询：一个查询语句嵌套到一个查询语句的内部</li>
-<li>SOME，ANY表示满足其中任一条件，允许创建一个表达式对子查询的返回列表进行比较，只要满足内层子查询中的任何一个比较条件，就返回一个结果作为外层查询的条件</li>
-<li>ALL关键字需要同时满足所有的内层查询条件</li>
-<li>EXISTS关键字后面跟任意子查询，子查询有返回行则返回TRUE，此时外层语句将进行查询，否则返回false，对称的操作时NOT EXISTS</li>
-<li>利用UNION关键字可以给出多条SELECT语句，并将它们的结果组合成单个结果集。合并时，两个表对应的列和数据类型必须相同。UNION会删除重复的记录，所有返回的行都是唯一的，UNION ALL不删除重复行也不对结果自动排序。UNION ALL的效率高一点</li>
-<li>LIKE匹配的字符串如果在文本中间出现，则找不到它，相应的行也不会返回，REGEXP会返回</li>
-<li>更新表UPDATE table_name SET column_name = val WHERE condition如果忽略WHERE子句，MySQL将更新表中所有的行</li>
-<li>TRUNCATE TABLE语句直接删除原来的表并新建一个表，比DELETE速度快</li>
-<li>索引用于快速查找出某个列中有一特定行的值，是对数据库表中一列或者多列的值进行排序的一种结构，可提高特定数据的查询速度</li>
-<li>索引是单独存储在磁盘上的数据结构，所有MySQL列类型都可以被索引</li>
-<li>索引优点：<blockquote>
-<ol>
-<li>通过创建唯一索引，可以保证数据库表中没一行数据的唯一性</li>
-<li>可以大大加快数据的查询速度</li>
-<li>在实现数据参考的完整性方面，可以加速表与表之间的连接</li>
-<li>在使用分组和排序子句进行数据查询时，可以显式减少查询中分组和排序的时间</li>
-</ol>
-</blockquote>
-</li>
-<li>索引缺点：<blockquote>
-<p>. 创建索引和维护索引需要耗费时间，并且随着数据量的增加所耗费的时间也会增加<br>. 索引需要占磁盘空间<br>. 对表中的数据进行增加、删除和修改的时候，索引也要动态维护，降低了维护速度</p>
-</blockquote>
-</li>
-</ul>
-<p>索引分类：</p>
+        <p>Mahout是一个机器学习Java类库的集合用于完成各种任务，如分类、评价性的聚类和模式挖掘等。相对于Weka和RapidMIner等库，Mahout真正是为大规模数据集设计的，它的算法用Hadoop环境。<br>我们将使用Slope On推荐算法，它基于协同过滤方法，因为在Mahout0.9之后已经没有此方法，因此需要在pom文件中指定0.8版本。<br><a id="more"></a><br><strong>准备工作</strong><br>数据集：GroupLens<br>下载方式：<code>wget http://www.grouplens.org/system/files/ml-1m.zip</code><br>下载后有四个文件：</p>
 <blockquote>
-<ul>
-<li>普通索引：基本索引类型，允许在定义索引的列中插入重复值和空值</li>
-<li>唯一索引：索引列必须是唯一的，允许有空值。主键索引是特殊唯一索引，不允许有空值</li>
-<li>单列索引：一个索引只允许包含一列，一个表可以有多个单列索引</li>
-<li>组合索引：在表的多个字段组合上创建的索引，只有在查询条件中使用了这些字段的左边字段时，索引才会被使用。遵循最左前缀集合</li>
-<li>全文索引：类型为FULLTEXT，在定义索引的列上支持全文查找，允许在这些索引列中插入重复值和空值MySQL中只有MyISAM存储引擎支持全文索引</li>
-<li>空间索引：对空间数据类型字段建立的索引。<br>创建表时创建索引：<code>CREATE TABLE table_name [col_name data_type] [UNIQUE|FULLTEXT|SPATIAL] [INDEX|KEY] [index_name] (col_name [length]) [ASC | DESC]</code>,UNIQUE|FULLTEXT|SPATIAL 可选，分别表示唯一索引，全文索引和空间索引，INDEX与KEY为同义词，用来指定创建索引，index_name为索引名，可选，若不指定，则默认以col_name为索引值;length可选，表示索引的长度，只有字符串类型的字段才能指定索引长度。</li>
-</ul>
+<p>user.dat:包含6000个用户<br>movies.dat:包含电影名字<br>ratings.dat: 包含用户和电影的关系，一个数字表示用户对电影的喜爱程度<br>README： 说明文件格式</p>
 </blockquote>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show create table book\G</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">       Table: book</span><br><span class="line"><span class="keyword">Create</span> <span class="keyword">Table</span>: <span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`book`</span> (</span><br><span class="line">  <span class="string">`book_id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`book_name`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`authors`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`info`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`comment`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`year_publication`</span> <span class="keyword">year</span>(<span class="number">4</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">KEY</span> <span class="string">`year_publication`</span> (<span class="string">`year_publication`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=latin1</span><br><span class="line"><span class="number">1</span> <span class="keyword">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
-<p>使用EXPLAIN语句查看索引是否正在使用。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain select * from book where year_publication=1990 \G</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">           id: 1</span><br><span class="line">  select_type: SIMPLE</span><br><span class="line">        table: book</span><br><span class="line">   partitions: NULL</span><br><span class="line">         type: ref</span><br><span class="line">possible_keys: year_publication</span><br><span class="line">          key: year_publication</span><br><span class="line">      key_len: 1</span><br><span class="line">          ref: const</span><br><span class="line">         rows: 1</span><br><span class="line">     filtered: 100.00</span><br><span class="line">        Extra: Using index condition</span><br><span class="line">1 row in <span class="keyword">set</span>, <span class="number">1</span> <span class="keyword">warning</span> (<span class="number">0.01</span> sec)</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li><code>ALTER TABLE table_name ADD [UNIQUE|FULLTEXT|SPATIAL] [INDEX|KEY] [index_name] (col_name[length]) [ASC|DESC]</code>在已存在的表上添加索引</li>
-<li><code>CREATE [UNIQUE|FULLTEXT|SPATIAL] INDEX index_name ON table_name (col_name[length],...) [ASC|DESC]</code>在已存在的表上添加索引</li>
-<li><code>ALTER TABLE table_name DROP INDEX index_name</code>删除索引</li>
-<li>添加AUTO_INCREMENT约束字段的唯一索引不能被删除</li>
-<li>DROP INDEX index_name ON table_name;</li>
-<li>存储过程是一条或多条SQL语句的集合，可视为批文件。</li>
-<li>存储程序可以分为存储过程和函数。创建存储过程，只能用输出变量返回值。<code>CREATE PROCEDURE</code>,创建函数<code>CREATE FUNCTION</code>，使用<code>CALL</code>语句调用存储过程。函数可以从语句外部调用，也能返回标量值。存储过程可以调用其他存储过程。</li>
-<li><code>CREATE PROCEDURE sp_name ([proc_parameter]) [characteristics ...] routine_body</code>,proc_parameter指定参数列表，列表形式：<code>[IN | OUT | INOUT] param_name type</code>,type参数类型可以时MySQL数据库中的任意类型。characteristic指定存储过程的特性，取值有：<blockquote>
-<p>LANGUAGE SQL:说明routine_body部分是由SQL语句组成的<br>[NOT] DETERMINISTIC：指明存储过程结果是否确定，即相同的输入是否能得到相同的输出<br>{CONSTRAINS SQL | NO SQL | READS SQL DATA | MODIFIES SQL DATA}，指明子程序使用SQL语句的限制<br>SQL SECURITY {DEFINER（定义者——默认） | INVOKER（拥有权限的调用者）}：指定谁有权执行<br>COMMENT’string’:注释信息</p>
-</blockquote>
-</li>
-</ul>
-<p>routine_body是SQL代码内容，用BEGIN…END表示开始和结束</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; DELIMITER //</span><br><span class="line">mysql&gt; CREATE PROCEDURE CountProc (OUT param1 INT)</span><br><span class="line">    -&gt; SELECT COUNT(*) INTO param1 FROM fruits;</span><br><span class="line">    -&gt; END //</span><br></pre></td></tr></table></figure>
-<p>将计算结果放入参数param1,<code>DELIMITER //</code>语句设置结束符，避免与存储过程中的;相冲突</p>
-<ul>
-<li>创建存储函数<code>CREATE FUNCTION func_name ([func_parameter]) RETURNS type [characteristic...] routine_body</code>,RETURNS type表示函数返回数据的类型</li>
-<li><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; CREATE FUNCTION NameByZip()</span><br><span class="line">    -&gt; RETURNS CHAR(50)</span><br><span class="line">    -&gt; RETURN (SELECT f_name FROM fruits WHERE s_price&gt;5.0);</span><br><span class="line">    -&gt; //</span><br><span class="line">Query OK, 0 rows affected (0.01 sec)</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>如果存储函数中RETURN语句返回的类型不同于函数RETURNS子句中指定类型不同，返回值将被强制为恰当的类型。函数体必须包含一个RETURN value语句</p>
-<ul>
-<li>变量可以在子程序中声明使用，作用范围是BEGIN…END程序中</li>
-<li>定义变量：<code>DECLARE var_name[,var_name]... data_type [DEFAULT value]</code></li>
-<li>改变变量值：<code>SET var_name = expr [,var_name = expr]...</code></li>
-<li>通过<code>SELECT col_name[,...] INTO var_name[,...] table_expr</code>向变量赋值</li>
-<li>定义条件是事先定义程序执行过程中遇到的问题，处理程序定义了在遇到问题时应当采取的处理方式，并且保证存储过程或函数在遇到警告或错误时能继续执行。</li>
-<li>定义条件：</li>
-<li><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> condition_name CONDITION <span class="keyword">FOR</span> [condition <span class="keyword">type</span>]</span><br><span class="line"></span><br><span class="line">[condition_type]:</span><br><span class="line"><span class="keyword">SQLSTATE</span> [<span class="keyword">VALUE</span>] sqlstate_value | mysql_error_code</span><br></pre></td></tr></table></figure>
-<p>  condition type表示条件的类型，sqlstate_value 和 mysql_error_code都表示MySQL的错误</p>
-</li>
-<li>定义处理程序：</li>
-</ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">DECALRE handler_type <span class="keyword">HANDLER</span> <span class="keyword">FOR</span> condition_value[,...] sp_statement</span><br><span class="line">handler_type:</span><br><span class="line">CONTINUE | <span class="keyword">EXIT</span> | <span class="keyword">UNDO</span></span><br><span class="line"></span><br><span class="line">condition_value:</span><br><span class="line">	<span class="keyword">SQLSTATE</span> [<span class="keyword">VALUE</span>]  sqlstate_value</span><br><span class="line">    | condition_name</span><br><span class="line">    | SQLWARNING</span><br><span class="line">    | <span class="keyword">NOT</span> <span class="keyword">FOUND</span></span><br><span class="line">    | SQLEXCEPTION</span><br><span class="line">    | mysql_error_code</span><br></pre></td></tr></table></figure>
-<p>handler_type为错误处理方式，有三个取值，UNDO表示遇到错误后撤回之前的操作，MySQL不支持UNDO<br><code>e.g:DECLARE CONTINUE HANDLER FOR 1146 SET @info=&#39;NO_SUCH_TABLE&#39;</code>;</p>
-<ul>
-<li>@var_name表示用户变量，使用SET赋值，与连接有关，一个客户端定义的变量不能被其他客户端看到或使用，客户端退出时，其连接的用户变量将自动释放。</li>
-<li>光标：数据量大时，在存储过程和函数中逐条读取查询结果集中的记录。必须在声明处理程序之前声明光标，并且变量和条件还必须在声明光标或处理程序之前被声明。</li>
-<li><code>DECLARE cursor_name CURSOR FOR select_statement</code>声明标签</li>
-<li><code>OPEN cursor_name</code>:打开先前声明的光标</li>
-<li><code>FETCH cursore_name INTO var_name,...</code>使用光标，将光标存入var_name,var_name必须在声明光标前就定义好</li>
-<li><code>CLOSE cursor_name</code>:关闭光标</li>
-<li>MySQL中光标只能在存储过程和函数中使用</li>
-<li>流程控制语句：根据条件控制语句的执行，IF，CASE，LOOP，LEAVE，ITERATE，REPEAT，WHILE语句等</li>
-<li><p>IF语句：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">IF expr_condition THEN statement_list</span><br><span class="line">	[ELSEIF expr_condition THEN statement_list]...</span><br><span class="line">	[ELSE statement_list]</span><br><span class="line"><span class="keyword">END</span> <span class="keyword">IF</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>CASE语句：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CASE case_expr</span><br><span class="line">	WHEN when_value THEN statement_list</span><br><span class="line">    [WHEN when_value THEN statement_list] ...</span><br><span class="line">    [ELSE statement_list]</span><br><span class="line"><span class="keyword">END</span> <span class="keyword">CASE</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>LOOP语句：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[loop_label：] LOOP</span><br><span class="line">	statement_list</span><br><span class="line"><span class="keyword">END</span> <span class="keyword">LOOP</span> [loop_label]</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>使用LEAVE语句退出LOOP</p>
-<ul>
-<li>LEAVE语句用来退出任何被标注的控制流程构造，语法<code>LEAVE label</code></li>
-<li>ITERATE语句将执行顺序转到语句段开头处，语法<code>ITERATE label</code></li>
-<li><p>REPEAT语句创建一个带条件判断的循环过程：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">·[repeat_label:] REPEAT</span><br><span class="line">	statement_list</span><br><span class="line">UNTIL expr_condition</span><br><span class="line"><span class="keyword">END</span> <span class="keyword">REPEAT</span> [repeat_label]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>WHILE语句：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[while_label:] WHILE expr_condition <span class="keyword">DO</span></span><br><span class="line">	statement_list</span><br><span class="line"><span class="keyword">END</span> <span class="keyword">WHILE</span> [while_label]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>调用存储过程：<code>CALL sp_name(parameter[,...])</code></p>
-</li>
-<li><code>SHOW {PROCEDURE | FUNCTION} STATUS [LIKE &#39;pattern&#39;]</code>查看存储过程和函数的状态</li>
-<li><code>SHOW CREATE {PROCEDURE | FUNCTION} sp_name</code>查看存储过程和函数的定义</li>
-<li><code>SELECT * FROM information_schema.Routines WHERE ROUTINE_NAME = &#39;sp_name&#39;</code>,从information_schema.Routines表中查看procedure和函数信息。</li>
-<li>修改存储过程和函数<code>ALTER {PROCEDURE | FUNCTION} sp_name [characteristic...]</code>,characteristic表示存储函数的特性</li>
-<li><code>DROP {PROCEDURE | FUNCTION} [IF EXISTS] sp_name</code>删除过程和函数</li>
-<li>存储程序和函数的比较：本质上都是存储程序，函数只能通过return语句返回单个值或者表对象，而存储过程不允许执行return，但是可以通过OUT返回多个值。函数限制比较多，不能用临时表，只能用表变量，还有一些函数不可用;存储过程限制较少。函数可以嵌入在SQL语句中使用，存储过程一般作为一个独立的部分来执行</li>
-<li>在存储过程中可以用CALL调用其他存储过程，但是不能用DROP语句删除其他存储过程</li>
-<li>传入中文参数时，要在定义存储过程的语句中加入<code>character set gbk</code></li>
-</ul>
+<p><strong>实现过程</strong><br>1.将GroupLens格式的rating.转换成CSV格式，将1::1193::5::978300760转为1,1193形式<br>2.创建一个Model类来处理将要使用的新文件rating.csv的文件格式<br>3.在该模型上创建一个简单的推荐系统<br>4.从文件rating.csv中提取整个用户列表需要花费一段时间，之后，在标题上将会看到每个用户的推荐</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.manhoutcookbook.recommendsys;</span><br><span class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.common.TasteException;</span><br><span class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator;</span><br><span class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.impl.model.file.FileDataModel;</span><br><span class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.impl.recommender.CachingRecommender;</span><br><span class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.impl.recommender.slopeone.SlopeOneRecommender;</span><br><span class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.model.DataModel;</span><br><span class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.recommender.RecommendedItem;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> String  inputFile = <span class="string">"ml-1m/ratings.dat"</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> String outputFile = <span class="string">"ml-1m/ratings.csv"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, TasteException </span>&#123;</span><br><span class="line">        CreateCvsRatingFile();<span class="comment">//修改文件格式</span></span><br><span class="line">        <span class="comment">//基于CSV文件建立模型</span></span><br><span class="line">        File  ratingsFile = <span class="keyword">new</span> File(outputFile);</span><br><span class="line">        DataModel model;</span><br><span class="line">        model = <span class="keyword">new</span> FileDataModel(ratingsFile);</span><br><span class="line">        <span class="comment">//创建SlopeRecommender</span></span><br><span class="line">        CachingRecommender cachingRecommender = <span class="keyword">new</span> CachingRecommender(<span class="keyword">new</span> SlopeOneRecommender(model));</span><br><span class="line">        <span class="keyword">for</span> (LongPrimitiveIterator it = model.getUserIDs(); it.hasNext(); ) &#123;</span><br><span class="line">            <span class="keyword">long</span> userId = it.nextLong();</span><br><span class="line">            <span class="comment">//显示推荐结果</span></span><br><span class="line">            List&lt;RecommendedItem&gt; recommendations = cachingRecommender.recommend(userId, <span class="number">10</span>);</span><br><span class="line">            <span class="keyword">if</span> (recommendations.size() == <span class="number">0</span>) &#123;</span><br><span class="line">                System.out.println(<span class="string">"User "</span>);</span><br><span class="line">                System.out.println(userId);</span><br><span class="line">                System.out.println(<span class="string">": no recommendations"</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span>(RecommendedItem recommendedItem : recommendations) &#123;</span><br><span class="line">                System.out.println(<span class="string">"User "</span>);</span><br><span class="line">                System.out.println(userId);</span><br><span class="line">                System.out.println(recommendedItem);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">CreateCvsRatingFile</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        BufferedReader reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> FileReader(inputFile));</span><br><span class="line">        BufferedWriter writer = <span class="keyword">new</span> BufferedWriter(<span class="keyword">new</span> FileWriter(outputFile));</span><br><span class="line">        String line = <span class="keyword">null</span>;</span><br><span class="line">        String line2write = <span class="keyword">null</span>;</span><br><span class="line">        String [] temp;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">//仅转换1000条，避免单机运行堆异常</span></span><br><span class="line">        <span class="keyword">while</span>((line  = reader.readLine()) != <span class="keyword">null</span> &amp;&amp; i&lt;<span class="number">10000</span>) &#123;</span><br><span class="line">            i++;</span><br><span class="line">            temp = line.split(<span class="string">"::"</span>);</span><br><span class="line">            line2write = temp[<span class="number">0</span>] + <span class="string">","</span> + temp[<span class="number">1</span>];</span><br><span class="line">            writer.write(line2write);</span><br><span class="line">            writer.newLine();</span><br><span class="line">            writer.flush();</span><br><span class="line">        &#125;</span><br><span class="line">        reader.close();</span><br><span class="line">        writer.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：<br><img src="http://p5s7d12ls.bkt.clouddn.com/18-4-10/23573009.jpg" alt=""><br>Slope One推荐算法：使用线性函数结合用户和条目来估计接近程度，计算简单快速，对新用户推荐效果不错</p>
 
       
 
@@ -353,11 +239,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">推荐系统， Mahout， Hadoop</a>
         		</li>
       		
 		</ul>
@@ -413,7 +299,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://harold.me/2018/04/04/MySQL查漏补缺（二）/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://harold.me/2018/04/10/用Mahout编写一个基本推荐系统/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -427,18 +313,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/04/08/MySQL查漏补缺（三）/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          MySQL查漏补缺（三）
-        
-      </div>
-    </a>
   
-  
-    <a href="/2018/04/03/《区块链原理、设计与应用》读书摘要/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">《区块链原理、设计与应用》读书摘要</div>
+    <a href="/2018/04/08/Java并发编程——结构化并发应用程序/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Java并发编程——结构化并发应用程序(一)</div>
       <i class="icon-circle-right"></i>
     </a>
   
