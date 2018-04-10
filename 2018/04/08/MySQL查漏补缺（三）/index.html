@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="视图：虚拟表，从数据库中的一个或多个表中导出来的表，还可以在已定义视图的基础上定义。 视图中看到的数据只是存放在基本表中的数据，若基本表数据发生变化，则这种变化可以自动反映到视图中。 创建视图：1234CREATE [OR REPLACE] [ALGORITHM = &amp;#123;UNDEFINED | MERGE | TEMPTABLE&amp;#125;]		VIEW view_name [(colu">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-08T12:13:36.030Z">
+<meta property="og:updated_time" content="2018-04-08T14:30:21.632Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL查漏补缺（三）">
 <meta name="twitter:description" content="视图：虚拟表，从数据库中的一个或多个表中导出来的表，还可以在已定义视图的基础上定义。 视图中看到的数据只是存放在基本表中的数据，若基本表数据发生变化，则这种变化可以自动反映到视图中。 创建视图：1234CREATE [OR REPLACE] [ALGORITHM = &amp;#123;UNDEFINED | MERGE | TEMPTABLE&amp;#125;]		VIEW view_name [(colu">
@@ -254,7 +254,7 @@
 </li>
 <li><p>删除用户：<code>DROP USER user</code> ，DROP USER不能自动关闭任何打开的用户对话，如果用户有打开的回话，此时取消用户，命令不会生效，直到对话关闭后生效。</p>
 </li>
-<li>删除用户2： <code>DELETE FROM MySQL。user WHERE host=&#39;hostname&#39; and user = &#39;username&#39;</code></li>
+<li>删除用户2： <code>DELETE FROM MySQL user WHERE host=&#39;hostname&#39; and user = &#39;username&#39;</code></li>
 </ul>
 
       
@@ -368,6 +368,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2018/04/08/Java并发编程——结构化并发应用程序/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Java并发编程——结构化并发应用程序(一)
+        
+      </div>
+    </a>
   
   
     <a href="/2018/04/04/MySQL查漏补缺（二）/" id="article-nav-older" class="article-nav-link-wrap">
@@ -528,11 +537,11 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -541,6 +550,14 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
