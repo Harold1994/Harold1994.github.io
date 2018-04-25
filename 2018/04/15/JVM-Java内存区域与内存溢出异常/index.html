@@ -6,22 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//harold.me">
-  <title>用Mahout编写一个基本推荐系统 | Harold的博客</title>
+  <title>JVM--Java内存区域与内存溢出异常 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Mahout是一个机器学习Java类库的集合用于完成各种任务，如分类、评价性的聚类和模式挖掘等。相对于Weka和RapidMIner等库，Mahout真正是为大规模数据集设计的，它的算法用Hadoop环境。我们将使用Slope On推荐算法，它基于协同过滤方法，因为在Mahout0.9之后已经没有此方法，因此需要在pom文件中指定0.8版本。">
-<meta name="keywords" content="大数据,推荐系统， Mahout， Hadoop">
+  <meta name="description" content="Java虚拟机在执行Java程序的过程中会把它管理的内存划分为若干不同的数据区域。 程序计数器：是一块较小的内存空间，可看做当前线程执行的字节码的行号指示器，在虚拟机的概念模型里(仅是概念模型,各种虚拟机可能会通过一些更高效的方式去实现),字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令,分支、循环、跳转、异常处理、线程恢复等基础功能都需要依赖这个计数器来完成。  程序">
+<meta name="keywords" content="JVM, Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="用Mahout编写一个基本推荐系统">
-<meta property="og:url" content="//harold.me/2018/04/10/用Mahout编写一个基本推荐系统/index.html">
+<meta property="og:title" content="JVM--Java内存区域与内存溢出异常">
+<meta property="og:url" content="//harold.me/2018/04/15/JVM-Java内存区域与内存溢出异常/index.html">
 <meta property="og:site_name" content="Harold的博客">
-<meta property="og:description" content="Mahout是一个机器学习Java类库的集合用于完成各种任务，如分类、评价性的聚类和模式挖掘等。相对于Weka和RapidMIner等库，Mahout真正是为大规模数据集设计的，它的算法用Hadoop环境。我们将使用Slope On推荐算法，它基于协同过滤方法，因为在Mahout0.9之后已经没有此方法，因此需要在pom文件中指定0.8版本。">
+<meta property="og:description" content="Java虚拟机在执行Java程序的过程中会把它管理的内存划分为若干不同的数据区域。 程序计数器：是一块较小的内存空间，可看做当前线程执行的字节码的行号指示器，在虚拟机的概念模型里(仅是概念模型,各种虚拟机可能会通过一些更高效的方式去实现),字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令,分支、循环、跳转、异常处理、线程恢复等基础功能都需要依赖这个计数器来完成。  程序">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-4-10/23573009.jpg">
-<meta property="og:updated_time" content="2018-04-10T03:25:39.383Z">
+<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-4-15/8172747.jpg">
+<meta property="og:updated_time" content="2018-04-15T16:07:31.982Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="用Mahout编写一个基本推荐系统">
-<meta name="twitter:description" content="Mahout是一个机器学习Java类库的集合用于完成各种任务，如分类、评价性的聚类和模式挖掘等。相对于Weka和RapidMIner等库，Mahout真正是为大规模数据集设计的，它的算法用Hadoop环境。我们将使用Slope On推荐算法，它基于协同过滤方法，因为在Mahout0.9之后已经没有此方法，因此需要在pom文件中指定0.8版本。">
-<meta name="twitter:image" content="http://p5s7d12ls.bkt.clouddn.com/18-4-10/23573009.jpg">
+<meta name="twitter:title" content="JVM--Java内存区域与内存溢出异常">
+<meta name="twitter:description" content="Java虚拟机在执行Java程序的过程中会把它管理的内存划分为若干不同的数据区域。 程序计数器：是一块较小的内存空间，可看做当前线程执行的字节码的行号指示器，在虚拟机的概念模型里(仅是概念模型,各种虚拟机可能会通过一些更高效的方式去实现),字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令,分支、循环、跳转、异常处理、线程恢复等基础功能都需要依赖这个计数器来完成。  程序">
+<meta name="twitter:image" content="http://p5s7d12ls.bkt.clouddn.com/18-4-15/8172747.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Harold的博客" type="application/atom+xml">
   
@@ -173,33 +173,52 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-用Mahout编写一个基本推荐系统" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-JVM-Java内存区域与内存溢出异常" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      用Mahout编写一个基本推荐系统
+      JVM--Java内存区域与内存溢出异常
     </h1>
   
 
         
-        <a href="/2018/04/10/用Mahout编写一个基本推荐系统/" class="archive-article-date">
-  	<time datetime="2018-04-10T01:44:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-10</time>
+        <a href="/2018/04/15/JVM-Java内存区域与内存溢出异常/" class="archive-article-date">
+  	<time datetime="2018-04-15T15:01:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-15</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Mahout是一个机器学习Java类库的集合用于完成各种任务，如分类、评价性的聚类和模式挖掘等。相对于Weka和RapidMIner等库，Mahout真正是为大规模数据集设计的，它的算法用Hadoop环境。<br>我们将使用Slope On推荐算法，它基于协同过滤方法，因为在Mahout0.9之后已经没有此方法，因此需要在pom文件中指定0.8版本。<br><a id="more"></a><br><strong>准备工作</strong><br>数据集：GroupLens<br>下载方式：<code>wget http://www.grouplens.org/system/files/ml-1m.zip</code><br>下载后有四个文件：</p>
+        <p>Java虚拟机在执行Java程序的过程中会把它管理的内存划分为若干不同的数据区域。<br><img src="http://p5s7d12ls.bkt.clouddn.com/18-4-15/8172747.jpg" alt=""></p>
+<p><em>程序计数器</em>：是一块较小的内存空间，可看做当前线程执行的字节码的行号指示器，在虚拟机的概念模型里(仅是概念模型,各种虚拟机可能会通过一些更高效的方式去实现),字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令,分支、循环、跳转、异常处理、线程恢复等基础功能都需要依赖这个计数器来完成。</p>
 <blockquote>
-<p>user.dat:包含6000个用户<br>movies.dat:包含电影名字<br>ratings.dat: 包含用户和电影的关系，一个数字表示用户对电影的喜爱程度<br>README： 说明文件格式</p>
+<p>程序计数器是线程私有的：为了线程切换后能恢复到正确的执行位置,每条线程都需要有一个独立的程序计数器,各条线程之间计数器互不影响,独立存储,我们称这类内存区域为“线程私有”的内存。</p>
 </blockquote>
-<p><strong>实现过程</strong><br>1.将GroupLens格式的rating.转换成CSV格式，将1::1193::5::978300760转为1,1193形式<br>2.创建一个Model类来处理将要使用的新文件rating.csv的文件格式<br>3.在该模型上创建一个简单的推荐系统<br>4.从文件rating.csv中提取整个用户列表需要花费一段时间，之后，在标题上将会看到每个用户的推荐</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.manhoutcookbook.recommendsys;</span><br><span class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.common.TasteException;</span><br><span class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator;</span><br><span class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.impl.model.file.FileDataModel;</span><br><span class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.impl.recommender.CachingRecommender;</span><br><span class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.impl.recommender.slopeone.SlopeOneRecommender;</span><br><span class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.model.DataModel;</span><br><span class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.recommender.RecommendedItem;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> String  inputFile = <span class="string">"ml-1m/ratings.dat"</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> String outputFile = <span class="string">"ml-1m/ratings.csv"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, TasteException </span>&#123;</span><br><span class="line">        CreateCvsRatingFile();<span class="comment">//修改文件格式</span></span><br><span class="line">        <span class="comment">//基于CSV文件建立模型</span></span><br><span class="line">        File  ratingsFile = <span class="keyword">new</span> File(outputFile);</span><br><span class="line">        DataModel model;</span><br><span class="line">        model = <span class="keyword">new</span> FileDataModel(ratingsFile);</span><br><span class="line">        <span class="comment">//创建SlopeRecommender</span></span><br><span class="line">        CachingRecommender cachingRecommender = <span class="keyword">new</span> CachingRecommender(<span class="keyword">new</span> SlopeOneRecommender(model));</span><br><span class="line">        <span class="keyword">for</span> (LongPrimitiveIterator it = model.getUserIDs(); it.hasNext(); ) &#123;</span><br><span class="line">            <span class="keyword">long</span> userId = it.nextLong();</span><br><span class="line">            <span class="comment">//显示推荐结果</span></span><br><span class="line">            List&lt;RecommendedItem&gt; recommendations = cachingRecommender.recommend(userId, <span class="number">10</span>);</span><br><span class="line">            <span class="keyword">if</span> (recommendations.size() == <span class="number">0</span>) &#123;</span><br><span class="line">                System.out.println(<span class="string">"User "</span>);</span><br><span class="line">                System.out.println(userId);</span><br><span class="line">                System.out.println(<span class="string">": no recommendations"</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span>(RecommendedItem recommendedItem : recommendations) &#123;</span><br><span class="line">                System.out.println(<span class="string">"User "</span>);</span><br><span class="line">                System.out.println(userId);</span><br><span class="line">                System.out.println(recommendedItem);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">CreateCvsRatingFile</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        BufferedReader reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> FileReader(inputFile));</span><br><span class="line">        BufferedWriter writer = <span class="keyword">new</span> BufferedWriter(<span class="keyword">new</span> FileWriter(outputFile));</span><br><span class="line">        String line = <span class="keyword">null</span>;</span><br><span class="line">        String line2write = <span class="keyword">null</span>;</span><br><span class="line">        String [] temp;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">//仅转换1000条，避免单机运行堆异常</span></span><br><span class="line">        <span class="keyword">while</span>((line  = reader.readLine()) != <span class="keyword">null</span> &amp;&amp; i&lt;<span class="number">10000</span>) &#123;</span><br><span class="line">            i++;</span><br><span class="line">            temp = line.split(<span class="string">"::"</span>);</span><br><span class="line">            line2write = temp[<span class="number">0</span>] + <span class="string">","</span> + temp[<span class="number">1</span>];</span><br><span class="line">            writer.write(line2write);</span><br><span class="line">            writer.newLine();</span><br><span class="line">            writer.flush();</span><br><span class="line">        &#125;</span><br><span class="line">        reader.close();</span><br><span class="line">        writer.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运行结果：<br><img src="http://p5s7d12ls.bkt.clouddn.com/18-4-10/23573009.jpg" alt=""><br>Slope One推荐算法：使用线性函数结合用户和条目来估计接近程度，计算简单快速，对新用户推荐效果不错</p>
+<p><em>Java虚拟机栈</em>：线程私有，生命周期与线程相同。虚拟机栈描述的是Java方法执行的内存模型:每个方法在执行的同时都会创建一个栈帧(Stack Frame)用于存储局部变量表、操作数栈、动态链接、方法出口等信息。每一个方法从调用直至执行完成的过程,就对应着一个栈帧在虚拟机栈中入栈到出栈的过程。</p>
+<blockquote>
+<p>局部变量表存放了<em>编译器可知</em>的各种<em>基本数据类型</em>（boolean、byte、char、short、int、float、long、<br>double)，<em>对象引用</em>和returnAddress类型。<br>其中64位长度的long和double类型的数据会占用2个局部变量空间(Slot),其余的数据类型只占用1个。局部<br>变量表所需的内存空间在编译期间完成分配,当进入一个方法时,这个方法需要在帧中分配多大的局部变量空间是<br>完全确定的,在方法运行期间不会改变局部变量表的大小。</p>
+</blockquote>
+<p><em>本地方法栈</em>：本地方法栈为虚拟机使用到的Native方法服务，线程独立</p>
+<blockquote>
+<p>与Java虚拟机栈对比：它们之间的区别不过是虚拟机栈为虚拟机执行Java方法(也就是字节码)服务,而本地方法栈则为虚拟机使用到的Native方法服务</p>
+</blockquote>
+<p><em>Java堆</em>：JVM管理的内存中最大的一块，<em>线程共享</em>，在JVM启动时创建，用来<em>存放实例对象</em>。java堆是垃圾回收的主要区域。</p>
+<blockquote>
+<p>从内存回收的角度来看,由于现在收集器基本都采用分代收集算法,所以Java堆中还可以细分为:新生代和老年代<br>从内存分配的角度来看,线程共享的Java堆中可能划分出多个线程私有的<em>分配缓冲区</em><br>Java堆可以处于物理上不连续的内存空间中，逻辑上连续即可<br>如果在堆中没有内存完成实例分配,并且堆也无法再扩展时,将会抛出OutOfMemoryError异常。</p>
+</blockquote>
+<p><em>Java方法区</em>：<em>线程共享</em>，用于存储已被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。又名“非堆”</p>
+<p><em>运行时常量池</em>：是方法区的一部分，常量池存放编译期生成的各种字面量和符号引用，这部分内容将在类加载后进入方法区的运行时常量池中存放。</p>
+<blockquote>
+<p>Class文件内容：类的版本、字段、方法、接口、常量池<br>运行时常量池相对于Class文件常量池的另外一个重要特征是具备动态性,Java语言并不要求常量一定只有编<br>译期才能产生,也就是并非预置入Class文件中常量池的内容才能进入方法区运行时常量池,运行期间也可能将新<br>的常量放入池中</p>
+</blockquote>
+<p><em>直接内存</em>：直接内存(Direct Memory)并不是虚拟机运行时数据区的一部分,也不是Java虚拟机规范中定义的内存区<br>域。NIO(New Input/Output)类引入了一种基于通道(Channel)与缓冲区(Buffer)的I/O方式,它可以使用Native函数库直接分配堆外内存,然后通过一个存储在Java堆中的DirectByteBuffer对象作为这块内存的引用进行操作。这样能在一些场景中显著提高性能,因为避免了在Java堆和Native堆中来回复制数据。</p>
+<blockquote>
+<p>本机直接内存的分配不会受到Java堆大小的限制,但是,既然是内存,肯定还是会受到本机总内存(包括RAM以及SWAP区或者分页文件)大小以及处理器寻址空间的限制。</p>
+</blockquote>
 
       
 
@@ -239,11 +258,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">推荐系统， Mahout， Hadoop</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JVM, Java</a>
         		</li>
       		
 		</ul>
@@ -299,7 +314,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://harold.me/2018/04/10/用Mahout编写一个基本推荐系统/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://harold.me/2018/04/15/JVM-Java内存区域与内存溢出异常/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -313,18 +328,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/04/15/JVM-Java内存区域与内存溢出异常/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/04/25/Scala快速学习/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          JVM--Java内存区域与内存溢出异常
+          Scala快速学习
         
       </div>
     </a>
   
   
-    <a href="/2018/04/08/Java并发编程——结构化并发应用程序/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Java并发编程——结构化并发应用程序(一)</div>
+    <a href="/2018/04/10/用Mahout编写一个基本推荐系统/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">用Mahout编写一个基本推荐系统</div>
       <i class="icon-circle-right"></i>
     </a>
   
