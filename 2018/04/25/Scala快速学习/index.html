@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="变量声明：var：可变变量val：不可变变量（推荐使用）">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-25T12:44:36.591Z">
+<meta property="og:updated_time" content="2018-04-25T12:46:10.199Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Scala快速学习">
 <meta name="twitter:description" content="变量声明：var：可变变量val：不可变变量（推荐使用）">
@@ -192,10 +192,9 @@
     <div class="article-entry" itemprop="articleBody">
       
         <ul>
-<li><p>变量声明：<br>var：可变变量<br>val：不可变变量（推荐使用）</p>
-  <a id="more"></a>
-</li>
+<li>变量声明：<br>var：可变变量<br>val：不可变变量（推荐使用）</li>
 </ul>
+<a id="more"></a>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; <span class="keyword">val</span> x = <span class="number">3</span></span><br><span class="line">x: <span class="type">Int</span> = <span class="number">3</span></span><br><span class="line"></span><br><span class="line">scala&gt; x = <span class="number">4</span></span><br><span class="line">&lt;console&gt;:<span class="number">12</span>: error: reassignment to <span class="keyword">val</span></span><br><span class="line">       x = <span class="number">4</span></span><br><span class="line">         ^</span><br></pre></td></tr></table></figure>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; <span class="keyword">var</span> b = <span class="number">45</span></span><br><span class="line">b: <span class="type">Int</span> = <span class="number">45</span></span><br><span class="line"></span><br><span class="line">scala&gt; b = <span class="number">12</span></span><br><span class="line">b: <span class="type">Int</span> = <span class="number">12</span></span><br></pre></td></tr></table></figure>
 <ul>
