@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="变量声明：var：可变变量val：不可变变量（推荐使用）">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-25T12:46:10.199Z">
+<meta property="og:updated_time" content="2018-04-26T02:43:35.924Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Scala快速学习">
 <meta name="twitter:description" content="变量声明：var：可变变量val：不可变变量（推荐使用）">
@@ -224,7 +224,7 @@
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Int</span>(<span class="params"></span>) <span class="keyword">extends</span> <span class="title">scala</span>.<span class="title">AnyVal</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">toByte</span> </span>: scala.<span class="type">Byte</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">toShort</span> </span>: scala.<span class="type">Short</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">toChar</span> </span>: scala.<span class="type">Char</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">toInt</span> </span>: scala.<span class="type">Int</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">toLong</span> </span>: scala.<span class="type">Long</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">toFloat</span> </span>: scala.<span class="type">Float</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">toDouble</span> </span>: scala.<span class="type">Double</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">unary_~</span> </span>: scala.<span class="type">Int</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">unary_+</span> </span>: scala.<span class="type">Int</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">unary_-</span> </span>: scala.<span class="type">Int</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">+</span></span>(x : scala.<span class="type">Predef</span>.<span class="type">String</span>) : scala.<span class="type">Predef</span>.<span class="type">String</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">&lt;&lt;</span></span>(x : scala.<span class="type">Int</span>) : scala.<span class="type">Int</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">&lt;&lt;</span></span>(x : scala.<span class="type">Long</span>) : scala.<span class="type">Int</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">&gt;&gt;&gt;</span></span>(x : scala.<span class="type">Int</span>) : scala.<span class="type">Int</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">&gt;&gt;&gt;</span></span>(x : scala.<span class="type">Long</span>) : scala.<span class="type">Int</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">&gt;&gt;</span></span>(x : scala.<span class="type">Int</span>) : scala.<span class="type">Int</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">&gt;&gt;</span></span>(x : scala.<span class="type">Long</span>) : scala.<span class="type">Int</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">==</span></span>(x : scala.<span class="type">Byte</span>) : scala.<span class="type">Boolean</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">==</span></span>(x : scala.<span class="type">Short</span>) : scala.<span class="type">Boolean</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">==</span></span>(x : scala.<span class="type">Char</span>) : scala.<span class="type">Boolean</span>...</span><br></pre></td></tr></table></figure>
 <p>测试：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; <span class="number">1</span>+<span class="number">2</span></span><br><span class="line">res0: <span class="type">Int</span> = <span class="number">3</span></span><br><span class="line"></span><br><span class="line">scala&gt; <span class="number">1.</span>+(<span class="number">2</span>)</span><br><span class="line">res1: <span class="type">Int</span> = <span class="number">3</span></span><br></pre></td></tr></table></figure>
-<p>方法的声明：def关键字：def 方法名 （参数1：参数类型 …)  返回类型  = 方法体 </p>
+<p>方法的声明：def 方法名 （参数1：参数类型 …)：  返回类型  = 方法体 </p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; <span class="function"><span class="keyword">def</span> <span class="title">m1</span></span>(x:<span class="type">Int</span>, y:<span class="type">Int</span>): <span class="type">Int</span> = x + y</span><br><span class="line">m1: (x: <span class="type">Int</span>, y: <span class="type">Int</span>)<span class="type">Int</span></span><br><span class="line">scala&gt; m1(<span class="number">3</span>,<span class="number">4</span>)</span><br><span class="line">res3: <span class="type">Int</span> = <span class="number">7</span></span><br></pre></td></tr></table></figure>
 <p>scala中的方法和函数不是一个东西，定义的方式都不一样。</p>
 <p>函数定义方式：</p>
@@ -381,6 +381,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2018/04/25/Scala常用方法/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Scala常用方法
+        
+      </div>
+    </a>
   
   
     <a href="/2018/04/15/JVM-Java内存区域与内存溢出异常/" id="article-nav-older" class="article-nav-link-wrap">
@@ -541,19 +550,15 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">JVM, Java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -565,11 +570,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -577,15 +586,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Hadoop</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -594,6 +599,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">HBase</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
               </li>
              
               <li class="article-tag-list-item">

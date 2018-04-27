@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//harold.me">
-  <title>Archives | Harold的博客</title>
+  <title>Scala常用方法 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Harold的博客">
-<meta property="og:url" content="//harold.me/archives/index.html">
+  <meta name="description" content="lazy关键字 lazy一般在变量前边作为修饰字符，表示该变量是一个惰性变量（想想spark里面的转换操作），会实现延迟加载，惰性变量只能是不可变变量， 只有在调用惰性变量时才会实例化该变量。">
+<meta name="keywords" content="scala">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scala常用方法">
+<meta property="og:url" content="//harold.me/2018/04/25/Scala常用方法/index.html">
 <meta property="og:site_name" content="Harold的博客">
+<meta property="og:description" content="lazy关键字 lazy一般在变量前边作为修饰字符，表示该变量是一个惰性变量（想想spark里面的转换操作），会实现延迟加载，惰性变量只能是不可变变量， 只有在调用惰性变量时才会实例化该变量。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-25T14:07:47.571Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Harold的博客">
+<meta name="twitter:title" content="Scala常用方法">
+<meta name="twitter:description" content="lazy关键字 lazy一般在变量前边作为修饰字符，表示该变量是一个惰性变量（想想spark里面的转换操作），会实现延迟加载，惰性变量只能是不可变变量， 只有在调用惰性变量时才会实例化该变量。">
   
     <link rel="alternative" href="/atom.xml" title="Harold的博客" type="application/atom+xml">
   
@@ -166,74 +171,76 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Scala常用方法" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/04/25/scala面向对象和模式匹配/" class="archive-article-date">
-  	<time datetime="2018-04-25T14:08:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-25</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/04/25/scala面向对象和模式匹配/">scala面向对象和模式匹配</a>
+    <h1 class="article-title" itemprop="name">
+      Scala常用方法
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">scala</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/04/25/Scala常用方法/" class="archive-article-date">
+        
+        <a href="/2018/04/25/Scala常用方法/" class="archive-article-date">
   	<time datetime="2018-04-25T12:48:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-25</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/04/25/Scala常用方法/">Scala常用方法</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li><p>lazy关键字</p>
+<p>lazy一般在变量前边作为修饰字符，表示该变量是一个<strong>惰性变量</strong>（想想spark里面的转换操作），会实现<strong>延迟加载</strong>，惰性变量只能是<em>不可变变量</em>， 只有在调用惰性变量时才会实例化该变量。</p>
+</li>
+</ul>
+<a id="more"></a>
+<p>  未使用lazy：</p>
+  <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">ScalaLazyDemo</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">init</span></span>(): <span class="type">Unit</span> = &#123;</span><br><span class="line">    println(<span class="string">"call init()"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> property = init()<span class="comment">//未使用lazy关键字</span></span><br><span class="line">    println(<span class="string">"after init"</span>)</span><br><span class="line">    println(property)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">output：</span><br><span class="line">call init()</span><br><span class="line">after init</span><br><span class="line">()</span><br></pre></td></tr></table></figure>
+<p>  使用lazy：</p>
+  <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">ScalaLazyDemo2</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">init</span></span>(): <span class="type">Unit</span> = &#123;</span><br><span class="line">    println(<span class="string">"call init()"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">lazy</span> <span class="keyword">val</span> property = init()<span class="comment">//使用lazy关键字</span></span><br><span class="line">    println(<span class="string">"after init"</span>)<span class="comment">//先执行这一句</span></span><br><span class="line">    println(property)<span class="comment">//到这里才执行init（）</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">output：</span><br><span class="line">after init</span><br><span class="line">call init()</span><br><span class="line">()</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>函数式编程连续</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Exercise</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="comment">//创建一个list</span></span><br><span class="line">    <span class="keyword">val</span> list0 = <span class="type">List</span>(<span class="number">5</span>, <span class="number">9</span>, <span class="number">5</span>, <span class="number">152</span>, <span class="number">85</span>, <span class="number">41</span>)</span><br><span class="line">    <span class="comment">//list中的每个元素乘2</span></span><br><span class="line">    <span class="keyword">val</span> list1 = list0.map(_ * <span class="number">2</span>)</span><br><span class="line">    <span class="comment">//将list中的偶数取出来生成一个新集合</span></span><br><span class="line">    <span class="keyword">val</span> list2 = list0.filter(_ % <span class="number">2</span> == <span class="number">0</span>)</span><br><span class="line">    <span class="comment">//将list排序</span></span><br><span class="line">    <span class="keyword">val</span> list3 = list0.sorted</span><br><span class="line">    <span class="comment">//反转list</span></span><br><span class="line">    <span class="keyword">val</span> listt4 = list0.reverse</span><br><span class="line">    <span class="comment">//将list中的元素4个一组，类型为Iterator[List[Int]]</span></span><br><span class="line">    <span class="keyword">val</span> it = list0.grouped(<span class="number">4</span>)</span><br><span class="line">    <span class="comment">//将iterator转为list</span></span><br><span class="line">    <span class="keyword">val</span> list5 = it.toList</span><br><span class="line">    <span class="comment">//输出为：List(List(5, 9, 5, 152), List(85, 41))</span></span><br><span class="line">    <span class="comment">//将多个list压扁</span></span><br><span class="line">    <span class="keyword">val</span> list6 = list5.flatten</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> lines = <span class="type">List</span>(<span class="string">"hello dd sdjjs sj wehjh"</span>, <span class="string">"hello ddd ws"</span>, <span class="string">"sawdxgyua hello jjs"</span>)</span><br><span class="line">    <span class="comment">//先按照空格切分，再压平</span></span><br><span class="line">    <span class="comment">//    val words = lines.map(_.split(" "))</span></span><br><span class="line">    <span class="comment">//    val flatten_words = words.flatten 比较费事，可以用flatMap</span></span><br><span class="line">    <span class="keyword">val</span> word = lines.flatMap(_.split(<span class="string">" "</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">   tips：系统中有多个任务同时存在可称之为“并发”，系统内有多个任务同时执行可称之为“并行”；</span></span><br><span class="line"><span class="comment">         并发是并行的子集。比如在单核CPU系统上，只可能存在并发而不可能存在并行。</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="comment">//并行计算求和</span></span><br><span class="line">    <span class="keyword">val</span> arr = <span class="type">Array</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>)</span><br><span class="line">    <span class="comment">//val res = arr.sum</span></span><br><span class="line">    <span class="comment">//和线程有关，每个线程计算一部分，（1，+2+3+4）+ （5+6+7+8）+（9+10）//</span></span><br><span class="line">    <span class="keyword">val</span> res = arr.par.sum <span class="comment">//par方法实现并行计算</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//按照特定顺序进行聚合 res2 和 res3</span></span><br><span class="line">    <span class="comment">//    （（（（1 + 2）+ 3） + 4） + 5）   ...</span></span><br><span class="line">    <span class="keyword">val</span> res2 = arr.reduce(_ + _)</span><br><span class="line">    <span class="keyword">val</span> res3 = arr.reduceLeft(_ + _)</span><br><span class="line">    <span class="keyword">val</span> res4 = arr.par.reduce(_ + _) <span class="comment">//没有顺序</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//折叠：有初始值（无特定顺序）</span></span><br><span class="line">    <span class="keyword">val</span> res5 = arr.par.fold(<span class="number">10</span>)(_ + _) <span class="comment">//有初始值时，在每个线程中都会加一次初始值，但是调用有顺序的fold就只计算一次初始值，比如foldLeft</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//折叠：有初始值（有特定顺序）</span></span><br><span class="line">    <span class="keyword">val</span> res6 = arr.foldLeft(<span class="number">10</span>)(_ + _) <span class="comment">//有初始值时，在每个线程中都会加一次初始值</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//聚合</span></span><br><span class="line">    <span class="keyword">val</span> list7 = <span class="type">List</span>(<span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>), <span class="type">List</span>(<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>), <span class="type">List</span>(<span class="number">2</span>), <span class="type">List</span>(<span class="number">0</span>))</span><br><span class="line">    <span class="comment">//val res7 = list7.flatten.reduce(_+_)</span></span><br><span class="line">    <span class="keyword">val</span> res8 = list7.aggregate(<span class="number">0</span>)(_ + _.sum, _ + _)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> l1 = <span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line">    <span class="keyword">val</span> l2 = <span class="type">List</span>(<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//并集</span></span><br><span class="line">    <span class="keyword">val</span> res9 = l1 union l2 <span class="comment">//不会去重</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//交集</span></span><br><span class="line">    <span class="keyword">val</span> res10 = l1 intersect l2</span><br><span class="line"></span><br><span class="line">    <span class="comment">//差集</span></span><br><span class="line">    <span class="keyword">val</span> res11 = l1 diff l2</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+</ul>
 
-        <div class="article-info info-on-right">
-          
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/alipay.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -245,346 +252,114 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://harold.me/2018/04/25/Scala常用方法/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/04/25/Scala快速学习/" class="archive-article-date">
-  	<time datetime="2018-04-25T08:36:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-25</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2018/04/25/scala面向对象和模式匹配/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          scala面向对象和模式匹配
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/25/Scala快速学习/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Scala快速学习</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/04/25/Scala快速学习/">Scala快速学习</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">scala</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/04/15/JVM-Java内存区域与内存溢出异常/" class="archive-article-date">
-  	<time datetime="2018-04-15T15:01:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/04/15/JVM-Java内存区域与内存溢出异常/">JVM--Java内存区域与内存溢出异常</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JVM, Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/04/10/用Mahout编写一个基本推荐系统/" class="archive-article-date">
-  	<time datetime="2018-04-10T01:44:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/04/10/用Mahout编写一个基本推荐系统/">用Mahout编写一个基本推荐系统</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">推荐系统， Mahout， Hadoop</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/04/08/Java并发编程——结构化并发应用程序/" class="archive-article-date">
-  	<time datetime="2018-04-08T13:08:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/04/08/Java并发编程——结构化并发应用程序/">Java并发编程——结构化并发应用程序(一)</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">多线程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/04/08/MySQL查漏补缺（三）/" class="archive-article-date">
-  	<time datetime="2018-04-07T16:05:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/04/08/MySQL查漏补缺（三）/">MySQL查漏补缺（三）</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/04/04/MySQL查漏补缺（二）/" class="archive-article-date">
-  	<time datetime="2018-04-04T14:55:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-04</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/04/04/MySQL查漏补缺（二）/">MySQL查漏补缺（二）</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/04/03/《区块链原理、设计与应用》读书摘要/" class="archive-article-date">
-  	<time datetime="2018-04-03T06:41:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-03</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/04/03/《区块链原理、设计与应用》读书摘要/">《区块链原理、设计与应用》读书摘要</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">区块链</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/04/03/MySQL查漏补缺（一）/" class="archive-article-date">
-  	<time datetime="2018-04-03T06:36:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-03</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/04/03/MySQL查漏补缺（一）/">MySQL查漏补缺（一）</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/">Next &raquo;</a>
-    </nav>
   
 
 
@@ -618,8 +393,8 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
