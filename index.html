@@ -168,6 +168,124 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-MLlib-协同过滤算法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/06/MLlib-协同过滤算法/">MLlib----协同过滤算法</a>
+    </h1>
+  
+
+        
+        <a href="/2018/05/06/MLlib-协同过滤算法/" class="archive-article-date">
+  	<time datetime="2018-05-06T15:48:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>协同过滤算法是最常用的推荐算法,主要有两种形式:基于用户和基于物品的推荐算法.</p>
+<p>ALS(alternate least square)是交替最小二乘法的简称,也是MLlib的基础推荐算法.</p>
+<p><strong>一. 协同过滤</strong></p>
+<p>协同过滤算法是一种基于群体用户或物品的典型推荐算法,主要有两种:</p>
+<blockquote>
+<ul>
+<li>通过考察具有相同爱好的用户对相同物品的评分标准进行计算</li>
+<li>考察具有相同特质的物品从而推荐给选择了某件物品的用户</li>
+</ul>
+</blockquote>
+<p>不足:</p>
+<blockquote>
+<ul>
+<li>基于用户: 针对热点物品的处理不够准确,一些常用的物品其推荐结果往往排在首位,但是这样没有实际意义.其次,数据量大,计算费事</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>基于物品: 存在推荐同类物品的问题</li>
+</ul>
+</blockquote>
+<p><strong>二. 相似度度量</strong></p>
+<ul>
+<li><p>基于欧几里德距离的相似度计算</p>
+<p>欧式距离表示空间中两个点的真实距离,<img src="https://gss2.bdstatic.com/-fo3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D272/sign=824f524b36292df593c3ab128e305ce2/9e3df8dcd100baa1dbb0d0df4b10b912c8fc2e31.jpg" alt="img">,在相似度计算中,不同的物品或用户可将其定义成不同的坐标点,特定目标定位成坐标原点.因为欧式距离越大,相近度越小,因此一般以<code>1/(ρ+1)</code>作为相似度近似值</p>
+</li>
+<li><p>基于余弦角度的相似度</p>
+<p>余弦相似度通过计算两个向量的夹角余弦值来评估他们的相似度</p>
+<p><img src="https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=ff93f325064f78f0940692a118586130/e850352ac65c1038573da3b3b7119313b07e897b.jpg" alt="img"></p>
+</li>
+</ul>
+<p>计算公式:<img src="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D187/sign=50b538a78244ebf869716037eef8d736/0df431adcbef760970e3983b2bdda3cc7dd99ead.jpg" alt="img"></p>
+<p>余弦值大小在[-1,1],值大小与夹角成正比</p>
+<ul>
+<li>欧式距离相似度与余弦相似度比较</li>
+</ul>
+<p>欧式相似度以目标绝对距离作为衡量标准,余弦相似度以目标差异大小作为衡量标准.余弦相似度更多的目标的方向趋势上区分,而随特定坐标数字不敏感.</p>
+<ul>
+<li><p>余弦相似度实战</p>
+<p>步骤:</p>
+<p>a. 输入数据</p>
+<p>b.建立相似度算法公式</p>
+<p>c.计算不同用户之间的相似度</p>
+</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MLib,大数据, 机器学习, 协同过滤</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/05/06/MLlib-协同过滤算法/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-MLlib-基本概念" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -189,12 +307,11 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p><strong>一、MLlib基本数据类型：</strong></p>
-<ol>
-<li><p>多种数据类型</p>
+<p><strong>多种数据类型</strong></p>
 <p>Local vector：本地向量集，主要向Spark提供一组可以进行操作的数据集合</p>
 <p>Labeled point： 向量标签， 能够让用户分类不同的数据集合</p>
 <p>Local matrix： 本地矩阵， 将数据集合以矩阵形式存储在本地计算机中</p>
-<p>Distributed matrix： 分布式矩阵，将数据集合以矩阵形式存储在分布式计算机中</p>
+<p>Distributed matrix： 分布式矩阵，将数据集合以矩阵形式存储在分布式计算机中<br>
         
           <a class="article-more-a" href="/2018/05/06/MLlib-基本概念/#more">more >></a>
         
@@ -886,89 +1003,6 @@
 
 
   
-    <article id="post-Java并发编程——结构化并发应用程序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/08/Java并发编程——结构化并发应用程序/">Java并发编程——结构化并发应用程序(一)</a>
-    </h1>
-  
-
-        
-        <a href="/2018/04/08/Java并发编程——结构化并发应用程序/" class="archive-article-date">
-  	<time datetime="2018-04-08T13:08:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>##一、任务执行（Task Execution）</p>
-<hr>
-<p>任务通常是一些抽象且离散的工作单元，通过把应用程序的工作分解到多个任务中，可以简化程序的组织结构，提供一种自然的事务边界来优化错误恢复过程，以及提供一种自然的并行工作结构来提升并发性。</p>
-<p>###1.在线程中执行任务<br>当围绕“任务执行”来设计应用程序时，第一步就是要找到清晰的任务边界。大多数服务器应用程序都以<em>独立的客户请求</em>为边界.将独立的请求作为任务边界，即可以实现任务的独立性，又可以实现合理的任务规模。<br>
-        
-          <a class="article-more-a" href="/2018/04/08/Java并发编程——结构化并发应用程序/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">多线程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/04/08/Java并发编程——结构化并发应用程序/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1097,19 +1131,23 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MLib,大数据, 机器学习, 协同过滤</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">JVM, Java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">算法</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">JVM, Java</a>
               </li>
              
               <li class="article-tag-list-item">

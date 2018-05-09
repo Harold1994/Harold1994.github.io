@@ -8,19 +8,19 @@
   <link rel="dns-prefetch" href="//harold.me">
   <title>MLlib----基本概念 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一、MLlib基本数据类型：  多种数据类型 Local vector：本地向量集，主要向Spark提供一组可以进行操作的数据集合 Labeled point： 向量标签， 能够让用户分类不同的数据集合 Local matrix： 本地矩阵， 将数据集合以矩阵形式存储在本地计算机中 Distributed matrix： 分布式矩阵，将数据集合以矩阵形式存储在分布式计算机中">
+  <meta name="description" content="一、MLlib基本数据类型： 多种数据类型 Local vector：本地向量集，主要向Spark提供一组可以进行操作的数据集合 Labeled point： 向量标签， 能够让用户分类不同的数据集合 Local matrix： 本地矩阵， 将数据集合以矩阵形式存储在本地计算机中 Distributed matrix： 分布式矩阵，将数据集合以矩阵形式存储在分布式计算机中">
 <meta name="keywords" content="MLlib, 机器学习, 大数据">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MLlib----基本概念">
 <meta property="og:url" content="//harold.me/2018/05/06/MLlib-基本概念/index.html">
 <meta property="og:site_name" content="Harold的博客">
-<meta property="og:description" content="一、MLlib基本数据类型：  多种数据类型 Local vector：本地向量集，主要向Spark提供一组可以进行操作的数据集合 Labeled point： 向量标签， 能够让用户分类不同的数据集合 Local matrix： 本地矩阵， 将数据集合以矩阵形式存储在本地计算机中 Distributed matrix： 分布式矩阵，将数据集合以矩阵形式存储在分布式计算机中">
+<meta property="og:description" content="一、MLlib基本数据类型： 多种数据类型 Local vector：本地向量集，主要向Spark提供一组可以进行操作的数据集合 Labeled point： 向量标签， 能够让用户分类不同的数据集合 Local matrix： 本地矩阵， 将数据集合以矩阵形式存储在本地计算机中 Distributed matrix： 分布式矩阵，将数据集合以矩阵形式存储在分布式计算机中">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D289/sign=90b7ce2ea064034f0bcdc50e96c27980/060828381f30e92463d59cc247086e061c95f7d4.jpg">
-<meta property="og:updated_time" content="2018-05-06T04:36:10.700Z">
+<meta property="og:updated_time" content="2018-05-09T14:29:02.191Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MLlib----基本概念">
-<meta name="twitter:description" content="一、MLlib基本数据类型：  多种数据类型 Local vector：本地向量集，主要向Spark提供一组可以进行操作的数据集合 Labeled point： 向量标签， 能够让用户分类不同的数据集合 Local matrix： 本地矩阵， 将数据集合以矩阵形式存储在本地计算机中 Distributed matrix： 分布式矩阵，将数据集合以矩阵形式存储在分布式计算机中">
+<meta name="twitter:description" content="一、MLlib基本数据类型： 多种数据类型 Local vector：本地向量集，主要向Spark提供一组可以进行操作的数据集合 Labeled point： 向量标签， 能够让用户分类不同的数据集合 Local matrix： 本地矩阵， 将数据集合以矩阵形式存储在本地计算机中 Distributed matrix： 分布式矩阵，将数据集合以矩阵形式存储在分布式计算机中">
 <meta name="twitter:image" content="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D289/sign=90b7ce2ea064034f0bcdc50e96c27980/060828381f30e92463d59cc247086e061c95f7d4.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Harold的博客" type="application/atom+xml">
@@ -194,14 +194,12 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p><strong>一、MLlib基本数据类型：</strong></p>
-<ol>
-<li><p>多种数据类型</p>
+<p><strong>多种数据类型</strong></p>
 <p>Local vector：本地向量集，主要向Spark提供一组可以进行操作的数据集合</p>
 <p>Labeled point： 向量标签， 能够让用户分类不同的数据集合</p>
 <p>Local matrix： 本地矩阵， 将数据集合以矩阵形式存储在本地计算机中</p>
-<p>Distributed matrix： 分布式矩阵，将数据集合以矩阵形式存储在分布式计算机中</p>
-<a id="more"></a></li>
-<li><p>本地向量集</p>
+<p>Distributed matrix： 分布式矩阵，将数据集合以矩阵形式存储在分布式计算机中<br><a id="more"></a></p>
+<p><strong>本地向量集</strong></p>
 <p>Local vector 主要分为两类，以数据集（4,5,2,9）为例介绍两种分类：</p>
 <ul>
 <li>稀疏型数据集：(4,  Array(0,1,2,3), Array(4,5,2,9))</li>
@@ -209,20 +207,17 @@
 </ul>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">testVector</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> vd : <span class="type">Vector</span> = <span class="type">Vectors</span>.dense(<span class="number">2</span>,<span class="number">0</span>,<span class="number">6</span>)</span><br><span class="line">    println(vd(<span class="number">2</span>))</span><br><span class="line">      <span class="comment">//Vectors.sparse(数据大小, 数据下标（严格递增，不需要公差为1,可大于数据大小）, 数据)</span></span><br><span class="line">    <span class="keyword">val</span> vs: <span class="type">Vector</span> = <span class="type">Vectors</span>.sparse(<span class="number">4</span>, <span class="type">Array</span>(<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>), <span class="type">Array</span>(<span class="number">9</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="number">7</span>))</span><br><span class="line">    println(vs(<span class="number">2</span>))<span class="comment">//这里面的参数必须小于总的数据大小</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">output :</span><br><span class="line"><span class="number">6.0</span></span><br><span class="line"><span class="number">2.0</span></span><br></pre></td></tr></table></figure>
 <p>目前MLib只支持整数与浮点数计算，字符类型会转换成整数</p>
-</li>
-<li><p>向量标签</p>
+<p><strong>向量标签</strong></p>
 <p>向量标签用于对MLlib中机器学习算法的不同值做标记，LabeledPoint是建立向量标签的静态类，Feature现实打印标记点所代表的数据内容，Label显示标记数</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.linalg.&#123;<span class="type">Vector</span>, <span class="type">Vectors</span>&#125;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.regression.<span class="type">LabeledPoint</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">testLablePoint</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> vd: <span class="type">Vector</span> = <span class="type">Vectors</span>.dense(<span class="number">2</span>,<span class="number">0</span>,<span class="number">6</span>)</span><br><span class="line">    <span class="keyword">val</span> pos = <span class="type">LabeledPoint</span>(<span class="number">1</span>,vd)</span><br><span class="line">    println(pos.features)<span class="comment">//打印标记点内容数据</span></span><br><span class="line">    println(pos.label)</span><br><span class="line">    <span class="keyword">val</span> vs: <span class="type">Vector</span> = <span class="type">Vectors</span>.sparse(<span class="number">4</span>, <span class="type">Array</span>(<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>), <span class="type">Array</span>(<span class="number">9</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="number">7</span>))</span><br><span class="line">    <span class="keyword">val</span> neg = <span class="type">LabeledPoint</span>(<span class="number">2</span>, vs)</span><br><span class="line">    println(neg.features)</span><br><span class="line">    println(neg.label)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">output：</span><br><span class="line">[<span class="number">2.0</span>,<span class="number">0.0</span>,<span class="number">6.0</span>]</span><br><span class="line"><span class="number">1.0</span></span><br><span class="line">(<span class="number">4</span>,[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],[<span class="number">9.0</span>,<span class="number">5.0</span>,<span class="number">2.0</span>,<span class="number">7.0</span>])</span><br><span class="line"><span class="number">2.0</span></span><br></pre></td></tr></table></figure>
 <p>可以调用MLUtils.loadLibSVMFile对写到文件中的数据进行读取，数据格式为：</p>
 <p><code>label index1：value1 index2：value2 ...</code></p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.util.<span class="type">MLUtils</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark._</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">testLabeledPoint2</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> conf = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">      .setMaster(<span class="string">"local"</span>)</span><br><span class="line">      .setAppName(<span class="string">"testLabeledPoint2"</span>)</span><br><span class="line">    <span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(conf)</span><br><span class="line">    <span class="keyword">val</span> mu = <span class="type">MLUtils</span>.loadLibSVMFile(sc, <span class="string">"/media/harold/SpareDisk/SParkMLibDemo/src/labeleddata.txt"</span>)</span><br><span class="line">    mu.foreach(println)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">input:</span><br><span class="line"><span class="number">1</span> <span class="number">0</span>:<span class="number">2</span> <span class="number">1</span>:<span class="number">3</span> <span class="number">2</span>:<span class="number">3</span></span><br><span class="line"><span class="number">2</span> <span class="number">0</span>:<span class="number">5</span> <span class="number">1</span>:<span class="number">8</span> <span class="number">2</span>:<span class="number">9</span></span><br><span class="line"><span class="number">1</span> <span class="number">0</span>:<span class="number">7</span> <span class="number">1</span>:<span class="number">6</span> <span class="number">2</span>:<span class="number">7</span></span><br><span class="line"><span class="number">1</span> <span class="number">0</span>:<span class="number">3</span> <span class="number">1</span>:<span class="number">2</span> <span class="number">2</span>:<span class="number">1</span></span><br></pre></td></tr></table></figure>
 <p>loadLibSVMFile方法将数据分解为一个稀疏向量 </p>
-</li>
-<li><p>本地矩阵</p>
+<p><strong>本地矩阵</strong></p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">testMatrix</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> mx = <span class="type">Matrices</span>.dense(<span class="number">2</span>, <span class="number">3</span>, <span class="type">Array</span>(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>))<span class="comment">//将数组转换为2行三列的矩阵</span></span><br><span class="line">    println(mx)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">output：</span><br><span class="line"><span class="number">1.0</span>  <span class="number">3.0</span>  <span class="number">5.0</span>  </span><br><span class="line"><span class="number">2.0</span>  <span class="number">4.0</span>  <span class="number">6.0</span></span><br></pre></td></tr></table></figure>
 <p>​</p>
-</li>
-<li><p>分布式矩阵</p>
+<p><strong>分布式矩阵</strong></p>
 <p>分布式矩阵进行数据存储的情况一般数据量都非常大，其处理速度和效率与存储格式相关，MLlib提供四种分布式矩阵存储形式：行矩阵，带有行索引的行矩阵，坐标矩阵、块矩阵。</p>
 <ul>
 <li>行矩阵</li>
@@ -230,8 +225,6 @@
 <blockquote>
 <p>以行作为基本方向，列的作用比较小,相当于一个巨大的特征向量的集合。</p>
 </blockquote>
-</li>
-</ol>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.linalg.<span class="type">Vectors</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.linalg.distributed.<span class="type">RowMatrix</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.&#123;<span class="type">SparkConf</span>, <span class="type">SparkContext</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">testRowMatrix</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> conf = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">      .setMaster(<span class="string">"local"</span>)</span><br><span class="line">      .setAppName(<span class="string">"testRowMatrix"</span>)</span><br><span class="line">    <span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(conf)</span><br><span class="line">    <span class="keyword">val</span> rdd = sc.textFile(<span class="string">"labeleddata.txt"</span>)</span><br><span class="line">      .map(_.split(<span class="string">" "</span>)</span><br><span class="line">      .map(_.toDouble))</span><br><span class="line">      .map(line =&gt; <span class="type">Vectors</span>.dense(line))</span><br><span class="line">    <span class="keyword">val</span> rm = <span class="keyword">new</span> <span class="type">RowMatrix</span>(rdd)</span><br><span class="line">    println(rm.numRows())</span><br><span class="line">    println(rm.numCols())</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">fileinput：</span><br><span class="line"><span class="number">1</span> <span class="number">2</span> <span class="number">3</span></span><br><span class="line"><span class="number">4</span> <span class="number">5</span> <span class="number">6</span></span><br><span class="line">output：</span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li><p>带有行索引的矩阵</p>
@@ -389,6 +382,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2018/05/06/MLlib-协同过滤算法/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          MLlib----协同过滤算法
+        
+      </div>
+    </a>
   
   
     <a href="/2018/05/02/Fabric启用网络/" id="article-nav-older" class="article-nav-link-wrap">
@@ -549,19 +551,23 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MLib,大数据, 机器学习, 协同过滤</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">JVM, Java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">算法</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">JVM, Java</a>
               </li>
              
               <li class="article-tag-list-item">
