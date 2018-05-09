@@ -9,7 +9,7 @@
   <title>MLlib----基本概念 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="一、MLlib基本数据类型： 多种数据类型 Local vector：本地向量集，主要向Spark提供一组可以进行操作的数据集合 Labeled point： 向量标签， 能够让用户分类不同的数据集合 Local matrix： 本地矩阵， 将数据集合以矩阵形式存储在本地计算机中 Distributed matrix： 分布式矩阵，将数据集合以矩阵形式存储在分布式计算机中">
-<meta name="keywords" content="MLlib, 机器学习, 大数据">
+<meta name="keywords" content="大数据,MLlib,机器学习">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MLlib----基本概念">
 <meta property="og:url" content="//harold.me/2018/05/06/MLlib-基本概念/index.html">
@@ -17,7 +17,7 @@
 <meta property="og:description" content="一、MLlib基本数据类型： 多种数据类型 Local vector：本地向量集，主要向Spark提供一组可以进行操作的数据集合 Labeled point： 向量标签， 能够让用户分类不同的数据集合 Local matrix： 本地矩阵， 将数据集合以矩阵形式存储在本地计算机中 Distributed matrix： 分布式矩阵，将数据集合以矩阵形式存储在分布式计算机中">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D289/sign=90b7ce2ea064034f0bcdc50e96c27980/060828381f30e92463d59cc247086e061c95f7d4.jpg">
-<meta property="og:updated_time" content="2018-05-09T14:29:02.191Z">
+<meta property="og:updated_time" content="2018-05-09T14:36:48.740Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MLlib----基本概念">
 <meta name="twitter:description" content="一、MLlib基本数据类型： 多种数据类型 Local vector：本地向量集，主要向Spark提供一组可以进行操作的数据集合 Labeled point： 向量标签， 能够让用户分类不同的数据集合 Local matrix： 本地矩阵， 将数据集合以矩阵形式存储在本地计算机中 Distributed matrix： 分布式矩阵，将数据集合以矩阵形式存储在分布式计算机中">
@@ -272,7 +272,8 @@
 <ul>
 <li><p>假设检验</p>
 <p>MLlib规定常使用的数据集一般为向量和矩阵.</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.linalg.&#123;<span class="type">Matrices</span>, <span class="type">Vectors</span>&#125;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.stat.<span class="type">Statistics</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">testChiSq</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> vd = <span class="type">Vectors</span>.dense(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>)</span><br><span class="line">    <span class="keyword">val</span> vdResult = <span class="type">Statistics</span>.chiSqTest(vd)</span><br><span class="line">    println(vdResult)</span><br><span class="line">    println(<span class="string">"------------------"</span>)</span><br><span class="line">    <span class="keyword">val</span> mtx = <span class="type">Matrices</span>.dense(<span class="number">3</span>,<span class="number">2</span>, <span class="type">Array</span>(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>))</span><br><span class="line">    <span class="keyword">val</span> mtxResult = <span class="type">Statistics</span>.chiSqTest(mtx)</span><br><span class="line">    println(mtxResult)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">output:</span><br><span class="line"><span class="type">Chi</span> squared test summary:</span><br><span class="line">method: pearson<span class="comment">//卡方检验使用方法</span></span><br><span class="line">degrees of freedom = <span class="number">5</span> <span class="comment">//自由度</span></span><br><span class="line">statistic = <span class="number">5.000000000000001</span> <span class="comment">//统计量</span></span><br><span class="line">pValue = <span class="number">0.4158801869955079</span> <span class="comment">//p值</span></span><br><span class="line"><span class="type">No</span> presumption against <span class="literal">null</span> hypothesis: observed follows the same distribution as expected..</span><br><span class="line">------------------</span><br><span class="line"><span class="type">Chi</span> squared test summary:</span><br><span class="line">method: pearson</span><br><span class="line">degrees of freedom = <span class="number">2</span> </span><br><span class="line">statistic = <span class="number">0.14141414141414144</span> </span><br><span class="line">pValue = <span class="number">0.931734784568187</span> </span><br><span class="line"><span class="type">No</span> presumption against <span class="literal">null</span> hypothesis: the occurrence of the outcomes is statistically independent..</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.linalg.&#123;<span class="type">Matrices</span>, <span class="type">Vectors</span>&#125;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.stat.<span class="type">Statistics</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">testChiSq</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> vd = <span class="type">Vectors</span>.dense(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>)</span><br><span class="line">    <span class="keyword">val</span> vdResult = <span class="type">Statistics</span>.chiSqTest(vd)</span><br><span class="line">    println(vdResult)</span><br><span class="line">    println(<span class="string">"------------------"</span>)</span><br><span class="line">    <span class="keyword">val</span> mtx = <span class="type">Matrices</span>.dense(<span class="number">3</span>,<span class="number">2</span>, <span class="type">Array</span>(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>))</span><br><span class="line">    <span class="keyword">val</span> mtxResult = <span class="type">Statistics</span>.chiSqTest(mtx)</span><br><span class="line">    println(mtxResult)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">output:</span><br><span class="line"><span class="type">Chi</span> squared test summary:</span><br><span class="line">method: pearson<span class="comment">//卡方检验使用方法</span></span><br><span class="line">degrees of freedom = <span class="number">5</span> <span class="comment">//自由度</span></span><br><span class="line">statistic = <span class="number">5.000000000000001</span> <span class="comment">//统计量</span></span><br><span class="line">pValue = <span class="number">0.4158801869955079</span> <span class="comment">//p值</span></span><br><span class="line"><span class="type">No</span> presumption against <span class="literal">null</span> hypothesis: observed follows the same distribution as expected..</span><br><span class="line">------------------</span><br><span class="line"><span class="type">Chi</span> squared test summary:</span><br><span class="line">method: pearson</span><br><span class="line">degrees of freedom = <span class="number">2</span> </span><br><span class="line">statistic = <span class="number">0.14141414141414144</span> </span><br><span class="line">pValue = <span class="number">0.931734784568187</span> </span><br><span class="line"><span class="type">No</span> presumption against <span class="literal">null</span> hypothesis: the occurrence of the outcomes is statistically independent..</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 
       
@@ -313,7 +314,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">MLlib, 机器学习, 大数据</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MLlib</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
         		</li>
       		
 		</ul>
@@ -624,6 +633,18 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">协同过滤</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MLlib</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
             
             <div class="clearfix"></div>
