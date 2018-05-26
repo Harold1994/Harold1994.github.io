@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//harold.me">
-  <title>Tag: 算法 | Harold的博客</title>
+  <title>Java并发编程——结构化并发应用程序(二) | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Harold的博客">
-<meta property="og:url" content="//harold.me/tags/算法/index.html">
+  <meta name="description" content="CompletionService：Executor和BlockingQueue若向Executor提交了一组计算任务，并希望在计算技术之后获得结果，有一下两种方法：   保留与任务关联的Future，反复使用get方法，同时将参数timeout指定为0，从而通过轮训判断任务是否完成 使用完成服务（CompletionService）   CompletionService：">
+<meta name="keywords" content="Java,多线程,并发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java并发编程——结构化并发应用程序(二)">
+<meta property="og:url" content="//harold.me/2018/05/27/Java并发编程——结构化并发应用程序2/index.html">
 <meta property="og:site_name" content="Harold的博客">
+<meta property="og:description" content="CompletionService：Executor和BlockingQueue若向Executor提交了一组计算任务，并希望在计算技术之后获得结果，有一下两种方法：   保留与任务关联的Future，反复使用get方法，同时将参数timeout指定为0，从而通过轮训判断任务是否完成 使用完成服务（CompletionService）   CompletionService：">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-05-26T16:41:35.280Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Harold的博客">
+<meta name="twitter:title" content="Java并发编程——结构化并发应用程序(二)">
+<meta name="twitter:description" content="CompletionService：Executor和BlockingQueue若向Executor提交了一组计算任务，并希望在计算技术之后获得结果，有一下两种方法：   保留与任务关联的Future，反复使用get方法，同时将参数timeout指定为0，从而通过轮训判断任务是否完成 使用完成服务（CompletionService）   CompletionService：">
   
     <link rel="alternative" href="/atom.xml" title="Harold的博客" type="application/atom+xml">
   
@@ -166,178 +171,212 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Java并发编程——结构化并发应用程序2" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/03/29/KMP算法/" class="archive-article-date">
-  	<time datetime="2018-03-29T12:28:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-29</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/03/29/KMP算法/">KMP算法</a>
+    <h1 class="article-title" itemprop="name">
+      Java并发编程——结构化并发应用程序(二)
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2018/05/27/Java并发编程——结构化并发应用程序2/" class="archive-article-date">
+  	<time datetime="2018-05-26T16:36:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="CompletionService：Executor和BlockingQueue"><a href="#CompletionService：Executor和BlockingQueue" class="headerlink" title="CompletionService：Executor和BlockingQueue"></a>CompletionService：Executor和BlockingQueue</h4><p>若向Executor提交了一组计算任务，并希望在计算技术之后获得结果，有一下两种方法：</p>
+<blockquote>
+<ul>
+<li>保留与任务关联的Future，反复使用get方法，同时将参数timeout指定为0，从而通过轮训判断任务是否完成</li>
+<li>使用完成服务（CompletionService）</li>
+</ul>
+</blockquote>
+<p><strong>CompletionService：</strong>                     CompletionService将Executor和BlockingQueue功能结合起来，可以将Callable任务提交给它来执行，然后使用类似队列操作的take和poll等方法获得已经完成的结果，这些结果会<strong>在完成时</strong>被封装为Future。<br><a id="more"></a><br>ExecutorCompletionService实现了CompletionService，并将计算部分委托给了一个Executor。实现方式：在构造函数中创建一个BlockingQueue来保存完成的结果，计算完成时，调用Future-Task中的done方法，当提交某个任务时，该任务首先将包装为一个QueueingFuture，这是FutureTask的一个子类，然后再改写子类的done方法，将结果放入BlockingQueue中。take和poll方法委托给了BlockingQueue，这些方法会在得出结果之前阻塞。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//ExecutorCompletionService部分源码</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExecutorCompletionService</span>&lt;<span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">CompletionService</span>&lt;<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Executor executor;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AbstractExecutorService aes;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> BlockingQueue&lt;Future&lt;V&gt;&gt; completionQueue;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * FutureTask extension to enqueue upon completion</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">QueueingFuture</span> <span class="keyword">extends</span> <span class="title">FutureTask</span>&lt;<span class="title">Void</span>&gt; </span>&#123;</span><br><span class="line">        QueueingFuture(RunnableFuture&lt;V&gt; task) &#123;</span><br><span class="line">            <span class="keyword">super</span>(task, <span class="keyword">null</span>);</span><br><span class="line">            <span class="keyword">this</span>.task = task;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">done</span><span class="params">()</span> </span>&#123; completionQueue.add(task); &#125;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> Future&lt;V&gt; task;</span><br><span class="line">    &#125;</span><br><span class="line">...</span><br><span class="line"> <span class="function"><span class="keyword">public</span> Future&lt;V&gt; <span class="title">take</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> completionQueue.take();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Future&lt;V&gt; <span class="title">poll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> completionQueue.poll();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Future&lt;V&gt; <span class="title">poll</span><span class="params">(<span class="keyword">long</span> timeout, TimeUnit unit)</span></span></span><br><span class="line"><span class="function">            <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> completionQueue.poll(timeout, unit);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>示例：使用CompletionService实现页面渲染</li>
+</ul>
+<p>通过CompletionService从<strong>缩短总运行时间</strong>和<strong>提高相应性</strong>两个方面提高渲染性能，为每幅图像下载创建一个独立的任务，并在线程池中执行他们，从而将串行的下载转换为并行的过程，这将减少总下载时间；通过CompletionService中获取结果以及使每张图片在下载完后立刻显示出来，提高了响应性。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> harold</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Title</span>:</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: 使用CompletionService实现页面渲染</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/5/24上午11:17</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Renderer</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> ExecutorService executor;</span><br><span class="line">    Renderer(ExecutorService executor) &#123;</span><br><span class="line">        <span class="keyword">this</span>.executor = executor;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">renderPage</span><span class="params">(CharSequence source)</span> </span>&#123;</span><br><span class="line">        List&lt;ImageInfo&gt; info = scanForImageInfo(source);</span><br><span class="line">        CompletionService &lt;ImageData&gt; completionService = <span class="keyword">new</span> ExecutorCompletionService&lt;ImageData&gt;(executor);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">final</span> ImageInfo imageInfo : info) &#123;</span><br><span class="line">            completionService.submit(<span class="keyword">new</span> Callable&lt;ImageData&gt;() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> ImageData <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                    <span class="keyword">return</span> imageInfo.downloadImage();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        renderText(source);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">for</span> (t = <span class="number">0</span>, n = info.size(); t&lt;n; t++) &#123;</span><br><span class="line">                Future&lt;ImageData&gt; f = completionService.take();</span><br><span class="line">                ImageData imageData = f.get();</span><br><span class="line">                renderImage(imageData);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            Thread.currentThread().interrupt();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ExecutionException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> launderThrowable(e.getCause());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>多个ExecutorCompletionService可以共享一个Executor，因此可以创建一个对于特定计算私有，又能共享一个公共Executor的ExecutorCompletionService。</p>
+<h4 id="为任务设置时限"><a href="#为任务设置时限" class="headerlink" title="为任务设置时限"></a>为任务设置时限</h4><p>有时候，如果某个任务无法在指定时间内完成，将不再需要它的结果，此时可以放弃这个任务。在有限时间内执行任务的难点在于：要确保得到答案的时间不会超出限定的时间，或者在限定的时间内无法获得答案。Future.get支持这种需求：当结果可用时，他将立即返回，若在指定时间没有计算出来，将抛出TimeoutException。</p>
+<p>传递给get的timeout参数的计算方式是将指定时限减去当前时间，这可能会得到负数，但java.util.concurrent中所有与时限相关的方法都将视负数为0.</p>
+<p>Future.cancel参数为true表示任务线程可以在啊运行过程中中断。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在指定时间内获取广告时间</span></span><br><span class="line">    <span class="function">Page <span class="title">renderPageWithAd</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> endNanos = System.nanoTime() + TIME_BUGET;</span><br><span class="line">        Future&lt;Ad&gt; f = executor.submit(<span class="keyword">new</span> FetchAdTask());</span><br><span class="line">        <span class="comment">//在等待广告时显示页面</span></span><br><span class="line">        Page page = renderPageBody();</span><br><span class="line">        Ad ad;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//只等待指定时间长度</span></span><br><span class="line">            <span class="keyword">long</span> timeLeft = endNanos - System.nanoTime();</span><br><span class="line">            ad = f.get(timeLeft, TimeUnit.NANOSECONDS);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ExecutionException e) &#123;</span><br><span class="line">            ad = DEFAULT_AD;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (TimeoutException e) &#123;</span><br><span class="line">            ad = DEFAULT_AD;</span><br><span class="line">            f.cancel(<span class="keyword">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        page.setAd(ad);</span><br><span class="line">        <span class="keyword">return</span> page;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>invokeAll<br>创建n个线程，将其提交到一个线程池，保留n个Future，并使用现实的get方法通过Future串行的获取每一个结果，这个过程可以通过更简单的invokeAll实现。</p>
+<p>invokeAll方法的参数为一组任务，并返回一组Future。这两个集合有着相同的结构。invokeAll按照任务集合中迭代器的顺序将所有Future添加到返回集合中，从而使调用者可以将各个Future与其表示的Callable关联起来。当所有任务都执行完毕后，或者调用线程被中断时没或者超过指定时间，invokeAll将返回。当超过指定时限后，任何还未完成的任务都会取消。当invokeAll返回后，每个任务要么正常执行完毕，要么被取消。客户端代码可以用get或isCanceled判断情况。</p>
+</li>
+</ul>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/alipay.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">字符串匹配</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">多线程</a>
         		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/03/24/今日头条2018春季实习生笔试题-BFS两道/" class="archive-article-date">
-  	<time datetime="2018-03-24T13:27:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-24</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/03/24/今日头条2018春季实习生笔试题-BFS两道/">今日头条2018春季实习生笔试题----BFS两道</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
+      		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">并发</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://harold.me/2018/05/27/Java并发编程——结构化并发应用程序2/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/03/23/动态规划算法面试题-硬币组合问题/" class="archive-article-date">
-  	<time datetime="2018-03-23T15:02:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-23</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2018/05/27/Java并发编程——并发基础构建模块/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Java并发编程——并发基础构建模块
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/05/27/Kafka中Consumer的多线程实现/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Kafka中Consumer的多线程实现</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/03/23/动态规划算法面试题-硬币组合问题/">动态规划算法面试题----硬币组合问题</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/03/22/记录一道笔试算法题/" class="archive-article-date">
-  	<time datetime="2018-03-22T14:54:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-22</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/03/22/记录一道笔试算法题/">记录一道笔试算法题</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
 
 
           </div>
@@ -370,9 +409,9 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
