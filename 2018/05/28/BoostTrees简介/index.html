@@ -8,13 +8,13 @@
   <link rel="dns-prefetch" href="//harold.me">
   <title>BoostTrees简介 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="本文翻译自陈天奇大神的英文ppt,喜欢看英文的同学可以直接跳转,翻译当中也增加了一些个人的补充. 一、监督学习的关键概念监督学习中的元素$x_i \in R^D$ :训练集中第i条记录 模型： 根据$x_i$预测$\hat y_i$ 线性模型：$\hat y_i = \sum_j \omega_jx_{ij}$（包括线性回归和逻辑回归） 在不同的任务中$y^i$有不同的解释：  线性回归中：$y^">
+  <meta name="description" content="本文翻译自陈天奇大神的英文ppt,喜欢看英文的同学可以直接跳转,翻译当中也增加了一些个人的补充. 一、监督学习的关键概念监督学习中的元素$x_i \in R^D$ :训练集中第i条记录 模型： 根据$x_i$预测$\hat y_i$">
 <meta name="keywords" content="机器学习">
 <meta property="og:type" content="article">
 <meta property="og:title" content="BoostTrees简介">
 <meta property="og:url" content="//harold.me/2018/05/28/BoostTrees简介/index.html">
 <meta property="og:site_name" content="Harold的博客">
-<meta property="og:description" content="本文翻译自陈天奇大神的英文ppt,喜欢看英文的同学可以直接跳转,翻译当中也增加了一些个人的补充. 一、监督学习的关键概念监督学习中的元素$x_i \in R^D$ :训练集中第i条记录 模型： 根据$x_i$预测$\hat y_i$ 线性模型：$\hat y_i = \sum_j \omega_jx_{ij}$（包括线性回归和逻辑回归） 在不同的任务中$y^i$有不同的解释：  线性回归中：$y^">
+<meta property="og:description" content="本文翻译自陈天奇大神的英文ppt,喜欢看英文的同学可以直接跳转,翻译当中也增加了一些个人的补充. 一、监督学习的关键概念监督学习中的元素$x_i \in R^D$ :训练集中第i条记录 模型： 根据$x_i$预测$\hat y_i$">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://liuchengxu.github.io/blog-cn/assets/images/posts/bulls-eye-diagram.png">
 <meta property="og:image" content="https://liuchengxu.github.io/blog-cn/assets/images/posts/bulls-eye-label-diagram.png">
@@ -38,10 +38,10 @@
 <meta property="og:image" content="http://dataunion.org/wp-content/uploads/2015/04/image1.png">
 <meta property="og:image" content="http://dataunion.org/wp-content/uploads/2015/04/133.png">
 <meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-5-28/19435924.jpg">
-<meta property="og:updated_time" content="2018-05-27T16:15:39.268Z">
+<meta property="og:updated_time" content="2018-05-27T16:17:47.302Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BoostTrees简介">
-<meta name="twitter:description" content="本文翻译自陈天奇大神的英文ppt,喜欢看英文的同学可以直接跳转,翻译当中也增加了一些个人的补充. 一、监督学习的关键概念监督学习中的元素$x_i \in R^D$ :训练集中第i条记录 模型： 根据$x_i$预测$\hat y_i$ 线性模型：$\hat y_i = \sum_j \omega_jx_{ij}$（包括线性回归和逻辑回归） 在不同的任务中$y^i$有不同的解释：  线性回归中：$y^">
+<meta name="twitter:description" content="本文翻译自陈天奇大神的英文ppt,喜欢看英文的同学可以直接跳转,翻译当中也增加了一些个人的补充. 一、监督学习的关键概念监督学习中的元素$x_i \in R^D$ :训练集中第i条记录 模型： 根据$x_i$预测$\hat y_i$">
 <meta name="twitter:image" content="https://liuchengxu.github.io/blog-cn/assets/images/posts/bulls-eye-diagram.png">
   
     <link rel="alternative" href="/atom.xml" title="Harold的博客" type="application/atom+xml">
@@ -77,7 +77,7 @@
 			<h1 class="header-author"><a href="/">李贺</a></h1>
 		</hgroup>
 		
-		<p class="header-subtitle">好风凭借力，送我上青云</p>
+		<p class="header-subtitle">踏实前进,戒骄戒躁</p>
 		
 
 		<nav class="header-menu">
@@ -90,6 +90,10 @@
 				<li><a href="/tags/数据库">数据库</a></li>
 	        
 				<li><a href="/tags/算法">算法</a></li>
+	        
+				<li><a href="/tags/机器学习">机器学习</a></li>
+	        
+				<li><a href="/tags/Java">Java</a></li>
 	        
 			</ul>
 		</nav>
@@ -141,9 +145,13 @@
 			  <h1 class="header-author js-header-author">李贺</h1>
 			</hgroup>
 			
-			<p class="header-subtitle"><i class="icon icon-quo-left"></i>好风凭借力，送我上青云<i class="icon icon-quo-right"></i></p>
+			<p class="header-subtitle"><i class="icon icon-quo-left"></i>踏实前进,戒骄戒躁<i class="icon icon-quo-right"></i></p>
 			
 			
+			
+				
+			
+				
 			
 				
 			
@@ -173,13 +181,17 @@
 				<ul style="width: 70%">
 				
 				
-					<li style="width: 25%"><a href="/">主页</a></li>
+					<li style="width: 16.666666666666668%"><a href="/">主页</a></li>
 		        
-					<li style="width: 25%"><a href="/tags/大数据">大数据</a></li>
+					<li style="width: 16.666666666666668%"><a href="/tags/大数据">大数据</a></li>
 		        
-					<li style="width: 25%"><a href="/tags/数据库">数据库</a></li>
+					<li style="width: 16.666666666666668%"><a href="/tags/数据库">数据库</a></li>
 		        
-					<li style="width: 25%"><a href="/tags/算法">算法</a></li>
+					<li style="width: 16.666666666666668%"><a href="/tags/算法">算法</a></li>
+		        
+					<li style="width: 16.666666666666668%"><a href="/tags/机器学习">机器学习</a></li>
+		        
+					<li style="width: 16.666666666666668%"><a href="/tags/Java">Java</a></li>
 		        
 				</ul>
 			</nav>
@@ -216,8 +228,7 @@
       
         <p>本文翻译自陈天奇大神的英文ppt,喜欢看英文的同学可以<a href="https://homes.cs.washington.edu/~tqchen/pdf/BoostedTree.pdf" target="_blank" rel="noopener">直接跳转</a>,翻译当中也增加了一些个人的补充.</p>
 <h2 id="一、监督学习的关键概念"><a href="#一、监督学习的关键概念" class="headerlink" title="一、监督学习的关键概念"></a>一、监督学习的关键概念</h2><h4 id="监督学习中的元素"><a href="#监督学习中的元素" class="headerlink" title="监督学习中的元素"></a>监督学习中的元素</h4><p>$x_i \in R^D$ :训练集中第i条记录</p>
-<p><strong>模型</strong>： 根据$x_i$预测$\hat y_i$</p>
-<p>线性模型：$\hat y_i = \sum_j \omega_jx_{ij}$（包括线性回归和逻辑回归）</p>
+<p><strong>模型</strong>： 根据$x_i$预测$\hat y_i$<br><a id="more"></a><br>线性模型：$\hat y_i = \sum_j \omega_jx_{ij}$（包括线性回归和逻辑回归）</p>
 <p>在不同的任务中$y^i$有不同的解释：</p>
 <ul>
 <li>线性回归中：$y^i$是预测得分</li>
