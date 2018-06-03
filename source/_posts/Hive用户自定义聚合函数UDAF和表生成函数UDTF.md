@@ -9,7 +9,7 @@ tags: [大数据, Hive, Hadoop]
 #### 一. 用户自定义聚合函数
 
 聚合函数会分多个阶段进行处理,基于UDAF执行的转换不同,在不同的阶段返回值类型也可能不同.聚合过程是在map或者reduce任务中执行的,任务task是一个[有内存限制](https://blog.csdn.net/androidlushangderen/article/details/50002015)的Java进程,因此在聚合过程中存储大的数据结构会产生溢出错误.
-
+<!-- more--> 
 > 写UDAF时可以通过配置参数mapred.child.java.opts调整执行过程的内存需求量,但是此方式并非总是奏效.
 
 ##### 实例: 创建一个COLLECT UDAF来模拟GROUP_CONCAT

@@ -9,6 +9,7 @@ tags: 随笔
 
 解决方案
 我们初步的解决方案是把我们的文件提交到git上，利用git来管理它，我是这样解决的： 在现有的XXX.github.io项目上创建一个分支来管理 
+<!-- more--> 
 1. 克隆gitHub上的XXX.github.io项目的文件到本地 
 
 git clone https://github.com/yourname/xxx.github.io.git 

@@ -16,7 +16,7 @@ curl -XPOST 'http://172.18.0.4:9200/demo/?pretty' -d '
 　　{
 
 　　　　"analysis":
-
+<!-- more--> 
 　　　　　　{
 
 　　　　　　　　"analyzer":
