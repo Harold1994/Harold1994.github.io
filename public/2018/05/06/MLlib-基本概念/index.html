@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>MLlib----基本概念 | Harold的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一、MLlib基本数据类型： 多种数据类型 Local vector：本地向量集，主要向Spark提供一组可以进行操作的数据集合 Labeled point： 向量标签， 能够让用户分类不同的数据集合 Local matrix： 本地矩阵， 将数据集合以矩阵形式存储在本地计算机中 Distributed matrix： 分布式矩阵，将数据集合以矩阵形式存储在分布式计算机中">
+<meta name="keywords" content="机器学习,大数据,MLlib">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MLlib----基本概念">
+<meta property="og:url" content="//harold.me/2018/05/06/MLlib-基本概念/index.html">
+<meta property="og:site_name" content="Harold的博客">
+<meta property="og:description" content="一、MLlib基本数据类型： 多种数据类型 Local vector：本地向量集，主要向Spark提供一组可以进行操作的数据集合 Labeled point： 向量标签， 能够让用户分类不同的数据集合 Local matrix： 本地矩阵， 将数据集合以矩阵形式存储在本地计算机中 Distributed matrix： 分布式矩阵，将数据集合以矩阵形式存储在分布式计算机中">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D289/sign=90b7ce2ea064034f0bcdc50e96c27980/060828381f30e92463d59cc247086e061c95f7d4.jpg">
+<meta property="og:updated_time" content="2018-06-07T13:35:07.276Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MLlib----基本概念">
+<meta name="twitter:description" content="一、MLlib基本数据类型： 多种数据类型 Local vector：本地向量集，主要向Spark提供一组可以进行操作的数据集合 Labeled point： 向量标签， 能够让用户分类不同的数据集合 Local matrix： 本地矩阵， 将数据集合以矩阵形式存储在本地计算机中 Distributed matrix： 分布式矩阵，将数据集合以矩阵形式存储在分布式计算机中">
+<meta name="twitter:image" content="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D289/sign=90b7ce2ea064034f0bcdc50e96c27980/060828381f30e92463d59cc247086e061c95f7d4.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Harold的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Harold的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">踏实前进,戒骄戒躁</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="//harold.me"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-MLlib-基本概念" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/06/MLlib-基本概念/" class="article-date">
+  <time datetime="2018-05-06T04:34:23.000Z" itemprop="datePublished">2018-05-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      MLlib----基本概念
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>一、MLlib基本数据类型：</strong></p>
+<p><strong>多种数据类型</strong></p>
+<p>Local vector：本地向量集，主要向Spark提供一组可以进行操作的数据集合</p>
+<p>Labeled point： 向量标签， 能够让用户分类不同的数据集合</p>
+<p>Local matrix： 本地矩阵， 将数据集合以矩阵形式存储在本地计算机中</p>
+<p>Distributed matrix： 分布式矩阵，将数据集合以矩阵形式存储在分布式计算机中<br><a id="more"></a></p>
+<p><strong>本地向量集</strong></p>
+<p>Local vector 主要分为两类，以数据集（4,5,2,9）为例介绍两种分类：</p>
+<ul>
+<li>稀疏型数据集：(4,  Array(0,1,2,3), Array(4,5,2,9))</li>
+<li>密集型数据集：(4,5,2,9)</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">testVector</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> vd : <span class="type">Vector</span> = <span class="type">Vectors</span>.dense(<span class="number">2</span>,<span class="number">0</span>,<span class="number">6</span>)</span><br><span class="line">    println(vd(<span class="number">2</span>))</span><br><span class="line">      <span class="comment">//Vectors.sparse(数据大小, 数据下标（严格递增，不需要公差为1,可大于数据大小）, 数据)</span></span><br><span class="line">    <span class="keyword">val</span> vs: <span class="type">Vector</span> = <span class="type">Vectors</span>.sparse(<span class="number">4</span>, <span class="type">Array</span>(<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>), <span class="type">Array</span>(<span class="number">9</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="number">7</span>))</span><br><span class="line">    println(vs(<span class="number">2</span>))<span class="comment">//这里面的参数必须小于总的数据大小</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">output :</span><br><span class="line"><span class="number">6.0</span></span><br><span class="line"><span class="number">2.0</span></span><br></pre></td></tr></table></figure>
+<p>目前MLib只支持整数与浮点数计算，字符类型会转换成整数</p>
+<p><strong>向量标签</strong></p>
+<p>向量标签用于对MLlib中机器学习算法的不同值做标记，LabeledPoint是建立向量标签的静态类，Feature现实打印标记点所代表的数据内容，Label显示标记数</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.linalg.&#123;<span class="type">Vector</span>, <span class="type">Vectors</span>&#125;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.regression.<span class="type">LabeledPoint</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">testLablePoint</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> vd: <span class="type">Vector</span> = <span class="type">Vectors</span>.dense(<span class="number">2</span>,<span class="number">0</span>,<span class="number">6</span>)</span><br><span class="line">    <span class="keyword">val</span> pos = <span class="type">LabeledPoint</span>(<span class="number">1</span>,vd)</span><br><span class="line">    println(pos.features)<span class="comment">//打印标记点内容数据</span></span><br><span class="line">    println(pos.label)</span><br><span class="line">    <span class="keyword">val</span> vs: <span class="type">Vector</span> = <span class="type">Vectors</span>.sparse(<span class="number">4</span>, <span class="type">Array</span>(<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>), <span class="type">Array</span>(<span class="number">9</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="number">7</span>))</span><br><span class="line">    <span class="keyword">val</span> neg = <span class="type">LabeledPoint</span>(<span class="number">2</span>, vs)</span><br><span class="line">    println(neg.features)</span><br><span class="line">    println(neg.label)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">output：</span><br><span class="line">[<span class="number">2.0</span>,<span class="number">0.0</span>,<span class="number">6.0</span>]</span><br><span class="line"><span class="number">1.0</span></span><br><span class="line">(<span class="number">4</span>,[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],[<span class="number">9.0</span>,<span class="number">5.0</span>,<span class="number">2.0</span>,<span class="number">7.0</span>])</span><br><span class="line"><span class="number">2.0</span></span><br></pre></td></tr></table></figure>
+<p>可以调用MLUtils.loadLibSVMFile对写到文件中的数据进行读取，数据格式为：</p>
+<p><code>label index1：value1 index2：value2 ...</code></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.util.<span class="type">MLUtils</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark._</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">testLabeledPoint2</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> conf = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">      .setMaster(<span class="string">"local"</span>)</span><br><span class="line">      .setAppName(<span class="string">"testLabeledPoint2"</span>)</span><br><span class="line">    <span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(conf)</span><br><span class="line">    <span class="keyword">val</span> mu = <span class="type">MLUtils</span>.loadLibSVMFile(sc, <span class="string">"/media/harold/SpareDisk/SParkMLibDemo/src/labeleddata.txt"</span>)</span><br><span class="line">    mu.foreach(println)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">input:</span><br><span class="line"><span class="number">1</span> <span class="number">0</span>:<span class="number">2</span> <span class="number">1</span>:<span class="number">3</span> <span class="number">2</span>:<span class="number">3</span></span><br><span class="line"><span class="number">2</span> <span class="number">0</span>:<span class="number">5</span> <span class="number">1</span>:<span class="number">8</span> <span class="number">2</span>:<span class="number">9</span></span><br><span class="line"><span class="number">1</span> <span class="number">0</span>:<span class="number">7</span> <span class="number">1</span>:<span class="number">6</span> <span class="number">2</span>:<span class="number">7</span></span><br><span class="line"><span class="number">1</span> <span class="number">0</span>:<span class="number">3</span> <span class="number">1</span>:<span class="number">2</span> <span class="number">2</span>:<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>loadLibSVMFile方法将数据分解为一个稀疏向量 </p>
+<p><strong>本地矩阵</strong></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">testMatrix</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> mx = <span class="type">Matrices</span>.dense(<span class="number">2</span>, <span class="number">3</span>, <span class="type">Array</span>(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>))<span class="comment">//将数组转换为2行三列的矩阵</span></span><br><span class="line">    println(mx)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">output：</span><br><span class="line"><span class="number">1.0</span>  <span class="number">3.0</span>  <span class="number">5.0</span>  </span><br><span class="line"><span class="number">2.0</span>  <span class="number">4.0</span>  <span class="number">6.0</span></span><br></pre></td></tr></table></figure>
+<p>​</p>
+<p><strong>分布式矩阵</strong></p>
+<p>分布式矩阵进行数据存储的情况一般数据量都非常大，其处理速度和效率与存储格式相关，MLlib提供四种分布式矩阵存储形式：行矩阵，带有行索引的行矩阵，坐标矩阵、块矩阵。</p>
+<ul>
+<li>行矩阵</li>
+</ul>
+<blockquote>
+<p>以行作为基本方向，列的作用比较小,相当于一个巨大的特征向量的集合。</p>
+</blockquote>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.linalg.<span class="type">Vectors</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.linalg.distributed.<span class="type">RowMatrix</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.&#123;<span class="type">SparkConf</span>, <span class="type">SparkContext</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">testRowMatrix</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> conf = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">      .setMaster(<span class="string">"local"</span>)</span><br><span class="line">      .setAppName(<span class="string">"testRowMatrix"</span>)</span><br><span class="line">    <span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(conf)</span><br><span class="line">    <span class="keyword">val</span> rdd = sc.textFile(<span class="string">"labeleddata.txt"</span>)</span><br><span class="line">      .map(_.split(<span class="string">" "</span>)</span><br><span class="line">      .map(_.toDouble))</span><br><span class="line">      .map(line =&gt; <span class="type">Vectors</span>.dense(line))</span><br><span class="line">    <span class="keyword">val</span> rm = <span class="keyword">new</span> <span class="type">RowMatrix</span>(rdd)</span><br><span class="line">    println(rm.numRows())</span><br><span class="line">    println(rm.numCols())</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">fileinput：</span><br><span class="line"><span class="number">1</span> <span class="number">2</span> <span class="number">3</span></span><br><span class="line"><span class="number">4</span> <span class="number">5</span> <span class="number">6</span></span><br><span class="line">output：</span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>带有行索引的矩阵</p>
+<p>行矩阵是一个转换变化,不是最运行结果,内容无法直接显示,因此提供了带有行索引的矩阵</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.linalg.<span class="type">Vectors</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.linalg.distributed.&#123;<span class="type">IndexedRow</span>, <span class="type">IndexedRowMatrix</span>&#125;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.&#123;<span class="type">SparkConf</span>, <span class="type">SparkContext</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">testIndexedRowMatrix</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> conf = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">      .setMaster(<span class="string">"local"</span>)</span><br><span class="line">      .setAppName(<span class="string">"testIndexedRowMatrix"</span>)</span><br><span class="line">    <span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(conf)</span><br><span class="line">    <span class="keyword">val</span> rdd = sc.textFile(<span class="string">"labeleddata.txt"</span>)</span><br><span class="line">      .map(_.split(<span class="string">" "</span>)</span><br><span class="line">        .map(_.toDouble))</span><br><span class="line">      .map(line =&gt; <span class="type">Vectors</span>.dense(line))</span><br><span class="line">      .map((vd) =&gt; <span class="keyword">new</span> <span class="type">IndexedRow</span>(vd.size,vd))</span><br><span class="line">    <span class="keyword">val</span> irm = <span class="keyword">new</span> <span class="type">IndexedRowMatrix</span>(rdd)</span><br><span class="line">    println(irm.getClass)</span><br><span class="line">    irm.rows.foreach(println)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">input:</span><br><span class="line"><span class="number">1</span> <span class="number">2</span> <span class="number">3</span></span><br><span class="line"><span class="number">4</span> <span class="number">5</span> <span class="number">6</span></span><br><span class="line">output:</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">org</span>.<span class="title">apache</span>.<span class="title">spark</span>.<span class="title">mllib</span>.<span class="title">linalg</span>.<span class="title">distributed</span>.<span class="title">IndexedRowMatrix</span></span></span><br><span class="line"><span class="class"><span class="title">IndexedRow</span>(<span class="params">3,[1.0,2.0,3.0]</span>)</span></span><br><span class="line"><span class="class"><span class="title">IndexedRow</span>(<span class="params">3,[4.0,5.0,6.0]</span>)</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>坐标矩阵</p>
+<p>一种带有坐标标记的矩阵,每一个具体数据都有一组坐标进行标示(x: Long,  y:  Long, value: Double).x,y分别是行和列,一般用于数据比较多且较为分散的情形</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.linalg.distributed.&#123;<span class="type">CoordinateMatrix</span>, <span class="type">MatrixEntry</span>&#125;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.&#123;<span class="type">SparkConf</span>, <span class="type">SparkContext</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">testCoordinateRowMatrix</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> conf = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">      .setMaster(<span class="string">"local"</span>)</span><br><span class="line">      .setAppName(<span class="string">"testCoordinateRowMatrix"</span>)</span><br><span class="line">    <span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(conf)</span><br><span class="line">    <span class="keyword">val</span> rdd = sc.textFile(<span class="string">"labeleddata.txt"</span>)</span><br><span class="line">      .map(_.split(<span class="string">" "</span>)</span><br><span class="line">        .map(_.toDouble))</span><br><span class="line">      .map(vue =&gt; (vue(<span class="number">0</span>).toLong, vue(<span class="number">1</span>).toLong, vue(<span class="number">2</span>)))</span><br><span class="line">      .map(vue2 =&gt; <span class="keyword">new</span> <span class="type">MatrixEntry</span>(vue2 _1, vue2 _2, vue2 _3))</span><br><span class="line">    <span class="keyword">val</span> crm = <span class="keyword">new</span> <span class="type">CoordinateMatrix</span>(rdd)</span><br><span class="line">    crm.entries.foreach(println)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">output:</span><br><span class="line"><span class="type">MatrixEntry</span>(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3.0</span>)</span><br><span class="line"><span class="type">MatrixEntry</span>(<span class="number">4</span>,<span class="number">5</span>,<span class="number">6.0</span>)</span><br></pre></td></tr></table></figure>
+<p>三个矩阵级别依次增加,高级可向低级转换.</p>
+</li>
+</ul>
+<p><strong>二 MLlib数理统计基本概念</strong></p>
+<p>在MLlib中,统计量计算主要用Statistic类库,主要包括:</p>
+<ul>
+<li>colStats:  以列为基础计算统计量的基本数据</li>
+<li>chiSqTest: 对数据集内数据计算皮尔逊距离</li>
+<li>corr: 计算两个数据集的相关系数</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.linalg.<span class="type">Vectors</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.stat.<span class="type">Statistics</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.&#123;<span class="type">SparkConf</span>, <span class="type">SparkContext</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">testSummary</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> conf = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">      .setMaster(<span class="string">"local"</span>)</span><br><span class="line">      .setAppName(<span class="string">"testIndexedRowMatrix"</span>)</span><br><span class="line">    <span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(conf)</span><br><span class="line">    <span class="keyword">val</span> rdd = sc.textFile(<span class="string">"a.txt"</span>)</span><br><span class="line">      .map(_.split(<span class="string">" "</span>)</span><br><span class="line">        .map(_.toDouble))</span><br><span class="line">      .map(line =&gt; <span class="type">Vectors</span>.dense(line))</span><br><span class="line">    <span class="keyword">val</span> summary = <span class="type">Statistics</span>.colStats(rdd)</span><br><span class="line">    println(summary.max)</span><br><span class="line">    println(summary.min)</span><br><span class="line">    println(summary.count)<span class="comment">//行内数据个数</span></span><br><span class="line">    println(summary.mean)<span class="comment">//均值</span></span><br><span class="line">    println(summary.numNonzeros)<span class="comment">//非零数字个数</span></span><br><span class="line">    println(summary.variance)<span class="comment">//标准差</span></span><br><span class="line">    println(summary.normL1)<span class="comment">//欧式距离,表达数据集内数据长度</span></span><br><span class="line">    println(summary.normL2)<span class="comment">//曼哈顿距离,表达两点在标准坐标系上的绝对轴距总和</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">input:</span><br><span class="line"><span class="number">0</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="number">45</span></span><br><span class="line"><span class="number">6</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="number">56</span></span><br><span class="line"><span class="number">32</span></span><br><span class="line"><span class="number">65</span></span><br><span class="line">output:</span><br><span class="line">[<span class="number">65.0</span>]</span><br><span class="line">[<span class="number">0.0</span>]</span><br><span class="line"><span class="number">12</span></span><br><span class="line">[<span class="number">18.0</span>]</span><br><span class="line">[<span class="number">11.0</span>]</span><br><span class="line">[<span class="number">598.7272727272727</span>]</span><br><span class="line">[<span class="number">216.0</span>]</span><br><span class="line">[<span class="number">102.34256201600583</span>]</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>两组数据相关系数计算</p>
+<p>相关系数用来反映变量之间相关关系密切程度,MLlib中默认相关系数求法是皮尔逊相关系数法.</p>
+<p>两个变量之间的皮尔逊相关系数定义为两个变量之间的<a href="https://baike.baidu.com/item/%E5%8D%8F%E6%96%B9%E5%B7%AE" target="_blank" rel="noopener">协方差</a>和<a href="https://baike.baidu.com/item/%E6%A0%87%E5%87%86%E5%B7%AE" target="_blank" rel="noopener">标准差</a>的商：</p>
+<p><img src="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D289/sign=90b7ce2ea064034f0bcdc50e96c27980/060828381f30e92463d59cc247086e061c95f7d4.jpg" alt="img"></p>
+</li>
+</ul>
+<p>​       可以看作是两组数据的向量夹角的余弦,描述两组数据的分开程度.</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.stat.<span class="type">Statistics</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.&#123;<span class="type">SparkConf</span>, <span class="type">SparkContext</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">testCorrect</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> conf = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">      .setMaster(<span class="string">"local"</span>)</span><br><span class="line">      .setAppName(<span class="string">"testCorrect"</span>)</span><br><span class="line">    <span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(conf)</span><br><span class="line">    <span class="keyword">val</span> rddX = sc.textFile(<span class="string">"x.txt"</span>)</span><br><span class="line">      .flatMap(_.split(<span class="string">" "</span>)</span><br><span class="line">        .map(_.toDouble))</span><br><span class="line">    <span class="keyword">val</span> rddY = sc.textFile(<span class="string">"y.txt"</span>)</span><br><span class="line">      .flatMap(_.split(<span class="string">" "</span>)</span><br><span class="line">        .map(_.toDouble))</span><br><span class="line">    <span class="keyword">val</span> correlation: <span class="type">Double</span> = <span class="type">Statistics</span>.corr(rddX,rddY)</span><br><span class="line">    println(correlation)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">input:<span class="comment">//两个文件分别输入</span></span><br><span class="line">xtxt:<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span></span><br><span class="line">ytxt:<span class="number">2</span> <span class="number">4</span> <span class="number">6</span> <span class="number">8</span> <span class="number">10</span></span><br><span class="line">outout:</span><br><span class="line"><span class="number">0.9999999999999998</span></span><br></pre></td></tr></table></figure>
+<p>使用val correlation: Double = Statistics.corr(rddX,rddY,’spearman’),可以计算斯皮尔曼相关系数</p>
+<ul>
+<li>分层抽样</li>
+</ul>
+<p>分层抽样:一种数据提取算法,先将总体的单位按照特征分为若干级次总体,然后再从每一曾进行单纯随机抽样,组成一个样本.</p>
+<p>eg:数据内容如下:</p>
+<blockquote>
+<p>aa</p>
+<p>bb</p>
+<p>aaa</p>
+<p>bbb</p>
+<p>ccc</p>
+</blockquote>
+<p>将每个字符串中含有三个字符的标记为1,两个字符的标记为2,再根据其数目进行分组.</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.&#123;<span class="type">SparkConf</span>, <span class="type">SparkContext</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">testStratifiedSampling2</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> conf = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">      .setMaster(<span class="string">"local"</span>)</span><br><span class="line">      .setAppName(<span class="string">"testStratifiedSampling2"</span>)</span><br><span class="line">    <span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(conf)</span><br><span class="line">    <span class="keyword">val</span> data = sc.textFile(<span class="string">"a.txt"</span>).map(row =&gt; &#123;</span><br><span class="line">      <span class="keyword">if</span> (row.length == <span class="number">3</span>)</span><br><span class="line">        (row, <span class="number">1</span>)</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">        (row, <span class="number">2</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    ).map(each =&gt; (each _2, each _1))</span><br><span class="line">    <span class="keyword">val</span> fractions : <span class="type">Map</span>[<span class="type">Int</span>, <span class="type">Double</span>] = (<span class="type">List</span>((<span class="number">1</span>,<span class="number">0.3</span>),(<span class="number">2</span>,<span class="number">0.7</span>))).toMap<span class="comment">//设定抽样格式,fractions表示在层1抽0.2，在层2中抽0.8</span></span><br><span class="line">    <span class="comment">//withReplacement false表示不重复抽样</span></span><br><span class="line">    <span class="keyword">val</span> approxSample = data.sampleByKey(withReplacement = <span class="literal">false</span>, fractions, <span class="number">0</span>)</span><br><span class="line">    approxSample.foreach(println)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>假设检验</p>
+<p>MLlib规定常使用的数据集一般为向量和矩阵.</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.linalg.&#123;<span class="type">Matrices</span>, <span class="type">Vectors</span>&#125;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.stat.<span class="type">Statistics</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">testChiSq</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> vd = <span class="type">Vectors</span>.dense(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>)</span><br><span class="line">    <span class="keyword">val</span> vdResult = <span class="type">Statistics</span>.chiSqTest(vd)</span><br><span class="line">    println(vdResult)</span><br><span class="line">    println(<span class="string">"------------------"</span>)</span><br><span class="line">    <span class="keyword">val</span> mtx = <span class="type">Matrices</span>.dense(<span class="number">3</span>,<span class="number">2</span>, <span class="type">Array</span>(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>))</span><br><span class="line">    <span class="keyword">val</span> mtxResult = <span class="type">Statistics</span>.chiSqTest(mtx)</span><br><span class="line">    println(mtxResult)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">output:</span><br><span class="line"><span class="type">Chi</span> squared test summary:</span><br><span class="line">method: pearson<span class="comment">//卡方检验使用方法</span></span><br><span class="line">degrees of freedom = <span class="number">5</span> <span class="comment">//自由度</span></span><br><span class="line">statistic = <span class="number">5.000000000000001</span> <span class="comment">//统计量</span></span><br><span class="line">pValue = <span class="number">0.4158801869955079</span> <span class="comment">//p值</span></span><br><span class="line"><span class="type">No</span> presumption against <span class="literal">null</span> hypothesis: observed follows the same distribution as expected..</span><br><span class="line">------------------</span><br><span class="line"><span class="type">Chi</span> squared test summary:</span><br><span class="line">method: pearson</span><br><span class="line">degrees of freedom = <span class="number">2</span> </span><br><span class="line">statistic = <span class="number">0.14141414141414144</span> </span><br><span class="line">pValue = <span class="number">0.931734784568187</span> </span><br><span class="line"><span class="type">No</span> presumption against <span class="literal">null</span> hypothesis: the occurrence of the outcomes is statistically independent..</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="//harold.me/2018/05/06/MLlib-基本概念/" data-id="cji4l7i6p000scf96v30uniqk" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MLlib/">MLlib</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/机器学习/">机器学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/05/06/MLlib-协同过滤算法/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          MLlib----协同过滤算法
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/05/02/Fabric启用网络/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Fabric启用网络</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Crunch/">Crunch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HBase/">HBase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hadoop/">Hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hive/">Hive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MLib/">MLib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MLlib/">MLlib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mahout/">Mahout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spark/">Spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scala/">scala</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式算法/">分布式算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/区块链/">区块链</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/协同过滤/">协同过滤</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/大数据/">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符串匹配/">字符串匹配</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发/">并发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/推荐系统/">推荐系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/机器学习/">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/随笔/">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Crunch/" style="font-size: 10px;">Crunch</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/HTTP/" style="font-size: 10px;">HTTP</a> <a href="/tags/Hadoop/" style="font-size: 17.5px;">Hadoop</a> <a href="/tags/Hive/" style="font-size: 11.25px;">Hive</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 18.75px;">Java</a> <a href="/tags/MLib/" style="font-size: 10px;">MLib</a> <a href="/tags/MLlib/" style="font-size: 10px;">MLlib</a> <a href="/tags/Mahout/" style="font-size: 10px;">Mahout</a> <a href="/tags/MySQL/" style="font-size: 12.5px;">MySQL</a> <a href="/tags/Spark/" style="font-size: 10px;">Spark</a> <a href="/tags/scala/" style="font-size: 15px;">scala</a> <a href="/tags/分布式算法/" style="font-size: 11.25px;">分布式算法</a> <a href="/tags/区块链/" style="font-size: 11.25px;">区块链</a> <a href="/tags/协同过滤/" style="font-size: 11.25px;">协同过滤</a> <a href="/tags/多线程/" style="font-size: 16.25px;">多线程</a> <a href="/tags/大数据/" style="font-size: 20px;">大数据</a> <a href="/tags/字符串匹配/" style="font-size: 10px;">字符串匹配</a> <a href="/tags/并发/" style="font-size: 16.25px;">并发</a> <a href="/tags/推荐系统/" style="font-size: 11.25px;">推荐系统</a> <a href="/tags/数据库/" style="font-size: 13.75px;">数据库</a> <a href="/tags/机器学习/" style="font-size: 17.5px;">机器学习</a> <a href="/tags/算法/" style="font-size: 13.75px;">算法</a> <a href="/tags/随笔/" style="font-size: 11.25px;">随笔</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/06/07/数据算法——Spark的二次排序解决方案/">数据算法——Spark的二次排序解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/07/lightGbm简要原理/">lightGbm简要原理</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/数据算法-二次排序/">数据算法——Hadoop的二次排序解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/ES分词器/">ES分词器</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/hexo系列问题之我们换了电脑怎么办/">hexo系列问题之我们换了电脑怎么办</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 李贺<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

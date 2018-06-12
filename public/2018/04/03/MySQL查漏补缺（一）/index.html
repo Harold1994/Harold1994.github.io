@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>MySQL查漏补缺（一） | Harold的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本篇博客记录本人在复习MySQL基本操作过程中碰到的之前忽略或者忘记的知识点  命令HOW DATABASES后出现的mysql数据库是必需的，它描述用户访问权限 创建数据库是在系统磁盘上划分一块区域用于数据的存储和管理 show engines查看系统支持的引擎 InnoDB是事务型数据库的首选引擎，支持事务安全表（ACID），支持行锁定和外键 特点：  InnoDB给MySQL提供了具有提交、">
+<meta name="keywords" content="数据库,MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL查漏补缺（一）">
+<meta property="og:url" content="//harold.me/2018/04/03/MySQL查漏补缺（一）/index.html">
+<meta property="og:site_name" content="Harold的博客">
+<meta property="og:description" content="本篇博客记录本人在复习MySQL基本操作过程中碰到的之前忽略或者忘记的知识点  命令HOW DATABASES后出现的mysql数据库是必需的，它描述用户访问权限 创建数据库是在系统磁盘上划分一块区域用于数据的存储和管理 show engines查看系统支持的引擎 InnoDB是事务型数据库的首选引擎，支持事务安全表（ACID），支持行锁定和外键 特点：  InnoDB给MySQL提供了具有提交、">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="//harold.me/home/harold/Pictures/Selection_050.png">
+<meta property="og:image" content="//harold.me/home/harold/Pictures/Selection_051.png">
+<meta property="og:updated_time" content="2018-06-07T13:35:07.276Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL查漏补缺（一）">
+<meta name="twitter:description" content="本篇博客记录本人在复习MySQL基本操作过程中碰到的之前忽略或者忘记的知识点  命令HOW DATABASES后出现的mysql数据库是必需的，它描述用户访问权限 创建数据库是在系统磁盘上划分一块区域用于数据的存储和管理 show engines查看系统支持的引擎 InnoDB是事务型数据库的首选引擎，支持事务安全表（ACID），支持行锁定和外键 特点：  InnoDB给MySQL提供了具有提交、">
+<meta name="twitter:image" content="//harold.me/home/harold/Pictures/Selection_050.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Harold的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Harold的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">踏实前进,戒骄戒躁</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="//harold.me"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-MySQL查漏补缺（一）" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/03/MySQL查漏补缺（一）/" class="article-date">
+  <time datetime="2018-04-03T06:36:40.000Z" itemprop="datePublished">2018-04-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      MySQL查漏补缺（一）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本篇博客记录本人在复习MySQL基本操作过程中碰到的之前忽略或者忘记的知识点</p>
+<ul>
+<li>命令<code>HOW DATABASES</code>后出现的mysql数据库是必需的，它描述用户访问权限</li>
+<li>创建数据库是在系统磁盘上划分一块区域用于数据的存储和管理</li>
+<li><code>show engines</code>查看系统支持的引擎</li>
+<li>InnoDB是事务型数据库的首选引擎，支持事务安全表（ACID），支持行锁定和外键<blockquote>
+<p>特点：</p>
+<ul>
+<li>InnoDB给MySQL提供了具有提交、回滚、和崩溃恢复能力的事务安全存储引擎</li>
+<li>为处理巨大数据量的最大性能设计，CPU效率高</li>
+<li>完全与MySQL服务器整合</li>
+<li>支持外键完整约束<a id="more"></a></li>
+</ul>
+</blockquote>
+</li>
+<li>MyISAM拥有较高的插入、查询速度，但不支持事务</li>
+<li>MEMORY存储引擎将数据存储到内存中，为查询和引用其他表数据提供快速访问</li>
+<li>主键是表中<em>一列或者多列的组合</em>，主键约束要求主键数据唯一，并且不能为空，主键可以和外键结合起来定义不同数据表之间的关系，可以加快查询的速度</li>
+<li>主键类型：单字段主键、多字段联合主键</li>
+<li>创建多字段主键：<code>PRIMARY KET [VAR1,VAR2,...]</code></li>
+<li>外键用来在两个表的数据之间建立链接，可以是一列或者多列，外键对应参照完整性</li>
+<li>一个表的外键可以为空，可以不是本表的主键，若不为空，则每个外键的值必须等于另一个表中主键的某个值</li>
+<li>定义外键后，不允许删除在另一个表中具有关联关系的行</li>
+<li>创建外键语法:<code>[CONSTRAINT &lt;外键名&gt;] FOREIGN KEY 字段名1 [，字段名2，...] REFRENCES &lt;主表名&gt; 主键列1[， 主键列2...]</code></li>
+<li>一个表中不能有相同名称的外键</li>
+<li>一个表只能有一个字段使用AUTO_INCREMENT约束，且该字段必须为主键的一部分</li>
+<li>查看表的基本结构：<blockquote>
+<p>DESC:查看基本结构<br>SHOW CREATE TABLE:查看详细表结构，可以显示创建表的语句，加上‘\G‘参数显示的结果更直观</p>
+</blockquote>
+</li>
+<li>修改表名：<code>alter table 表名 rename to 新表名</code></li>
+<li>修改字段数据类型：<code>alter table 表名 modify 字段名 数据类型</code></li>
+<li>修改字段名：<code>alter table 表名 change 旧字段名 新字段名 新数据类型</code></li>
+<li>添加字段：<code>alter table 表名 add 新字段名 数据类型 约束类型 [FIRST|AFTER 已存在字段名]</code> FIRST和AFTER为可选参数，将新字段置于首位或者添加到以存在字段名之后， 默认添加到最后列</li>
+<li>删除字段： <code>alter table 表名 drop 字段名</code></li>
+<li>修改表名的排列顺序：<code>alter table 表名 modify 字段名 数据类型 FIRST | AFTER 已存在字段</code></li>
+<li>修改引擎： <code>alter table 表名 engin=引擎名</code></li>
+<li>删除外键约束：<code>alter table 表名 drop foreign kei 外键名</code></li>
+<li>数据表之间存在关联关系时，删除父表会报错</li>
+<li>并不是每个表都需要主键</li>
+<li>表示小数：浮点数：float double 定点数：decimal,都可以用（M，N）表示，M为精度，表示总共位数，N为标度，表示小数位数</li>
+<li>decimal以串存放，其可能的最大取直与double一样</li>
+<li>CHAR(M)定长字符串，检索到CHAR值时，尾部空格将删除</li>
+<li>VARCHAR(M)长度可变字符串，M表示最大列长度，0-65535，实际占用空间为字符串实际长度加一，在值保存和检索时尾部的空格任保留</li>
+<li>ENUM是字符串对象，值为表在创建时在列规定中枚举的一列直，语法<code>字段名 enum （&#39;val1&#39;，&#39;val2&#39;,...&#39;valn&#39;）</code></li>
+<li><p>ENUM类型的字段在取值时只能在指定枚举列表中取且一次只能取一个，成员尾部空格将自动被删除，ENUM值在内部用整数表示，每个枚举值均有一个索引值，列表索引值从一开始编号，NULL的索引为NULL，字段值区分大小写<br><img src="/home/harold/Pictures/Selection_050.png" alt=""><br><img src="/home/harold/Pictures/Selection_051.png" alt=""></p>
+</li>
+<li><p>SET是一个字符串对象，可以有0-64个成员，SET类型的列可以从定义的列值中选择多个字符的联合，SET会删除重复的值</p>
+</li>
+<li>BIN()函数将数字转换为二进制</li>
+<li>二进制字符串类型：<blockquote>
+<ul>
+<li>BIT:位字段</li>
+<li>BINARY(M):长度二进制字符串<ul>
+<li>VARBINARY(M): 变长</li>
+<li>BLOB(M):小BLOB，BLOB是二进制大对象，存储可变数量的数据</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+</li>
+<li>TEXT和BLOB比较：</li>
+</ul>
+<p><table></table></p>
+<p><tr><td>TEXT</td></tr></p>
+<p><td>BLOB</td></p>
+<p><tr><td>存储非二进制字符串(字符字符串)</td></tr></p>
+<p><td>存储二进制字符串(字节字符串)</td></p>
+<p><tr><td>有一个字符集,根据字符集对值比较和排序</td></tr></p>
+<p><td>没有字符集，排序和比较基于列值字节的数值</td></p>
+<p><tr><td>只能存纯文本文件</td></tr></p>
+<p><td>主要存图片，音频等</td></p>
+<p><table></table></p>
+<ul>
+<li><p><code>=</code>操作符：<br>若有一个或两个参数为NULL，比较结果为NULL<br>若两个参数都是字符串，则按字符串进行比较<br>都为整数，按整数比较<br>若一个字符串一个整数比较，自动将字符串转换为整数</p>
+</li>
+<li><p>安全等于运算符<code>&lt;=&gt;</code>,可用来判断null值</p>
+</li>
+<li><code>LEAST（val1,val2,...valn）</code>运算符返回参数中的最小值，如果参数中有NULL，返回NULL</li>
+<li><code>GREATEST(val1,val2,...)</code>返回最大值，有NULL时，返回NULL</li>
+<li><code>exp REGEXP 匹配条件</code>，用来匹配字符串，匹配返回1,否则返回0，若expr或匹配条件中有一个NULL，结果为NULL，通配符比LIKE多，不区分大小写</li>
+<li>函数CEIL(x),CEILING(x),FLOOR(x)获取整数值，前两个向上取整，floor()向下取整</li>
+<li>函数RAND(x)返回0-1间的浮点数，x作为种子</li>
+<li>ROUND(x)函数四舍五入,ROUND(x,y)返回最接近x的数，结果保留小数点后y位，若y为负值，则将小数点保留x只到小数点左边y位</li>
+<li>TRUNCATE(x,y)返回被舍去小数点后y位的数字x，若y为0，则结果不带有小数部分，若y为负数，则截取(归零)x小数点做起y位开始后所有低位的值。</li>
+<li>CHAR_LENGTH(str)返回字符串str所包含的字符个数，一个多字节字符算作一个单字符。</li>
+<li>LENGTH(str）返回字符串的字节长度</li>
+<li>CONCAT(s1,s2,…)连接字符串，如果有一个参数为NULL，则结果为NULL，若自变量中存在二进制字符串，则结果为一个二进制字符串</li>
+<li>CONCAT(X,S1,S2,…)以x作为分隔符连接字符串</li>
+<li><code>INSERT(S1,X，LEN,s2)</code>替换字符串函数，从s1的x位置用s2取代len个字符，若x超过字符串长度，则返回原始字符串，有一个参数为NULL则返回NULL</li>
+<li>大小写转换LOWER(STR),LCASE(STR),UPPER(STR),UCASE(STR)</li>
+<li>获取指定长度字符串<code>LEFT(s,n)</code>,<code>RIGHT(s,n)</code></li>
+<li><code>TRIM(s1 FROM s)</code>从s两端删除所有子字符s1</li>
+<li>匹配子串str1在str中开始位置的函数:<code>LOCATE(str1,str),POSITION(str1 IN str),INSTR(str,str1)</code></li>
+<li><code>ELT(N,str1,str2,...)</code>返回指定位置N的字符串,若N小于1或大于参数的个数，则返回NULL</li>
+<li><code>IF(expr,v1,v2)</code>若expr为真，返回v1,否则返回v2</li>
+<li><code>IFNULL(v1,v2)</code>若v1不为NULL，则返回v1.否则返回v2</li>
+<li><code>CASE expr WHEN v1 THEN r1 [WHEN v2 THEN r2] [ELSE rn] END</code>如果expr的值等于某个vn，则返回对应rn</li>
+<li>查看系统信息<code>select version()</code> <code>select connection_ID()</code></li>
+<li><code>SELECT USER(),CURRENT_USER(),SYSTEM_USER();</code>获取用户名函数</li>
+<li><code>LAST_INSERT_ID()</code>获取最后一格自动生成的ID值</li>
+<li><code>FORMAT(x,n)</code>将数字格式化，四舍五入保留小数点后n位。以字符串形式返回，若n=0,则返回函数不包含小数部分</li>
+<li><code>CONV(n,FROM_BASE,TO_BASE)</code>对N进制转换</li>
+<li>ip地址与数字相互转换：<code>INET_ATON(expr)</code>返回一个代表地址数值的整数，<code>INET_NTOA(EXPR)</code>将数值转换为网络地址</li>
+<li>查询语句中AND和OR一起使用时，AND优先级高于OR</li>
+<li>DISTINCT关键字去重</li>
+<li>ORDER BY关键字默认按ASC(升序)方式排序，DESC只对其前面的列进行降序排序</li>
+<li>[GROUP BY 字段] [HAVING &lt;条件表达式&gt;]分组查询</li>
+<li>HAVING和WHERE比较：两个都是用来过滤数据的，HAVING在数据分组之后进行过滤来选择分组，WHERE在分组之前来选择记录。WHERE排除的记录不再包括在分组中。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="//harold.me/2018/04/03/MySQL查漏补缺（一）/" data-id="cji4l7i6o000pcf96a08e6okm" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/04/03/《区块链原理、设计与应用》读书摘要/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          《区块链原理、设计与应用》读书摘要
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/03/29/KMP算法/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">KMP算法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Crunch/">Crunch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HBase/">HBase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hadoop/">Hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hive/">Hive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MLib/">MLib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MLlib/">MLlib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mahout/">Mahout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spark/">Spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scala/">scala</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式算法/">分布式算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/区块链/">区块链</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/协同过滤/">协同过滤</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/大数据/">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符串匹配/">字符串匹配</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发/">并发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/推荐系统/">推荐系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/机器学习/">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/随笔/">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Crunch/" style="font-size: 10px;">Crunch</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/HTTP/" style="font-size: 10px;">HTTP</a> <a href="/tags/Hadoop/" style="font-size: 17.5px;">Hadoop</a> <a href="/tags/Hive/" style="font-size: 11.25px;">Hive</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 18.75px;">Java</a> <a href="/tags/MLib/" style="font-size: 10px;">MLib</a> <a href="/tags/MLlib/" style="font-size: 10px;">MLlib</a> <a href="/tags/Mahout/" style="font-size: 10px;">Mahout</a> <a href="/tags/MySQL/" style="font-size: 12.5px;">MySQL</a> <a href="/tags/Spark/" style="font-size: 10px;">Spark</a> <a href="/tags/scala/" style="font-size: 15px;">scala</a> <a href="/tags/分布式算法/" style="font-size: 11.25px;">分布式算法</a> <a href="/tags/区块链/" style="font-size: 11.25px;">区块链</a> <a href="/tags/协同过滤/" style="font-size: 11.25px;">协同过滤</a> <a href="/tags/多线程/" style="font-size: 16.25px;">多线程</a> <a href="/tags/大数据/" style="font-size: 20px;">大数据</a> <a href="/tags/字符串匹配/" style="font-size: 10px;">字符串匹配</a> <a href="/tags/并发/" style="font-size: 16.25px;">并发</a> <a href="/tags/推荐系统/" style="font-size: 11.25px;">推荐系统</a> <a href="/tags/数据库/" style="font-size: 13.75px;">数据库</a> <a href="/tags/机器学习/" style="font-size: 17.5px;">机器学习</a> <a href="/tags/算法/" style="font-size: 13.75px;">算法</a> <a href="/tags/随笔/" style="font-size: 11.25px;">随笔</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/06/07/数据算法——Spark的二次排序解决方案/">数据算法——Spark的二次排序解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/07/lightGbm简要原理/">lightGbm简要原理</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/数据算法-二次排序/">数据算法——Hadoop的二次排序解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/ES分词器/">ES分词器</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/hexo系列问题之我们换了电脑怎么办/">hexo系列问题之我们换了电脑怎么办</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 李贺<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

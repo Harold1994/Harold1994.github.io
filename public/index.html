@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Harold的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Harold的博客">
+<meta property="og:url" content="//harold.me/index.html">
+<meta property="og:site_name" content="Harold的博客">
+<meta property="og:locale" content="zh-Hans">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Harold的博客">
+  
+    <link rel="alternate" href="/atom.xml" title="Harold的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Harold的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">踏实前进,戒骄戒躁</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="//harold.me"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="posts-数据算法——Spark的二次排序解决方案" class="article article-type-posts" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/07/数据算法——Spark的二次排序解决方案/" class="article-date">
+  <time datetime="2018-06-07T07:41:50.000Z" itemprop="datePublished">2018-06-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/07/数据算法——Spark的二次排序解决方案/">数据算法——Spark的二次排序解决方案</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在Saprk中解决二次排序问题，又以下两种解决方案：</p>
+<ul>
+<li><p>方案一：</p>
+<p>将一个给定的键的所有值读取并缓存到一个List数组，对数组中得值完成归约器排序，如果每个归约器键的值集很小，则本方案适用</p>
+</li>
+<li><p>方案二：</p>
+<p>使用Spark框架对归约器值排序，这种方法“会为自然键增加部分或者整个值来创建一个组合键以实现排序目标”，本方法可伸缩，不受内存限制。</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/06/07/数据算法——Spark的二次排序解决方案/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="//harold.me/2018/06/07/数据算法——Spark的二次排序解决方案/" data-id="cji4m0lti0000nr96ylr00024" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spark/">Spark</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式算法/">分布式算法</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/机器学习/">机器学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-lightGbm简要原理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/07/lightGbm简要原理/" class="article-date">
+  <time datetime="2018-06-06T17:47:18.000Z" itemprop="datePublished">2018-06-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/07/lightGbm简要原理/">lightGbm简要原理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文转自:<a href="https://blog.csdn.net/niaolianjiulin/article/details/76584785" target="_blank" rel="noopener">https://blog.csdn.net/niaolianjiulin/article/details/76584785</a></p>
+<p>和<a href="https://www.cnblogs.com/wanglei5205/p/8722237.html" target="_blank" rel="noopener">https://www.cnblogs.com/wanglei5205/p/8722237.html</a></p>
+<h1 id="1-lightGBM简介"><a href="#1-lightGBM简介" class="headerlink" title="1. lightGBM简介"></a>1. lightGBM简介</h1><p>xgboost的出现，让数据民工们告别了传统的机器学习算法们：RF、GBM、SVM、LASSO……..。现在微软推出了一个新的boosting框架，想要挑战xgboost的江湖地位。</p>
+<p>顾名思义，lightGBM包含两个关键点：light即轻量级，GBM 梯度提升机。</p>
+<p>LightGBM 是一个梯度 boosting 框架，使用基于学习算法的决策树。它可以说是分布式的，高效的，有以下优势：<br>
+        
+          <p class="article-more-link">
+            <a href="/2018/06/07/lightGbm简要原理/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="//harold.me/2018/06/07/lightGbm简要原理/" data-id="cji4l7i6r000vcf96j63n8iie" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/机器学习/">机器学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-数据算法-二次排序" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/04/数据算法-二次排序/" class="article-date">
+  <time datetime="2018-06-04T07:58:43.000Z" itemprop="datePublished">2018-06-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/04/数据算法-二次排序/">数据算法——Hadoop的二次排序解决方案</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="一-二次排序-secondary-sort-问题的引出"><a href="#一-二次排序-secondary-sort-问题的引出" class="headerlink" title="一. 二次排序(secondary sort)问题的引出"></a>一. 二次排序(secondary sort)问题的引出</h4><p><strong>1. 二次排序</strong>:</p>
+<p>在reduce阶段对与某个键关联的值排序,又称为键值转换;</p>
+<p><strong>2. MR中的排序:</strong></p>
+<p>MapReduce框架会自动对mapper生成的键排序,说明在启动reducer之前,mapper生成的所有中间键值对必然是<strong>按键有序</strong>的.但是传入reducer的值并不是有序的,他们可能有任意的顺序,要想对reducer中的值进行排序,可以用二次排序设计模式实现.</p>
+<p><strong>3. 通过MR的范式分析二次排序</strong>:</p>
+<p>map(key1,value1)—&gt;list(key2,value2)<br>reduce(list(key2,value2))—&gt;list(key3,value3)<br>list(key2,value2)作为reducer的输入,list(value2)=(V1,V2,V3…,Vn),其本身是无序的.<br>二次排序的目标就是让reducer收到的值有某种顺序.<br>
+        
+          <p class="article-more-link">
+            <a href="/2018/06/04/数据算法-二次排序/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="//harold.me/2018/06/04/数据算法-二次排序/" data-id="cji4l7i7q003mcf96auoju0ds" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hadoop/">Hadoop</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式算法/">分布式算法</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/机器学习/">机器学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-ES分词器" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/04/ES分词器/" class="article-date">
+  <time datetime="2018-06-03T16:15:12.000Z" itemprop="datePublished">2018-06-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/04/ES分词器/">ES分词器</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>ES逗号分词<br>1：新建分析器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">curl -XPOST &apos;http://172.18.0.4:9200/demo/?pretty&apos; -d &apos;</span><br><span class="line">&#123;</span><br><span class="line">　　&quot;settings&quot;:</span><br><span class="line">　　&#123;</span><br><span class="line">　　　　&quot;analysis&quot;:</span><br><span class="line">　　　　　　&#123;</span><br><span class="line">　　　　　　　　&quot;analyzer&quot;:</span><br><span class="line">　　　　　　　　　　&#123;</span><br><span class="line">　　　　　　　　　　　　&quot;douhao&quot;:</span><br><span class="line">　　　　　　　　　　　　　　&#123;</span><br><span class="line">　　　　　　　　　　　　　　　　&quot;type&quot;:&quot;pattern&quot;,</span><br><span class="line">　　　　　　　　　　　　　　　　&quot;pattern&quot;:&quot;,&quot;</span><br><span class="line">　　　　　　　　　　　　　　&#125;</span><br><span class="line">　　　　　　　　　&#125;</span><br><span class="line">　　　　　　&#125;</span><br><span class="line">　　&#125;</span><br><span class="line"></span><br><span class="line">&#125;&apos;</span><br></pre></td></tr></table></figure></p>
+        
+          <p class="article-more-link">
+            <a href="/2018/06/04/ES分词器/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="//harold.me/2018/06/04/ES分词器/" data-id="cji4l7i5z0001cf96px32hdz0" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-hexo系列问题之我们换了电脑怎么办" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/04/hexo系列问题之我们换了电脑怎么办/" class="article-date">
+  <time datetime="2018-06-03T16:14:00.000Z" itemprop="datePublished">2018-06-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/04/hexo系列问题之我们换了电脑怎么办/">hexo系列问题之我们换了电脑怎么办</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>问题<br>我们如果换了电脑怎么办？我们把hexo文件从一个电脑cope到另外一个电脑吗?答案肯定不是这样的，因为这里面有好多依赖包，好几万个文件呢，这样显然不合理</p>
+<p>解决方案<br>我们初步的解决方案是把我们的文件提交到git上，利用git来管理它，我是这样解决的： 在现有的XXX.github.io项目上创建一个分支来管理<br>
+        
+          <p class="article-more-link">
+            <a href="/2018/06/04/hexo系列问题之我们换了电脑怎么办/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="//harold.me/2018/06/04/hexo系列问题之我们换了电脑怎么办/" data-id="cji4l7i7o003hcf961z86ske6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/随笔/">随笔</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-数据库中：维度表和事实表" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/04/数据库中：维度表和事实表/" class="article-date">
+  <time datetime="2018-06-03T16:13:13.000Z" itemprop="datePublished">2018-06-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/04/数据库中：维度表和事实表/">数据库中：维度表和事实表</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p> a) 事实表   </p>
+<p> i.              事实表是维度模型的基本表，存放有大量的业务性能度量值。</p>
+<p> ii.              事实表的一行对应一个度量值，一个度量值就是事实表的一行，事实表的所有度量值必须具有相同的粒度</p>
+<p> iii.              事实表中最有用的事实是数字类型和可加形型事实<br>
+        
+          <p class="article-more-link">
+            <a href="/2018/06/04/数据库中：维度表和事实表/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="//harold.me/2018/06/04/数据库中：维度表和事实表/" data-id="cji4l7i87004ncf963o149z2i" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-线程的生命周期" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/04/线程的生命周期/" class="article-date">
+  <time datetime="2018-06-03T16:12:09.000Z" itemprop="datePublished">2018-06-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/04/线程的生命周期/">线程的生命周期</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>  当线程被创建并启动以后，它既不是一启动就进入了执行状态，也不是一直处于执行状态，在线程的生命周期中，它要经过新建（New）、就绪（Runnable）、运</p>
+<p>行（Running）、阻塞（Blocked）和死亡（Dead）五种状态。尤其是当线程启动以后，它不能一直“霸占”着CPU独自运行，所以CPU需要在多条线程之间切换，于是线程状态也会多次在运行、阻塞之间切换。<br>
+        
+          <p class="article-more-link">
+            <a href="/2018/06/04/线程的生命周期/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="//harold.me/2018/06/04/线程的生命周期/" data-id="cji4l7i7v003ucf96dqg7q1v7" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/并发/">并发</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Java并发编程——线程的取消与关闭" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/04/Java并发编程——线程的取消与关闭/" class="article-date">
+  <time datetime="2018-06-03T16:10:55.000Z" itemprop="datePublished">2018-06-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/04/Java并发编程——线程的取消与关闭/">Java并发编程——线程的取消与关闭</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Java没有提供任何机制来安全的终止线程，但是提供了<strong>中断</strong>（Interruption），这是一种协作机制，能够使一个线程终止另外一个线程。</p>
+<h4 id="一、任务取消"><a href="#一、任务取消" class="headerlink" title="一、任务取消"></a>一、任务取消</h4><ul>
+<li>可取消操作：如果外部代码能在某个正常操作完成之前将其置入“完成”状态，称这个任务可取消</li>
+<li>取消某个操作的原因：
+        
+          <p class="article-more-link">
+            <a href="/2018/06/04/Java并发编程——线程的取消与关闭/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="//harold.me/2018/06/04/Java并发编程——线程的取消与关闭/" data-id="cji4l7i6e000bcf96zkvg9446" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/并发/">并发</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Java并发编程——线程池的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/04/Java并发编程——线程池的使用/" class="article-date">
+  <time datetime="2018-06-03T16:07:56.000Z" itemprop="datePublished">2018-06-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/04/Java并发编程——线程池的使用/">Java并发编程——线程池的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="一、在任务与执行策略之间的隐性耦合"><a href="#一、在任务与执行策略之间的隐性耦合" class="headerlink" title="一、在任务与执行策略之间的隐性耦合"></a>一、在任务与执行策略之间的隐性耦合</h4><p>Executor框架可以将任务的提交与任务的执行策略解耦开来，虽然Executor框架为制定和修改执行策略都提供了相当大的灵活性，但并非所有任务都适用于所有执行策略，有些类型的任务需要明确指定执行策略：</p>
+<ul>
+<li>依赖性任务： 在线程池中执行独立的任务时，可以随意的改变线程池的大小和配置，这只会影响其执行性能。但是若提交到线程池的任务依赖于其他的任务，那么就隐含的给执行策略带来了约束。
+        
+          <p class="article-more-link">
+            <a href="/2018/06/04/Java并发编程——线程池的使用/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="//harold.me/2018/06/04/Java并发编程——线程池的使用/" data-id="cji4l7i6c0009cf968b2zqxpb" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/并发/">并发</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Hive用户自定义聚合函数UDAF和表生成函数UDTF" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/30/Hive用户自定义聚合函数UDAF和表生成函数UDTF/" class="article-date">
+  <time datetime="2018-05-30T13:45:40.000Z" itemprop="datePublished">2018-05-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/30/Hive用户自定义聚合函数UDAF和表生成函数UDTF/">Hive用户自定义聚合函数(UDAF)和表生成函数(UDTF)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在之前关于Hive的<a href="https://harold1994.github.io/2018/03/17/%E5%85%B3%E4%BA%8EHIVE/" target="_blank" rel="noopener">博文</a>中写到了UDAF和UDTF,不过只是简单的带过,在UDAF部分继承是已经被废弃的的UDAF类,因此在这片博文中详细说明一下新的继承类的使用方法,算是还技术债吧.</p>
+<h4 id="一-用户自定义聚合函数"><a href="#一-用户自定义聚合函数" class="headerlink" title="一. 用户自定义聚合函数"></a>一. 用户自定义聚合函数</h4><p>聚合函数会分多个阶段进行处理,基于UDAF执行的转换不同,在不同的阶段返回值类型也可能不同.聚合过程是在map或者reduce任务中执行的,任务task是一个<a href="https://blog.csdn.net/androidlushangderen/article/details/50002015" target="_blank" rel="noopener">有内存限制</a>的Java进程,因此在聚合过程中存储大的数据结构会产生溢出错误.<br>
+        
+          <p class="article-more-link">
+            <a href="/2018/05/30/Hive用户自定义聚合函数UDAF和表生成函数UDTF/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="//harold.me/2018/05/30/Hive用户自定义聚合函数UDAF和表生成函数UDTF/" data-id="cji4l7i670004cf963nv0m60w" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hadoop/">Hadoop</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hive/">Hive</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Crunch/">Crunch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HBase/">HBase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hadoop/">Hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hive/">Hive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MLib/">MLib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MLlib/">MLlib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mahout/">Mahout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spark/">Spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scala/">scala</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式算法/">分布式算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/区块链/">区块链</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/协同过滤/">协同过滤</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/大数据/">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符串匹配/">字符串匹配</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发/">并发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/推荐系统/">推荐系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/机器学习/">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/随笔/">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Crunch/" style="font-size: 10px;">Crunch</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/HTTP/" style="font-size: 10px;">HTTP</a> <a href="/tags/Hadoop/" style="font-size: 17.5px;">Hadoop</a> <a href="/tags/Hive/" style="font-size: 11.25px;">Hive</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 18.75px;">Java</a> <a href="/tags/MLib/" style="font-size: 10px;">MLib</a> <a href="/tags/MLlib/" style="font-size: 10px;">MLlib</a> <a href="/tags/Mahout/" style="font-size: 10px;">Mahout</a> <a href="/tags/MySQL/" style="font-size: 12.5px;">MySQL</a> <a href="/tags/Spark/" style="font-size: 10px;">Spark</a> <a href="/tags/scala/" style="font-size: 15px;">scala</a> <a href="/tags/分布式算法/" style="font-size: 11.25px;">分布式算法</a> <a href="/tags/区块链/" style="font-size: 11.25px;">区块链</a> <a href="/tags/协同过滤/" style="font-size: 11.25px;">协同过滤</a> <a href="/tags/多线程/" style="font-size: 16.25px;">多线程</a> <a href="/tags/大数据/" style="font-size: 20px;">大数据</a> <a href="/tags/字符串匹配/" style="font-size: 10px;">字符串匹配</a> <a href="/tags/并发/" style="font-size: 16.25px;">并发</a> <a href="/tags/推荐系统/" style="font-size: 11.25px;">推荐系统</a> <a href="/tags/数据库/" style="font-size: 13.75px;">数据库</a> <a href="/tags/机器学习/" style="font-size: 17.5px;">机器学习</a> <a href="/tags/算法/" style="font-size: 13.75px;">算法</a> <a href="/tags/随笔/" style="font-size: 11.25px;">随笔</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/06/07/数据算法——Spark的二次排序解决方案/">数据算法——Spark的二次排序解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/07/lightGbm简要原理/">lightGbm简要原理</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/数据算法-二次排序/">数据算法——Hadoop的二次排序解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/ES分词器/">ES分词器</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/hexo系列问题之我们换了电脑怎么办/">hexo系列问题之我们换了电脑怎么办</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 李贺<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

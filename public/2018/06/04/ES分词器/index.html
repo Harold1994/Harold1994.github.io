@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>ES分词器 | Harold的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="ES逗号分词1：新建分析器123456789101112131415161718curl -XPOST &amp;apos;http://172.18.0.4:9200/demo/?pretty&amp;apos; -d &amp;apos;&amp;#123;　　&amp;quot;settings&amp;quot;:　　&amp;#123;　　　　&amp;quot;analysis&amp;quot;:　　　　　　&amp;#123;　　　　　　　　&amp;quot;ana">
+<meta name="keywords" content="ElasticSearch,大数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES分词器">
+<meta property="og:url" content="//harold.me/2018/06/04/ES分词器/index.html">
+<meta property="og:site_name" content="Harold的博客">
+<meta property="og:description" content="ES逗号分词1：新建分析器123456789101112131415161718curl -XPOST &amp;apos;http://172.18.0.4:9200/demo/?pretty&amp;apos; -d &amp;apos;&amp;#123;　　&amp;quot;settings&amp;quot;:　　&amp;#123;　　　　&amp;quot;analysis&amp;quot;:　　　　　　&amp;#123;　　　　　　　　&amp;quot;ana">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-06-07T14:06:15.375Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ES分词器">
+<meta name="twitter:description" content="ES逗号分词1：新建分析器123456789101112131415161718curl -XPOST &amp;apos;http://172.18.0.4:9200/demo/?pretty&amp;apos; -d &amp;apos;&amp;#123;　　&amp;quot;settings&amp;quot;:　　&amp;#123;　　　　&amp;quot;analysis&amp;quot;:　　　　　　&amp;#123;　　　　　　　　&amp;quot;ana">
+  
+    <link rel="alternate" href="/atom.xml" title="Harold的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Harold的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">踏实前进,戒骄戒躁</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="//harold.me"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-ES分词器" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/04/ES分词器/" class="article-date">
+  <time datetime="2018-06-03T16:15:12.000Z" itemprop="datePublished">2018-06-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ES分词器
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>ES逗号分词<br>1：新建分析器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">curl -XPOST &apos;http://172.18.0.4:9200/demo/?pretty&apos; -d &apos;</span><br><span class="line">&#123;</span><br><span class="line">　　&quot;settings&quot;:</span><br><span class="line">　　&#123;</span><br><span class="line">　　　　&quot;analysis&quot;:</span><br><span class="line">　　　　　　&#123;</span><br><span class="line">　　　　　　　　&quot;analyzer&quot;:</span><br><span class="line">　　　　　　　　　　&#123;</span><br><span class="line">　　　　　　　　　　　　&quot;douhao&quot;:</span><br><span class="line">　　　　　　　　　　　　　　&#123;</span><br><span class="line">　　　　　　　　　　　　　　　　&quot;type&quot;:&quot;pattern&quot;,</span><br><span class="line">　　　　　　　　　　　　　　　　&quot;pattern&quot;:&quot;,&quot;</span><br><span class="line">　　　　　　　　　　　　　　&#125;</span><br><span class="line">　　　　　　　　　&#125;</span><br><span class="line">　　　　　　&#125;</span><br><span class="line">　　&#125;</span><br><span class="line"></span><br><span class="line">&#125;&apos;</span><br></pre></td></tr></table></figure></p>
+ <a id="more"></a>
+<p>2：将分析器mapping到新的字段上（旧的字段上是无法修改mapping），当然最好的办法是使用别名，可以零停机切换<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">curl -XPOST &apos;http://172.18.0.4:9200/demo/_mapping/master?pretty&apos; -d &apos;</span><br><span class="line">&#123;</span><br><span class="line">　　&quot;properties&quot;:</span><br><span class="line">　　&#123;</span><br><span class="line">　　　　&quot;master_id&quot;:</span><br><span class="line">　　　　&#123;</span><br><span class="line">　　　　　　&quot;type&quot;:&quot;string&quot;,</span><br><span class="line">　　　　　　&quot;index&quot;:&quot;not_analyzed&quot;</span><br><span class="line">　　　　&#125;,</span><br><span class="line">　　　　&quot;serve_regions&quot;:</span><br><span class="line">　　　　&#123;</span><br><span class="line">　　　　　　&quot;type&quot;:&quot;string&quot;,</span><br><span class="line">　　　　　　&quot;analyzer&quot;:&quot;douhao&quot;,</span><br><span class="line">　　　　　　&quot;search_analyzer&quot;:&quot;douhao&quot;</span><br><span class="line">　　　　&#125;</span><br><span class="line">　　&#125;</span><br><span class="line">&#125;&apos;</span><br></pre></td></tr></table></figure></p>
+<p>3：同步MYSQL的数据到ES（或者手动添加两条数据）</p>
+<p>curl -PUT ‘<a href="http://172.18.0.4:9200/demo/master/?pretty&#39;" target="_blank" rel="noopener">http://172.18.0.4:9200/demo/master/?pretty&#39;</a> -d ‘{“master_id”:”123”,”serve_regions”:”1,2,3”}’</p>
+<p>curl -PUT ‘<a href="http://172.18.0.4:9200/demo/master/?pretty&#39;" target="_blank" rel="noopener">http://172.18.0.4:9200/demo/master/?pretty&#39;</a> -d ‘{“master_id”:”321”,”serve_regions”:”1”}’</p>
+<p>curl -PUT ‘<a href="http://172.18.0.4:9200/demo/master/?pretty&#39;" target="_blank" rel="noopener">http://172.18.0.4:9200/demo/master/?pretty&#39;</a> -d ‘{“master_id”:”231”,”serve_regions”:”2,3”}’</p>
+<p>4：测试 <a href="http://172.18.0.4:9200/_plugin/head" target="_blank" rel="noopener">http://172.18.0.4:9200/_plugin/head</a></p>
+<p>参考文档</p>
+<p>　　1：ES中如何使用逗号来分词[<a href="http://yangshangchuan.iteye.com/blog/2280720]" target="_blank" rel="noopener">http://yangshangchuan.iteye.com/blog/2280720]</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="//harold.me/2018/06/04/ES分词器/" data-id="cji4l7i5z0001cf96px32hdz0" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/06/04/数据算法-二次排序/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          数据算法——Hadoop的二次排序解决方案
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/06/04/hexo系列问题之我们换了电脑怎么办/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">hexo系列问题之我们换了电脑怎么办</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Crunch/">Crunch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HBase/">HBase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hadoop/">Hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hive/">Hive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MLib/">MLib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MLlib/">MLlib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mahout/">Mahout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spark/">Spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scala/">scala</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式算法/">分布式算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/区块链/">区块链</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/协同过滤/">协同过滤</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/大数据/">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符串匹配/">字符串匹配</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发/">并发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/推荐系统/">推荐系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/机器学习/">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/随笔/">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Crunch/" style="font-size: 10px;">Crunch</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/HTTP/" style="font-size: 10px;">HTTP</a> <a href="/tags/Hadoop/" style="font-size: 17.5px;">Hadoop</a> <a href="/tags/Hive/" style="font-size: 11.25px;">Hive</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 18.75px;">Java</a> <a href="/tags/MLib/" style="font-size: 10px;">MLib</a> <a href="/tags/MLlib/" style="font-size: 10px;">MLlib</a> <a href="/tags/Mahout/" style="font-size: 10px;">Mahout</a> <a href="/tags/MySQL/" style="font-size: 12.5px;">MySQL</a> <a href="/tags/Spark/" style="font-size: 10px;">Spark</a> <a href="/tags/scala/" style="font-size: 15px;">scala</a> <a href="/tags/分布式算法/" style="font-size: 11.25px;">分布式算法</a> <a href="/tags/区块链/" style="font-size: 11.25px;">区块链</a> <a href="/tags/协同过滤/" style="font-size: 11.25px;">协同过滤</a> <a href="/tags/多线程/" style="font-size: 16.25px;">多线程</a> <a href="/tags/大数据/" style="font-size: 20px;">大数据</a> <a href="/tags/字符串匹配/" style="font-size: 10px;">字符串匹配</a> <a href="/tags/并发/" style="font-size: 16.25px;">并发</a> <a href="/tags/推荐系统/" style="font-size: 11.25px;">推荐系统</a> <a href="/tags/数据库/" style="font-size: 13.75px;">数据库</a> <a href="/tags/机器学习/" style="font-size: 17.5px;">机器学习</a> <a href="/tags/算法/" style="font-size: 13.75px;">算法</a> <a href="/tags/随笔/" style="font-size: 11.25px;">随笔</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/06/07/数据算法——Spark的二次排序解决方案/">数据算法——Spark的二次排序解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/07/lightGbm简要原理/">lightGbm简要原理</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/数据算法-二次排序/">数据算法——Hadoop的二次排序解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/ES分词器/">ES分词器</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/hexo系列问题之我们换了电脑怎么办/">hexo系列问题之我们换了电脑怎么办</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 李贺<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

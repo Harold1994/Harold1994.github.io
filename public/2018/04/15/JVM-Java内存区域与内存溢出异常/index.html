@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>JVM--Java内存区域与内存溢出异常 | Harold的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Java虚拟机在执行Java程序的过程中会把它管理的内存划分为若干不同的数据区域。">
+<meta name="keywords" content="JVM,Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM--Java内存区域与内存溢出异常">
+<meta property="og:url" content="//harold.me/2018/04/15/JVM-Java内存区域与内存溢出异常/index.html">
+<meta property="og:site_name" content="Harold的博客">
+<meta property="og:description" content="Java虚拟机在执行Java程序的过程中会把它管理的内存划分为若干不同的数据区域。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-4-15/8172747.jpg">
+<meta property="og:updated_time" content="2018-06-07T13:35:07.276Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVM--Java内存区域与内存溢出异常">
+<meta name="twitter:description" content="Java虚拟机在执行Java程序的过程中会把它管理的内存划分为若干不同的数据区域。">
+<meta name="twitter:image" content="http://p5s7d12ls.bkt.clouddn.com/18-4-15/8172747.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Harold的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Harold的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">踏实前进,戒骄戒躁</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="//harold.me"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-JVM-Java内存区域与内存溢出异常" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/15/JVM-Java内存区域与内存溢出异常/" class="article-date">
+  <time datetime="2018-04-15T15:01:29.000Z" itemprop="datePublished">2018-04-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      JVM--Java内存区域与内存溢出异常
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Java虚拟机在执行Java程序的过程中会把它管理的内存划分为若干不同的数据区域。<br><img src="http://p5s7d12ls.bkt.clouddn.com/18-4-15/8172747.jpg" alt=""></p>
+<a id="more"></a>
+<p>程序计数器*：是一块较小的内存空间，可看做当前线程执行的字节码的行号指示器，在虚拟机的概念模型里(仅是概念模型,各种虚拟机可能会通过一些更高效的方式去实现),字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令,分支、循环、跳转、异常处理、线程恢复等基础功能都需要依赖这个计数器来完成。</p>
+<blockquote>
+<p>程序计数器是线程私有的：为了线程切换后能恢复到正确的执行位置,每条线程都需要有一个独立的程序计数器,各条线程之间计数器互不影响,独立存储,我们称这类内存区域为“线程私有”的内存。</p>
+</blockquote>
+<p><em>Java虚拟机栈</em>：线程私有，生命周期与线程相同。虚拟机栈描述的是Java方法执行的内存模型:每个方法在执行的同时都会创建一个栈帧(Stack Frame)用于存储局部变量表、操作数栈、动态链接、方法出口等信息。每一个方法从调用直至执行完成的过程,就对应着一个栈帧在虚拟机栈中入栈到出栈的过程。</p>
+<blockquote>
+<p>局部变量表存放了<em>编译器可知</em>的各种<em>基本数据类型</em>（boolean、byte、char、short、int、float、long、<br>double)，<em>对象引用</em>和returnAddress类型。<br>其中64位长度的long和double类型的数据会占用2个局部变量空间(Slot),其余的数据类型只占用1个。局部<br>变量表所需的内存空间在编译期间完成分配,当进入一个方法时,这个方法需要在帧中分配多大的局部变量空间是<br>完全确定的,在方法运行期间不会改变局部变量表的大小。</p>
+</blockquote>
+<p><em>本地方法栈</em>：本地方法栈为虚拟机使用到的Native方法服务，线程独立</p>
+<blockquote>
+<p>与Java虚拟机栈对比：它们之间的区别不过是虚拟机栈为虚拟机执行Java方法(也就是字节码)服务,而本地方法栈则为虚拟机使用到的Native方法服务</p>
+</blockquote>
+<p><em>Java堆</em>：JVM管理的内存中最大的一块，<em>线程共享</em>，在JVM启动时创建，用来<em>存放实例对象</em>。java堆是垃圾回收的主要区域。</p>
+<blockquote>
+<p>从内存回收的角度来看,由于现在收集器基本都采用分代收集算法,所以Java堆中还可以细分为:新生代和老年代<br>从内存分配的角度来看,线程共享的Java堆中可能划分出多个线程私有的<em>分配缓冲区</em><br>Java堆可以处于物理上不连续的内存空间中，逻辑上连续即可<br>如果在堆中没有内存完成实例分配,并且堆也无法再扩展时,将会抛出OutOfMemoryError异常。</p>
+</blockquote>
+<p><em>Java方法区</em>：<em>线程共享</em>，用于存储已被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。又名“非堆”</p>
+<p><em>运行时常量池</em>：是方法区的一部分，常量池存放编译期生成的各种字面量和符号引用，这部分内容将在类加载后进入方法区的运行时常量池中存放。</p>
+<blockquote>
+<p>Class文件内容：类的版本、字段、方法、接口、常量池<br>运行时常量池相对于Class文件常量池的另外一个重要特征是具备动态性,Java语言并不要求常量一定只有编<br>译期才能产生,也就是并非预置入Class文件中常量池的内容才能进入方法区运行时常量池,运行期间也可能将新<br>的常量放入池中</p>
+</blockquote>
+<p><em>直接内存</em>：直接内存(Direct Memory)并不是虚拟机运行时数据区的一部分,也不是Java虚拟机规范中定义的内存区<br>域。NIO(New Input/Output)类引入了一种基于通道(Channel)与缓冲区(Buffer)的I/O方式,它可以使用Native函数库直接分配堆外内存,然后通过一个存储在Java堆中的DirectByteBuffer对象作为这块内存的引用进行操作。这样能在一些场景中显著提高性能,因为避免了在Java堆和Native堆中来回复制数据。</p>
+<blockquote>
+<p>本机直接内存的分配不会受到Java堆大小的限制,但是,既然是内存,肯定还是会受到本机总内存(包括RAM以及SWAP区或者分页文件)大小以及处理器寻址空间的限制。</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="//harold.me/2018/04/15/JVM-Java内存区域与内存溢出异常/" data-id="cji4l7i680005cf96uhxkdzjw" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/04/25/Scala快速学习/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Scala快速学习
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/10/用Mahout编写一个基本推荐系统/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">用Mahout编写一个基本推荐系统</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Crunch/">Crunch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HBase/">HBase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hadoop/">Hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hive/">Hive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MLib/">MLib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MLlib/">MLlib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mahout/">Mahout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spark/">Spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scala/">scala</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式算法/">分布式算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/区块链/">区块链</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/协同过滤/">协同过滤</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/大数据/">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符串匹配/">字符串匹配</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发/">并发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/推荐系统/">推荐系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/机器学习/">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/随笔/">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Crunch/" style="font-size: 10px;">Crunch</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/HTTP/" style="font-size: 10px;">HTTP</a> <a href="/tags/Hadoop/" style="font-size: 17.5px;">Hadoop</a> <a href="/tags/Hive/" style="font-size: 11.25px;">Hive</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 18.75px;">Java</a> <a href="/tags/MLib/" style="font-size: 10px;">MLib</a> <a href="/tags/MLlib/" style="font-size: 10px;">MLlib</a> <a href="/tags/Mahout/" style="font-size: 10px;">Mahout</a> <a href="/tags/MySQL/" style="font-size: 12.5px;">MySQL</a> <a href="/tags/Spark/" style="font-size: 10px;">Spark</a> <a href="/tags/scala/" style="font-size: 15px;">scala</a> <a href="/tags/分布式算法/" style="font-size: 11.25px;">分布式算法</a> <a href="/tags/区块链/" style="font-size: 11.25px;">区块链</a> <a href="/tags/协同过滤/" style="font-size: 11.25px;">协同过滤</a> <a href="/tags/多线程/" style="font-size: 16.25px;">多线程</a> <a href="/tags/大数据/" style="font-size: 20px;">大数据</a> <a href="/tags/字符串匹配/" style="font-size: 10px;">字符串匹配</a> <a href="/tags/并发/" style="font-size: 16.25px;">并发</a> <a href="/tags/推荐系统/" style="font-size: 11.25px;">推荐系统</a> <a href="/tags/数据库/" style="font-size: 13.75px;">数据库</a> <a href="/tags/机器学习/" style="font-size: 17.5px;">机器学习</a> <a href="/tags/算法/" style="font-size: 13.75px;">算法</a> <a href="/tags/随笔/" style="font-size: 11.25px;">随笔</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/06/07/数据算法——Spark的二次排序解决方案/">数据算法——Spark的二次排序解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/07/lightGbm简要原理/">lightGbm简要原理</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/数据算法-二次排序/">数据算法——Hadoop的二次排序解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/ES分词器/">ES分词器</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/hexo系列问题之我们换了电脑怎么办/">hexo系列问题之我们换了电脑怎么办</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 李贺<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

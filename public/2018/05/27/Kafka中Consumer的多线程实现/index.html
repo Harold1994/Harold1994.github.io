@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Kafka中Consumer的多线程实现 | Harold的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="【转自：http://www.cnblogs.com/huxi2b/p/6124937.html】 Kafka 0.9版本开始推出了Java版本的consumer，优化了coordinator的设计以及摆脱了对zookeeper的依赖。社区最近也在探讨正式用这套consumer API替换Scala版本的consumer的计划。鉴于目前这方面的资料并不是很多，本文将尝试给出一个利用KafkaCon">
+<meta name="keywords" content="大数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kafka中Consumer的多线程实现">
+<meta property="og:url" content="//harold.me/2018/05/27/Kafka中Consumer的多线程实现/index.html">
+<meta property="og:site_name" content="Harold的博客">
+<meta property="og:description" content="【转自：http://www.cnblogs.com/huxi2b/p/6124937.html】 Kafka 0.9版本开始推出了Java版本的consumer，优化了coordinator的设计以及摆脱了对zookeeper的依赖。社区最近也在探讨正式用这套consumer API替换Scala版本的consumer的计划。鉴于目前这方面的资料并不是很多，本文将尝试给出一个利用KafkaCon">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://images2015.cnblogs.com/blog/735367/201612/735367-20161202105906443-1609157006.png">
+<meta property="og:image" content="https://images2015.cnblogs.com/blog/735367/201612/735367-20161202110008787-550483601.png">
+<meta property="og:image" content="https://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="https://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="https://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="https://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="https://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="https://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="https://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="https://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="https://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="https://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="https://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="https://common.cnblogs.com/images/copycode.gif">
+<meta property="og:updated_time" content="2018-06-07T13:35:07.276Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kafka中Consumer的多线程实现">
+<meta name="twitter:description" content="【转自：http://www.cnblogs.com/huxi2b/p/6124937.html】 Kafka 0.9版本开始推出了Java版本的consumer，优化了coordinator的设计以及摆脱了对zookeeper的依赖。社区最近也在探讨正式用这套consumer API替换Scala版本的consumer的计划。鉴于目前这方面的资料并不是很多，本文将尝试给出一个利用KafkaCon">
+<meta name="twitter:image" content="https://images2015.cnblogs.com/blog/735367/201612/735367-20161202105906443-1609157006.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Harold的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Harold的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">踏实前进,戒骄戒躁</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="//harold.me"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Kafka中Consumer的多线程实现" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/27/Kafka中Consumer的多线程实现/" class="article-date">
+  <time datetime="2018-05-26T16:21:12.000Z" itemprop="datePublished">2018-05-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Kafka中Consumer的多线程实现
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>【转自：<a href="http://www.cnblogs.com/huxi2b/p/6124937.html】" target="_blank" rel="noopener">http://www.cnblogs.com/huxi2b/p/6124937.html】</a></p>
+<p>Kafka 0.9版本开始推出了Java版本的consumer，优化了coordinator的设计以及摆脱了对zookeeper的依赖。社区最近也在探讨正式用这套consumer API替换Scala版本的consumer的计划。鉴于目前这方面的资料并不是很多，本文将尝试给出一个利用KafkaConsumer编写的多线程消费者实例，希望对大家有所帮助。</p>
+<a id="more"></a>    这套API最重要的入口就是KafkaConsumer(o.a.k.clients.consumer.KafkaConsumer)，普通的单线程使用方法官网API已有介绍，这里不再赘述了。因此，我们直奔主题——讨论一下如何创建多线程的方式来使用KafkaConsumer。KafkaConsumer和KafkaProducer不同，后者是线程安全的，因此我们鼓励用户在多个线程中共享一个KafkaProducer实例，这样通常都要比每个线程维护一个KafkaProducer实例效率要高。但对于KafkaConsumer而言，它不是线程安全的，所以实现多线程时通常由两种实现方法：<br><br>1 每个线程维护一个KafkaConsumer<br><br><img src="https://images2015.cnblogs.com/blog/735367/201612/735367-20161202105906443-1609157006.png" alt="img"><br><br>2  维护一个或多个KafkaConsumer，同时维护多个事件处理线程(worker thread)<br><br><img src="https://images2015.cnblogs.com/blog/735367/201612/735367-20161202110008787-550483601.png" alt="img"><br><br>当然，这种方法还可以有多个变种：比如每个worker线程有自己的处理队列。consumer根据某种规则或逻辑将消息放入不同的队列。不过总体思想还是相同的，故这里不做过多展开讨论了。<br><br>　　下表总结了两种方法的优缺点：<br><br>|                                              | 优点                                                         | 缺点                                                         |<br>| ——————————————– | ———————————————————— | ———————————————————— |<br>| 方法1(每个线程维护一个KafkaConsumer)         | 方便实现速度较快，因为不需要任何线程间交互易于维护分区内的消息顺序 | 更多的TCP连接开销(每个线程都要维护若干个TCP连接)consumer数受限于topic分区数，扩展性差频繁请求导致吞吐量下降线程自己处理消费到的消息可能会导致超时，从而造成rebalance |<br>| 方法2 (单个(或多个)consumer，多个worker线程) | 可独立扩展consumer数和worker数，伸缩性好                     | 实现麻烦通常难于维护分区内的消息顺序处理链路变长，导致难以保证提交位移的语义正确性 |<br><br><br><br>下面我们分别实现这两种方法。需要指出的是，下面的代码都是最基本的实现，并没有考虑很多编程细节，比如如何处理错误等。<br><br><strong>方法1</strong><br><br><strong>ConsumerRunnable类</strong><br><br><a href="javascript:void(0" target="_blank" rel="noopener"><img src="https://common.cnblogs.com/images/copycode.gif" alt="复制代码"></a>;)<br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"> 1 import org.apache.kafka.clients.consumer.ConsumerRecord;</span><br><span class="line"> 2 import org.apache.kafka.clients.consumer.ConsumerRecords;</span><br><span class="line"> 3 import org.apache.kafka.clients.consumer.KafkaConsumer;</span><br><span class="line"> 4 </span><br><span class="line"> 5 import java.util.Arrays;</span><br><span class="line"> 6 import java.util.Properties;</span><br><span class="line"> 7 </span><br><span class="line"> 8 public class ConsumerRunnable implements Runnable &#123;</span><br><span class="line"> 9 </span><br><span class="line">10     // 每个线程维护私有的KafkaConsumer实例</span><br><span class="line">11     private final KafkaConsumer&lt;String, String&gt; consumer;</span><br><span class="line">12 </span><br><span class="line">13     public ConsumerRunnable(String brokerList, String groupId, String topic) &#123;</span><br><span class="line">14         Properties props = new Properties();</span><br><span class="line">15         props.put(&quot;bootstrap.servers&quot;, brokerList);</span><br><span class="line">16         props.put(&quot;group.id&quot;, groupId);</span><br><span class="line">17         props.put(&quot;enable.auto.commit&quot;, &quot;true&quot;);        //本例使用自动提交位移</span><br><span class="line">18         props.put(&quot;auto.commit.interval.ms&quot;, &quot;1000&quot;);</span><br><span class="line">19         props.put(&quot;session.timeout.ms&quot;, &quot;30000&quot;);</span><br><span class="line">20         props.put(&quot;key.deserializer&quot;, &quot;org.apache.kafka.common.serialization.StringDeserializer&quot;);</span><br><span class="line">21         props.put(&quot;value.deserializer&quot;, &quot;org.apache.kafka.common.serialization.StringDeserializer&quot;);</span><br><span class="line">22         this.consumer = new KafkaConsumer&lt;&gt;(props);</span><br><span class="line">23         consumer.subscribe(Arrays.asList(topic));   // 本例使用分区副本自动分配策略</span><br><span class="line">24     &#125;</span><br><span class="line">25 </span><br><span class="line">26     @Override</span><br><span class="line">27     public void run() &#123;</span><br><span class="line">28         while (true) &#123;</span><br><span class="line">29             ConsumerRecords&lt;String, String&gt; records = consumer.poll(200);   // 本例使用200ms作为获取超时时间</span><br><span class="line">30             for (ConsumerRecord&lt;String, String&gt; record : records) &#123;</span><br><span class="line">31                 // 这里面写处理消息的逻辑，本例中只是简单地打印消息</span><br><span class="line">32                 System.out.println(Thread.currentThread().getName() + &quot; consumed &quot; + record.partition() +</span><br><span class="line">33                         &quot;th message with offset: &quot; + record.offset());</span><br><span class="line">34             &#125;</span><br><span class="line">35         &#125;</span><br><span class="line">36     &#125;</span><br><span class="line">37 &#125;</span><br></pre></td></tr></table></figure>
+<p><a href="javascript:void(0" target="_blank" rel="noopener"><img src="https://common.cnblogs.com/images/copycode.gif" alt="复制代码"></a>;)</p>
+<p><strong>ConsumerGroup类</strong></p>
+<p><a href="javascript:void(0" target="_blank" rel="noopener"><img src="https://common.cnblogs.com/images/copycode.gif" alt="复制代码"></a>;)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"> 1 package com.my.kafka.test;</span><br><span class="line"> 2 </span><br><span class="line"> 3 import java.util.ArrayList;</span><br><span class="line"> 4 import java.util.List;</span><br><span class="line"> 5 </span><br><span class="line"> 6 public class ConsumerGroup &#123;</span><br><span class="line"> 7 </span><br><span class="line"> 8     private List&lt;ConsumerRunnable&gt; consumers;</span><br><span class="line"> 9 </span><br><span class="line">10     public ConsumerGroup(int consumerNum, String groupId, String topic, String brokerList) &#123;</span><br><span class="line">11         consumers = new ArrayList&lt;&gt;(consumerNum);</span><br><span class="line">12         for (int i = 0; i &lt; consumerNum; ++i) &#123;</span><br><span class="line">13             ConsumerRunnable consumerThread = new ConsumerRunnable(brokerList, groupId, topic);</span><br><span class="line">14             consumers.add(consumerThread);</span><br><span class="line">15         &#125;</span><br><span class="line">16     &#125;</span><br><span class="line">17 </span><br><span class="line">18     public void execute() &#123;</span><br><span class="line">19         for (ConsumerRunnable task : consumers) &#123;</span><br><span class="line">20             new Thread(task).start();</span><br><span class="line">21         &#125;</span><br><span class="line">22     &#125;</span><br><span class="line">23 &#125;</span><br></pre></td></tr></table></figure>
+<p><a href="javascript:void(0" target="_blank" rel="noopener"><img src="https://common.cnblogs.com/images/copycode.gif" alt="复制代码"></a>;)</p>
+<p><strong>ConsumerMain类</strong></p>
+<p><a href="javascript:void(0" target="_blank" rel="noopener"><img src="https://common.cnblogs.com/images/copycode.gif" alt="复制代码"></a>;)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> 1 public class ConsumerMain &#123;</span><br><span class="line"> 2 </span><br><span class="line"> 3     public static void main(String[] args) &#123;</span><br><span class="line"> 4         String brokerList = &quot;localhost:9092&quot;;</span><br><span class="line"> 5         String groupId = &quot;testGroup1&quot;;</span><br><span class="line"> 6         String topic = &quot;test-topic&quot;;</span><br><span class="line"> 7         int consumerNum = 3;</span><br><span class="line"> 8 </span><br><span class="line"> 9         ConsumerGroup consumerGroup = new ConsumerGroup(consumerNum, groupId, topic, brokerList);</span><br><span class="line">10         consumerGroup.execute();</span><br><span class="line">11     &#125;</span><br><span class="line">12 &#125;</span><br></pre></td></tr></table></figure>
+<p><a href="javascript:void(0" target="_blank" rel="noopener"><img src="https://common.cnblogs.com/images/copycode.gif" alt="复制代码"></a>;)</p>
+<p><strong>方法2</strong></p>
+<p><strong>Worker类</strong></p>
+<p><a href="javascript:void(0" target="_blank" rel="noopener"><img src="https://common.cnblogs.com/images/copycode.gif" alt="复制代码"></a>;)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"> 1 import org.apache.kafka.clients.consumer.ConsumerRecord;</span><br><span class="line"> 2 </span><br><span class="line"> 3 public class Worker implements Runnable &#123;</span><br><span class="line"> 4 </span><br><span class="line"> 5     private ConsumerRecord&lt;String, String&gt; consumerRecord;</span><br><span class="line"> 6 </span><br><span class="line"> 7     public Worker(ConsumerRecord record) &#123;</span><br><span class="line"> 8         this.consumerRecord = record;</span><br><span class="line"> 9     &#125;</span><br><span class="line">10 </span><br><span class="line">11     @Override</span><br><span class="line">12     public void run() &#123;</span><br><span class="line">13         // 这里写你的消息处理逻辑，本例中只是简单地打印消息</span><br><span class="line">14         System.out.println(Thread.currentThread().getName() + &quot; consumed &quot; + consumerRecord.partition()</span><br><span class="line">15             + &quot;th message with offset: &quot; + consumerRecord.offset());</span><br><span class="line">16     &#125;</span><br><span class="line">17 &#125;</span><br></pre></td></tr></table></figure>
+<p><a href="javascript:void(0" target="_blank" rel="noopener"><img src="https://common.cnblogs.com/images/copycode.gif" alt="复制代码"></a>;)</p>
+<p><strong>ConsumerHandler类</strong></p>
+<p><a href="javascript:void(0" target="_blank" rel="noopener"><img src="https://common.cnblogs.com/images/copycode.gif" alt="复制代码"></a>;)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"> 1 import org.apache.kafka.clients.consumer.ConsumerRecord;</span><br><span class="line"> 2 import org.apache.kafka.clients.consumer.ConsumerRecords;</span><br><span class="line"> 3 import org.apache.kafka.clients.consumer.KafkaConsumer;</span><br><span class="line"> 4 </span><br><span class="line"> 5 import java.util.Arrays;</span><br><span class="line"> 6 import java.util.Properties;</span><br><span class="line"> 7 import java.util.concurrent.ArrayBlockingQueue;</span><br><span class="line"> 8 import java.util.concurrent.ExecutorService;</span><br><span class="line"> 9 import java.util.concurrent.ThreadPoolExecutor;</span><br><span class="line">10 import java.util.concurrent.TimeUnit;</span><br><span class="line">11 </span><br><span class="line">12 public class ConsumerHandler &#123;</span><br><span class="line">13 </span><br><span class="line">14     // 本例中使用一个consumer将消息放入后端队列，你当然可以使用前一种方法中的多实例按照某张规则同时把消息放入后端队列</span><br><span class="line">15     private final KafkaConsumer&lt;String, String&gt; consumer;</span><br><span class="line">16     private ExecutorService executors;</span><br><span class="line">17 </span><br><span class="line">18     public ConsumerHandler(String brokerList, String groupId, String topic) &#123;</span><br><span class="line">19         Properties props = new Properties();</span><br><span class="line">20         props.put(&quot;bootstrap.servers&quot;, brokerList);</span><br><span class="line">21         props.put(&quot;group.id&quot;, groupId);</span><br><span class="line">22         props.put(&quot;enable.auto.commit&quot;, &quot;true&quot;);</span><br><span class="line">23         props.put(&quot;auto.commit.interval.ms&quot;, &quot;1000&quot;);</span><br><span class="line">24         props.put(&quot;session.timeout.ms&quot;, &quot;30000&quot;);</span><br><span class="line">25         props.put(&quot;key.deserializer&quot;, &quot;org.apache.kafka.common.serialization.StringDeserializer&quot;);</span><br><span class="line">26         props.put(&quot;value.deserializer&quot;, &quot;org.apache.kafka.common.serialization.StringDeserializer&quot;);</span><br><span class="line">27         consumer = new KafkaConsumer&lt;&gt;(props);</span><br><span class="line">28         consumer.subscribe(Arrays.asList(topic));</span><br><span class="line">29     &#125;</span><br><span class="line">30 </span><br><span class="line">31     public void execute(int workerNum) &#123;</span><br><span class="line">32         executors = new ThreadPoolExecutor(workerNum, workerNum, 0L, TimeUnit.MILLISECONDS,</span><br><span class="line">33                 new ArrayBlockingQueue&lt;&gt;(1000), new ThreadPoolExecutor.CallerRunsPolicy());</span><br><span class="line">34 </span><br><span class="line">35         while (true) &#123;</span><br><span class="line">36             ConsumerRecords&lt;String, String&gt; records = consumer.poll(200);</span><br><span class="line">37             for (final ConsumerRecord record : records) &#123;</span><br><span class="line">38                 executors.submit(new Worker(record));</span><br><span class="line">39             &#125;</span><br><span class="line">40         &#125;</span><br><span class="line">41     &#125;</span><br><span class="line">42 </span><br><span class="line">43     public void shutdown() &#123;</span><br><span class="line">44         if (consumer != null) &#123;</span><br><span class="line">45             consumer.close();</span><br><span class="line">46         &#125;</span><br><span class="line">47         if (executors != null) &#123;</span><br><span class="line">48             executors.shutdown();</span><br><span class="line">49         &#125;</span><br><span class="line">50         try &#123;</span><br><span class="line">51             if (!executors.awaitTermination(10, TimeUnit.SECONDS)) &#123;</span><br><span class="line">52                 System.out.println(&quot;Timeout.... Ignore for this case&quot;);</span><br><span class="line">53             &#125;</span><br><span class="line">54         &#125; catch (InterruptedException ignored) &#123;</span><br><span class="line">55             System.out.println(&quot;Other thread interrupted this shutdown, ignore for this case.&quot;);</span><br><span class="line">56             Thread.currentThread().interrupt();</span><br><span class="line">57         &#125;</span><br><span class="line">58     &#125;</span><br><span class="line">59 </span><br><span class="line">60 &#125;</span><br></pre></td></tr></table></figure>
+<p><a href="javascript:void(0" target="_blank" rel="noopener"><img src="https://common.cnblogs.com/images/copycode.gif" alt="复制代码"></a>;)</p>
+<p><strong>Main类</strong></p>
+<p><a href="javascript:void(0" target="_blank" rel="noopener"><img src="https://common.cnblogs.com/images/copycode.gif" alt="复制代码"></a>;)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> 1 public class Main &#123;</span><br><span class="line"> 2 </span><br><span class="line"> 3     public static void main(String[] args) &#123;</span><br><span class="line"> 4         String brokerList = &quot;localhost:9092,localhost:9093,localhost:9094&quot;;</span><br><span class="line"> 5         String groupId = &quot;group2&quot;;</span><br><span class="line"> 6         String topic = &quot;test-topic&quot;;</span><br><span class="line"> 7         int workerNum = 5;</span><br><span class="line"> 8 </span><br><span class="line"> 9         ConsumerHandler consumers = new ConsumerHandler(brokerList, groupId, topic);</span><br><span class="line">10         consumers.execute(workerNum);</span><br><span class="line">11         try &#123;</span><br><span class="line">12             Thread.sleep(1000000);</span><br><span class="line">13         &#125; catch (InterruptedException ignored) &#123;&#125;</span><br><span class="line">14         consumers.shutdown();</span><br><span class="line">15     &#125;</span><br><span class="line">16 &#125;</span><br></pre></td></tr></table></figure>
+<p><a href="javascript:void(0" target="_blank" rel="noopener"><img src="https://common.cnblogs.com/images/copycode.gif" alt="复制代码"></a>;)</p>
+<p>　　总结一下，这两种方法或是模型都有各自的优缺点，在具体使用时需要根据自己实际的业务特点来选取对应的方法。就我个人而言，我比较推崇第二种方法以及背后的思想，即不要将很重的处理逻辑放入消费者的代码中，很多Kafka consumer使用者碰到的各种rebalance超时、coordinator重新选举、心跳无法维持等问题都来源于此。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="//harold.me/2018/05/27/Kafka中Consumer的多线程实现/" data-id="cji4l7i6j000jcf96m56lq1w7" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/05/27/Java并发编程——结构化并发应用程序2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Java并发编程——结构化并发应用程序(二)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/05/27/特征提取方法-one-hot和TF-IDF/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">特征提取方法:one-hot和TF-IDF</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Crunch/">Crunch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HBase/">HBase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hadoop/">Hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hive/">Hive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MLib/">MLib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MLlib/">MLlib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mahout/">Mahout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spark/">Spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scala/">scala</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式算法/">分布式算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/区块链/">区块链</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/协同过滤/">协同过滤</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/大数据/">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符串匹配/">字符串匹配</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发/">并发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/推荐系统/">推荐系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/机器学习/">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/随笔/">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Crunch/" style="font-size: 10px;">Crunch</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/HTTP/" style="font-size: 10px;">HTTP</a> <a href="/tags/Hadoop/" style="font-size: 17.5px;">Hadoop</a> <a href="/tags/Hive/" style="font-size: 11.25px;">Hive</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 18.75px;">Java</a> <a href="/tags/MLib/" style="font-size: 10px;">MLib</a> <a href="/tags/MLlib/" style="font-size: 10px;">MLlib</a> <a href="/tags/Mahout/" style="font-size: 10px;">Mahout</a> <a href="/tags/MySQL/" style="font-size: 12.5px;">MySQL</a> <a href="/tags/Spark/" style="font-size: 10px;">Spark</a> <a href="/tags/scala/" style="font-size: 15px;">scala</a> <a href="/tags/分布式算法/" style="font-size: 11.25px;">分布式算法</a> <a href="/tags/区块链/" style="font-size: 11.25px;">区块链</a> <a href="/tags/协同过滤/" style="font-size: 11.25px;">协同过滤</a> <a href="/tags/多线程/" style="font-size: 16.25px;">多线程</a> <a href="/tags/大数据/" style="font-size: 20px;">大数据</a> <a href="/tags/字符串匹配/" style="font-size: 10px;">字符串匹配</a> <a href="/tags/并发/" style="font-size: 16.25px;">并发</a> <a href="/tags/推荐系统/" style="font-size: 11.25px;">推荐系统</a> <a href="/tags/数据库/" style="font-size: 13.75px;">数据库</a> <a href="/tags/机器学习/" style="font-size: 17.5px;">机器学习</a> <a href="/tags/算法/" style="font-size: 13.75px;">算法</a> <a href="/tags/随笔/" style="font-size: 11.25px;">随笔</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/06/07/数据算法——Spark的二次排序解决方案/">数据算法——Spark的二次排序解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/07/lightGbm简要原理/">lightGbm简要原理</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/数据算法-二次排序/">数据算法——Hadoop的二次排序解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/ES分词器/">ES分词器</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/hexo系列问题之我们换了电脑怎么办/">hexo系列问题之我们换了电脑怎么办</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 李贺<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>数据算法——Spark的二次排序解决方案 | Harold的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在Saprk中解决二次排序问题，又以下两种解决方案：  方案一： 将一个给定的键的所有值读取并缓存到一个List数组，对数组中得值完成归约器排序，如果每个归约器键的值集很小，则本方案适用  方案二： 使用Spark框架对归约器值排序，这种方法“会为自然键增加部分或者整个值来创建一个组合键以实现排序目标”，本方法可伸缩，不受内存限制。">
+<meta name="keywords" content="机器学习,大数据,分布式算法,Spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据算法——Spark的二次排序解决方案">
+<meta property="og:url" content="//harold.me/2018/06/07/数据算法——Spark的二次排序解决方案/index.html">
+<meta property="og:site_name" content="Harold的博客">
+<meta property="og:description" content="在Saprk中解决二次排序问题，又以下两种解决方案：  方案一： 将一个给定的键的所有值读取并缓存到一个List数组，对数组中得值完成归约器排序，如果每个归约器键的值集很小，则本方案适用  方案二： 使用Spark框架对归约器值排序，这种方法“会为自然键增加部分或者整个值来创建一个组合键以实现排序目标”，本方法可伸缩，不受内存限制。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-06-07T11:40:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据算法——Spark的二次排序解决方案">
+<meta name="twitter:description" content="在Saprk中解决二次排序问题，又以下两种解决方案：  方案一： 将一个给定的键的所有值读取并缓存到一个List数组，对数组中得值完成归约器排序，如果每个归约器键的值集很小，则本方案适用  方案二： 使用Spark框架对归约器值排序，这种方法“会为自然键增加部分或者整个值来创建一个组合键以实现排序目标”，本方法可伸缩，不受内存限制。">
+  
+    <link rel="alternate" href="/atom.xml" title="Harold的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Harold的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">踏实前进,戒骄戒躁</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="//harold.me"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="posts-数据算法——Spark的二次排序解决方案" class="article article-type-posts" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/07/数据算法——Spark的二次排序解决方案/" class="article-date">
+  <time datetime="2018-06-07T07:41:50.000Z" itemprop="datePublished">2018-06-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      数据算法——Spark的二次排序解决方案
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在Saprk中解决二次排序问题，又以下两种解决方案：</p>
+<ul>
+<li><p>方案一：</p>
+<p>将一个给定的键的所有值读取并缓存到一个List数组，对数组中得值完成归约器排序，如果每个归约器键的值集很小，则本方案适用</p>
+</li>
+<li><p>方案二：</p>
+<p>使用Spark框架对归约器值排序，这种方法“会为自然键增加部分或者整个值来创建一个组合键以实现排序目标”，本方法可伸缩，不受内存限制。</p>
+<a id="more"></a>
+<p><strong>时间序列作为输入</strong>：</p>
+</li>
+</ul>
+<p>输入格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;key&gt;&lt;,&gt;&lt;time&gt;&lt;,&gt;&lt;value&gt;</span><br></pre></td></tr></table></figure>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">p,4,40</span><br><span class="line">p,6,20</span><br><span class="line">x,2,9</span><br><span class="line">y,2,5</span><br><span class="line">x,1,3</span><br><span class="line">y,1,7</span><br><span class="line">y,3,1</span><br><span class="line">x,3,6</span><br><span class="line">z,1,4</span><br><span class="line">z,2,8</span><br><span class="line">z,3,7</span><br><span class="line">z,4,0</span><br><span class="line">p,1,10</span><br><span class="line">p,3,60</span><br></pre></td></tr></table></figure>
+<p><strong>期望输出：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(z,&#123;1=4, 2=8, 3=7, 4=0&#125;)</span><br><span class="line">(p,&#123;1=10, 3=60, 4=40, 6=20&#125;)</span><br><span class="line">(x,&#123;1=3, 2=9, 3=6&#125;)</span><br><span class="line">(y,&#123;1=7, 2=5, 3=1&#125;)</span><br></pre></td></tr></table></figure>
+<h4 id="一、方案一：内存中实现二次排序"><a href="#一、方案一：内存中实现二次排序" class="headerlink" title="一、方案一：内存中实现二次排序"></a>一、方案一：内存中实现二次排序</h4><p>算法：</p>
+<blockquote>
+<p>1.导入所需Java/Spark类</p>
+<p>2.将输入数据作为参数传入并验证</p>
+<p>3.创建sparkcontext对象，连接到Spark master,用来创建新的RDD</p>
+<p>4.使用sc对象为输入文件创建一个RDD</p>
+<p>5.从一个RDD<string>创建键值对，键是name，值是（time，value）对，得到PairRDD&lt;String,Tuple2&lt;String, String&gt;&gt;</string></p>
+<p>6.验证第五步，打印PairRDD所有值</p>
+<p>7.按键分组，使用GroupByKey()方法， 得到PairRDD&lt;String, Iterable&lt;Tuple2&lt;String, String&gt;&gt;&gt;</p>
+<ul>
+<li>注意：Iterable&lt;Tuple2&lt;String, String&gt;&gt;并不是有序的，一般处于性能考虑，更优先使用reduceByKey(),而不是GroupByKey(),不过此处只能用GroupByKey()，因为reduceByKey()不允许对给定键的值原地排序。</li>
+</ul>
+<p>8.验证第七步，打印PairRDD&lt;String, Iterable&lt;Tuple2&lt;String, String&gt;&gt;&gt;中所有值</p>
+<p>9.对reducer排序来得到最终输出</p>
+<p>10.打印所有值</p>
+</blockquote>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">SecondarySort_InMemory</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">if</span> (args.length != <span class="number">2</span>) &#123;</span><br><span class="line">      println(<span class="string">"Usage &lt;input-path&gt; &lt;output-path&gt;"</span>)</span><br><span class="line">      sys.exit(<span class="number">1</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> inpath = args(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">val</span> outpath = args(<span class="number">1</span>)</span><br><span class="line">    <span class="comment">//    val inpath = "/Users/harold-mac/Documents/data-algorithms/input"</span></span><br><span class="line">    <span class="comment">//    val outpath = "./out"</span></span><br><span class="line">    <span class="keyword">val</span> config = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">      .setAppName(<span class="string">"SecondarySort_InMemory"</span>)</span><br><span class="line">      .setMaster(<span class="string">"local"</span>)</span><br><span class="line">    <span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(config)</span><br><span class="line">    <span class="keyword">val</span> input = sc.textFile(inpath)</span><br><span class="line">    <span class="keyword">val</span> tmp = input.map(line =&gt; &#123;</span><br><span class="line">      <span class="keyword">val</span> x = line.split(<span class="string">","</span>)</span><br><span class="line">      (x(<span class="number">0</span>), (x(<span class="number">1</span>).toInt, x(<span class="number">2</span>).toInt))</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">val</span> output = tmp.groupByKey().mapValues(x =&gt; x.toList.sortWith((x, y) =&gt; x._1 &gt; y._1))</span><br><span class="line">    <span class="comment">//或者</span></span><br><span class="line">    <span class="comment">//    val output = tmp.groupByKey().map &#123;</span></span><br><span class="line">    <span class="comment">//      case (name, iter) =&gt; iter.toList.sortWith((x, y) =&gt; x._1 &gt; y._1)</span></span><br><span class="line">    <span class="comment">//    &#125;</span></span><br><span class="line">    output.saveAsTextFile(outpath)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="二、方案二：使用Spark框架实现二次排序"><a href="#二、方案二：使用Spark框架实现二次排序" class="headerlink" title="二、方案二：使用Spark框架实现二次排序"></a>二、方案二：使用Spark框架实现二次排序</h4><p>按照(name, time)排序，写一个分区器。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">SecondarySort</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">if</span> (args.length != <span class="number">3</span>) &#123;</span><br><span class="line">      println(<span class="string">"Usage &lt;number-of-partitions&gt; &lt;input-path&gt; &lt;output-path&gt;"</span>)</span><br><span class="line">      sys.exit(<span class="number">1</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> partitions = args(<span class="number">0</span>).toInt</span><br><span class="line">    <span class="keyword">val</span> inputPath = args(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">val</span> outputPath = args(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> config = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">      .setMaster(<span class="string">"local"</span>)</span><br><span class="line">      .setAppName(<span class="string">"SecondarySort"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(config)</span><br><span class="line">    <span class="keyword">val</span> input = sc.textFile(inputPath)</span><br><span class="line">    <span class="keyword">val</span> valueToKey = input.map(x =&gt; &#123;</span><br><span class="line">      <span class="keyword">val</span> line = x.split(<span class="string">","</span>)</span><br><span class="line">      ((line(<span class="number">0</span>) + <span class="string">"-"</span> + line(<span class="number">1</span>) , line(<span class="number">2</span>).toInt), line(<span class="number">2</span>).toInt)</span><br><span class="line">    &#125;</span><br><span class="line">    )</span><br><span class="line">    <span class="comment">//隐式变换，按照（name，time）方式排序</span></span><br><span class="line">    <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">tupleOrderingDesc</span> </span>= <span class="keyword">new</span> <span class="type">Ordering</span>[<span class="type">Tuple2</span>[<span class="type">String</span>, <span class="type">Int</span>]] &#123;</span><br><span class="line">      <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">compare</span></span>(x: <span class="type">Tuple2</span>[<span class="type">String</span>, <span class="type">Int</span>], y: <span class="type">Tuple2</span>[<span class="type">String</span>, <span class="type">Int</span>]): <span class="type">Int</span> = &#123;</span><br><span class="line">        <span class="keyword">if</span> (y._1.compareTo(x._1) == <span class="number">0</span>)</span><br><span class="line">          y._2.compareTo(x._2)</span><br><span class="line">        <span class="keyword">else</span> y._1.compareTo(x._1)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> sorted = valueToKey.repartitionAndSortWithinPartitions(<span class="keyword">new</span> <span class="type">CustomPartitioner</span>(partitions))</span><br><span class="line">    <span class="keyword">val</span> result = sorted.map &#123;</span><br><span class="line">      <span class="keyword">case</span> (k,v) =&gt; (k._1, v)</span><br><span class="line">    &#125;</span><br><span class="line">    result.saveAsTextFile(outputPath)</span><br><span class="line">    sc.stop()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//分区器</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CustomPartitioner</span>(<span class="params">partitons :<span class="type">Int</span></span>) <span class="keyword">extends</span> <span class="title">Partitioner</span></span>&#123;</span><br><span class="line">  require(partitons &gt;<span class="number">0</span>, <span class="string">s"Number of partitons (<span class="subst">$partitons</span>) cannot be negative."</span>)</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">numPartitions</span></span>: <span class="type">Int</span> = partitons</span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">getPartition</span></span>(key: <span class="type">Any</span>): <span class="type">Int</span> = key <span class="keyword">match</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> (k:<span class="type">String</span>, v:<span class="type">Int</span>) =&gt; math.abs(k.hashCode % numPartitions)</span><br><span class="line">    <span class="keyword">case</span> <span class="literal">null</span> =&gt; <span class="number">0</span></span><br><span class="line">    <span class="keyword">case</span> _ =&gt; math.abs(key.hashCode() % numPartitions)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">equals</span></span>(obj: scala.<span class="type">Any</span>): <span class="type">Boolean</span> = obj <span class="keyword">match</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> h:<span class="type">CustomPartitioner</span> =&gt; h.numPartitions == numPartitions</span><br><span class="line">    <span class="keyword">case</span> _ =&gt; <span class="literal">false</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">hashCode</span></span>(): <span class="type">Int</span> = numPartitions</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="//harold.me/2018/06/07/数据算法——Spark的二次排序解决方案/" data-id="cji4m0lti0000nr96ylr00024" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spark/">Spark</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式算法/">分布式算法</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/机器学习/">机器学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/06/07/lightGbm简要原理/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">lightGbm简要原理</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Crunch/">Crunch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HBase/">HBase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hadoop/">Hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hive/">Hive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MLib/">MLib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MLlib/">MLlib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mahout/">Mahout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spark/">Spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scala/">scala</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式算法/">分布式算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/区块链/">区块链</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/协同过滤/">协同过滤</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/大数据/">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符串匹配/">字符串匹配</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发/">并发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/推荐系统/">推荐系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/机器学习/">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/随笔/">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Crunch/" style="font-size: 10px;">Crunch</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/HTTP/" style="font-size: 10px;">HTTP</a> <a href="/tags/Hadoop/" style="font-size: 17.5px;">Hadoop</a> <a href="/tags/Hive/" style="font-size: 11.25px;">Hive</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 18.75px;">Java</a> <a href="/tags/MLib/" style="font-size: 10px;">MLib</a> <a href="/tags/MLlib/" style="font-size: 10px;">MLlib</a> <a href="/tags/Mahout/" style="font-size: 10px;">Mahout</a> <a href="/tags/MySQL/" style="font-size: 12.5px;">MySQL</a> <a href="/tags/Spark/" style="font-size: 10px;">Spark</a> <a href="/tags/scala/" style="font-size: 15px;">scala</a> <a href="/tags/分布式算法/" style="font-size: 11.25px;">分布式算法</a> <a href="/tags/区块链/" style="font-size: 11.25px;">区块链</a> <a href="/tags/协同过滤/" style="font-size: 11.25px;">协同过滤</a> <a href="/tags/多线程/" style="font-size: 16.25px;">多线程</a> <a href="/tags/大数据/" style="font-size: 20px;">大数据</a> <a href="/tags/字符串匹配/" style="font-size: 10px;">字符串匹配</a> <a href="/tags/并发/" style="font-size: 16.25px;">并发</a> <a href="/tags/推荐系统/" style="font-size: 11.25px;">推荐系统</a> <a href="/tags/数据库/" style="font-size: 13.75px;">数据库</a> <a href="/tags/机器学习/" style="font-size: 17.5px;">机器学习</a> <a href="/tags/算法/" style="font-size: 13.75px;">算法</a> <a href="/tags/随笔/" style="font-size: 11.25px;">随笔</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/06/07/数据算法——Spark的二次排序解决方案/">数据算法——Spark的二次排序解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/07/lightGbm简要原理/">lightGbm简要原理</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/数据算法-二次排序/">数据算法——Hadoop的二次排序解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/ES分词器/">ES分词器</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/hexo系列问题之我们换了电脑怎么办/">hexo系列问题之我们换了电脑怎么办</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 李贺<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

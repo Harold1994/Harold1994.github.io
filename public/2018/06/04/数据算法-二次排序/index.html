@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>数据算法——Hadoop的二次排序解决方案 | Harold的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一. 二次排序(secondary sort)问题的引出1. 二次排序: 在reduce阶段对与某个键关联的值排序,又称为键值转换; 2. MR中的排序: MapReduce框架会自动对mapper生成的键排序,说明在启动reducer之前,mapper生成的所有中间键值对必然是按键有序的.但是传入reducer的值并不是有序的,他们可能有任意的顺序,要想对reducer中的值进行排序,可以用二次">
+<meta name="keywords" content="机器学习,大数据,Hadoop,分布式算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据算法——Hadoop的二次排序解决方案">
+<meta property="og:url" content="//harold.me/2018/06/04/数据算法-二次排序/index.html">
+<meta property="og:site_name" content="Harold的博客">
+<meta property="og:description" content="一. 二次排序(secondary sort)问题的引出1. 二次排序: 在reduce阶段对与某个键关联的值排序,又称为键值转换; 2. MR中的排序: MapReduce框架会自动对mapper生成的键排序,说明在启动reducer之前,mapper生成的所有中间键值对必然是按键有序的.但是传入reducer的值并不是有序的,他们可能有任意的顺序,要想对reducer中的值进行排序,可以用二次">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-6-4/84337503.jpg">
+<meta property="og:updated_time" content="2018-06-07T11:40:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据算法——Hadoop的二次排序解决方案">
+<meta name="twitter:description" content="一. 二次排序(secondary sort)问题的引出1. 二次排序: 在reduce阶段对与某个键关联的值排序,又称为键值转换; 2. MR中的排序: MapReduce框架会自动对mapper生成的键排序,说明在启动reducer之前,mapper生成的所有中间键值对必然是按键有序的.但是传入reducer的值并不是有序的,他们可能有任意的顺序,要想对reducer中的值进行排序,可以用二次">
+<meta name="twitter:image" content="http://p5s7d12ls.bkt.clouddn.com/18-6-4/84337503.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Harold的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Harold的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">踏实前进,戒骄戒躁</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="//harold.me"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-数据算法-二次排序" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/04/数据算法-二次排序/" class="article-date">
+  <time datetime="2018-06-04T07:58:43.000Z" itemprop="datePublished">2018-06-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      数据算法——Hadoop的二次排序解决方案
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="一-二次排序-secondary-sort-问题的引出"><a href="#一-二次排序-secondary-sort-问题的引出" class="headerlink" title="一. 二次排序(secondary sort)问题的引出"></a>一. 二次排序(secondary sort)问题的引出</h4><p><strong>1. 二次排序</strong>:</p>
+<p>在reduce阶段对与某个键关联的值排序,又称为键值转换;</p>
+<p><strong>2. MR中的排序:</strong></p>
+<p>MapReduce框架会自动对mapper生成的键排序,说明在启动reducer之前,mapper生成的所有中间键值对必然是<strong>按键有序</strong>的.但是传入reducer的值并不是有序的,他们可能有任意的顺序,要想对reducer中的值进行排序,可以用二次排序设计模式实现.</p>
+<p><strong>3. 通过MR的范式分析二次排序</strong>:</p>
+<p>map(key1,value1)—&gt;list(key2,value2)<br>reduce(list(key2,value2))—&gt;list(key3,value3)<br>list(key2,value2)作为reducer的输入,list(value2)=(V1,V2,V3…,Vn),其本身是无序的.<br>二次排序的目标就是让reducer收到的值有某种顺序.<br><a id="more"></a><br><strong>4. 问题引入</strong></p>
+<p>假如我们有一组温度数据,按照’年\月\日\温度’的格式存储, 我们希望输入每一个年月的温度,并且按照升序排序:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2012-01: 5, 10, 25, 30...</span><br><span class="line">2012-02: 18, 25, 30...</span><br><span class="line">2012-08: 13, 20, 35...</span><br></pre></td></tr></table></figure>
+<h4 id="二-二次排序问题的解决方案"><a href="#二-二次排序问题的解决方案" class="headerlink" title="二. 二次排序问题的解决方案"></a>二. 二次排序问题的解决方案</h4><ul>
+<li>1.让reducer读取和缓存给定键的所有值,然后对这些值完成in-reducer排序,数据量大时可能导致内存溢出</li>
+<li>2.使用MapReduce框架对reducer值排序(这样就不需要再对传入reducer的值进行reducer中的排序),这种方法”会为自然键增加部分或整个值来创建一个组合键以实现排序目标”,不会造成内存溢出<ul>
+<li>使用键值转换设计模式:构造一组中间键(K, V1),其中V1是次键,K称为自然键,要在reducer键中注入一个值,只需要创建一个组合键.在本例中,V1就是温度数据</li>
+<li>让MapReduce执行框架完成排序(利用集群的力量)</li>
+<li>保留多个键值对状态来完成处理,可以适当利用mapper的partitioner来实现.</li>
+</ul>
+</li>
+</ul>
+<p><strong>1.中间键的排序顺序</strong></p>
+<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-6-4/84337503.jpg" alt=""></p>
+<p>要实现二次排序,我们需要控制中间键的排序顺序,以及reducer处理键的顺序,首先要在组合键中注入一个值(temperature),然后控制中间键的排序顺序.</p>
+<p>因为希望reducer按照温度排序,所以增加temperature.要用compareTo方法指出如何对DateTemperaturePair对象排序.</p>
+<blockquote>
+<p> 在Hadoop中,要持久存储定制数据类型,则必须实现Writable接口,要比较定制数据类型,必须实现WritableComparable接口</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DateTemperaturePair</span> <span class="keyword">implements</span> <span class="title">Writable</span>, <span class="title">WritableComparable</span>&lt;<span class="title">DateTemperaturePair</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Text yearMonth = <span class="keyword">new</span> Text();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Text day = <span class="keyword">new</span> Text();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> IntWritable temperature = <span class="keyword">new</span> IntWritable();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DateTemperaturePair</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DateTemperaturePair</span><span class="params">(String yearMonth, String day, <span class="keyword">int</span> temperature)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.yearMonth.set(yearMonth);</span><br><span class="line">        <span class="keyword">this</span>.day.set(day);</span><br><span class="line">        <span class="keyword">this</span>.temperature.set(temperature);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> DateTemperaturePair <span class="title">read</span><span class="params">(DataInput in)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        DateTemperaturePair pair = <span class="keyword">new</span> DateTemperaturePair();</span><br><span class="line">        pair.readFields(in);</span><br><span class="line">        <span class="keyword">return</span> pair;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">write</span><span class="params">(DataOutput dataOutput)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        yearMonth.write(dataOutput);</span><br><span class="line">        day.write(dataOutput);</span><br><span class="line">        temperature.write(dataOutput);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">readFields</span><span class="params">(DataInput in)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        yearMonth.readFields(in);</span><br><span class="line">        day.readFields(in);</span><br><span class="line">        temperature.readFields(in);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setYearMonth</span><span class="params">(String yearMonthAsString)</span> </span>&#123;</span><br><span class="line">        yearMonth.set(yearMonthAsString);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setTemperature</span><span class="params">(<span class="keyword">int</span> Temp)</span> </span>&#123;</span><br><span class="line">        temperature.set(Temp);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDay</span><span class="params">(String dayAsString)</span> </span>&#123;</span><br><span class="line">        day.set(dayAsString);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Text <span class="title">getYearMonth</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> yearMonth;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Text <span class="title">getDay</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> day;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> IntWritable <span class="title">getTemperature</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> temperature;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(DateTemperaturePair pair)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> compareValue = <span class="keyword">this</span>.yearMonth.compareTo(pair.getYearMonth());</span><br><span class="line">        <span class="keyword">if</span> (compareValue == <span class="number">0</span>) &#123;</span><br><span class="line">            compareValue = temperature.compareTo(pair.getTemperature());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span> * compareValue;<span class="comment">//降序排序</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span> == o) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">if</span> (o == <span class="keyword">null</span> || getClass() != o.getClass()) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        DateTemperaturePair that = (DateTemperaturePair) o;</span><br><span class="line">        <span class="keyword">if</span> (temperature != <span class="keyword">null</span> ? !temperature.equals(that.temperature) : that.temperature != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (yearMonth != <span class="keyword">null</span> ? !yearMonth.equals(that.yearMonth) : that.yearMonth != yearMonth) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> result = yearMonth != <span class="keyword">null</span> ? yearMonth.hashCode() : <span class="number">0</span>;</span><br><span class="line">        result = <span class="number">31</span> * result + (temperature != <span class="keyword">null</span> ? temperature.hashCode() : <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"DateTemperaturePair&#123;"</span> +</span><br><span class="line">                <span class="string">"yearMonth="</span> + yearMonth +</span><br><span class="line">                <span class="string">", day="</span> + day +</span><br><span class="line">                <span class="string">", temperature="</span> + temperature +</span><br><span class="line">                <span class="string">'&#125;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2.定制分区器</p>
+<p>partitioner会根据mapper输出的键来决定将其输出发送到那个表reducer，为此我们需要：</p>
+<p>​    1.一个定制partitioner控制哪个reducer处理哪些键</p>
+<p>​    2.一个定制比较器对reducer值排序</p>
+<p>定制分区器会确保具有相同键（自然键，并非包含temperature的组合键）的所有数据都发送给同一个reducer，定制比较器会完成排序，保证数据一到达reducer就会按自然键对数据分组。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DateTemperaturePartitioner</span> <span class="keyword">extends</span> <span class="title">Partitioner</span>&lt;<span class="title">DateTemperaturePair</span>, <span class="title">Text</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getPartition</span><span class="params">(DateTemperaturePair dateTemperaturePair, Text text, <span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Math.abs(dateTemperaturePair.getYearMonth().hashCode() % i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3.分组比较器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> lihe</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Title</span>:</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: 分组比较器，控制哪些键分组到一个reduce函数调用</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/6/7上午11:33</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DateTempratureGroupingComparator</span>  <span class="keyword">extends</span> <span class="title">WritableComparator</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DateTempratureGroupingComparator</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(DateTemperaturePair.class, <span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(WritableComparable a, WritableComparable b)</span> </span>&#123;</span><br><span class="line">        DateTemperaturePair pair = (DateTemperaturePair) a;</span><br><span class="line">        DateTemperaturePair pair2 = (DateTemperaturePair) b;</span><br><span class="line">        <span class="keyword">return</span> pair.getYearMonth().compareTo(pair2.getYearMonth());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="三、MAPREDUCER-Hadoop的二次排序解决方案"><a href="#三、MAPREDUCER-Hadoop的二次排序解决方案" class="headerlink" title="三、MAPREDUCER/Hadoop的二次排序解决方案"></a>三、MAPREDUCER/Hadoop的二次排序解决方案</h4><p><strong>输入：</strong></p>
+<p><year>&lt;,&gt;<month>&lt;,&gt;<day>&lt;,&gt;<temperature></temperature></day></month></year></p>
+<p>示例：</p>
+<p>2012，01，01，35</p>
+<p>2012，12，23，-4</p>
+<p><strong>期望输出：</strong></p>
+<p><year><-><month>:<temperature>&lt;,&gt;<temperature>&lt;,&gt;…</temperature></temperature></month></-></year></p>
+<p>其中<temperature1> &lt;= <temperature2> &lt;= …</temperature2></temperature1></p>
+<p>示例：<br>2012-01: 5，10，13，30，…</p>
+<p>2012-03: 12，23，31， …</p>
+<p><strong>map()函数</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> harold</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Title</span>:</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: map()函数完成解析和词法分析，然后将temperature注入到reducer键中</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/6/7下午1:34</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SecondarySortMapper</span> <span class="keyword">extends</span> <span class="title">Mapper</span>&lt;<span class="title">LongWritable</span>, <span class="title">Text</span>, <span class="title">DateTemperaturePair</span>, <span class="title">Text</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Text theTemperature = <span class="keyword">new</span> Text();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> DateTemperaturePair pair = <span class="keyword">new</span> DateTemperaturePair();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">map</span><span class="params">(LongWritable key, Text value, Context context)</span> <span class="keyword">throws</span> IOException, InterruptedException </span>&#123;</span><br><span class="line">        String line = value.toString();</span><br><span class="line">        String [] tokens = line.split(<span class="string">","</span>);</span><br><span class="line">        String yearMonth = tokens[<span class="number">0</span>] + tokens[<span class="number">1</span>];</span><br><span class="line">        String day = tokens[<span class="number">2</span>];</span><br><span class="line">        <span class="keyword">int</span> temperature = Integer.parseInt(tokens[<span class="number">3</span>]);</span><br><span class="line"></span><br><span class="line">        pair.setDay(day);</span><br><span class="line">        pair.setTemperature(temperature);</span><br><span class="line">        pair.setYearMonth(yearMonth);</span><br><span class="line">        theTemperature.set(tokens[<span class="number">3</span>]);</span><br><span class="line"></span><br><span class="line">        context.write(pair, theTemperature);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>reduce()函数</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> lihe</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Title</span>:</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: 连接值</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/6/7下午1:44</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SecondarySortReducer</span>  <span class="keyword">extends</span> <span class="title">Reducer</span>&lt;<span class="title">DateTemperaturePair</span>, <span class="title">Text</span>, <span class="title">Text</span>, <span class="title">Text</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">reduce</span><span class="params">(DateTemperaturePair key, Iterable&lt;Text&gt; values, Context context)</span> <span class="keyword">throws</span> IOException, InterruptedException </span>&#123;</span><br><span class="line">        StringBuilder builder = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        <span class="keyword">for</span> (Text value : values) &#123;</span><br><span class="line">            builder.append(value.toString());</span><br><span class="line">            builder.append(<span class="string">","</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        context.write(key.getYearMonth(), <span class="keyword">new</span> Text(builder.toString()));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>驱动函数</strong></p>
+<p>第一个比较器（DateTemperaturePair.compareTo()）方法会控制键的排序顺序，第二个比较器（DateTemperatureGroupingComparator.compare()）方法会控制哪些键分到一个reducer（）。通过这两个比较器，建立作业时就好像定义了值得顺序一样。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> lihe</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Title</span>:</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: 驱动器</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/6/7下午1:54</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SecondarySortDriver</span> <span class="keyword">extends</span> <span class="title">Configured</span> <span class="keyword">implements</span> <span class="title">Tool</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Logger theLogger = Logger.getLogger(SecondarySortDriver.class);</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">run</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        Configuration conf = getConf();</span><br><span class="line">        Job job = <span class="keyword">new</span> Job(conf);</span><br><span class="line">        job.setJarByClass(SecondarySortDriver.class);</span><br><span class="line">        job.setJobName(<span class="string">"SecondarySort"</span>);</span><br><span class="line"></span><br><span class="line">        FileInputFormat.setInputPaths(job, <span class="keyword">new</span> Path(args[<span class="number">0</span>]));</span><br><span class="line">        FileOutputFormat.setOutputPath(job, <span class="keyword">new</span> Path(args[<span class="number">1</span>]));</span><br><span class="line"></span><br><span class="line">        job.setMapOutputKeyClass(DateTemperaturePair.class);</span><br><span class="line">        job.setMapOutputValueClass(Text.class);</span><br><span class="line"></span><br><span class="line">        job.setOutputKeyClass(Text.class);</span><br><span class="line">        job.setOutputValueClass(Text.class);</span><br><span class="line"></span><br><span class="line">        job.setMapperClass(SecondarySortMapper.class);</span><br><span class="line">        job.setReducerClass(SecondarySortReducer.class);</span><br><span class="line">        job.setPartitionerClass(DateTemperaturePartitioner.class);</span><br><span class="line">        job.setGroupingComparatorClass(DateTempratureGroupingComparator.class);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">boolean</span> status = job.waitForCompletion(<span class="keyword">true</span>);</span><br><span class="line">        theLogger.info(<span class="string">"run: status"</span> + status);</span><br><span class="line">        <span class="keyword">return</span> status ? <span class="number">0</span> : <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (args.length != <span class="number">2</span>) &#123;</span><br><span class="line">            theLogger.warn(<span class="string">"SecondarySortDriver &lt;input-dir&gt; &lt;output-dir&gt;"</span>);</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"SecondarySortDriver &lt;input-dir&gt; &lt;output-dir&gt;"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> returnStatus = ToolRunner.run(<span class="keyword">new</span> SecondarySortDriver(), args);</span><br><span class="line">        theLogger.info(<span class="string">"returnStatus="</span> + returnStatus);</span><br><span class="line">        System.exit(returnStatus);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="//harold.me/2018/06/04/数据算法-二次排序/" data-id="cji4l7i7q003mcf96auoju0ds" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hadoop/">Hadoop</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式算法/">分布式算法</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/机器学习/">机器学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/06/07/lightGbm简要原理/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          lightGbm简要原理
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/06/04/ES分词器/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">ES分词器</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Crunch/">Crunch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HBase/">HBase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hadoop/">Hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hive/">Hive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MLib/">MLib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MLlib/">MLlib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mahout/">Mahout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spark/">Spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scala/">scala</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式算法/">分布式算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/区块链/">区块链</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/协同过滤/">协同过滤</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/大数据/">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符串匹配/">字符串匹配</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发/">并发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/推荐系统/">推荐系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/机器学习/">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/随笔/">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Crunch/" style="font-size: 10px;">Crunch</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/HTTP/" style="font-size: 10px;">HTTP</a> <a href="/tags/Hadoop/" style="font-size: 17.5px;">Hadoop</a> <a href="/tags/Hive/" style="font-size: 11.25px;">Hive</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 18.75px;">Java</a> <a href="/tags/MLib/" style="font-size: 10px;">MLib</a> <a href="/tags/MLlib/" style="font-size: 10px;">MLlib</a> <a href="/tags/Mahout/" style="font-size: 10px;">Mahout</a> <a href="/tags/MySQL/" style="font-size: 12.5px;">MySQL</a> <a href="/tags/Spark/" style="font-size: 10px;">Spark</a> <a href="/tags/scala/" style="font-size: 15px;">scala</a> <a href="/tags/分布式算法/" style="font-size: 11.25px;">分布式算法</a> <a href="/tags/区块链/" style="font-size: 11.25px;">区块链</a> <a href="/tags/协同过滤/" style="font-size: 11.25px;">协同过滤</a> <a href="/tags/多线程/" style="font-size: 16.25px;">多线程</a> <a href="/tags/大数据/" style="font-size: 20px;">大数据</a> <a href="/tags/字符串匹配/" style="font-size: 10px;">字符串匹配</a> <a href="/tags/并发/" style="font-size: 16.25px;">并发</a> <a href="/tags/推荐系统/" style="font-size: 11.25px;">推荐系统</a> <a href="/tags/数据库/" style="font-size: 13.75px;">数据库</a> <a href="/tags/机器学习/" style="font-size: 17.5px;">机器学习</a> <a href="/tags/算法/" style="font-size: 13.75px;">算法</a> <a href="/tags/随笔/" style="font-size: 11.25px;">随笔</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/06/07/数据算法——Spark的二次排序解决方案/">数据算法——Spark的二次排序解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/07/lightGbm简要原理/">lightGbm简要原理</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/数据算法-二次排序/">数据算法——Hadoop的二次排序解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/ES分词器/">ES分词器</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/04/hexo系列问题之我们换了电脑怎么办/">hexo系列问题之我们换了电脑怎么办</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 李贺<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
