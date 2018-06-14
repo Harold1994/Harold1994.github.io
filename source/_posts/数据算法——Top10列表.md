@@ -8,13 +8,13 @@ top10列表问题是一种过滤模式的问题，即需要过滤数据，找出
 
 #### 一、Top N设计模式的形式化描述
 
-令N是一个整数，而且N>0。令L是一个$List<Tuple2<T,Integer>>$,其中T可以是任意类型；$L.size() = S; S > N$,L的元素为：
+令N是一个整数，而且N>0。令L是一个$List<Tuple2<T,Integer>>$,其中T可以是任意类型；$L.size() = S,S > N$,L的元素为：
 
 ​								$\lbrace (K_i,V_i),1\leq i\leq S\rbrace$
 
-其中$K_i$类型为T，$V_i$为Integer类型（为$K_i$的频度）。令sort(L)返回以排序的L值，这里使用频度作为键，如下所示：
+其中$K_i$类型为T，$V_i$为Integer类型（为$K_i$的频度）。令sort(L)返回已排序的L值，这里使用频度作为键，如下所示：
 
-  						$\lbrace (A_j,B_j),1\leq j\leq S,B_1\geq B_2\geq …\geq B_S \rbrace$
+​			                	$\lbrace (A_j,B_j),1\leq j\leq S,B_1\geq B_2\geq …\geq B_S \rbrace$
 
 其中$(A_j,B_j) \in L $,则Top N的定义为：
 
@@ -194,7 +194,7 @@ object TopN {
 | （C，4）   | （C，5）   | （C，2）   |
 | （F，3)    | （E，1）   | （D，3）   |
 |            | （F，2)    | （E，2）   |
-|            |            | (F，1)     |
+|            |            | （F，1)    |
 
 如果先得到每个服务器的本地top N，在规约得到的数据并不正确，原因是所有服务器上的URL并不惟一。要得到正确的结果，必须为所有输入创建一组唯一的URL，然后再分区计算。
 
@@ -232,9 +232,9 @@ class TopNNonUnique {
       sortedMap.takeRight(N.value).toIterator
     })
 
-    val alltop10 = partitions.collect()
-    val finaltop10 = SortedMap.empty[Int, String].++(alltop10)
-    val resultUsingMapPartiton = finaltop10.takeRight(N.value)
+    val alltop2 = partitions.collect()
+    val finaltop2 = SortedMap.empty[Int, String].++(alltop2)
+    val resultUsingMapPartiton = finaltop2.takeRight(N.value)
 
     resultUsingMapPartiton.foreach {
       case (k, v) => println(s"$k \t ${v.mkString(",")}")
@@ -258,7 +258,7 @@ class TopNNonUnique {
 }
 ```
 
-注意上面代码中使用combineByKey方法得到了一种更简洁的表达方式。combineByKey是Spark中一个比较核心的高级函数，其他一些高阶键值对函数底层都是用它实现的。诸如 groupByKey,reduceByKey等等。
+注意上面代码中使用combineByKey方法得到了一种更简洁的表达方式。combineByKey是Spark中一个比较核心的高级函数，其他一些高阶键值对函数底层都是用它实现的，诸如 groupByKey,reduceByKey等等，里面的参数分别代表：
 
 - createCombiner: V => C ，这个函数把当前的值作为参数，此时我们可以对其做些附加操作(类型转换)并把它返回 (这一步类似于初始化操作)
 - mergeValue: (C, V) => C，该函数把元素V合并到之前的元素C(createCombiner)上 (这个操作在每个分区内进行)
