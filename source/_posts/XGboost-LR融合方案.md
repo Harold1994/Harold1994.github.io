@@ -6,6 +6,8 @@ tags: 机器学习
 
 最近在做比赛，是一道用户活跃度预测的题目，在讨论中发现大牛说XGboost+LR融合效果不错，想要动手试一下，学习笔记记录在此处，之前已经翻译过关于BoostTree的ppt，有兴趣的可以移步到本站的[另一篇博客](https://harold1994.github.io/2018/05/28/BoostTrees%E7%AE%80%E4%BB%8B/).
 
+<!-- more-->
+
 本博客借鉴了以下博客的内容：
 
 https://blog.csdn.net/a358463121/article/details/77993198?locationNum=10&fps=1
