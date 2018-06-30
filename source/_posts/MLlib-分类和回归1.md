@@ -1,5 +1,5 @@
 ---
-title: MLlib-分类回归（一）
+title: MLlib-分类回归
 date: 2018-06-28 15:59:27
 tags: [机器学习, Spark, MLlib]
 ---
@@ -482,3 +482,108 @@ object DecisionTreeRegressionExample {
 }
 ```
 
+**4.随机森林回归**
+
+​       随机森林是决策树的集成算法。随机森林包含多个决策树来降低过拟合的风险。随机森林同样具有易解释性、可处理类别特征、易扩展到多分类问题、不需特征缩放等性质。
+
+​       随机森林分别训练一系列的决策树，所以训练过程是并行的。因算法中加入随机过程，所以每个决策树又有少量区别。通过合并每个树的预测结果来减少预测的方差，提高在测试集上的性能表现。
+
+随机性体现：
+
+1. 每次迭代时，对原始数据进行二次抽样来获得不同的训练数据。
+2. 对于每个树节点，考虑不同的随机特征子集来进行分裂。
+
+除此之外，决策时的训练过程和单独决策树训练过程相同。对新实例进行预测时，随机森林需要整合其各个决策树的预测结果。回归和分类问题的整合的方式略有不同。分类问题采取投票制，每个决策树投票给一个类别，获得最多投票的类别为最终结果。回归问题每个树得到的预测结果为实数，最终的预测结果为各个树预测结果的平均值。
+
+spark.ml支持二分类、多分类以及回归的随机森林算法，适用于连续特征以及类别特征。
+
+```scala
+object RandomForestRegressorExample {
+  def main(args: Array[String]): Unit = {
+    val spark = SparkSession.builder()
+      .master("local")
+      .appName("DecisionTreeClassificationExample")
+      .getOrCreate()
+
+    val data = spark.read.format("libsvm").load("data/mllib/sample_libsvm_data.txt")
+    val featureIndexer = new VectorIndexer()
+      .setInputCol("features")
+      .setOutputCol("indexedFeatures")
+      .setMaxCategories(4)
+      .fit(data)
+
+    val Array(trainingData, testData) = data.randomSplit(Array(0.7, 0.3))
+
+    val rf = new RandomForestRegressor()
+      .setFeaturesCol("indexedFeatures")
+      .setLabelCol("label")
+
+    val pipeline = new Pipeline()
+      .setStages(Array(featureIndexer, rf))
+
+    val model = pipeline.fit(trainingData)
+    val predictions = model.transform(testData)
+    predictions.select("prediction", "label", "features").show(5)
+
+    val evaluator = new RegressionEvaluator()
+      .setLabelCol("label")
+      .setPredictionCol("prediction")
+      .setMetricName("rmse")
+
+    val rmse = evaluator.evaluate(predictions)
+    println(s"Root Mean Squared Errpes:\n ${rmse}")
+
+    val rfModel = model.stages(1).asInstanceOf[RandomForestRegressionModel]
+    println("Learned regression forest model:\n" + rfModel.toDebugString)
+  }
+}
+```
+
+**5.梯度增强树回归**
+
+  梯度提升树是一种决策树的集成算法。它通过反复迭代训练决策树来最小化损失函数。决策树类似，梯度提升树具有可处理类别特征、易扩展到多分类问题、不需特征缩放等性质。Spark.ml通过使用现有[decision tree](http://spark.apache.org/docs/latest/mllib-decision-tree.html)工具来实现。
+
+​       梯度提升树依次迭代训练一系列的决策树。在一次迭代中，算法使用现有的集成来对每个训练实例的类别进行预测，然后将预测结果与真实的标签值进行比较。通过重新标记，来赋予预测结果不好的实例更高的权重。所以，在下次迭代中，决策树会对先前的错误进行修正。
+
+​       对实例标签进行重新标记的机制由损失函数来指定。每次迭代过程中，梯度迭代树在训练数据上进一步减少损失函数的值。spark.ml为分类问题提供一种损失函数（Log Loss），为回归问题提供两种损失函数（平方误差与绝对误差）
+
+```scala
+object GradientBoostedTreeRegressorExample {
+  def main(args: Array[String]): Unit = {
+    val spark = SparkSession.builder()
+      .master("local")
+      .appName("DecisionTreeClassificationExample")
+      .getOrCreate()
+
+    val data = spark.read.format("libsvm").load("data/mllib/sample_libsvm_data.txt")
+    val featureIndexer = new VectorIndexer()
+      .setInputCol("features")
+      .setOutputCol("indexedFeatures")
+      .setMaxCategories(4)
+      .fit(data)
+    val Array(trainingData, testData) = data.randomSplit(Array(0.7, 0.3))
+    val gbt = new GBTRegressor()
+      .setLabelCol("label")
+      .setFeaturesCol("indexedFeatures")
+      .setMaxIter(10)
+
+    val pipeline = new Pipeline()
+      .setStages(Array(featureIndexer, gbt))
+
+    val model = pipeline.fit(trainingData)
+    val predictions = model.transform(testData)
+    predictions.select("prediction","label", "features").show(5)
+
+    val evaluator = new RegressionEvaluator()
+      .setLabelCol("label")
+      .setPredictionCol("prediction")
+      .setMetricName("rmse")
+
+    val rmse = evaluator.evaluate(predictions)
+    println("Root Mean Squared Error (RMSE) on test data = " + rmse)
+
+    val gbtModel = model.stages(1).asInstanceOf[GBTRegressionModel]
+    println("Learned regression GBT model:\n" + gbtModel.toDebugString)
+  }
+}
+```

@@ -264,3 +264,84 @@ ALS算法的缺点在于：
 1.它是一个离线算法。
 
 2.无法准确评估新加入的用户或商品。这个问题也被称为Cold Start问题。
+
+2.3 使用DataFrame API的协同过滤算法
+
+[协作过滤](http://en.wikipedia.org/wiki/Recommender_system#Collaborative_filtering)通常用于推荐系统。这些技术旨在填补用户-项目关联矩阵中丢失的条目。**spark.ml** 目前支持基于模型的协同过滤，其中用户和项目通过一小组潜在因素来描述，可用于预测缺失的条目。**spark.ml** 使用[ **ALS**（交替最小二乘法）](http://dl.acm.org/citation.cfm?id=1608614)算法来学习这些潜在因素。**spark.ml** 中的实现具有以下参数：
+
+- numBlocks 是用户和项目将被分区以便并行化计算的块数（默认值为10）。
+- rank是模型中潜在因素的数量（默认为10）。
+- maxIter是要运行的最大迭代次数（默认为10）。
+- implicitPrefs指定是使用显式反馈ALS的版本还是用适用于隐式反馈数据集的版本（默认值为 false，这意味着使用显式反馈）。
+- alpha是适用于ALS的隐式反馈版本的参数，用于控制偏好观察值的基线置信度（默认为1.0）。
+- nonnegative 指定是否对最小二乘使用非负约束（默认为 false ）。
+
+**注意：**用于 **ALS** 的基于 **DataFrame**（数据框）的 API 目前仅支持整数的用户和项目id。 用户和项目id的列支持其他数字类型，但是列中id的取值必须在整数值范围内。
+
+ **显式与隐式反馈**
+
+​    基于矩阵分解的协同过滤的标准方法中，“用户－商品”矩阵中的条目是用户给予商品的显式偏好，例如，用户给电影评级。然而在现实世界中使用时，我们常常只能访问隐式反馈（如意见、点击、购买、喜欢以及分享等），在spark.ml中我们使用“隐式反馈数据集的协同过滤“来处理这类数据。本质上来说它不是直接对评分矩阵进行建模，而是将数据当作数值来看待，这些数值代表用户行为的观察值（如点击次数，用户观看一部电影的持续时间）。这些数值被用来衡量用户偏好观察值的置信水平，而不是显式地给商品一个评分。然后，模型用来寻找可以用来预测用户对商品预期偏好的潜在因子。
+
+**正则化参数**
+
+​    我们调整正则化参数regParam来解决用户在更新用户因子时产生新评分或者商品更新商品因子时收到的新评分带来的最小二乘问题。这个方法叫做“ALS-WR”它降低regParam对数据集规模的依赖，所以我们可以将从部分子集中学习到的最佳参数应用到整个数据集中时获得同样的性能。
+
+在以下示例中，我们从 [MovieLens](http://grouplens.org/datasets/movielens/) 数据集加载评分数据，每行由用户，电影，评分和时间戳组成。 然后，我们训练一个 **ALS** 模型，默认情况下假定评分是显式的（ implicitPrefs是 false ）。 我们通过测量评级预测的 **root-mean-square error**（均方根误差）来评估推荐模型。
+
+```scala
+object ALSExample {
+  case class Rating(userId: Int, movieId: Int, rating: Float, timeStamp: Long)
+  def parseRating(str: String): Rating = {
+    val fields = str.split("::")
+    assert(fields.size == 4)
+    Rating(fields(0).toInt, fields(1).toInt, fields(2).toFloat, fields(3).toLong)
+  }
+
+  def main(args: Array[String]) {
+    val spark = SparkSession.builder
+      .master("local")
+      .appName("ALSExample")
+      .getOrCreate()
+    import spark.implicits._
+    val ratings = spark.read.textFile("data/als/sample_movielens_ratings.txt")
+      .map(parseRating)
+      .toDF()
+    val Array(training, test) = ratings.randomSplit(Array(0.8, 0.2))
+
+    val als = new ALS()
+      .setMaxIter(5)
+      .setRegParam(0.01)
+      .setUserCol("userId")
+      .setItemCol("movieId")
+      .setRatingCol("rating")
+    val model = als.fit(training)
+
+    val predictions = model.transform(test)
+
+    val evaluator = new RegressionEvaluator()
+      .setMetricName("rmse")
+      .setLabelCol("rating")
+      .setPredictionCol("prediction")
+    val rmse = evaluator.evaluate(predictions)
+    println(s"Root-mean-square error = $rmse")
+
+    //为每个用户产生top10推荐电影
+    val userRecs = model.recommendForAllUsers(10)
+    //为每部电影产生Top10推荐用户
+    val movieRecs = model.recommendForAllItems(10)
+    //为特定集合的用户推荐电影
+    val users = ratings.select(als.getUserCol).distinct().limit(3)
+    val userSubsetRecs = model.recommendForUserSubset(users, 10)
+    //为特定集合的电影推荐用户
+    val movies = ratings.select(als.getItemCol).distinct().limit(3)
+    val movieSubSetRecs = model.recommendForItemSubset(movies, 10)
+
+    userRecs.show()
+    movieRecs.show()
+    userSubsetRecs.show()
+    movieSubSetRecs.show()
+    spark.stop()
+  }
+}
+```
+
