@@ -20,7 +20,7 @@ top10列表问题是一种过滤模式的问题，即需要过滤数据，找出
 
 ​				$topN(L) =\lbrace (A_j,B_j),1\leq j\leq N,B_1\geq B_2\geq …\geq B_N \geq …\geq B_s \rbrace$			
 <!-- more-->
-为实现Top N，需要一个散列表数据结构，从而可以得到键的全序，在Java中可以使用SortedMap<K,V>作为接口和TreeMap<K,V>.
+为实现Top N，需要一个散列表数据结构，从而可以得到键的全序，在Java中可以使用SortedMap<K,V>(作为接口)和TreeMap<K,V>(作为SortedMap的一个实现类).
 
 ```java
 public SortedMap<Integer, T> topN(List<Tuple2<T, Integer>> L, int N) {

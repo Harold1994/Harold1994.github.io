@@ -577,7 +577,7 @@ reduce阶段逻辑比较简单，将每个item对应的值加起来就是用户�
 Step4在执行的时候会报错：
 ![](http://p5s7d12ls.bkt.clouddn.com/18-3-28/51842026.jpg)
 
-原因在于当输入是用户评分矩阵时，同现map并不是随时就绪的，可能不会先构造同现矩阵。因为hadoop从hdfs上读取小文件时，会先读占用空间大的文件，这样就不难保证先生成coocurenceMatrix了，所以Step4.java这个类不能使用，我们把矩阵乘法进行分开计算，先进行对于位置相乘Step4_Updata.java，最后进行加法Step4_Updata2.java
+原因在于当输入是用户评分矩阵时，同现map并不是随时就绪的，可能不会先构造同现矩阵。因为hadoop从hdfs上读取小文件时，会先读占用空间大的文件，这样就不能保证先生成coocurenceMatrix了，所以Step4.java这个类不能使用，我们把矩阵乘法进行分开计算，先进行对于位置相乘Step4_Updata.java，最后进行加法Step4_Updata2.java
  
 **5). Step4_Update.java，计算推荐结果列表**
 
