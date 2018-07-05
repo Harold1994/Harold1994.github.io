@@ -24,7 +24,7 @@
 <meta property="og:image" content="https://img-blog.csdn.net/20160523110941941">
 <meta property="og:image" content="https://img-blog.csdn.net/20160523112421700">
 <meta property="og:image" content="https://img-blog.csdn.net/20160523114759278">
-<meta property="og:updated_time" content="2018-06-18T09:05:15.129Z">
+<meta property="og:updated_time" content="2018-06-30T07:52:31.193Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MLlib----协同过滤算法">
 <meta name="twitter:description" content="协同过滤算法是最常用的推荐算法,主要有两种形式:基于用户和基于物品的推荐算法. ALS(alternate least square)是交替最小二乘法的简称,也是MLlib的基础推荐算法. 一. 协同过滤 协同过滤算法是一种基于群体用户或物品的典型推荐算法,主要有两种:   通过考察具有相同爱好的用户对相同物品的评分标准进行计算 考察具有相同特质的物品从而推荐给选择了某件物品的用户">
@@ -306,6 +306,23 @@
 <p>ALS算法的缺点在于：</p>
 <p>1.它是一个离线算法。</p>
 <p>2.无法准确评估新加入的用户或商品。这个问题也被称为Cold Start问题。</p>
+<p>2.3 使用DataFrame API的协同过滤算法</p>
+<p><a href="http://en.wikipedia.org/wiki/Recommender_system#Collaborative_filtering" target="_blank" rel="noopener">协作过滤</a>通常用于推荐系统。这些技术旨在填补用户-项目关联矩阵中丢失的条目。<strong>spark.ml</strong> 目前支持基于模型的协同过滤，其中用户和项目通过一小组潜在因素来描述，可用于预测缺失的条目。<strong>spark.ml</strong> 使用<a href="http://dl.acm.org/citation.cfm?id=1608614" target="_blank" rel="noopener"> <strong>ALS</strong>（交替最小二乘法）</a>算法来学习这些潜在因素。<strong>spark.ml</strong> 中的实现具有以下参数：</p>
+<ul>
+<li>numBlocks 是用户和项目将被分区以便并行化计算的块数（默认值为10）。</li>
+<li>rank是模型中潜在因素的数量（默认为10）。</li>
+<li>maxIter是要运行的最大迭代次数（默认为10）。</li>
+<li>implicitPrefs指定是使用显式反馈ALS的版本还是用适用于隐式反馈数据集的版本（默认值为 false，这意味着使用显式反馈）。</li>
+<li>alpha是适用于ALS的隐式反馈版本的参数，用于控制偏好观察值的基线置信度（默认为1.0）。</li>
+<li>nonnegative 指定是否对最小二乘使用非负约束（默认为 false ）。</li>
+</ul>
+<p><strong>注意：</strong>用于 <strong>ALS</strong> 的基于 <strong>DataFrame</strong>（数据框）的 API 目前仅支持整数的用户和项目id。 用户和项目id的列支持其他数字类型，但是列中id的取值必须在整数值范围内。</p>
+<p> <strong>显式与隐式反馈</strong></p>
+<p>​    基于矩阵分解的协同过滤的标准方法中，“用户－商品”矩阵中的条目是用户给予商品的显式偏好，例如，用户给电影评级。然而在现实世界中使用时，我们常常只能访问隐式反馈（如意见、点击、购买、喜欢以及分享等），在spark.ml中我们使用“隐式反馈数据集的协同过滤“来处理这类数据。本质上来说它不是直接对评分矩阵进行建模，而是将数据当作数值来看待，这些数值代表用户行为的观察值（如点击次数，用户观看一部电影的持续时间）。这些数值被用来衡量用户偏好观察值的置信水平，而不是显式地给商品一个评分。然后，模型用来寻找可以用来预测用户对商品预期偏好的潜在因子。</p>
+<p><strong>正则化参数</strong></p>
+<p>​    我们调整正则化参数regParam来解决用户在更新用户因子时产生新评分或者商品更新商品因子时收到的新评分带来的最小二乘问题。这个方法叫做“ALS-WR”它降低regParam对数据集规模的依赖，所以我们可以将从部分子集中学习到的最佳参数应用到整个数据集中时获得同样的性能。</p>
+<p>在以下示例中，我们从 <a href="http://grouplens.org/datasets/movielens/" target="_blank" rel="noopener">MovieLens</a> 数据集加载评分数据，每行由用户，电影，评分和时间戳组成。 然后，我们训练一个 <strong>ALS</strong> 模型，默认情况下假定评分是显式的（ implicitPrefs是 false ）。 我们通过测量评级预测的 <strong>root-mean-square error</strong>（均方根误差）来评估推荐模型。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">ALSExample</span> </span>&#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Rating</span>(<span class="params">userId: <span class="type">Int</span>, movieId: <span class="type">Int</span>, rating: <span class="type">Float</span>, timeStamp: <span class="type">Long</span></span>)</span></span><br><span class="line"><span class="class">  <span class="title">def</span> <span class="title">parseRating</span>(<span class="params">str: <span class="type">String</span></span>)</span>: <span class="type">Rating</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> fields = str.split(<span class="string">"::"</span>)</span><br><span class="line">    assert(fields.size == <span class="number">4</span>)</span><br><span class="line">    <span class="type">Rating</span>(fields(<span class="number">0</span>).toInt, fields(<span class="number">1</span>).toInt, fields(<span class="number">2</span>).toFloat, fields(<span class="number">3</span>).toLong)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    <span class="keyword">val</span> spark = <span class="type">SparkSession</span>.builder</span><br><span class="line">      .master(<span class="string">"local"</span>)</span><br><span class="line">      .appName(<span class="string">"ALSExample"</span>)</span><br><span class="line">      .getOrCreate()</span><br><span class="line">    <span class="keyword">import</span> spark.implicits._</span><br><span class="line">    <span class="keyword">val</span> ratings = spark.read.textFile(<span class="string">"data/als/sample_movielens_ratings.txt"</span>)</span><br><span class="line">      .map(parseRating)</span><br><span class="line">      .toDF()</span><br><span class="line">    <span class="keyword">val</span> <span class="type">Array</span>(training, test) = ratings.randomSplit(<span class="type">Array</span>(<span class="number">0.8</span>, <span class="number">0.2</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> als = <span class="keyword">new</span> <span class="type">ALS</span>()</span><br><span class="line">      .setMaxIter(<span class="number">5</span>)</span><br><span class="line">      .setRegParam(<span class="number">0.01</span>)</span><br><span class="line">      .setUserCol(<span class="string">"userId"</span>)</span><br><span class="line">      .setItemCol(<span class="string">"movieId"</span>)</span><br><span class="line">      .setRatingCol(<span class="string">"rating"</span>)</span><br><span class="line">    <span class="keyword">val</span> model = als.fit(training)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> predictions = model.transform(test)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> evaluator = <span class="keyword">new</span> <span class="type">RegressionEvaluator</span>()</span><br><span class="line">      .setMetricName(<span class="string">"rmse"</span>)</span><br><span class="line">      .setLabelCol(<span class="string">"rating"</span>)</span><br><span class="line">      .setPredictionCol(<span class="string">"prediction"</span>)</span><br><span class="line">    <span class="keyword">val</span> rmse = evaluator.evaluate(predictions)</span><br><span class="line">    println(<span class="string">s"Root-mean-square error = <span class="subst">$rmse</span>"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//为每个用户产生top10推荐电影</span></span><br><span class="line">    <span class="keyword">val</span> userRecs = model.recommendForAllUsers(<span class="number">10</span>)</span><br><span class="line">    <span class="comment">//为每部电影产生Top10推荐用户</span></span><br><span class="line">    <span class="keyword">val</span> movieRecs = model.recommendForAllItems(<span class="number">10</span>)</span><br><span class="line">    <span class="comment">//为特定集合的用户推荐电影</span></span><br><span class="line">    <span class="keyword">val</span> users = ratings.select(als.getUserCol).distinct().limit(<span class="number">3</span>)</span><br><span class="line">    <span class="keyword">val</span> userSubsetRecs = model.recommendForUserSubset(users, <span class="number">10</span>)</span><br><span class="line">    <span class="comment">//为特定集合的电影推荐用户</span></span><br><span class="line">    <span class="keyword">val</span> movies = ratings.select(als.getItemCol).distinct().limit(<span class="number">3</span>)</span><br><span class="line">    <span class="keyword">val</span> movieSubSetRecs = model.recommendForItemSubset(movies, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">    userRecs.show()</span><br><span class="line">    movieRecs.show()</span><br><span class="line">    userSubsetRecs.show()</span><br><span class="line">    movieSubSetRecs.show()</span><br><span class="line">    spark.stop()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
 
@@ -572,6 +589,10 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
              
@@ -580,19 +601,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">区块链</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -601,6 +610,14 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Hadoop</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -625,14 +642,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">MLlib</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">协同过滤</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">ALS算法</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -680,11 +689,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">时间序列</a>
+                <a href="javascript:void(0)" class="js-tag color5">协同过滤</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">ALS算法</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">时间序列</a>
               </li>
              
               <li class="article-tag-list-item">
