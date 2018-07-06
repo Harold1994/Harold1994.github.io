@@ -1,5 +1,5 @@
 ---
-title: linux常用命令
+title: linux常用命令————awk、sed、wc
 date: 2018-07-05 10:17:53
 tags: Linux
 ---
@@ -10,8 +10,6 @@ tags: Linux
 
 **awk处理过程:** 依次对每一行进行处理，然后输出
 
-<!-- more--> 
-
 **语法**
 
 ```
@@ -19,6 +17,8 @@ awk [选项参数] 'script' var=value file(s)
 或
 awk [选项参数] -f scriptfile var=value file(s)
 ```
+
+<!-- more--> 
 
 **选项参数说明：**
 
