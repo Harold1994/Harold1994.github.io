@@ -55,7 +55,9 @@ W 06:48:13.425 NotebookApp] WARNING: The notebook server is listening on all IP 
         http://localhost:8888/?token=2031705799dc7a5d58bc51b1f406d8771f0fdf3086b9564212345678910
 ```
 
-打开浏览器就可以直接看到界面了，同时可以编辑内容：。
+打开浏览器就可以直接看到界面了，同时可以编辑内容：
+
+![](http://p5s7d12ls.bkt.clouddn.com/18-7-6/87067696.jpg)
 
 #### 4 固定token
 
