@@ -502,3 +502,70 @@ exit 0
 * continue
 
   类似C语言中的同名语句
+
+* eval命令
+
+  eval命令允许对参数求值。它是shell的内置命令，通常不会以单独命令的形式存在。
+
+  ![](http://p5s7d12ls.bkt.clouddn.com/18-7-12/65806701.jpg)
+
+  如上面的实验所示，eval命令有点像一个额外的`$`,它给出一个变量的值。
+
+* exit n
+
+  exit命令使脚本程序以退出码n结束运行，如果在任何一个交互式shell的命令提示符中使用这个命令，将会退出系统。如果允许自己的脚本程序存在退出时不指定一个退出状态，那么脚本中最后一条执行命令的状态将被用作返回值。在shell中，退出码0表示成功，退出码1-125是可以使用的错误码，其余数字有保留含义：
+
+  | 退 出 码  |    说 明     |
+  | :-------: | :----------: |
+  |    126    | 文件不可执行 |
+  |    127    |  命令未找到  |
+  | 128及以上 | 出现一个信号 |
+
+* export
+
+  export命令将作为它参数的变量导出到子shell中，并使之在子shell有效，在默认情况下，在一个shell中被创建的变量在这个shell调用的下级shell中是不可用的。export命令将自己的参数创建为一个环境变量，而这个环境变量可以被当前程序调用的其他脚本和程序看见。即，被导出的变量构成从shell衍生的任何子进程的环境变量。
+
+  实验：导出变量
+
+  export2.sh:
+
+  ```shell
+  #！/bin/sh
+  echo "$foo"
+  echo "$bar"
+  ```
+
+  export1.sh
+
+  ```shell
+  #!/bin/sh
+  foo="The first meta-syntactic variable"
+  export bar="the second meta-syntactic variable"
+  ./export2.sh
+  ```
+
+  运行结果：
+
+  ```shell
+  $ ./export1.sh
+  
+  the second meta-syntactic variable
+  ```
+
+  可见，在运行export2时，foo值已经丢失，但是变量bar的值被导出到了第二个脚本中。一旦一个变量被shell导出，他就可以被该shell调用的任何脚本使用，也可以被后续依次调用的任何shell使用。
+
+  > set -a或set --allexport命令将导出它之后声明的所有变量。
+
+* expr命令
+
+  expr将它的参数当做一个表达式来求值，常见用法：
+
+  ```shell
+  x=`expr $x + 1`
+  ```
+
+  反引号（``） 使x取值为命令$expr \ \ x+1$的执行结果，可以用语法 $()代替反引号 ，如下所示：
+
+  ```shell
+  x=$(expr $x + 1)
+  ```
