@@ -190,7 +190,7 @@ loss = tf.add_n(tf.get_collection('losses'))
                              $shadow\_variable=decay * shadow\_variable + (1-decay)*variable$
 
 其中shadow_variable为影子变量，variable为待更新的变量，decay为衰减率。decay决定了模型更新的速度，decay越大模型越趋于稳定。在实际应用中，decay一般设为非常接近1的数，为了使模型在训练前期可以更新的更快，ExponentialMovingAverage提供了num_updatyes参数来动态设置decay的大小，如果在ExponentialMovingAverage初始化时提供了num_updates参数，那么每次使用的衰减率将是：
-                                              $min\lbrace decay, \frac {1+num_updates}{10+num_updates}\rbrace$
+$min\lbrace decay, \frac {1+num_updates}{10+num_updates}\rbrace$
 
 ```python
 #定义一个变量用于计算滑动平均，初始值为0，手动指定类型为float32
