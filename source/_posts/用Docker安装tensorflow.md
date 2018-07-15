@@ -1,7 +1,7 @@
 ---
-title: [转]用Docker安装tensorflow
-date:  2018-07-06 20:27:54
-tags: [tensorflow, 深度学习]
+title: 用Docker安装tensorflow
+date: 2018-07-06 20:27:54
+tags: [tensorflow，深度学习]
 ---
 
 #### 1 关于TensorFlow

@@ -79,13 +79,15 @@ with g.device('gpu:0'):
 ```python
 #载入Tensorflow
 import tensorflow as tf
-#tf.constant是一个计算，结果是一个张亮，保存在a中
+#tf.constant是一个计算，结果是一个张量，保存在a中
 a = tf.constant([1.0,2.0], name = "a")
 b = tf.constant([2.0,3.0], name = "b")
 result = tf.add(a,b,name="add")
 print(result)
 输出：
-# 名字：节点的第一个输出 维度     类型:每个张量类型唯一，不匹配会报错
+# 名字：节点的第一个输出 
+# 维度     
+# 类型:每个张量类型唯一，不匹配会报错
 Tensor("add_2:0", shape=(2,), dtype=float32)
 ```
 
@@ -217,7 +219,7 @@ sess.close()
 
 上述代码实现了神经网络的前向传播过程,在计算y之前，需运行w1.initializer和w2.initializer给变量赋值，虽然直接调用变量的初始化过程是一个可行方案，但是当变量数目增多时，或者变量之间存在依赖关系时，单个调用就比较麻烦。因此可以使用tf.global_variables_initializer一次性初始化所有变量。
 
-Tensorflow中所有变量都会被自动加入GraphKeys.VARIABLES集合，当构建机器学习模型时，可以通过变量生命函数中的trainable参数来区分需要优化的参数（比如神经网络中的参数）和其他参数（如迭代的轮数），如果声明trainable为True,变量会被加入GraphKeys.TRAINABLE_VARIABLES集合，可以通过tf.trainable_variable函数得到需要优化的参数。， Tensorflow中提供的神经网络优化算法会将GraphKeys.TRAINABLE_VARIABLES集合中的变量作为默认的优化对象。
+Tensorflow中所有变量都会被自动加入GraphKeys.VARIABLES集合，当构建机器学习模型时，可以通过变量声明函数中的trainable参数来区分需要优化的参数（比如神经网络中的参数）和其他参数（如迭代的轮数），如果声明trainable为True,变量会被加入GraphKeys.TRAINABLE_VARIABLES集合，可以通过tf.trainable_variable函数得到需要优化的参数。 Tensorflow中提供的神经网络优化算法会将GraphKeys.TRAINABLE_VARIABLES集合中的变量作为默认的优化对象。
 
 **维度**和**类型**也是变量的两个重要属性，变量类型不可改变，维度在运行中可改变，通过设置参数validate_shape=False。
 
@@ -247,7 +249,8 @@ y_ = tf.placeholder(tf.float32, shape=(None,1), name='y-input')
 
 a = tf.matmul(x,w1)
 y = tf.matmul(a, w2)
-#定义损失函数和反向传播算法
+#定义损失函数和反向传播算法，互熵损失，将在之后的帖子中介绍
+#clip_by_value将输入的数值范围限制在（1e-10,1.0)之间，避免出现log0的状况
 cross_entropy = - tf.reduce_mean(y_ * tf.log(tf.clip_by_value(y, 1e-10,1.0)))
 train_step = tf.train.AdamOptimizer(0.01).minimize(cross_entropy)
 #随机数模拟数据集
