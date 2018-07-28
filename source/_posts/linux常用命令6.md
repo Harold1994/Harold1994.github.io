@@ -1,5 +1,5 @@
 ---
-title: linux常用命令6
+title: linux常用命令——find、join
 date: 2018-07-12 17:06:02
 tags: Linux
 ---
