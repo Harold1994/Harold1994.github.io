@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>scala——actor，Akka | lyyourc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/app.css">
+  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+  
+</head>
+
+<body>
+  <nav class="app-nav">
+  
+    
+      <a href="/.">home</a>
+    
+  
+    
+      <a href="/archives">archive</a>
+    
+  
+    
+      <a href="/atom.xml">rss</a>
+    
+  
+</nav>
+
+  <main class="post">
+  <article>
+  <h1 class="article-title">
+    <a href="/2018/04/29/scala——actor，Akka/">scala——actor，Akka</a>
+  </h1>
+
+  <section class="article-meta">
+    <p class="article-date">April 29 2018</p>
+  </section>
+
+  <section class="article-entry">
+    <ul>
+<li><p>Actor</p>
+<p>Actor是消息并发模型</p>
+<p>Scala中的Actor能够实现并行编程的强大功能，是基于事件的并发机制</p>
+<p>Scala是运用消息（message）的发送和接收来实现多线程</p>
+<p>使用scala能更容易的实现多线程应用的开发</p>
+<a id="more"></a>
+</li>
+<li><p>Java并发编程和Scala Actor编程的区别</p>
+<p>Scala的Actor类似于Java的多线程编程，但是Scala的Actor提供的模型与多线程有所不同</p>
+<p>Scala的Actor尽可能的避免锁和共享状态，从而避免多线程并发时出现资源争用的情况，进而提高多线程编程的性能，此外，Scala Actor还可以避免死锁等一系列传统多线程问题。</p>
+<p>Java中多数使用的是可变状态的对象资源，对这些资源进行共享来实现多线程编程的话，控制好资源竞争与防止对象状态被意外修改是非常重要的，而对象的不变性也是难以保证的。</p>
+<p>在scala中，可以通过复制不可变状态的资源（即对象）的一个副本，再基于Actor的消息发送、接收机制进行并行编程</p>
+</li>
+<li><p>Actor方法执行顺序：</p>
+<ol>
+<li>调用start()方法启动Actor</li>
+<li>执行act()方法</li>
+<li>向Actor发送消息</li>
+</ol>
+</li>
+<li><p>发送消息的方式：</p>
+<ol>
+<li>！ 发送异步消息，没有返回值</li>
+<li>！? 发送同步消息，等待返回值</li>
+<li>！！ 发送异步消息，返回值是Future[Any]</li>
+</ol>
+</li>
+</ul>
+
+  </section>
+</article>
+
+  <div class="sharing grid">
+  <section class="profile grid-item grid">
+    <img class="avatar" src="http://7xrcp8.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" />
+    <div class="grid-item">
+      <p class="title"> lyyourc </p>
+      <p class="subtitle"> You Are The JavaScript In My HTML </p>
+    <div>
+  </section>
+
+  <section class="share-btns">
+    <!-- <p> share it if you like it~ </p> -->
+    <a
+  class="twitter-share-button"
+  data-size="large"
+  data-via="DrakeLeung"
+  href="https://twitter.com/intent/tweet?text=>
+<li><p>Actor</p>
+<"
+>
+  Tweet
+</a>
+
+<script>
+  window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  js.async = true;
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));
+</script>
+
+  </section>
+</div>
+
+
+  
+    
+<section class="article-comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+<script>
+  var disqus_shortname = 'drakeleung';
+  
+  var disqus_url = '//harold.me/2018/04/29/scala——actor，Akka/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+  
+</main>
+
+</body>
+</html>

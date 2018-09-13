@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>用Mahout编写一个基本推荐系统 | lyyourc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/app.css">
+  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+  
+</head>
+
+<body>
+  <nav class="app-nav">
+  
+    
+      <a href="/.">home</a>
+    
+  
+    
+      <a href="/archives">archive</a>
+    
+  
+    
+      <a href="/atom.xml">rss</a>
+    
+  
+</nav>
+
+  <main class="post">
+  <article>
+  <h1 class="article-title">
+    <a href="/2018/04/10/用Mahout编写一个基本推荐系统/">用Mahout编写一个基本推荐系统</a>
+  </h1>
+
+  <section class="article-meta">
+    <p class="article-date">April 10 2018</p>
+  </section>
+
+  <section class="article-entry">
+    <p>Mahout是一个机器学习Java类库的集合用于完成各种任务，如分类、评价性的聚类和模式挖掘等。相对于Weka和RapidMIner等库，Mahout真正是为大规模数据集设计的，它的算法用Hadoop环境。<br>我们将使用Slope On推荐算法，它基于协同过滤方法，因为在Mahout0.9之后已经没有此方法，因此需要在pom文件中指定0.8版本。<br><a id="more"></a><br><strong>准备工作</strong><br>数据集：GroupLens<br>下载方式：<code>wget http://www.grouplens.org/system/files/ml-1m.zip</code><br>下载后有四个文件：</p>
+<blockquote>
+<p>user.dat:包含6000个用户<br>movies.dat:包含电影名字<br>ratings.dat: 包含用户和电影的关系，一个数字表示用户对电影的喜爱程度<br>README： 说明文件格式</p>
+</blockquote>
+<p><strong>实现过程</strong><br>1.将GroupLens格式的rating.转换成CSV格式，将1::1193::5::978300760转为1,1193形式<br>2.创建一个Model类来处理将要使用的新文件rating.csv的文件格式<br>3.在该模型上创建一个简单的推荐系统<br>4.从文件rating.csv中提取整个用户列表需要花费一段时间，之后，在标题上将会看到每个用户的推荐</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.manhoutcookbook.recommendsys;</span><br><span class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.common.TasteException;</span><br><span class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator;</span><br><span class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.impl.model.file.FileDataModel;</span><br><span class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.impl.recommender.CachingRecommender;</span><br><span class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.impl.recommender.slopeone.SlopeOneRecommender;</span><br><span class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.model.DataModel;</span><br><span class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.recommender.RecommendedItem;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> String  inputFile = <span class="string">"ml-1m/ratings.dat"</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> String outputFile = <span class="string">"ml-1m/ratings.csv"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, TasteException </span>&#123;</span><br><span class="line">        CreateCvsRatingFile();<span class="comment">//修改文件格式</span></span><br><span class="line">        <span class="comment">//基于CSV文件建立模型</span></span><br><span class="line">        File  ratingsFile = <span class="keyword">new</span> File(outputFile);</span><br><span class="line">        DataModel model;</span><br><span class="line">        model = <span class="keyword">new</span> FileDataModel(ratingsFile);</span><br><span class="line">        <span class="comment">//创建SlopeRecommender</span></span><br><span class="line">        CachingRecommender cachingRecommender = <span class="keyword">new</span> CachingRecommender(<span class="keyword">new</span> SlopeOneRecommender(model));</span><br><span class="line">        <span class="keyword">for</span> (LongPrimitiveIterator it = model.getUserIDs(); it.hasNext(); ) &#123;</span><br><span class="line">            <span class="keyword">long</span> userId = it.nextLong();</span><br><span class="line">            <span class="comment">//显示推荐结果</span></span><br><span class="line">            List&lt;RecommendedItem&gt; recommendations = cachingRecommender.recommend(userId, <span class="number">10</span>);</span><br><span class="line">            <span class="keyword">if</span> (recommendations.size() == <span class="number">0</span>) &#123;</span><br><span class="line">                System.out.println(<span class="string">"User "</span>);</span><br><span class="line">                System.out.println(userId);</span><br><span class="line">                System.out.println(<span class="string">": no recommendations"</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span>(RecommendedItem recommendedItem : recommendations) &#123;</span><br><span class="line">                System.out.println(<span class="string">"User "</span>);</span><br><span class="line">                System.out.println(userId);</span><br><span class="line">                System.out.println(recommendedItem);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">CreateCvsRatingFile</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        BufferedReader reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> FileReader(inputFile));</span><br><span class="line">        BufferedWriter writer = <span class="keyword">new</span> BufferedWriter(<span class="keyword">new</span> FileWriter(outputFile));</span><br><span class="line">        String line = <span class="keyword">null</span>;</span><br><span class="line">        String line2write = <span class="keyword">null</span>;</span><br><span class="line">        String [] temp;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">//仅转换1000条，避免单机运行堆异常</span></span><br><span class="line">        <span class="keyword">while</span>((line  = reader.readLine()) != <span class="keyword">null</span> &amp;&amp; i&lt;<span class="number">10000</span>) &#123;</span><br><span class="line">            i++;</span><br><span class="line">            temp = line.split(<span class="string">"::"</span>);</span><br><span class="line">            line2write = temp[<span class="number">0</span>] + <span class="string">","</span> + temp[<span class="number">1</span>];</span><br><span class="line">            writer.write(line2write);</span><br><span class="line">            writer.newLine();</span><br><span class="line">            writer.flush();</span><br><span class="line">        &#125;</span><br><span class="line">        reader.close();</span><br><span class="line">        writer.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：<br><img src="http://p5s7d12ls.bkt.clouddn.com/18-4-10/23573009.jpg" alt=""><br>Slope One推荐算法：使用线性函数结合用户和条目来估计接近程度，计算简单快速，对新用户推荐效果不错</p>
+
+  </section>
+</article>
+
+  <div class="sharing grid">
+  <section class="profile grid-item grid">
+    <img class="avatar" src="http://7xrcp8.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" />
+    <div class="grid-item">
+      <p class="title"> lyyourc </p>
+      <p class="subtitle"> You Are The JavaScript In My HTML </p>
+    <div>
+  </section>
+
+  <section class="share-btns">
+    <!-- <p> share it if you like it~ </p> -->
+    <a
+  class="twitter-share-button"
+  data-size="large"
+  data-via="DrakeLeung"
+  href="https://twitter.com/intent/tweet?text=Mahout是一个机器学习Java类库的"
+>
+  Tweet
+</a>
+
+<script>
+  window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  js.async = true;
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));
+</script>
+
+  </section>
+</div>
+
+
+  
+    
+<section class="article-comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+<script>
+  var disqus_shortname = 'drakeleung';
+  
+  var disqus_url = '//harold.me/2018/04/10/用Mahout编写一个基本推荐系统/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+  
+</main>
+
+</body>
+</html>

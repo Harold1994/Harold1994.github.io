@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>shell程序设计（二） | lyyourc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/app.css">
+  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+  
+</head>
+
+<body>
+  <nav class="app-nav">
+  
+    
+      <a href="/.">home</a>
+    
+  
+    
+      <a href="/archives">archive</a>
+    
+  
+    
+      <a href="/atom.xml">rss</a>
+    
+  
+</nav>
+
+  <main class="post">
+  <article>
+  <h1 class="article-title">
+    <a href="/2018/07/09/shell程序设计二/">shell程序设计（二）</a>
+  </h1>
+
+  <section class="article-meta">
+    <p class="article-date">July 09 2018</p>
+  </section>
+
+  <section class="article-entry">
+    <p><strong>1.条件</strong></p>
+<p>一个shell脚本能够对任何可以从命令行上调用的命令的退出码进行测试，包括自己写的脚本。</p>
+<p><strong>test或[命令</strong></p>
+<p><code>[</code>或<code></code>test<code>是布尔判断命令，在使用</code>[<code>时，使用符号</code>]`来结尾。</p>
+<p>以下示例检查文件是否存在，用于实现这一操作的命令是<code>test -f &lt;filename&gt;</code></p>
+<a id="more"></a> 
+<p>可以使用如下所示代码：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if test -f fred.c</span><br><span class="line">then </span><br><span class="line">...</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<p>或：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if [ if fred.c ]</span><br><span class="line">then</span><br><span class="line">...</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<p>test命令的退出码(表明条件是否被满足)决定是否需要执行后面的代码。</p>
+<blockquote>
+<p>注意，必须在<code>[</code>符合和被检查的条件之间留出空格</p>
+<p>如果想把then和if放到同一行，必须用一个分号把test语句和then分隔开：</p>
+<p>if [ -f fred.c ]; then</p>
+<p>…</p>
+<p>fi</p>
+</blockquote>
+<p>test命令可以使用的条件可以归为3类：字符串比较、算数比较和与文件有关的条件测试。</p>
+<table>
+<thead>
+<tr>
+<th>字符串比较</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>string1 = string2</td>
+<td>如果两个字符串相同结果为真</td>
+</tr>
+<tr>
+<td>string1 != string2</td>
+<td>两个字符串不相同为真</td>
+</tr>
+<tr>
+<td>-n string</td>
+<td>如果字符串不为空则为真</td>
+</tr>
+<tr>
+<td>-z string</td>
+<td>如果字符串为null，则结果为真</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>算数比较</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>exp1 -eq exp2</td>
+<td>如果两个表达式相等则为真</td>
+</tr>
+<tr>
+<td>exp1 -ne exp2</td>
+<td>如果两个表达式不相等则为真</td>
+</tr>
+<tr>
+<td>exp1 -gt exp2</td>
+<td>如果exp1大于exp2则为真</td>
+</tr>
+<tr>
+<td>exp1 -ge exp2</td>
+<td>如果exp1大于等于exp2则为真</td>
+</tr>
+<tr>
+<td>exp1 -lt exp2</td>
+<td>如果exp1小于exp2则为真</td>
+</tr>
+<tr>
+<td>exp1 -le exp2</td>
+<td>如果exp1小于等于exp2则为真</td>
+</tr>
+<tr>
+<td>！exp1</td>
+<td>表达式为假则为真</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>文件条件测试</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-d file</td>
+<td>如果文件是一个目录则为真</td>
+</tr>
+<tr>
+<td>-e file</td>
+<td>如果文件存在则为真</td>
+</tr>
+<tr>
+<td>-f file</td>
+<td>如果文件是一个普通文件则为真</td>
+</tr>
+<tr>
+<td>-g file</td>
+<td>如果文件的set-group-id位被设置则为真</td>
+</tr>
+<tr>
+<td>-r file</td>
+<td>文件可读则为真</td>
+</tr>
+<tr>
+<td>-s file</td>
+<td>如果文件大小不为0则为真</td>
+</tr>
+<tr>
+<td>-u file</td>
+<td>如果文件的set-user-id位被设置则结果为真</td>
+</tr>
+<tr>
+<td>-w file</td>
+<td>文件可写则为真</td>
+</tr>
+<tr>
+<td>-x file</td>
+<td>如果文件可执行则为真</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>set-user-id(set-uid)授予程序其拥有者的访问权限而不是其他使用者的访问权限，set-group-id(set-gid)授予其所在组的访问权限，是通过chmod命令的s和g设置的。</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>! /bin/sh</span><br><span class="line">if [ -f /bin/bash ]</span><br><span class="line">then</span><br><span class="line">    echo "file /bin/bash exists"</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ -d /bin/bash ]</span><br><span class="line">then</span><br><span class="line">    echo "/bin/bash"</span><br><span class="line">else</span><br><span class="line">    echo "/bin/bash is not a directory"</span><br><span class="line">fi</span><br><span class="line">测试结果：</span><br><span class="line">./iftest.sh</span><br><span class="line">file /bin/bash exists</span><br><span class="line">/bin/bash is not a directory</span><br></pre></td></tr></table></figure>
+<p><strong>2.控制结构</strong></p>
+<ul>
+<li><p>if 语句</p>
+<p>语法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if condition</span><br><span class="line">then</span><br><span class="line">	statements</span><br><span class="line">else</span><br><span class="line">	statements</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<p>实验：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/sh</span><br><span class="line">echo "Is it morning? please answer yes or no"</span><br><span class="line">read timeofday</span><br><span class="line"></span><br><span class="line">if [ $timeofday = "yes" ]; then</span><br><span class="line">    echo "good morning"</span><br><span class="line">else </span><br><span class="line">    echo "good afternoon"</span><br><span class="line">fi</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>elif语句</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/sh</span><br><span class="line">echo "Is it morning? please answer yes or no"</span><br><span class="line">read timeofday</span><br><span class="line"></span><br><span class="line">if [ $timeofday = "yes" ]; then</span><br><span class="line">    echo "good morning"</span><br><span class="line">elif [ $timeofday = "no" ]; then</span><br><span class="line">    echo "good afternoon"</span><br><span class="line">else</span><br><span class="line">    echo "Sorry, $timeofday not recognized. Enter yes or no"</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>一个与变量有关的问题</p>
+<p>上面的程序存在一个隐含的问题，当输入为空（直接按enter）时，会出现<code>[: =: unexpected operator</code>的错误，因为在if语句中对变量timeofday进行测试的时候，它包含了一个空字符串<code>if [ = &quot;yes&quot; ]</code>，而这不是一个合法的条件，为了避免这个问题，需要给变量加上引号，如<code>if [ &quot;$timeofday&quot; = &quot;yes&quot; ]</code>,这样空变量提供的就是一个合法的测试了。</p>
+</li>
+<li><p>for语句</p>
+<p>语法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for variable in values</span><br><span class="line">do</span><br><span class="line">	statements</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<p>实验：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/sh</span><br><span class="line"></span><br><span class="line">for foo in bar fud 43</span><br><span class="line">do</span><br><span class="line">    echo $foo</span><br><span class="line">done</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+<p>实验：通过通配符扩展的for循环</p>
+<p>在字符串的值中使用一个通配符，并由shell在程序执行时填写所有的值</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/sh</span><br><span class="line">for file in $(ls f*.sh); do</span><br><span class="line"><span class="meta">#</span> 打印文件</span><br><span class="line">    lpr $file</span><br><span class="line">done</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>while语句</p>
+<p>语法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">while condition do</span><br><span class="line">	statement</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<p>实验：读取密码</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/sh</span><br><span class="line">echo "Enter password"</span><br><span class="line">read trythis</span><br><span class="line"></span><br><span class="line">while [ "$trythis" != "secret" ]; do</span><br><span class="line">    echo "Sorry, try again"</span><br><span class="line">    read trythis</span><br><span class="line">done</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>until语句</p>
+<p>语法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">until condition</span><br><span class="line">do</span><br><span class="line">	statement</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<p>与while循环类似，循环将反复执行直到条件为真，如果需要循环至少执行一次，就是用while;如果可能根本都不用执行循环，就使用until.</p>
+<p>实验：特定用户登录报警</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line"></span><br><span class="line">until who | grep "$1" &gt; /dev/null</span><br><span class="line">do</span><br><span class="line">    sleep 60</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>用户登录，发出警报</span><br><span class="line">echo -e '\a'</span><br><span class="line">echo "***** $1 has just logged in *****"</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>case语句</p>
+<p>语法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">case variable in</span><br><span class="line">  pattern [ | pattern ] ...) statements;;</span><br><span class="line">  pattern [ | pattern ] ...) statements;;</span><br><span class="line">  ...</span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
+<p>case允许通过一种比较复杂的方式将变量内容和模式进行匹配，再根据匹配的模式执行不同的代码。</p>
+<blockquote>
+<p>注意：每个模式以双分号(;;)结尾，因为可以再前后模式之间放置多条语句，所以用双分号标记一个语句的结束</p>
+</blockquote>
+<p>实验一：用户输入</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line"></span><br><span class="line">echo "Is it morning? answer yes or no"</span><br><span class="line">read timeofday</span><br><span class="line"></span><br><span class="line">case "$timeofday" in</span><br><span class="line">    yes) echo "good morning";;</span><br><span class="line">    no ) echo "good afternoon";;</span><br><span class="line">    y  ) echo "good morning";;</span><br><span class="line">    n  ) echo "good afternoon";;</span><br><span class="line">    *  ) echo "sorry, answer not recongnized";;</span><br><span class="line">esac</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+<p>实验二：合并匹配模式</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>! /bin/bash</span><br><span class="line"></span><br><span class="line">echo "Is it morning?"</span><br><span class="line">read timeofday</span><br><span class="line"></span><br><span class="line">case "$timeofday" in</span><br><span class="line">    yes | y | Yes | YES ) echo "good morning";;</span><br><span class="line">    no | n | No | NO )    echo "good afternoon";;</span><br><span class="line">    * )                   echo "sorry"</span><br><span class="line">esac</span><br><span class="line"></span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>通配符*在引号中不起作用</p>
+</blockquote>
+<p>实验三：执行多条语句</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>! /bin/bash</span><br><span class="line"></span><br><span class="line">echo "Is it morning?"</span><br><span class="line">read timeofday</span><br><span class="line"></span><br><span class="line">case "$timeofday" in</span><br><span class="line">    yes | y | Yes | YES )</span><br><span class="line">        echo "good morning"</span><br><span class="line">        echo "up bright and early this morning"</span><br><span class="line">        ;;</span><br><span class="line">    [nN]* )</span><br><span class="line">        echo "good afternoon"</span><br><span class="line">        echo "have a good rest"</span><br><span class="line">        ;;</span><br><span class="line"></span><br><span class="line">    * )                   echo "sorry"</span><br><span class="line">esac</span><br><span class="line"></span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>需要把最精确的匹配放到最开始，而把一般匹配放到最后，因为case执行他找到的第一个匹配而不是最佳匹配。esac前的双分号是可选的，</p>
+</blockquote>
+</li>
+<li><p>命令列表</p>
+<ul>
+<li><p>AND列表】</p>
+<p>AND列表结构类似与C语言中的与逻辑：只有前面的所有命令都执行成功才执行下一条命令</p>
+<p>语法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">state1 &amp;&amp; state2 &amp;&amp; state3 &amp;&amp; ...</span><br></pre></td></tr></table></figure>
+<p>实验：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line"></span><br><span class="line">touch file_one</span><br><span class="line">rm -f file_two</span><br><span class="line"></span><br><span class="line">if [ -f file_one ] &amp;&amp; echo "hello" &amp;&amp; [ -f file_two ] &amp;&amp; echo "there"</span><br><span class="line">then</span><br><span class="line">    echo "in if"</span><br><span class="line">else</span><br><span class="line">    echo "in else"</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>OR列表</p>
+<p>OR结构允许持续执行一系列命令知道有一条命令成功为止，其后命令将不再被执行。</p>
+<p>语法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">state1 || state2 || ...</span><br></pre></td></tr></table></figure>
+<p>实验：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line"></span><br><span class="line">rm -r file_one</span><br><span class="line">if [ -f file_one ] || echo "hello" || echo " there"</span><br><span class="line">then</span><br><span class="line">    echo "in if"</span><br><span class="line">else</span><br><span class="line">    echo "in else"</span><br><span class="line">fi  </span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>语句块</p>
+<p>可以用{}构造语句块，其中有多条语句。</p>
+</li>
+</ul>
+<p><strong>3. 函数</strong></p>
+<p>shell中定义函数，只需写出名字、然后一对空括号，再把函数中的语句放到一对花括号之中：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function_name() &#123;</span><br><span class="line">    statements</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实验：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line"></span><br><span class="line">foo () &#123;</span><br><span class="line">	echo "Function foo is executing"</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">echo "script starting"</span><br><span class="line">foo</span><br><span class="line">echo "script ends"</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p> 必须在调用一个函数之前先对它进行定义，因为所有脚本程序都是从顶部开始执行，所以只要把所有函数定义都放在任何一个函数调用之前，就可以保证函数被调用之前就被定义了。</p>
+<p>当一个函数被调用时，脚本程序的位置参数（<code>$*</code>,<code>$@</code>,<code>$1</code>等）会被替换为函数的参数，当函数执行完毕后，参数会恢复为他们先前的值。</p>
+</blockquote>
+<p>​    通过return命令让函数返回数字值，函数返回字符串的常用方法是让函数将字符串保存在一个变量中，该变量可以在函数结束之后被使用，还可以echo一个字符串并捕获其结果。</p>
+<p>​    可以使用local关键字声明局部变量，局部变量仅在函数作用域内有效，此外函数可以访问全局范围内的其他shell变量，如果一个局部变量和全局变量重名，前者会覆盖后者，但仅限于函数作用范围之内。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">sample_text="global variable"</span><br><span class="line">foo () &#123;</span><br><span class="line">    local sample_text="local variable"</span><br><span class="line">    echo "Function foo is executing"</span><br><span class="line">    echo "$sample_text"</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">echo "script starting"</span><br><span class="line">echo "$sample_text"</span><br><span class="line">foo</span><br><span class="line">echo "script ends"</span><br><span class="line">echo "$sample_text"</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+<p>如果函数没有return命令指定返回值，则返回执行的最后一条命令的退出码。</p>
+<p>实验：从函数中返回一个值</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line"></span><br><span class="line">yes_or_no() &#123;</span><br><span class="line">    echo "Is your name $*?"</span><br><span class="line">    while true </span><br><span class="line">    do</span><br><span class="line">      echo -n "Enter yes or no"</span><br><span class="line">      read x</span><br><span class="line">      case "$x" in </span><br><span class="line">        y | yes ) return 0;;</span><br><span class="line">        n | no  ) return 1;;</span><br><span class="line">        * )       echo "Answer yes or no"</span><br><span class="line">      esac</span><br><span class="line">    done</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">echo "Original parameter are $*"</span><br><span class="line"></span><br><span class="line">if yes_or_no "$1"</span><br><span class="line">then</span><br><span class="line">    echo "Hi $1 ,nice name"</span><br><span class="line">else </span><br><span class="line">    echo "never mind"</span><br><span class="line">fi</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+<p><strong>4.命令</strong></p>
+<p>可以再shell脚本中执行两类命令，一类是在命令提示符中进行的<strong>外部命令</strong>，另一种是<strong>内置命令</strong>，内置命令是在shell中实现的，不能作为外部程序被调用。</p>
+<ul>
+<li><p>break命令</p>
+<p>可以跳出for 、while或until，可以为break命令提供一个额外的数值参数来表明需要跳出的循环参数，默认情况下只跳出一层循环。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line"></span><br><span class="line">yes_or_no() &#123;</span><br><span class="line">    echo "Is your name $*?"</span><br><span class="line">    while true </span><br><span class="line">    do</span><br><span class="line">      echo -n "Enter yes or no"</span><br><span class="line">      read x</span><br><span class="line">      case "$x" in </span><br><span class="line">        y | yes ) return 0;;</span><br><span class="line">        n | no  ) return 1;;</span><br><span class="line">        * )       echo "Answer yes or no"</span><br><span class="line">      esac</span><br><span class="line">    done</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">echo "Original parameter are $*"</span><br><span class="line"></span><br><span class="line">if yes_or_no "$1"</span><br><span class="line">then</span><br><span class="line">    echo "Hi $1 ,nice name"</span><br><span class="line">else </span><br><span class="line">    echo "never mind"</span><br><span class="line">fi</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>：命令</p>
+<p>冒号（：）是一个空命令，偶尔用于简化条件逻辑，相当于true的一个别名，运行比true快，但是作为输出可读性较差。</p>
+</li>
+<li><p>continue</p>
+<p>类似C语言中的同名语句</p>
+</li>
+<li><p>eval命令</p>
+<p>eval命令允许对参数求值。它是shell的内置命令，通常不会以单独命令的形式存在。</p>
+<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-7-12/65806701.jpg" alt=""></p>
+<p>如上面的实验所示，eval命令有点像一个额外的<code>$</code>,它给出一个变量的值。</p>
+</li>
+<li><p>exit n</p>
+<p>exit命令使脚本程序以退出码n结束运行，如果在任何一个交互式shell的命令提示符中使用这个命令，将会退出系统。如果允许自己的脚本程序存在退出时不指定一个退出状态，那么脚本中最后一条执行命令的状态将被用作返回值。在shell中，退出码0表示成功，退出码1-125是可以使用的错误码，其余数字有保留含义：</p>
+<p>| 退 出 码  |    说 明     |<br>| :——-: | :———-: |<br>|    126    | 文件不可执行 |<br>|    127    |  命令未找到  |<br>| 128及以上 | 出现一个信号 |</p>
+</li>
+<li><p>export</p>
+<p>export命令将作为它参数的变量导出到子shell中，并使之在子shell有效，在默认情况下，在一个shell中被创建的变量在这个shell调用的下级shell中是不可用的。export命令将自己的参数创建为一个环境变量，而这个环境变量可以被当前程序调用的其他脚本和程序看见。即，被导出的变量构成从shell衍生的任何子进程的环境变量。</p>
+<p>实验：导出变量</p>
+<p>export2.sh:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>！/bin/sh</span><br><span class="line">echo "$foo"</span><br><span class="line">echo "$bar"</span><br></pre></td></tr></table></figure>
+<p>export1.sh</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/sh</span><br><span class="line">foo="The first meta-syntactic variable"</span><br><span class="line">export bar="the second meta-syntactic variable"</span><br><span class="line">./export2.sh</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> ./export1.sh</span><br><span class="line"></span><br><span class="line">the second meta-syntactic variable</span><br></pre></td></tr></table></figure>
+<p>可见，在运行export2时，foo值已经丢失，但是变量bar的值被导出到了第二个脚本中。一旦一个变量被shell导出，他就可以被该shell调用的任何脚本使用，也可以被后续依次调用的任何shell使用。</p>
+<blockquote>
+<p>set -a或set –allexport命令将导出它之后声明的所有变量。</p>
+</blockquote>
+</li>
+<li><p>expr命令</p>
+<p>expr将它的参数当做一个表达式来求值，常见用法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x=`expr $x + 1`</span><br></pre></td></tr></table></figure>
+<p>反引号（<code></code>） 使x取值为命令$expr \ \ x+1$的执行结果，可以用语法 $()代替反引号 ，如下所示：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x=$(expr $x + 1)</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+  </section>
+</article>
+
+  <div class="sharing grid">
+  <section class="profile grid-item grid">
+    <img class="avatar" src="http://7xrcp8.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" />
+    <div class="grid-item">
+      <p class="title"> lyyourc </p>
+      <p class="subtitle"> You Are The JavaScript In My HTML </p>
+    <div>
+  </section>
+
+  <section class="share-btns">
+    <!-- <p> share it if you like it~ </p> -->
+    <a
+  class="twitter-share-button"
+  data-size="large"
+  data-via="DrakeLeung"
+  href="https://twitter.com/intent/tweet?text=<strong>1.条件</strong"
+>
+  Tweet
+</a>
+
+<script>
+  window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  js.async = true;
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));
+</script>
+
+  </section>
+</div>
+
+
+  
+    
+<section class="article-comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+<script>
+  var disqus_shortname = 'drakeleung';
+  
+  var disqus_url = '//harold.me/2018/07/09/shell程序设计二/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+  
+</main>
+
+</body>
+</html>

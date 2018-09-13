@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>linux常用命令——find、join | lyyourc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/app.css">
+  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+  
+</head>
+
+<body>
+  <nav class="app-nav">
+  
+    
+      <a href="/.">home</a>
+    
+  
+    
+      <a href="/archives">archive</a>
+    
+  
+    
+      <a href="/atom.xml">rss</a>
+    
+  
+</nav>
+
+  <main class="post">
+  <article>
+  <h1 class="article-title">
+    <a href="/2018/07/12/linux常用命令6/">linux常用命令——find、join</a>
+  </h1>
+
+  <section class="article-meta">
+    <p class="article-date">July 12 2018</p>
+  </section>
+
+  <section class="article-entry">
+    <p><strong>1.find</strong></p>
+<p>Linux find命令用来在指定目录下查找文件。任何位于参数之前的字符串都将被视为欲查找的目录名。如果使用该命令时，不设置任何参数，则find命令将在当前目录下查找子目录与文件。并且将查找到的子目录和文件全部进行显示。</p>
+<p>语法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find   path   -option   [   -print ]   [ -exec   -ok   command ]   &#123;&#125; \;</span><br></pre></td></tr></table></figure>
+<p>参数说明：find 根据下列规则判断 path 和 expression，在命令列上第一个 - ( ) , ! 之前的部份为 path，之后的是 expression。如果 path 是空字串则使用目前路径，如果 expression 是空字串则使用 -print 为预设 expression。</p>
+<a id="more"></a> 
+<p>expression 中可使用的选项有二三十个之多，在此只介绍最常用的部份。</p>
+<p>-mount, -xdev : 只检查和指定目录在同一个文件系统下的文件，避免列出其它文件系统中的文件</p>
+<p>-amin n : 在过去 n 分钟内被读取过</p>
+<p>-anewer file : 比文件 file 更晚被读取过的文件</p>
+<p>-atime -n : 在过去 n 天过读取过的文件</p>
+<p>-cmin -n : 在过去 n 分钟内被修改过</p>
+<p>-cnewer file :比文件 file 更新的文件</p>
+<p>-ctime -n : 在过去 n 天过修改过的文件</p>
+<p>-empty : 空的文件-gid n or -group name : gid 是 n 或是 group 名称是 name</p>
+<p>-ipath p, -path p : 路径名称符合 p 的文件，ipath 会忽略大小写</p>
+<p>-name name, -iname name : 文件名称符合 name 的文件。iname 会忽略大小写</p>
+<p>-size n : 文件大小 是 n 单位，b 代表 512 位元组的区块，c 表示字元数，k 表示 kilo bytes，w 是二个位元组。</p>
+<p>-type c : 文件类型是 c 的文件。</p>
+<p>d: 目录</p>
+<p>c: 字型装置文件</p>
+<p>b: 区块装置文件</p>
+<p>p: 具名贮列</p>
+<p>f: 一般文件</p>
+<p>l: 符号连结</p>
+<p>s: socket</p>
+<p>-pid n : process id 是 n 的文件</p>
+<p>你可以使用 ( ) 将运算式分隔，并使用下列运算。</p>
+<p>exp1 -and exp2</p>
+<p>! expr</p>
+<p>-not expr</p>
+<p>exp1 -or exp2</p>
+<p>exp1, exp2</p>
+<p>示例:</p>
+<p>将目前目录及其子目录下所有延伸档名是 c 的文件列出来。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> find . -name "*.c"</span><br></pre></td></tr></table></figure>
+<p>将目前目录及其下子目录中所有一般文件列出：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> find . -type f</span><br></pre></td></tr></table></figure>
+<p>将目前目录及其子目录下所有最近 20 天内更新过的文件列出</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> find . -ctime -20</span><br></pre></td></tr></table></figure>
+<p>查找/var/log目录中更改时间在7日以前的普通文件，并在删除之前询问它们：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> find /var/log -type f -mtime +7 -ok rm &#123;&#125; \;</span><br></pre></td></tr></table></figure>
+<p>查找当前目录中文件属主具有读、写权限，并且文件所属组的用户和其他用户具有读权限的文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> find . -type f -perm 644 -exec ls -l &#123;&#125; \;</span><br></pre></td></tr></table></figure>
+<p>为了查找系统中所有文件长度为0的普通文件，并列出它们的完整路径：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> find / -type f -size 0 -exec ls -l &#123;&#125; \;</span><br></pre></td></tr></table></figure>
+<p>-exec command：command 为其他指令，-exec后面可再接额外的指令来处理搜寻到的结果。</p>
+<p><img src="http://linux.vbird.org/linux_basic/0220filemanager/centos7_find_exec.gif" alt="find 相關的額外動作"></p>
+<p>{ }代表的是「由 find 找到的内容」，如上图所示，找到的结果会被放置到 { } 位置中;<br>-exec一直到 ; 是关键字，代表找到额外动作的开始（-exec）到结束（），在这中间的就是找到指令内的额外动作</p>
+<p>因为「;」在bash的环境下是有特殊意义的，因此利用反斜线来跳脱。</p>
+<p><strong>2.grep</strong></p>
+<p>​    Linux grep命令用于查找文件里符合条件的字符串。grep指令用于查找内容包含指定的范本样式的文件，如果发现某文件的内容符合所指定的范本样式，预设grep指令会把含有范本样式的那一列显示出来。若不指定任何文件名称，或是所给予的文件名为”-“，则grep指令会从标准输入设备读取数据。</p>
+<p>语法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep [-abcEFGhHilLnqrsvVwxy][-A&lt;显示列数&gt;][-B&lt;显示列数&gt;][-C&lt;显示列数&gt;][-d&lt;进行动作&gt;][-e&lt;范本样式&gt;][-f&lt;范本文件&gt;][--help][范本样式][文件或目录...]</span><br></pre></td></tr></table></figure>
+<p>参数：</p>
+<ul>
+<li><strong>-a 或 –text</strong> : 不要忽略二进制的数据。</li>
+<li><strong>-A&lt;显示行数&gt; 或 –after-context=&lt;显示行数&gt;</strong> : 除了显示符合范本样式的那一列之外，并显示该行之后的内容。</li>
+<li><strong>-b 或 –byte-offset</strong> : 在显示符合样式的那一行之前，标示出该行第一个字符的编号。</li>
+<li><strong>-B&lt;显示行数&gt; 或 –before-context=&lt;显示行数&gt;</strong> : 除了显示符合样式的那一行之外，并显示该行之前的内容。</li>
+<li><strong>-c 或 –count</strong> : 计算符合样式的列数。</li>
+<li><strong>-C&lt;显示行数&gt; 或 –context=&lt;显示行数&gt;或-&lt;显示行数&gt;</strong> : 除了显示符合样式的那一行之外，并显示该行之前后的内容。</li>
+<li><strong>-d &lt;动作&gt; 或 –directories=&lt;动作&gt;</strong> : 当指定要查找的是目录而非文件时，必须使用这项参数，否则grep指令将回报信息并停止动作。</li>
+<li><strong>-e&lt;范本样式&gt; 或 –regexp=&lt;范本样式&gt;</strong> : 指定字符串做为查找文件内容的样式。</li>
+<li><strong>-E 或 –extended-regexp</strong> : 将样式为延伸的普通表示法来使用。</li>
+<li><strong>-f&lt;规则文件&gt; 或 –file=&lt;规则文件&gt;</strong> : 指定规则文件，其内容含有一个或多个规则样式，让grep查找符合规则条件的文件内容，格式为每行一个规则样式。</li>
+<li><strong>-F 或 –fixed-regexp</strong> : 将样式视为固定字符串的列表。</li>
+<li><strong>-G 或 –basic-regexp</strong> : 将样式视为普通的表示法来使用。</li>
+<li><strong>-h 或 –no-filename</strong> : 在显示符合样式的那一行之前，不标示该行所属的文件名称。</li>
+<li><strong>-H 或 –with-filename</strong> : 在显示符合样式的那一行之前，表示该行所属的文件名称。</li>
+<li><strong>-i 或 –ignore-case</strong> : 忽略字符大小写的差别。</li>
+<li><strong>-l 或 –file-with-matches</strong> : 列出文件内容符合指定的样式的文件名称。</li>
+<li><strong>-L 或 –files-without-match</strong> : 列出文件内容不符合指定的样式的文件名称。</li>
+<li><strong>-n 或 –line-number</strong> : 在显示符合样式的那一行之前，标示出该行的列数编号。</li>
+<li><strong>-q 或 –quiet或–silent</strong> : 不显示任何信息。</li>
+<li><strong>-r 或 –recursive</strong> : 此参数的效果和指定”-d recurse”参数相同。</li>
+<li><strong>-s 或 –no-messages</strong> : 不显示错误信息。</li>
+<li><strong>-v 或 –revert-match</strong> : 显示不包含匹配文本的所有行。</li>
+<li><strong>-V 或 –version</strong> : 显示版本信息。</li>
+<li><strong>-w 或 –word-regexp</strong> : 只显示全字符合的列。</li>
+<li><strong>-x –line-regexp</strong> : 只显示全列符合的列。</li>
+<li><strong>-y</strong> : 此参数的效果和指定”-i”参数相同。</li>
+</ul>
+<p>示例：</p>
+<p>1、在当前目录中，查找后缀有 file 字样的文件中包含 test 字符串的文件，并打印出该字符串的行。此时，可以使用如下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep test *file</span><br></pre></td></tr></table></figure>
+<p>2、以递归的方式查找符合条件的文件。例如，查找指定目录/etc/acpi 及其子目录（如果存在子目录的话）下所有文件中包含字符串”update”的文件，并打印出该字符串所在行的内容，使用的命令为：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep -r update /etc/acpi</span><br></pre></td></tr></table></figure>
+<p>3、反向查找。前面各个例子是查找并打印出符合条件的行，通过”-v”参数可以打印出不符合条件行的内容。</p>
+<p>查找文件名中包含 test 的文件中不包含test 的行，此时，使用的命令为：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep -v test *test*</span><br></pre></td></tr></table></figure>
+<p><strong>3. join</strong></p>
+<p>Linux join命令用于将两个文件中，指定栏位内容相同的行连接起来。</p>
+<p>找出两个文件中，指定栏位内容相同的行，并加以合并，再输出到标准输出设备。</p>
+<p>语法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">join [-i][-a&lt;1或2&gt;][-e&lt;字符串&gt;][-o&lt;格式&gt;][-t&lt;字符&gt;][-v&lt;1或2&gt;][-1&lt;栏位&gt;][-2&lt;栏位&gt;][--help][--version][文件1][文件2]</span><br></pre></td></tr></table></figure>
+<p>参数：</p>
+<ul>
+<li>-a&lt;1或2&gt; 除了显示原来的输出内容之外，还显示指令文件中没有相同栏位的行。</li>
+<li>-e&lt;字符串&gt; 若[文件1]与[文件2]中找不到指定的栏位，则在输出中填入选项中的字符串。</li>
+<li>-i或–igore-case 比较栏位内容时，忽略大小写的差异。</li>
+<li>-o&lt;格式&gt; 按照指定的格式来显示结果。</li>
+<li>-t&lt;字符&gt; 使用栏位的分隔字符。</li>
+<li>-v&lt;1或2&gt; 跟-a相同，但是只显示文件中没有相同栏位的行。</li>
+<li>-1&lt;栏位&gt; 连接[文件1]指定的栏位。</li>
+<li>-2&lt;栏位&gt; 连接[文件2]指定的栏位。</li>
+<li>–help 显示帮助。</li>
+<li>–version 显示版本信息。</li>
+</ul>
+<p>示例：</p>
+<p>连接两个文件。</p>
+<p>为了清楚地了解join命令，首先通过cat命令显示文件testfile_1和 testfile_2 的内容。</p>
+<p>然后以默认的方式比较两个文件，将两个文件中指定字段的内容相同的行连接起来，在终端中输入命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">join testfile_1 testfile_2</span><br></pre></td></tr></table></figure>
+<p>首先查看testfile_1、testfile_2 中的文件内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> cat testfile_1 #testfile_1文件中的内容  </span><br><span class="line">Hello 95 #例如，本例中第一列为姓名，第二列为数额  </span><br><span class="line">Linux 85  </span><br><span class="line">test 30  </span><br><span class="line">cmd@hdd-desktop:~$ cat testfile_2 #testfile_2文件中的内容  </span><br><span class="line">Hello 2005 #例如，本例中第一列为姓名，第二列为年份  </span><br><span class="line">Linux 2009  </span><br><span class="line">test 2006</span><br></pre></td></tr></table></figure>
+<p>然后使用join命令，将两个文件连接，结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ join testfile_1 testfile_2 #连接testfile_1、testfile_2中的内容  </span><br><span class="line">Hello 95 2005 #连接后显示的内容  </span><br><span class="line">Linux 85 2009  </span><br><span class="line">test 30 2006</span><br></pre></td></tr></table></figure>
+<p>文件1与文件2的位置对输出到标准输出的结果是有影响的。例如将命令中的两个文件互换，即输入如下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">join testfile_2 testfile_1</span><br></pre></td></tr></table></figure>
+<p>最终在标准输出的输出结果将发生变化，如下所示：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> join testfile_2 testfile_1 #改变文件顺序连接两个文件  </span><br><span class="line">Hello 2005 95 #连接后显示的内容  </span><br><span class="line">Linux 2009 85  </span><br><span class="line">test 2006 30</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">指定输出字段：</span><br><span class="line">-o &lt;FILENO.FIELDNO&gt; ...</span><br><span class="line">其中FILENO=1表示第一个文件，FILENO=2表示第二个文件，FIELDNO表示字段序号，从1开始编号。默认会全部输出，但关键字列只输出一次。</span><br><span class="line">比如：-o 1.1 1.2 2.2 表示输出第一个文件的第一个字段、第二个字段，第二个文件的第二个字段。</span><br></pre></td></tr></table></figure>
+<p><a href="javascript:void(0" target="_blank" rel="noopener"><img src="https://common.cnblogs.com/images/copycode.gif" alt="复制代码"></a>;)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br></pre></td><td class="code"><pre><span class="line">使用示例</span><br><span class="line">示例一 内连接（忽略不匹配的行）</span><br><span class="line">不指定任何参数的情况下使用join命令，就相当于数据库中的内连接，关键字不匹配的行不会输出。</span><br><span class="line">[root@rhel55 linux]# cat month_cn.txt </span><br><span class="line">1       一月</span><br><span class="line">2       二月</span><br><span class="line">3       三月</span><br><span class="line">4       四月</span><br><span class="line">5       五月</span><br><span class="line">6       六月</span><br><span class="line">7       七月</span><br><span class="line">8       八月</span><br><span class="line">9       九月</span><br><span class="line">10      十月</span><br><span class="line">11      十一月</span><br><span class="line">12      十二月</span><br><span class="line">13      十三月，故意的 </span><br><span class="line">[root@rhel55 linux]# cat month_en.txt </span><br><span class="line">1       January</span><br><span class="line">2       February</span><br><span class="line">3       March</span><br><span class="line">4       April</span><br><span class="line">5       May</span><br><span class="line">6       June</span><br><span class="line">7       July</span><br><span class="line">8       August</span><br><span class="line">9       September</span><br><span class="line">10      October</span><br><span class="line">11              November</span><br><span class="line">12      December</span><br><span class="line">14      MonthUnknown</span><br><span class="line">注：注意两个文件的内容，中文版的多了十三月，英文版的多了14月，这纯粹是为了方便演示。 </span><br><span class="line">[root@rhel55 linux]# join month_cn.txt month_en.txt  </span><br><span class="line">1 一月 January</span><br><span class="line">2 二月 February</span><br><span class="line">3 三月 March</span><br><span class="line">4 四月 April</span><br><span class="line">5 五月 May</span><br><span class="line">6 六月 June</span><br><span class="line">7 七月 July</span><br><span class="line">8 八月 August</span><br><span class="line">9 九月 September</span><br><span class="line">10 十月 October</span><br><span class="line">11 十一月 November</span><br><span class="line">12 十二月 December</span><br><span class="line">[root@rhel55 linux]#</span><br><span class="line">示例二 左连接（又称左外连接，显示左边所有记录）</span><br><span class="line">显示左边文件中的所有记录，右边文件中没有匹配的显示空白。</span><br><span class="line">[root@rhel55 linux]# join -a1 month_cn.txt month_en.txt   </span><br><span class="line">1 一月 January</span><br><span class="line">2 二月 February</span><br><span class="line">3 三月 March</span><br><span class="line">4 四月 April</span><br><span class="line">5 五月 May</span><br><span class="line">6 六月 June</span><br><span class="line">7 七月 July</span><br><span class="line">8 八月 August</span><br><span class="line">9 九月 September</span><br><span class="line">10 十月 October</span><br><span class="line">11 十一月 November</span><br><span class="line">12 十二月 December</span><br><span class="line">13 十三月，故意的 </span><br><span class="line">[root@rhel55 linux]#</span><br><span class="line"> </span><br><span class="line">示例三 右连接（又称右外连接，显示右边所有记录）</span><br><span class="line">显示右边文件中的所有记录，左边文件中没有匹配的显示空白。</span><br><span class="line">[root@rhel55 linux]# join -a2 month_cn.txt month_en.txt  </span><br><span class="line">1 一月 January</span><br><span class="line">2 二月 February</span><br><span class="line">3 三月 March</span><br><span class="line">4 四月 April</span><br><span class="line">5 五月 May</span><br><span class="line">6 六月 June</span><br><span class="line">7 七月 July</span><br><span class="line">8 八月 August</span><br><span class="line">9 九月 September</span><br><span class="line">10 十月 October</span><br><span class="line">11 十一月 November</span><br><span class="line">12 十二月 December</span><br><span class="line">14 MonthUnknown </span><br><span class="line">[root@rhel55 linux]#</span><br><span class="line"> </span><br><span class="line">示例四 全连接（又称全外连接，显示左边和右边所有记录）</span><br><span class="line">[root@rhel55 linux]# join -a1 -a2 month_cn.txt month_en.txt </span><br><span class="line">1 一月 January</span><br><span class="line">2 二月 February</span><br><span class="line">3 三月 March</span><br><span class="line">4 四月 April</span><br><span class="line">5 五月 May</span><br><span class="line">6 六月 June</span><br><span class="line">7 七月 July</span><br><span class="line">8 八月 August</span><br><span class="line">9 九月 September</span><br><span class="line">10 十月 October</span><br><span class="line">11 十一月 November</span><br><span class="line">12 十二月 December</span><br><span class="line">13 十三月，故意的</span><br><span class="line">14 MonthUnknown </span><br><span class="line">[root@rhel55 linux]#</span><br><span class="line"> </span><br><span class="line">示例五 指定输出字段</span><br><span class="line">比如参数 -o 1.1 表示只输出第一个文件的第一个字段。</span><br><span class="line">[root@rhel55 linux]# join -o 1.1 month_cn.txt month_en.txt </span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">[root@rhel55 linux]# join -o 1.1 2.2 month_cn.txt month_en.txt   </span><br><span class="line">1 January</span><br><span class="line">2 February</span><br><span class="line">3 March</span><br><span class="line">4 April</span><br><span class="line">5 May</span><br><span class="line">6 June</span><br><span class="line">7 July</span><br><span class="line">8 August</span><br><span class="line">9 September</span><br><span class="line">10 October</span><br><span class="line">11 November</span><br><span class="line">12 December</span><br><span class="line">[root@rhel55 linux]# join -o 1.1 2.2 1.2 month_cn.txt month_en.txt </span><br><span class="line">1 January 一月</span><br><span class="line">2 February 二月</span><br><span class="line">3 March 三月</span><br><span class="line">4 April 四月</span><br><span class="line">5 May 五月</span><br><span class="line">6 June 六月</span><br><span class="line">7 July 七月</span><br><span class="line">8 August 八月</span><br><span class="line">9 September 九月</span><br><span class="line">10 October 十月</span><br><span class="line">11 November 十一月</span><br><span class="line">12 December 十二月</span><br><span class="line">[root@rhel55 linux]# join -o 1.1 2.2 1.2 1.3 month_cn.txt month_en.txt   &lt;== 字段1.3并不存在 </span><br><span class="line">1 January 一月 </span><br><span class="line">2 February 二月 </span><br><span class="line">3 March 三月 </span><br><span class="line">4 April 四月 </span><br><span class="line">5 May 五月 </span><br><span class="line">6 June 六月 </span><br><span class="line">7 July 七月 </span><br><span class="line">8 August 八月 </span><br><span class="line">9 September 九月 </span><br><span class="line">10 October 十月 </span><br><span class="line">11 November 十一月 </span><br><span class="line">12 December 十二月 </span><br><span class="line">[root@rhel55 linux]#</span><br><span class="line"> </span><br><span class="line">示例六 指定分隔符</span><br><span class="line">[root@rhel55 linux]# join -t ':' /etc/passwd /etc/shadow</span><br></pre></td></tr></table></figure>
+  </section>
+</article>
+
+  <div class="sharing grid">
+  <section class="profile grid-item grid">
+    <img class="avatar" src="http://7xrcp8.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" />
+    <div class="grid-item">
+      <p class="title"> lyyourc </p>
+      <p class="subtitle"> You Are The JavaScript In My HTML </p>
+    <div>
+  </section>
+
+  <section class="share-btns">
+    <!-- <p> share it if you like it~ </p> -->
+    <a
+  class="twitter-share-button"
+  data-size="large"
+  data-via="DrakeLeung"
+  href="https://twitter.com/intent/tweet?text=<strong>1.find</stro"
+>
+  Tweet
+</a>
+
+<script>
+  window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  js.async = true;
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));
+</script>
+
+  </section>
+</div>
+
+
+  
+    
+<section class="article-comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+<script>
+  var disqus_shortname = 'drakeleung';
+  
+  var disqus_url = '//harold.me/2018/07/12/linux常用命令6/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+  
+</main>
+
+</body>
+</html>

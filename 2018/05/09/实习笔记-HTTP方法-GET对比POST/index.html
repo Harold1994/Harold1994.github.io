@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>实习笔记----HTTP方法:GET对比POST | lyyourc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/app.css">
+  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+  
+</head>
+
+<body>
+  <nav class="app-nav">
+  
+    
+      <a href="/.">home</a>
+    
+  
+    
+      <a href="/archives">archive</a>
+    
+  
+    
+      <a href="/atom.xml">rss</a>
+    
+  
+</nav>
+
+  <main class="post">
+  <article>
+  <h1 class="article-title">
+    <a href="/2018/05/09/实习笔记-HTTP方法-GET对比POST/">实习笔记----HTTP方法:GET对比POST</a>
+  </h1>
+
+  <section class="article-meta">
+    <p class="article-date">May 09 2018</p>
+  </section>
+
+  <section class="article-entry">
+    <h2 id="什么是-HTTP？"><a href="#什么是-HTTP？" class="headerlink" title="什么是 HTTP？"></a>什么是 HTTP？</h2><p>超文本传输协议（HTTP）的设计目的是保证客户机与服务器之间的通信。</p>
+<p>HTTP 的工作方式是客户机与服务器之间的请求-应答协议。</p>
+<p>web 浏览器可能是客户端，而计算机上的网络应用程序也可能作为服务器端。<br><a id="more"></a><br>举例：客户端（浏览器）向服务器提交 HTTP 请求；服务器向客户端返回响应。响应包含关于请求的状态信息以及可能被请求的内容。</p>
+<h2 id="两种-HTTP-请求方法：GET-和-POST"><a href="#两种-HTTP-请求方法：GET-和-POST" class="headerlink" title="两种 HTTP 请求方法：GET 和 POST"></a>两种 HTTP 请求方法：GET 和 POST</h2><p>在客户机和服务器之间进行请求-响应时，两种最常被用到的方法是：GET 和 POST。</p>
+<ul>
+<li><em>GET</em> - 从指定的资源请求数据。</li>
+<li><em>POST</em> - 向指定的资源提交要被处理的数据</li>
+</ul>
+<h2 id="GET-方法"><a href="#GET-方法" class="headerlink" title="GET 方法"></a>GET 方法</h2><p>请注意，查询字符串（名称/值对）是在 GET 请求的 URL 中发送的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/test/demo_form.asp?name1=value1&amp;name2=value2</span><br></pre></td></tr></table></figure>
+<p>有关 GET 请求的其他一些注释：</p>
+<ul>
+<li>GET 请求可被缓存</li>
+<li>GET 请求保留在浏览器历史记录中</li>
+<li>GET 请求可被收藏为书签</li>
+<li>GET 请求不应在处理敏感数据时使用</li>
+<li>GET 请求有长度限制</li>
+<li>GET 请求只应当用于取回数据</li>
+</ul>
+<h2 id="POST-方法"><a href="#POST-方法" class="headerlink" title="POST 方法"></a>POST 方法</h2><p>请注意，查询字符串（名称/值对）是在 POST 请求的 HTTP 消息主体中发送的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">POST /test/demo_form.asp HTTP/1.1</span><br><span class="line">Host: xxx.com</span><br><span class="line">name1=value1&amp;name2=value2</span><br></pre></td></tr></table></figure>
+<p>有关 POST 请求的其他一些注释：</p>
+<ul>
+<li>POST 请求不会被缓存</li>
+<li>POST 请求不会保留在浏览器历史记录中</li>
+<li>POST 不能被收藏为书签</li>
+<li>POST 请求对数据长度没有要求</li>
+</ul>
+<h2 id="比较-GET-与-POST"><a href="#比较-GET-与-POST" class="headerlink" title="比较 GET 与 POST"></a>比较 GET 与 POST</h2><p>下面的表格比较了两种 HTTP 方法：GET 和 POST。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>GET</th>
+<th>POST</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>后退按钮/刷新</td>
+<td>无害</td>
+<td>数据会被重新提交（浏览器应该告知用户数据会被重新提交）。</td>
+</tr>
+<tr>
+<td>书签</td>
+<td>可收藏为书签</td>
+<td>不可收藏为书签</td>
+</tr>
+<tr>
+<td>缓存</td>
+<td>能被缓存</td>
+<td>不能缓存</td>
+</tr>
+<tr>
+<td>编码类型</td>
+<td>application/x-www-form-urlencoded</td>
+<td>application/x-www-form-urlencoded 或 multipart/form-data。为二进制数据使用多重编码。</td>
+</tr>
+<tr>
+<td>历史</td>
+<td>参数保留在浏览器历史中。</td>
+<td>参数不会保存在浏览器历史中。</td>
+</tr>
+<tr>
+<td>对数据长度的限制</td>
+<td>是的。当发送数据时，GET 方法向 URL 添加数据；URL 的长度是受限制的（URL 的最大长度是 2048 个字符）。</td>
+<td>无限制。</td>
+</tr>
+<tr>
+<td>对数据类型的限制</td>
+<td>只允许 ASCII 字符。</td>
+<td>没有限制。也允许二进制数据。</td>
+</tr>
+<tr>
+<td>安全性</td>
+<td>与 POST 相比，GET 的安全性较差，因为所发送的数据是 URL 的一部分。在发送密码或其他敏感信息时绝不要使用 GET ！</td>
+<td>POST 比 GET 更安全，因为参数不会被保存在浏览器历史或 web 服务器日志中。</td>
+</tr>
+<tr>
+<td>可见性</td>
+<td>数据在 URL 中对所有人都是可见的。</td>
+<td>数据不会显示在 URL 中。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="其他-HTTP-请求方法"><a href="#其他-HTTP-请求方法" class="headerlink" title="其他 HTTP 请求方法"></a>其他 HTTP 请求方法</h2><p>下面的表格列出了其他一些 HTTP 请求方法：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HEAD</td>
+<td>与 GET 相同，但只返回 HTTP 报头，不返回文档主体。</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td>上传指定的 URI 表示。</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td>删除指定资源。</td>
+</tr>
+<tr>
+<td>OPTIONS</td>
+<td>返回服务器支持的 HTTP 方法。</td>
+</tr>
+<tr>
+<td>CONNECT</td>
+<td>把请求连接转换到透明的 TCP/IP 通道。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Java-HTTP请求方式："><a href="#Java-HTTP请求方式：" class="headerlink" title="Java HTTP请求方式："></a>Java HTTP请求方式：</h2><p>常用的HTTP库有HttpClient和HttpURLConnection，先来看两个例子再比较两种库。</p>
+<ul>
+<li><p>HttpURLConnection</p>
+<p>HttpURLConnection一般步骤：创建URL对象 ==》 获取URL的HttpURLConnection对象实例==》设置HTTP请求使用的方法==》设置超时和消息头==》对服务器响应码判断==》获得服务器返回的输入流==》关掉HTTP连接</p>
+<p><strong>GET请求</strong></p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">URL url = <span class="keyword">new</span> URL(<span class="string">"xxx"</span>);</span><br><span class="line"><span class="comment">//调用URL对象的openConnection( )来获取HttpURLConnection对象实例</span></span><br><span class="line">HttpURLConnection conn = (HttpURLConnection) url.openConnection();</span><br><span class="line"><span class="comment">//请求方法为GET</span></span><br><span class="line">conn.setRequestMethod(<span class="string">"GET"</span>);</span><br><span class="line"><span class="comment">//设置连接超时为5秒</span></span><br><span class="line">conn.setConnectTimeout(<span class="number">5000</span>);</span><br><span class="line"><span class="comment">//服务器返回东西了，先对响应码判断</span></span><br><span class="line"><span class="keyword">if</span> (conn.getResponseCode() == <span class="number">200</span>) &#123;</span><br><span class="line">    <span class="comment">//用getInputStream()方法获得服务器返回的输入流</span></span><br><span class="line">    InputStream in = conn.getInputStream();</span><br><span class="line">    <span class="keyword">byte</span>[] data = read(in); <span class="comment">//流转换为二进制数组，read()自己写的是转换方法</span></span><br><span class="line">    String html = <span class="keyword">new</span> String(data, <span class="string">"UTF-8"</span>);</span><br><span class="line">    System.out.println(html);</span><br><span class="line">    in.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  <strong>POST请求</strong></p>
+<p>  POST请求：POST请求大体和GET一致，只是设置相关参数的时候要注意设置允许输入、输出，还有POST方法不能缓存，要手动设置为false.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建URL对象,xxx是服务器API</span></span><br><span class="line">URL url = <span class="keyword">new</span> URL(<span class="string">"xxx"</span>);</span><br><span class="line"><span class="comment">//调用URL对象的openConnection( )来获取HttpURLConnection对象实例</span></span><br><span class="line">HttpURLConnection conn = (HttpURLConnection) url.openConnection();</span><br><span class="line"><span class="comment">//请求方法为GET</span></span><br><span class="line">conn.setRequestMethod(<span class="string">"POST"</span>);</span><br><span class="line"><span class="comment">//设置连接超时为5秒</span></span><br><span class="line">conn.setConnectTimeout(<span class="number">5000</span>);</span><br><span class="line"><span class="comment">//允许输入输出</span></span><br><span class="line">conn.setDoInput(<span class="keyword">true</span>);</span><br><span class="line">conn.setDoOutput(<span class="keyword">true</span>);</span><br><span class="line"><span class="comment">//不能缓存</span></span><br><span class="line">conn.setUseCaches(<span class="keyword">false</span>);</span><br><span class="line"><span class="comment">//至少要设置的两个请求头</span></span><br><span class="line">conn.setRequestProperty(<span class="string">"Content-Type"</span>,<span class="string">"application/x-www-form-urlencoded"</span>);</span><br><span class="line"><span class="comment">//输出流包含要发送的数据,要注意数据格式编码</span></span><br><span class="line">OutputStream op=conn.getOutputStream();<span class="comment">//此时才发送http请求</span></span><br><span class="line">op.write(<span class="keyword">new</span> String(<span class="string">"name=zharold"</span>).getBytes());</span><br><span class="line"><span class="comment">//服务器返回东西了，先对响应码判断</span></span><br><span class="line"><span class="keyword">if</span> (conn.getResponseCode() == <span class="number">200</span>) &#123;</span><br><span class="line">    <span class="comment">//用getInputStream()方法获得服务器返回的输入流</span></span><br><span class="line">    InputStream in = conn.getInputStream();</span><br><span class="line">    <span class="keyword">byte</span>[] data = read(in); <span class="comment">//流转换为二进制数组，read()是转换方法</span></span><br><span class="line">    String html = <span class="keyword">new</span> String(data, <span class="string">"UTF-8"</span>);</span><br><span class="line">    System.out.println(html);</span><br><span class="line">    in.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>说明：</p>
+<blockquote>
+<ul>
+<li>HttpURLConnection对象不能直接构造，需要通过URL类中的openConnection()方法来获得。</li>
+<li>HttpURLConnection的connect()函数，实际上<strong>只是建立了一个与服务器的TCP连接</strong>，并没有实际发送HTTP请求。HTTP请求实际上直到我们获取服务器响应数据（如调用getInputStream()、getResponseCode()等方法）时才正式发送出去。</li>
+<li>对HttpURLConnection对象的配置都需要在connect()方法执行之前完成。</li>
+<li>HttpURLConnection是基于HTTP协议的，其底层通过socket通信实现。如果不设置超时（timeout），在网络异常的情况下，可能会导致程序僵死而不继续往下执行。</li>
+<li>HTTP正文的内容是通过OutputStream流写入的， <strong>向流中写入的数据不会立即发送到网络，而是存在于内存缓冲区中，待流关闭时，根据写入的内容生成HTTP正文</strong>。</li>
+<li>调用getInputStream()方法时，返回一个输入流，用于从中读取服务器对于HTTP请求的返回信息。</li>
+<li>我们可以使用HttpURLConnection.connect()方法手动的发送一个HTTP请求，但是如果要获取HTTP响应的时候，请求就会自动的发起，比如我们使用HttpURLConnection.getInputStream()方法的时候，所以完全没有必要调用connect()方法。</li>
+</ul>
+</blockquote>
+</blockquote>
+<ul>
+<li><p>HttpClient</p>
+<p>HttpClient的使用步骤：创建HttpClient对象==》创建Http请求对象（GET、POST不同）==》设置请求参数==》执行请求==》获取响应对象==》对响应对象处理==》关闭相应对象==》关闭HttpClient</p>
+<p><strong>GET请求</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//构造uri</span></span><br><span class="line">URI uri = <span class="keyword">new</span> URIBuilder()</span><br><span class="line">        .setScheme(<span class="string">"https"</span>)</span><br><span class="line">        .setHost(<span class="string">"xxx"</span>)</span><br><span class="line">        .setPath(<span class="string">"/xxx"</span>)</span><br><span class="line">        .setParameter(<span class="string">"key1"</span>, <span class="string">"value1"</span>)</span><br><span class="line">        .setParameter(<span class="string">"key2"</span>, <span class="string">"value2"</span>)</span><br><span class="line">        .build();</span><br><span class="line"><span class="comment">//创建httpclient对象</span></span><br><span class="line">CloseableHttpClient client = HttpClients.createDefault();</span><br><span class="line"><span class="comment">//创建GET对象</span></span><br><span class="line">HttpGet httpget = <span class="keyword">new</span> HttpGet(uri);</span><br><span class="line"><span class="comment">//执行请求</span></span><br><span class="line">CloseableHttpResponse response = client.execute(httpget);</span><br><span class="line"><span class="keyword">if</span> (response.getStatusLine().getStatusCode() == <span class="number">200</span> ) &#123;</span><br><span class="line">    HttpEntity entity = response.getEntity();</span><br><span class="line">    String detail = EntityUtils.toString(entity, <span class="string">"utf-8"</span>);</span><br><span class="line">    System.out.println(detail);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">response.close();</span><br><span class="line">client.close();</span><br></pre></td></tr></table></figure>
+<p><strong>POST请求</strong></p>
+<p>POST一般用于提交一些特别的东西，内容多种多样，HttpClient针对不同内容提供了不同的数据容器，如最常见的字符串（StringEntity），字节数组（ByteArrayEntity），输入流（InputStreamEntity），和文件（FileEntity）,请注意<code>InputStreamEntity</code>是不可重复的，因为它只能从底层数据流中读取一次。一般建议实现一个自定义<code>HttpEntity</code>类，而不是使用泛型<code>InputStreamEntity</code>。 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">postInfo</span><span class="params">(String infoType, String aimUrl, String jsonBody)</span> </span>&#123;</span><br><span class="line">        System.out.println(infoType + <span class="string">"发送数据"</span>);</span><br><span class="line">		String str = <span class="string">""</span>;</span><br><span class="line">		CloseableHttpClient httpclient = HttpClients.createDefault();</span><br><span class="line">		HttpPost httpPost = <span class="keyword">new</span> HttpPost(aimUrl);</span><br><span class="line">		<span class="comment">//DES加密</span></span><br><span class="line">		<span class="keyword">byte</span>[] encrypt = SecureUtil.des(HexUtil.decodeHex(ZhengzhouData.DES)).encrypt(jsonBody);</span><br><span class="line">		<span class="comment">//apache.commons.codec.Base64 编码</span></span><br><span class="line">		String data = Base64.encodeBase64String(encrypt);</span><br><span class="line">		StringEntity strEntity = <span class="keyword">new</span> StringEntity(data, <span class="string">"UTF-8"</span>);</span><br><span class="line">		httpPost.setEntity(strEntity);</span><br><span class="line">		strEntity.setContentEncoding(<span class="string">"UTF-8"</span>);</span><br><span class="line">		strEntity.setContentType(<span class="string">"application/json"</span>);</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			CloseableHttpResponse response = httpclient.execute(httpPost);</span><br><span class="line">			<span class="keyword">if</span> (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) &#123;</span><br><span class="line">				str = EntityUtils.toString(response.getEntity(), <span class="string">"UTF-8"</span>);</span><br><span class="line">			&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"发送"</span> + infoType + <span class="string">"信息异常 code : "</span> + response.getStatusLine().getStatusCode());</span><br><span class="line">            &#125;</span><br><span class="line">			response.close();</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> str;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>​</p>
+<p>在一般情况下，如果只是需要向Web站点的某个简单页面提交请求并获取服务器响应，HttpURLConnection完全可以胜任。但在绝大部分情况下，Web站点的网页可能没这么简单，这些页面并不是通过一个简单的URL就可访问的，可能需要用户登录而且具有相应的权限才可访问该页面。在这种情况下，就需要涉及Session、Cookie的处理了，如果打算使用HttpURLConnection来处理这些细节，当然也是可能实现的，只是处理起来难度就大了。</p>
+</li>
+</ul>
+<p>为了更好地处理向Web站点请求，包括处理Session、Cookie等细节问题，Apache开源组织提供了一个HttpClient项目，看它的名称就知道，它是一个简单的HTTP客户端（并不是浏览器），可以用于发送HTTP请求，接收HTTP响应。但不会缓存服务器的响应，不能执行HTML页面中嵌入的Javascript代码；也不会对页面内容进行任何解析、处理。</p>
+<p>简单来说，HttpClient就是一个增强版的HttpURLConnection，HttpURLConnection可以做的事情HttpClient全部可以做；HttpURLConnection没有提供的有些功能，HttpClient也提供了，但它只是关注于如何发送请求、接收响应，以及管理HTTP连接。</p>
+
+  </section>
+</article>
+
+  <div class="sharing grid">
+  <section class="profile grid-item grid">
+    <img class="avatar" src="http://7xrcp8.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" />
+    <div class="grid-item">
+      <p class="title"> lyyourc </p>
+      <p class="subtitle"> You Are The JavaScript In My HTML </p>
+    <div>
+  </section>
+
+  <section class="share-btns">
+    <!-- <p> share it if you like it~ </p> -->
+    <a
+  class="twitter-share-button"
+  data-size="large"
+  data-via="DrakeLeung"
+  href="https://twitter.com/intent/tweet?text= id="什么是-HTTP？"><a h"
+>
+  Tweet
+</a>
+
+<script>
+  window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  js.async = true;
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));
+</script>
+
+  </section>
+</div>
+
+
+  
+    
+<section class="article-comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+<script>
+  var disqus_shortname = 'drakeleung';
+  
+  var disqus_url = '//harold.me/2018/05/09/实习笔记-HTTP方法-GET对比POST/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+  
+</main>
+
+</body>
+</html>

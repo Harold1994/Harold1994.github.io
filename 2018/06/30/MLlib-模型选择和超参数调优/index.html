@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>MLlib-模型选择和超参数调优 | lyyourc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/app.css">
+  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+  
+</head>
+
+<body>
+  <nav class="app-nav">
+  
+    
+      <a href="/.">home</a>
+    
+  
+    
+      <a href="/archives">archive</a>
+    
+  
+    
+      <a href="/atom.xml">rss</a>
+    
+  
+</nav>
+
+  <main class="post">
+  <article>
+  <h1 class="article-title">
+    <a href="/2018/06/30/MLlib-模型选择和超参数调优/">MLlib-模型选择和超参数调优</a>
+  </h1>
+
+  <section class="article-meta">
+    <p class="article-date">June 30 2018</p>
+  </section>
+
+  <section class="article-entry">
+    <p>中的一个重要任务是模型选择，或使用数据找到给定任务的最佳模型或参数。这也叫调优。可以针对个体估算器（如Logistic回归）或包括多个算法，特征化和其他步骤的整个管道完成调整。用户可以一次调整整个流水线，而不是单独调整管道中的每个元素。</p>
+<p>机器学习中的一个重要任务是模型选择，或使用数据找到给定任务的最佳模型或参数。这也叫调优.可以针对个体估算器（如Logistic回归）或包括多个算法，特征化和其他步骤的整个管道完成调整。用户可以一次调整整个流水线，而不是单独调整管道中的每个元素。</p>
+<a id="more"></a> 
+<p>MLlib支持使用 CrossValidator和TrainValidationSplit等工具进行模型选择。这些工具需要以下项目：</p>
+<ul>
+<li>Estimator（估算器）：算法或管道调整</li>
+<li>ParamMaps集：可供选择的参数，有时称为“参数网格”进行搜索</li>
+<li>Evaluator（评估者）：衡量拟合模型对延伸测试数据有多好的度量</li>
+</ul>
+<p>在高层次上，这些模型选择工具的工作如下：</p>
+<ul>
+<li>将输入数据分成单独的训练和测试数据集</li>
+<li>对于每个（训练，测试）对，他们遍历一组ParamMaps：<ul>
+<li>对于每个ParamMap，它们使用这些参数fit Estimator，获得拟合的Model，并使用Evaluator评估Model的性能。</li>
+</ul>
+</li>
+<li>选择由最佳性能参数组合生成的模型</li>
+</ul>
+<p>Estimator可以是回归问题的RegressionEvaluator，二进制数据的BinaryClassificationEvaluator或多类问题的MulticlassClassificationEvaluator。用于选择最佳ParamMap的默认度量可以被这些评估器中的每一个的setMetricName方法覆盖。为了帮助构建参数网格，可以使用ParamGridBuilder实用程序。</p>
+<h4 id="一-交叉验证"><a href="#一-交叉验证" class="headerlink" title="一. 交叉验证"></a>一. 交叉验证</h4><p> CrossValidator将数据集划分为若干子集分别地进行训练和测试。如当k＝3时，CrossValidator产生3个训练数据与测试数据对，每个数据对使用2/3的数据来训练，1/3的数据来测试。对于一组特定的参数表，CrossValidator计算基于三组不同训练数据与测试数据对训练得到的模型的评估准则的平均值。确定最佳参数表后，CrossValidator最后使用最佳参数表基于全部数据来重新拟合估计器。</p>
+<p> 注意对参数网格进行交叉验证的成本是很高的。如下面例子中，参数网格hashingTF.numFeatures有3个值，lr.regParam有2个值，CrossValidator使用2折交叉验证。这样就会产生(3<em>2)</em>2=12中不同的模型需要进行训练。在实际的设置中，通常有更多的参数需要设置，且我们可能会使用更多的交叉验证折数（3折或者10折都是经使用的）。所以CrossValidator的成本是很高的，尽管如此，比起启发式的手工验证，交叉验证仍然是目前存在的参数选择方法中非常有用的一种。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">CrossValidationExample</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> spark = <span class="type">SparkSession</span>.builder</span><br><span class="line">      .master(<span class="string">"local"</span>)</span><br><span class="line">      .appName(<span class="string">"ALSExample"</span>)</span><br><span class="line">      .getOrCreate()</span><br><span class="line">    <span class="keyword">val</span> training = spark.createDataFrame(<span class="type">Seq</span>(</span><br><span class="line">      (<span class="number">0</span>L, <span class="string">"a b c d e spark"</span>, <span class="number">1.0</span>),</span><br><span class="line">      (<span class="number">1</span>L, <span class="string">"b d"</span>, <span class="number">0.0</span>),</span><br><span class="line">      (<span class="number">2</span>L, <span class="string">"spark f g h"</span>, <span class="number">1.0</span>),</span><br><span class="line">      (<span class="number">3</span>L, <span class="string">"hadoop mapreduce"</span>, <span class="number">0.0</span>),</span><br><span class="line">      (<span class="number">4</span>L, <span class="string">"b spark who"</span>, <span class="number">1.0</span>),</span><br><span class="line">      (<span class="number">5</span>L, <span class="string">"g d a y"</span>, <span class="number">0.0</span>),</span><br><span class="line">      (<span class="number">6</span>L, <span class="string">"spark fly"</span>, <span class="number">1.0</span>),</span><br><span class="line">      (<span class="number">7</span>L, <span class="string">"was mapreduce"</span>, <span class="number">0.0</span>),</span><br><span class="line">      (<span class="number">8</span>L, <span class="string">"e spark program"</span>, <span class="number">1.0</span>),</span><br><span class="line">      (<span class="number">9</span>L, <span class="string">"a e c l"</span>, <span class="number">0.0</span>),</span><br><span class="line">      (<span class="number">10</span>L, <span class="string">"spark compile"</span>, <span class="number">1.0</span>),</span><br><span class="line">      (<span class="number">11</span>L, <span class="string">"hadoop software"</span>, <span class="number">0.0</span>)</span><br><span class="line">    )).toDF(<span class="string">"id"</span>, <span class="string">"text"</span>, <span class="string">"label"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//创建一个pipeline,包括平tokenizer,tf,lr三个步骤</span></span><br><span class="line">    <span class="keyword">val</span> tokenizer = <span class="keyword">new</span> <span class="type">Tokenizer</span>()</span><br><span class="line">      .setInputCol(<span class="string">"text"</span>)</span><br><span class="line">      .setOutputCol(<span class="string">"words"</span>)</span><br><span class="line">    <span class="keyword">val</span> hashingTF = <span class="keyword">new</span> <span class="type">HashingTF</span>()</span><br><span class="line">      .setInputCol(tokenizer.getOutputCol)</span><br><span class="line">      .setOutputCol(<span class="string">"features"</span>)</span><br><span class="line">    <span class="keyword">val</span> lr = <span class="keyword">new</span> <span class="type">LogisticRegression</span>()</span><br><span class="line">      .setMaxIter(<span class="number">10</span>)</span><br><span class="line">    <span class="keyword">val</span> pipeline = <span class="keyword">new</span> <span class="type">Pipeline</span>()</span><br><span class="line">      .setStages(<span class="type">Array</span>(tokenizer, hashingTF, lr))</span><br><span class="line"></span><br><span class="line">    <span class="comment">//我们使用ParamGridBuilder构建一个参数网格来搜索。</span></span><br><span class="line">    <span class="keyword">val</span> paramGrid = <span class="keyword">new</span> <span class="type">ParamGridBuilder</span>()</span><br><span class="line">      .addGrid(hashingTF.numFeatures, <span class="type">Array</span>(<span class="number">10</span>, <span class="number">100</span>, <span class="number">1000</span>))</span><br><span class="line">      .addGrid(lr.regParam, <span class="type">Array</span>(<span class="number">0.1</span>, <span class="number">0.01</span>))</span><br><span class="line">      .build()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> cv = <span class="keyword">new</span> <span class="type">CrossValidator</span>()</span><br><span class="line">      .setEstimator(pipeline)</span><br><span class="line">      .setEvaluator(<span class="keyword">new</span> <span class="type">BinaryClassificationEvaluator</span>) <span class="comment">//默认metric是AUC</span></span><br><span class="line">      .setEstimatorParamMaps(paramGrid)</span><br><span class="line">      .setNumFolds(<span class="number">2</span>)</span><br><span class="line">    <span class="comment">//在实际中使用要大于3</span></span><br><span class="line">    <span class="comment">//运行交叉验证并使用最好的参数</span></span><br><span class="line">    <span class="keyword">val</span> cvModel = cv.fit(training)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> test = spark.createDataFrame(<span class="type">Seq</span>(</span><br><span class="line">      (<span class="number">4</span>L, <span class="string">"spark i j k"</span>),</span><br><span class="line">      (<span class="number">5</span>L, <span class="string">"l m n"</span>),</span><br><span class="line">      (<span class="number">6</span>L, <span class="string">"mapreduce spark"</span>),</span><br><span class="line">      (<span class="number">7</span>L, <span class="string">"apache hadoop"</span>)</span><br><span class="line">    )).toDF(<span class="string">"id"</span>, <span class="string">"text"</span>)</span><br><span class="line"></span><br><span class="line">    cvModel.transform(test)</span><br><span class="line">      .select(<span class="string">"id"</span>, <span class="string">"text"</span>, <span class="string">"probability"</span>, <span class="string">"prediction"</span>)</span><br><span class="line">      .collect()</span><br><span class="line">      .foreach &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="type">Row</span>(id: <span class="type">Long</span>, text: <span class="type">String</span>, prob: <span class="type">Vector</span>, pred: <span class="type">Double</span>) =&gt;</span><br><span class="line">          println(<span class="string">s"(<span class="subst">$id</span>, <span class="subst">$text</span>) --&gt; prob=<span class="subst">$prob</span>, prediction=<span class="subst">$pred</span>"</span>)</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="二-训练验证分裂"><a href="#二-训练验证分裂" class="headerlink" title="二. 训练验证分裂"></a>二. 训练验证分裂</h4><p>  除了交叉验证以外，Spark还提供训练验证分裂用以超参数调整。和交叉验证评估K次不同，训练验证分裂只对每组参数评估一次。因此它计算代价更低，但当训练数据集不是足够大时，其结果可靠性不高。</p>
+<p>​      与交叉验证不同，训练验证分裂仅需要一个训练数据与验证数据对。使用训练比率参数将原始数据划分为两个部分。如当训练比率为0.75时，训练验证分裂使用75%数据以训练，25%数据以验证。</p>
+<p>​     与交叉验证相同，确定最佳参数表后，训练验证分裂最后使用最佳参数表基于全部数据来重新拟合估计器。</p>
+ <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TrainValidationSplitExample</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> spark = <span class="type">SparkSession</span>.builder</span><br><span class="line">      .master(<span class="string">"local"</span>)</span><br><span class="line">      .appName(<span class="string">"ALSExample"</span>)</span><br><span class="line">      .getOrCreate()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> data = spark.read.format(<span class="string">"libsvm"</span>).load(<span class="string">"data/mllib/sample_linear_regression_data.txt"</span>)</span><br><span class="line">    <span class="keyword">val</span> <span class="type">Array</span>(training, test) = data.randomSplit(<span class="type">Array</span>(<span class="number">0.9</span>, <span class="number">0.1</span>), seed = <span class="number">12345</span>)</span><br><span class="line">    <span class="keyword">val</span> lr = <span class="keyword">new</span> <span class="type">LinearRegression</span>()</span><br><span class="line">      .setMaxIter(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> paramGrid = <span class="keyword">new</span> <span class="type">ParamGridBuilder</span>()</span><br><span class="line">      .addGrid(lr.regParam, <span class="type">Array</span>(<span class="number">0.1</span>, <span class="number">0.01</span>))</span><br><span class="line">      .addGrid(lr.fitIntercept)</span><br><span class="line">      .addGrid(lr.elasticNetParam, <span class="type">Array</span>(<span class="number">0.0</span>, <span class="number">0.5</span>, <span class="number">1.0</span>))</span><br><span class="line">      .build()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> trainValidationSplit = <span class="keyword">new</span> <span class="type">TrainValidationSplit</span>()</span><br><span class="line">      .setEstimator(lr)</span><br><span class="line">      .setEvaluator(<span class="keyword">new</span> <span class="type">RegressionEvaluator</span>)</span><br><span class="line">      .setEstimatorParamMaps(paramGrid)</span><br><span class="line">      .setTrainRatio(<span class="number">0.8</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> model = trainValidationSplit.fit(training)</span><br><span class="line">    model.transform(test)</span><br><span class="line">      .select(<span class="string">"features"</span>, <span class="string">"label"</span>, <span class="string">"prediction"</span>)</span><br><span class="line">      .show()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+  </section>
+</article>
+
+  <div class="sharing grid">
+  <section class="profile grid-item grid">
+    <img class="avatar" src="http://7xrcp8.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" />
+    <div class="grid-item">
+      <p class="title"> lyyourc </p>
+      <p class="subtitle"> You Are The JavaScript In My HTML </p>
+    <div>
+  </section>
+
+  <section class="share-btns">
+    <!-- <p> share it if you like it~ </p> -->
+    <a
+  class="twitter-share-button"
+  data-size="large"
+  data-via="DrakeLeung"
+  href="https://twitter.com/intent/tweet?text=中的一个重要任务是模型选择，或使用数据找"
+>
+  Tweet
+</a>
+
+<script>
+  window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  js.async = true;
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));
+</script>
+
+  </section>
+</div>
+
+
+  
+    
+<section class="article-comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+<script>
+  var disqus_shortname = 'drakeleung';
+  
+  var disqus_url = '//harold.me/2018/06/30/MLlib-模型选择和超参数调优/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+  
+</main>
+
+</body>
+</html>

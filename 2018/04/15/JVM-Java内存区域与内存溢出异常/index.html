@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JVM--Java内存区域与内存溢出异常 | lyyourc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/app.css">
+  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+  
+</head>
+
+<body>
+  <nav class="app-nav">
+  
+    
+      <a href="/.">home</a>
+    
+  
+    
+      <a href="/archives">archive</a>
+    
+  
+    
+      <a href="/atom.xml">rss</a>
+    
+  
+</nav>
+
+  <main class="post">
+  <article>
+  <h1 class="article-title">
+    <a href="/2018/04/15/JVM-Java内存区域与内存溢出异常/">JVM--Java内存区域与内存溢出异常</a>
+  </h1>
+
+  <section class="article-meta">
+    <p class="article-date">April 15 2018</p>
+  </section>
+
+  <section class="article-entry">
+    <p>Java虚拟机在执行Java程序的过程中会把它管理的内存划分为若干不同的数据区域。<br><img src="http://p5s7d12ls.bkt.clouddn.com/18-4-15/8172747.jpg" alt=""></p>
+<a id="more"></a>
+<p>程序计数器*：是一块较小的内存空间，可看做当前线程执行的字节码的行号指示器，在虚拟机的概念模型里(仅是概念模型,各种虚拟机可能会通过一些更高效的方式去实现),字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令,分支、循环、跳转、异常处理、线程恢复等基础功能都需要依赖这个计数器来完成。</p>
+<blockquote>
+<p>程序计数器是线程私有的：为了线程切换后能恢复到正确的执行位置,每条线程都需要有一个独立的程序计数器,各条线程之间计数器互不影响,独立存储,我们称这类内存区域为“线程私有”的内存。</p>
+</blockquote>
+<p><em>Java虚拟机栈</em>：线程私有，生命周期与线程相同。虚拟机栈描述的是Java方法执行的内存模型:每个方法在执行的同时都会创建一个栈帧(Stack Frame)用于存储局部变量表、操作数栈、动态链接、方法出口等信息。每一个方法从调用直至执行完成的过程,就对应着一个栈帧在虚拟机栈中入栈到出栈的过程。</p>
+<blockquote>
+<p>局部变量表存放了<em>编译器可知</em>的各种<em>基本数据类型</em>（boolean、byte、char、short、int、float、long、<br>double)，<em>对象引用</em>和returnAddress类型。<br>其中64位长度的long和double类型的数据会占用2个局部变量空间(Slot),其余的数据类型只占用1个。局部<br>变量表所需的内存空间在编译期间完成分配,当进入一个方法时,这个方法需要在帧中分配多大的局部变量空间是<br>完全确定的,在方法运行期间不会改变局部变量表的大小。</p>
+</blockquote>
+<p><em>本地方法栈</em>：本地方法栈为虚拟机使用到的Native方法服务，线程独立</p>
+<blockquote>
+<p>与Java虚拟机栈对比：它们之间的区别不过是虚拟机栈为虚拟机执行Java方法(也就是字节码)服务,而本地方法栈则为虚拟机使用到的Native方法服务</p>
+</blockquote>
+<p><em>Java堆</em>：JVM管理的内存中最大的一块，<em>线程共享</em>，在JVM启动时创建，用来<em>存放实例对象</em>。java堆是垃圾回收的主要区域。</p>
+<blockquote>
+<p>从内存回收的角度来看,由于现在收集器基本都采用分代收集算法,所以Java堆中还可以细分为:新生代和老年代<br>从内存分配的角度来看,线程共享的Java堆中可能划分出多个线程私有的<em>分配缓冲区</em><br>Java堆可以处于物理上不连续的内存空间中，逻辑上连续即可<br>如果在堆中没有内存完成实例分配,并且堆也无法再扩展时,将会抛出OutOfMemoryError异常。</p>
+</blockquote>
+<p><em>Java方法区</em>：<em>线程共享</em>，用于存储已被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。又名“非堆”</p>
+<p><em>运行时常量池</em>：是方法区的一部分，常量池存放编译期生成的各种字面量和符号引用，这部分内容将在类加载后进入方法区的运行时常量池中存放。</p>
+<blockquote>
+<p>Class文件内容：类的版本、字段、方法、接口、常量池<br>运行时常量池相对于Class文件常量池的另外一个重要特征是具备动态性,Java语言并不要求常量一定只有编<br>译期才能产生,也就是并非预置入Class文件中常量池的内容才能进入方法区运行时常量池,运行期间也可能将新<br>的常量放入池中</p>
+</blockquote>
+<p><em>直接内存</em>：直接内存(Direct Memory)并不是虚拟机运行时数据区的一部分,也不是Java虚拟机规范中定义的内存区<br>域。NIO(New Input/Output)类引入了一种基于通道(Channel)与缓冲区(Buffer)的I/O方式,它可以使用Native函数库直接分配堆外内存,然后通过一个存储在Java堆中的DirectByteBuffer对象作为这块内存的引用进行操作。这样能在一些场景中显著提高性能,因为避免了在Java堆和Native堆中来回复制数据。</p>
+<blockquote>
+<p>本机直接内存的分配不会受到Java堆大小的限制,但是,既然是内存,肯定还是会受到本机总内存(包括RAM以及SWAP区或者分页文件)大小以及处理器寻址空间的限制。</p>
+</blockquote>
+
+  </section>
+</article>
+
+  <div class="sharing grid">
+  <section class="profile grid-item grid">
+    <img class="avatar" src="http://7xrcp8.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" />
+    <div class="grid-item">
+      <p class="title"> lyyourc </p>
+      <p class="subtitle"> You Are The JavaScript In My HTML </p>
+    <div>
+  </section>
+
+  <section class="share-btns">
+    <!-- <p> share it if you like it~ </p> -->
+    <a
+  class="twitter-share-button"
+  data-size="large"
+  data-via="DrakeLeung"
+  href="https://twitter.com/intent/tweet?text=Java虚拟机在执行Java程序的过程中"
+>
+  Tweet
+</a>
+
+<script>
+  window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  js.async = true;
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));
+</script>
+
+  </section>
+</div>
+
+
+  
+    
+<section class="article-comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+<script>
+  var disqus_shortname = 'drakeleung';
+  
+  var disqus_url = '//harold.me/2018/04/15/JVM-Java内存区域与内存溢出异常/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+  
+</main>
+
+</body>
+</html>

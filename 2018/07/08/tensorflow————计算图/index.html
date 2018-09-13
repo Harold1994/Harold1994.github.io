@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>tensorflow入门 | lyyourc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/app.css">
+  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+  
+</head>
+
+<body>
+  <nav class="app-nav">
+  
+    
+      <a href="/.">home</a>
+    
+  
+    
+      <a href="/archives">archive</a>
+    
+  
+    
+      <a href="/atom.xml">rss</a>
+    
+  
+</nav>
+
+  <main class="post">
+  <article>
+  <h1 class="article-title">
+    <a href="/2018/07/08/tensorflow————计算图/">tensorflow入门</a>
+  </h1>
+
+  <section class="article-meta">
+    <p class="article-date">July 08 2018</p>
+  </section>
+
+  <section class="article-entry">
+    <h4 id="一、Tensorflow计算模型——计算图"><a href="#一、Tensorflow计算模型——计算图" class="headerlink" title="一、Tensorflow计算模型——计算图"></a>一、Tensorflow计算模型——计算图</h4><p>计算图是Tensorflow中最基本的一个概念，Tensorflow中所有计算都会被转化为计算图上的结点。Tensor就是张量，在tensorflow中可以理解为多维数组，Flow是“流”，体现了Tensorflow的计算模型，flow表达了张量之间通过计算相互转化的过程。Tensorflow是一个通过计算图的形式来表达计算的编程系统，它的每个计算都是计算图上的一个节点，节点之间的边描述了计算之间的依赖关系。</p>
+ <a id="more"></a>
+<p>Tensorflow程序分为<strong>定义图中所有的计算</strong>和<strong>执行计算</strong>两个阶段：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#载入Tensorflow</span></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">a = tf.constant([<span class="number">1.0</span>,<span class="number">2.0</span>], name = <span class="string">"a"</span>)</span><br><span class="line">b = tf.constant([<span class="number">2.0</span>,<span class="number">3.0</span>], name = <span class="string">"b"</span>)</span><br><span class="line">result = a + b</span><br></pre></td></tr></table></figure>
+<p>在这个过程中，Tensorflow会自动将定义的计算转为计算图上的节点，在Tensorflow中，系统会维护一个默认计算图。通过tf.get_default_graph可以获得：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#a.graph查看张量所属计算图，因为没有特定指定，所以</span></span><br><span class="line"><span class="comment">#这个计算图应该等于当前默认计算图</span></span><br><span class="line">print(a.graph <span class="keyword">is</span> tf.get_default_graph())</span><br></pre></td></tr></table></figure>
+<p>除了默认计算图，Tensorflow支持通过tf.Graph函数来生成新的计算图。<strong>不同计算图上的张量和运算都不会共享</strong>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">g1 = tf.Graph()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> g1.as_default():</span><br><span class="line">    <span class="comment">#在g1中定义v，设值为0</span></span><br><span class="line">    v = tf.get_variable(<span class="string">"v"</span>, initializer=tf.zeros_initializer()(shape=[<span class="number">1</span>]))</span><br><span class="line"></span><br><span class="line">g2 = tf.Graph()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> g2.as_default():</span><br><span class="line">    <span class="comment">#在g2中定义v,设值为2</span></span><br><span class="line">    v = tf.get_variable(<span class="string">"v"</span>, initializer=tf.ones_initializer()(shape=[<span class="number">1</span>]))</span><br><span class="line"></span><br><span class="line"><span class="comment">#在计算图2中读取变量“v的取值”</span></span><br><span class="line"><span class="keyword">with</span> tf.Session(graph=g2) <span class="keyword">as</span> sess:</span><br><span class="line">    tf.initialize_all_variables().run()</span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">""</span>, reuse=<span class="keyword">True</span>):</span><br><span class="line">        print(sess.run(tf.get_variable(<span class="string">"v"</span>)))</span><br><span class="line">输出：[<span class="number">1.</span>]</span><br></pre></td></tr></table></figure>
+<p>Tensorflow中的计算图不仅仅可以用来隔离张量和计算，还提供了管理张量和计算的机制，计算图可以通过tf.Graph.device函数指定运算的设备。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">g = tf.Graph()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> g.device(<span class="string">'gpu:0'</span>):</span><br><span class="line">    result = a + b</span><br></pre></td></tr></table></figure>
+<p>在一个计算图中，可以通过集合(“collection”)管理不同类别的资源。比如通过tf.add_to_collection函数可将资源加入一个或多个集合中，然后通过tf.get_collection获取一个集合中的所有资源。</p>
+<p>​                                ——Tensorflow中维护的集合列表——</p>
+<table>
+<thead>
+<tr>
+<th>集合名称</th>
+<th style="text-align:left">集合内容</th>
+<th style="text-align:left">使用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tf.GraphKeys.VARIABLES</code></td>
+<td style="text-align:left">所有变量</td>
+<td style="text-align:left">持久化Tensorflow模型</td>
+</tr>
+<tr>
+<td><code>tf.GraphKeys.TRAINABLE_VARIABLES</code></td>
+<td style="text-align:left">可学习的变量（一般指神经网络中的参数）</td>
+<td style="text-align:left">模型训练、生成模型可视化内容</td>
+</tr>
+<tr>
+<td><code>tf.GraphKeys.SUMMARIES</code></td>
+<td style="text-align:left">日志生成相关的张量</td>
+<td style="text-align:left">Tensorflow计算可视化</td>
+</tr>
+<tr>
+<td><code>tf.GraphKeys.QUEUE_RUNNERS</code></td>
+<td style="text-align:left">处理输入的QueueRunner</td>
+<td style="text-align:left">输入处理</td>
+</tr>
+<tr>
+<td><code>tf.GraphKeys.MOVING_AVERAGE_VARIABLES</code></td>
+<td style="text-align:left">所有计算了滑动平均值的变量</td>
+<td style="text-align:left">计算变量的滑动平均值</td>
+</tr>
+</tbody>
+</table>
+<h4 id="二、Tensorflow数据模型——张量"><a href="#二、Tensorflow数据模型——张量" class="headerlink" title="二、Tensorflow数据模型——张量"></a>二、Tensorflow数据模型——张量</h4><p>在Tensorflow中，所有数据通过张量形式表示，可被理解为多维数组。零阶张量表示<strong>标量</strong>，就是一个数；一阶张量为<strong>向量</strong>，就是一维数组；n阶张量可以理解为一个n维数组。但是Tensorflow中张量并非采用数组形式，它只是对Tensorflow中运算结果的引用，张量中保存的不是数字，而是得到这些数字的计算过程。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#载入Tensorflow</span></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="comment">#tf.constant是一个计算，结果是一个张量，保存在a中</span></span><br><span class="line">a = tf.constant([<span class="number">1.0</span>,<span class="number">2.0</span>], name = <span class="string">"a"</span>)</span><br><span class="line">b = tf.constant([<span class="number">2.0</span>,<span class="number">3.0</span>], name = <span class="string">"b"</span>)</span><br><span class="line">result = tf.add(a,b,name=<span class="string">"add"</span>)</span><br><span class="line">print(result)</span><br><span class="line">输出：</span><br><span class="line"><span class="comment"># 名字：节点的第一个输出 </span></span><br><span class="line"><span class="comment"># 维度     </span></span><br><span class="line"><span class="comment"># 类型:每个张量类型唯一，不匹配会报错</span></span><br><span class="line">Tensor(<span class="string">"add_2:0"</span>, shape=(<span class="number">2</span>,), dtype=float32)</span><br></pre></td></tr></table></figure>
+<p>从上面看出：Tensorflow计算结果不是一个具体数字而是一个张量的结构。</p>
+<p>张量的使用主要分为两类：</p>
+<ul>
+<li><p>对中间计算结果的引用</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#使用张量记录中间结果</span></span><br><span class="line">a = tf.constant([<span class="number">1</span>,<span class="number">2</span>], name = <span class="string">"a"</span>, dtype=tf.float32)</span><br><span class="line">b = tf.constant([<span class="number">2.0</span>,<span class="number">3.0</span>], name = <span class="string">"b"</span>)</span><br><span class="line">result = tf.add(a,b,name=<span class="string">"add"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#直接计算向量和,可读性差</span></span><br><span class="line">result= tf.constant([<span class="number">1.0</span>,<span class="number">2.0</span>], name=<span class="string">"a"</span>) + tf.constant([<span class="number">2.0</span>,<span class="number">3.0</span>], name=<span class="string">'b'</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取计算结果</p>
+<p>可以使用tf.Session().run(result)得到计算结果</p>
+</li>
+</ul>
+<h4 id="三、Tensorflow运行模型——会话（session）"><a href="#三、Tensorflow运行模型——会话（session）" class="headerlink" title="三、Tensorflow运行模型——会话（session）"></a>三、Tensorflow运行模型——会话（session）</h4><p>session拥有并管理Tensorflow程序运行时的所有资源，当所有计算完成后需要关闭session来帮助系统回收资源。否则可能资源泄露。</p>
+<p>创建会话有两种模式：</p>
+<ul>
+<li><p>明确会话生成和关闭函数: 当程序异常退出时将不能关闭会话导致资源泄露</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#创建会话</span></span><br><span class="line">sess = tf.Session()</span><br><span class="line"><span class="comment">#运算</span></span><br><span class="line">sess.run(...)</span><br><span class="line"><span class="comment"># 关闭会话，释放资源</span></span><br><span class="line">sess.close()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过Python上下文管理器使用会话</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#创建会话，通过上下文管理器管理会话</span></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(...)</span><br><span class="line"><span class="comment">#上下文退出时自动关闭session与释放资源</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>Tensorflow可以制定默认的session,默认session被指定后可通过tf.Tensor.eval函数计算一个张量的取值，有如下几种设定方式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span></span><br><span class="line">sess = tf.Session()</span><br><span class="line"><span class="keyword">with</span> sess.as_default():</span><br><span class="line">    print(result.eval())</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2.</span></span><br><span class="line">sess = tf.Session()</span><br><span class="line">print(result.eval(session=sess))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">3.</span>交互环境下直接构造默认会话，tf.InteractiveSession会自动将生成的会话注册为默认会话。</span><br><span class="line">sess = tf.InteractiveSession()</span><br><span class="line">print(result.eval())</span><br><span class="line">sess.close()</span><br></pre></td></tr></table></figure>
+<p>无论使用哪种方法都可以通过ConfigProto Protocol Bufefer配置要生成的会话，通过ConfigProto可以配置类似并行的线程数、GPU分配策略、运算超时时间等参数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">config = tf.ConfigProto(allow_soft_placement = <span class="keyword">True</span>,<span class="comment">#当某些运算无法被GPU支持时，自动调整到cpu</span></span><br><span class="line">                       log_device_placement = <span class="keyword">True</span>)<span class="comment">#日志中记录每个节点被安排在那个设备上</span></span><br><span class="line">sess1 = tf.InteractiveSession(config=config)</span><br><span class="line">sess2 = tf.Session(config=config)</span><br></pre></td></tr></table></figure>
+<h4 id="四、Tensorflow实现神经网络"><a href="#四、Tensorflow实现神经网络" class="headerlink" title="四、Tensorflow实现神经网络"></a>四、Tensorflow实现神经网络</h4><p>在Tensorflow中，变量的作用就是保存和更新神经网络中的参数，Tensorflow变量需要赋初始值，在神经网络中，给参数赋予随机初始值最常见，所以一般使用随机数给Tensorflow中变量初始化。</p>
+<p><code>weighTensorflow = tf.Variable(tf.random_normal([2,3], stddev = 2))</code>会产生一个2*3的随机数矩阵，矩阵元素均值为0，标准差为2，random_normal还可以通过参数mean指定平均数，在没指定时默认为零。通过满足正态分布的随机数来初始化神经网络中的参数是一个很常用的方法，还有一些其他随机数生成器：</p>
+<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-7-8/22556167.jpg" alt=""></p>
+<p>Tensorflow也支持通过常熟来初始化一个变量：</p>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>功能</th>
+<th>样例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tf.zeros</td>
+<td>产生全0数组</td>
+<td>tf.zeros([2,3],tf.int32) -&gt;[[000],[000]]</td>
+</tr>
+<tr>
+<td>tf.ones</td>
+<td>产生全1数组</td>
+<td></td>
+</tr>
+<tr>
+<td>tf.fill</td>
+<td>产生一个全部为给定数字的数组</td>
+<td>tf.fill([2,3],9)-&gt;[[9,9,9],[9,9,9]]</td>
+</tr>
+<tr>
+<td>tf.constant</td>
+<td>产生一个给定值的数组</td>
+</tr>
+</tbody>
+</table>
+<p>神经网络的前向传播：</p>
+<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-7-9/34664713.jpg" alt=""></p>
+<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-7-9/39006147.jpg" alt=""></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="comment">#声明变量，通过seed设定随机数种子</span></span><br><span class="line">w1 = tf.Variable(tf.random_normal([<span class="number">2</span>,<span class="number">3</span>], stddev=<span class="number">1</span>, seed=<span class="number">1</span>))</span><br><span class="line">w2 = tf.Variable(tf.random_normal([<span class="number">3</span>,<span class="number">1</span>], stddev=<span class="number">1</span>, seed=<span class="number">1</span>))</span><br><span class="line"><span class="comment">#将输入特征向量定义为常量，这里x是一个1*2的矩阵</span></span><br><span class="line">x = tf.constant([[<span class="number">0.7</span>,<span class="number">0.9</span>]])</span><br><span class="line"><span class="comment">#通过前向算法，计算矩阵乘法</span></span><br><span class="line">a = tf.matmul(x,w1)</span><br><span class="line">y = tf.matmul(a,w2)</span><br><span class="line"></span><br><span class="line">sess = tf.Session()</span><br><span class="line"><span class="comment">#初始化变量的两种方式</span></span><br><span class="line"><span class="comment">#1.分开挨个初始化</span></span><br><span class="line"><span class="comment"># sess.run(w1.initializer)</span></span><br><span class="line"><span class="comment"># sess.run(w2.initializer)</span></span><br><span class="line"><span class="comment">#2.一次性初始化所有变量tf.global_variables_initializer</span></span><br><span class="line">init_op = sess.run(tf.global_variables_initializer())</span><br><span class="line">sess.run(y)</span><br><span class="line"></span><br><span class="line">print(sess.run(y))</span><br><span class="line">sess.close()</span><br></pre></td></tr></table></figure>
+<p>上述代码实现了神经网络的前向传播过程,在计算y之前，需运行w1.initializer和w2.initializer给变量赋值，虽然直接调用变量的初始化过程是一个可行方案，但是当变量数目增多时，或者变量之间存在依赖关系时，单个调用就比较麻烦。因此可以使用tf.global_variables_initializer一次性初始化所有变量。</p>
+<p>Tensorflow中所有变量都会被自动加入GraphKeys.VARIABLES集合，当构建机器学习模型时，可以通过变量声明函数中的trainable参数来区分需要优化的参数（比如神经网络中的参数）和其他参数（如迭代的轮数），如果声明trainable为True,变量会被加入GraphKeys.TRAINABLE_VARIABLES集合，可以通过tf.trainable_variable函数得到需要优化的参数。 Tensorflow中提供的神经网络优化算法会将GraphKeys.TRAINABLE_VARIABLES集合中的变量作为默认的优化对象。</p>
+<p><strong>维度</strong>和<strong>类型</strong>也是变量的两个重要属性，变量类型不可改变，维度在运行中可改变，通过设置参数validate_shape=False。</p>
+<p>在神经网络优化算法中，最常用的是反向传播法（bp）,流程图如下：</p>
+<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-7-9/44477907.jpg" alt=""></p>
+<p>​    每次迭代开始前要先选取一小部分训练数据，这一小部分叫一个batch,如果每轮迭代选取的数据都要通过常量来表示，那么Tensorflow的计算图会太大，因为每生成一个常量，Tensorflow都会在计算图中增加一个节点。为此，Tensorflow提供了placeholder机制用于提供输入数据，相当于定义了一个位置，这个位置中的数据在程序运行时再指定。在定义placeholder时，这个位置上的数据类型需要指定，且不可改变。</p>
+<p>​    在得到一个batch的前向传播结果之后，需要定义一个损失函数来刻画当前的预测值和真实值之间的差距，然后通过反向传播算法来调整网络参数的取值使差距缩小。</p>
+<p>例子：利用神经网络解决二分类问题</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> numpy.random <span class="keyword">import</span> RandomState</span><br><span class="line"><span class="comment"># 定义训练数据batch大小</span></span><br><span class="line">batch_size = <span class="number">8</span></span><br><span class="line"><span class="comment">#定义神经网络参数</span></span><br><span class="line">w1 = tf.Variable(tf.random_normal([<span class="number">2</span>,<span class="number">3</span>],stddev=<span class="number">1</span>,seed=<span class="number">1</span>))</span><br><span class="line">w2 = tf.Variable(tf.random_normal([<span class="number">3</span>,<span class="number">1</span>],stddev=<span class="number">1</span>,seed=<span class="number">1</span>))</span><br><span class="line"><span class="comment">#在shape的一个维度上使用none可以方便使用不大的batch大小</span></span><br><span class="line">x = tf.placeholder(tf.float32, shape=(<span class="keyword">None</span>, <span class="number">2</span>), name=<span class="string">'x-input'</span>)</span><br><span class="line">y_ = tf.placeholder(tf.float32, shape=(<span class="keyword">None</span>,<span class="number">1</span>), name=<span class="string">'y-input'</span>)</span><br><span class="line"></span><br><span class="line">a = tf.matmul(x,w1)</span><br><span class="line">y = tf.matmul(a, w2)</span><br><span class="line"><span class="comment">#定义损失函数和反向传播算法，互熵损失，将在之后的帖子中介绍</span></span><br><span class="line"><span class="comment">#clip_by_value将输入的数值范围限制在（1e-10,1.0)之间，避免出现log0的状况</span></span><br><span class="line">cross_entropy = - tf.reduce_mean(y_ * tf.log(tf.clip_by_value(y, <span class="number">1e-10</span>,<span class="number">1.0</span>)))</span><br><span class="line">train_step = tf.train.AdamOptimizer(<span class="number">0.01</span>).minimize(cross_entropy)</span><br><span class="line"><span class="comment">#随机数模拟数据集</span></span><br><span class="line">rdm  = RandomState(<span class="number">1</span>)</span><br><span class="line">dataset_size = <span class="number">128</span></span><br><span class="line">X = rdm.rand(dataset_size, <span class="number">2</span>)</span><br><span class="line"><span class="comment"># 根据x1+x2&lt;1判断正反例</span></span><br><span class="line">Y= [[int (x1 + x2 &lt;<span class="number">1</span>)] <span class="keyword">for</span> (x1,x2) <span class="keyword">in</span> X]</span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    init_op = tf.initialize_all_variables()</span><br><span class="line">    sess.run(init_op)</span><br><span class="line">    print(sess.run(w1))</span><br><span class="line">    print(sess.run(w2))</span><br><span class="line">    STEPS = <span class="number">5000</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(STEPS):</span><br><span class="line">        start = (i * batch_size) % dataset_size</span><br><span class="line">        end = min(start + batch_size, dataset_size)</span><br><span class="line">        <span class="comment">#通过选取的样本训练网络并更新参数</span></span><br><span class="line">        sess.run(train_step, feed_dict=&#123;x:X[start:end], y_:Y[start:end]&#125;)</span><br><span class="line">        <span class="keyword">if</span> i % <span class="number">1000</span> == <span class="number">0</span>:</span><br><span class="line">            <span class="comment">#每隔一段时间计算交叉熵</span></span><br><span class="line">            total_cross_entropy = sess.run(cross_entropy, feed_dict=&#123;x:X,y_:Y&#125;)</span><br><span class="line">            print(<span class="string">"After %d training steps(s), cross entropy on all data is %g"</span> % (i, total_cross_entropy))</span><br></pre></td></tr></table></figure>
+<p>总结：神经网络训练步骤：</p>
+<ol>
+<li>定义网络结构和前向传输的输出结果</li>
+<li>定义损失函数及选择反向传播优化算法</li>
+<li>生成会话并在训练数据上反复运行反向传播优化算法</li>
+</ol>
+
+  </section>
+</article>
+
+  <div class="sharing grid">
+  <section class="profile grid-item grid">
+    <img class="avatar" src="http://7xrcp8.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" />
+    <div class="grid-item">
+      <p class="title"> lyyourc </p>
+      <p class="subtitle"> You Are The JavaScript In My HTML </p>
+    <div>
+  </section>
+
+  <section class="share-btns">
+    <!-- <p> share it if you like it~ </p> -->
+    <a
+  class="twitter-share-button"
+  data-size="large"
+  data-via="DrakeLeung"
+  href="https://twitter.com/intent/tweet?text= id="一、Tensorflow计算模"
+>
+  Tweet
+</a>
+
+<script>
+  window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  js.async = true;
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));
+</script>
+
+  </section>
+</div>
+
+
+  
+    
+<section class="article-comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+<script>
+  var disqus_shortname = 'drakeleung';
+  
+  var disqus_url = '//harold.me/2018/07/08/tensorflow————计算图/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+  
+</main>
+
+</body>
+</html>

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>linux常用命令————awk、sed、wc | lyyourc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/app.css">
+  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+  
+</head>
+
+<body>
+  <nav class="app-nav">
+  
+    
+      <a href="/.">home</a>
+    
+  
+    
+      <a href="/archives">archive</a>
+    
+  
+    
+      <a href="/atom.xml">rss</a>
+    
+  
+</nav>
+
+  <main class="post">
+  <article>
+  <h1 class="article-title">
+    <a href="/2018/07/05/linux常用命令/">linux常用命令————awk、sed、wc</a>
+  </h1>
+
+  <section class="article-meta">
+    <p class="article-date">July 05 2018</p>
+  </section>
+
+  <section class="article-entry">
+    <p><strong>1.awk</strong></p>
+<p><strong>awk是行处理器</strong>: 相比较屏幕处理的优点，在处理庞大文件时不会出现内存溢出或是处理缓慢的问题，通常用来格式化文本信息</p>
+<p><strong>awk处理过程:</strong> 依次对每一行进行处理，然后输出</p>
+<p><strong>语法</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">awk [选项参数] &apos;script&apos; var=value file(s)</span><br><span class="line">或</span><br><span class="line">awk [选项参数] -f scriptfile var=value file(s)</span><br></pre></td></tr></table></figure>
+<a id="more"></a> 
+<p><strong>选项参数说明：</strong></p>
+<ul>
+<li>-F fs or –field-separator fs<br>指定输入文件折分隔符，fs是一个字符串或者是一个正则表达式，如-F:。</li>
+<li>-v var=value or –asign var=value<br>赋值一个用户定义变量。</li>
+<li>-f scripfile or –file scriptfile<br>从脚本文件中读取awk命令。</li>
+<li>-mf nnn and -mr nnn<br>对nnn值设置内在限制，-mf选项限制分配给nnn的最大块数目；-mr选项限制记录的最大数目。这两个功能是Bell实验室版awk的扩展功能，在标准awk中不适用。</li>
+<li>-W compact or –compat, -W traditional or –traditional<br>在兼容模式下运行awk。所以gawk的行为和标准的awk完全一样，所有的awk扩展都被忽略。</li>
+<li>-W copyleft or –copyleft, -W copyright or –copyright<br>打印简短的版权信息。</li>
+<li>-W help or –help, -W usage or –usage<br>打印全部awk选项和每个选项的简短说明。</li>
+<li>-W lint or –lint<br>打印不能向传统unix平台移植的结构的警告。</li>
+<li>-W lint-old or –lint-old<br>打印关于不能向传统unix平台移植的结构的警告。</li>
+<li>-W posix<br>打开兼容模式。但有以下限制，不识别：/x、函数关键字、func、换码序列以及当fs是一个空格时，将新行作为一个域分隔符；操作符<strong>和</strong>=不能代替^和^=；fflush无效。</li>
+<li>-W re-interval or –re-inerval<br>允许间隔正则表达式的使用，参考(grep中的Posix字符类)，如括号表达式[[:alpha:]]。</li>
+<li>-W source program-text or –source program-text<br>使用program-text作为源代码，可与-f命令混用。</li>
+<li>-W version or –version<br>打印bug报告信息的版本。</li>
+</ul>
+<p><strong>基本用法</strong></p>
+<p>log.txt文本内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2 this is a test</span><br><span class="line">3 Are you like awk</span><br><span class="line">This&apos;s a test</span><br><span class="line">10 There are orange,apple,mongo</span><br></pre></td></tr></table></figure>
+<p>用法一：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk &apos;&#123;[pattern] action&#125;&apos; &#123;filenames&#125;   # 行匹配语句 awk &apos;&apos; 只能用单引号</span><br></pre></td></tr></table></figure>
+<p>实例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 每行按空格或TAB分割，输出文本中的1、4项</span><br><span class="line"> $ awk &apos;&#123;print $1,$4&#125;&apos; log.txt</span><br><span class="line"> ---------------------------------------------</span><br><span class="line"> 2 a</span><br><span class="line"> 3 like</span><br><span class="line"> This&apos;s</span><br><span class="line"> 10 orange,apple,mongo</span><br><span class="line"> # 格式化输出</span><br><span class="line"> $ awk &apos;&#123;printf &quot;%-8s %-10s\n&quot;,$1,$4&#125;&apos; log.txt</span><br><span class="line"> ---------------------------------------------</span><br><span class="line"> 2        a</span><br><span class="line"> 3        like</span><br><span class="line"> This&apos;s</span><br><span class="line"> 10       orange,apple,mongo</span><br></pre></td></tr></table></figure>
+<p>用法二：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk -F  #-F相当于内置变量FS, 指定分割字符</span><br></pre></td></tr></table></figure>
+<p>实例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># 使用&quot;,&quot;分割</span><br><span class="line"> $  awk -F, &apos;&#123;print $1,$2&#125;&apos;   log.txt</span><br><span class="line"> ---------------------------------------------</span><br><span class="line"> 2 this is a test</span><br><span class="line"> 3 Are you like awk</span><br><span class="line"> This&apos;s a test</span><br><span class="line"> 10 There are orange apple</span><br><span class="line"> # 或者使用内建变量</span><br><span class="line"> $ awk &apos;BEGIN&#123;FS=&quot;,&quot;&#125; &#123;print $1,$2&#125;&apos;     log.txt</span><br><span class="line"> ---------------------------------------------</span><br><span class="line"> 2 this is a test</span><br><span class="line"> 3 Are you like awk</span><br><span class="line"> This&apos;s a test</span><br><span class="line"> 10 There are orange apple</span><br><span class="line"> # 使用多个分隔符.先使用空格分割，然后对分割结果再使用&quot;,&quot;分割</span><br><span class="line"> $ awk -F &apos;[ ,]&apos;  &apos;&#123;print $1,$2,$5&#125;&apos;   log.txt</span><br><span class="line"> ---------------------------------------------</span><br><span class="line"> 2 this test</span><br><span class="line"> 3 Are awk</span><br><span class="line"> This&apos;s a</span><br><span class="line"> 10 There apple</span><br></pre></td></tr></table></figure>
+<p>用法三：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk -v  # 设置变量</span><br></pre></td></tr></table></figure>
+<p>实例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ awk -va=1 &apos;&#123;print $1,$1+a&#125;&apos; log.txt</span><br><span class="line">---------------------------------------------</span><br><span class="line">2 3</span><br><span class="line">3 4</span><br><span class="line">This&apos;s 1</span><br><span class="line">10 11</span><br><span class="line">$ awk -va=1 -vb=s &apos;&#123;print $1,$1+a,$1b&#125;&apos; log.txt</span><br><span class="line">---------------------------------------------</span><br><span class="line">2 3 2s</span><br><span class="line">3 4 3s</span><br><span class="line">This&apos;s 1 This&apos;ss</span><br><span class="line">10 11 10s</span><br></pre></td></tr></table></figure>
+<p>用法四：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk -f &#123;awk脚本&#125; &#123;文件名&#125;</span><br></pre></td></tr></table></figure>
+<p>实例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ awk -f cal.awk log.txt</span><br></pre></td></tr></table></figure>
+<p><strong>运算符</strong></p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>= += -= *= /= %= ^= **=</td>
+<td>赋值</td>
+</tr>
+<tr>
+<td>?:</td>
+<td>C条件表达式</td>
+</tr>
+<tr>
+<td>\</td>
+<td>\</td>
+<td></td>
+<td>逻辑或</td>
+</tr>
+<tr>
+<td>&amp;&amp;</td>
+<td>逻辑与</td>
+</tr>
+<tr>
+<td>~ ~!</td>
+<td>匹配正则表达式和不匹配正则表达式</td>
+</tr>
+<tr>
+<td>&lt; &lt;= &gt; &gt;= != ==</td>
+<td>关系运算符</td>
+</tr>
+<tr>
+<td>空格</td>
+<td>连接</td>
+</tr>
+<tr>
+<td>+ -</td>
+<td>加，减</td>
+</tr>
+<tr>
+<td>* / %</td>
+<td>乘，除与求余</td>
+</tr>
+<tr>
+<td>+ - !</td>
+<td>一元加，减和逻辑非</td>
+</tr>
+<tr>
+<td>^ ***</td>
+<td>求幂</td>
+</tr>
+<tr>
+<td>++ –</td>
+<td>增加或减少，作为前缀或后缀</td>
+</tr>
+<tr>
+<td>$</td>
+<td>字段引用</td>
+</tr>
+<tr>
+<td>in</td>
+<td>数组成员</td>
+</tr>
+</tbody>
+</table>
+<p><strong>内建变量</strong></p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$n</td>
+<td>当前记录的第n个字段，字段间由FS分隔</td>
+</tr>
+<tr>
+<td>$0</td>
+<td>完整的输入记录</td>
+</tr>
+<tr>
+<td>ARGC</td>
+<td>命令行参数的数目</td>
+</tr>
+<tr>
+<td>ARGIND</td>
+<td>命令行中当前文件的位置(从0开始算)</td>
+</tr>
+<tr>
+<td>ARGV</td>
+<td>包含命令行参数的数组</td>
+</tr>
+<tr>
+<td>CONVFMT</td>
+<td>数字转换格式(默认值为%.6g)ENVIRON环境变量关联数组</td>
+</tr>
+<tr>
+<td>ERRNO</td>
+<td>最后一个系统错误的描述</td>
+</tr>
+<tr>
+<td>FIELDWIDTHS</td>
+<td>字段宽度列表(用空格键分隔)</td>
+</tr>
+<tr>
+<td>FILENAME</td>
+<td>当前文件名</td>
+</tr>
+<tr>
+<td>FNR</td>
+<td>各文件分别计数的行号</td>
+</tr>
+<tr>
+<td>FS</td>
+<td>字段分隔符(默认是任何空格)</td>
+</tr>
+<tr>
+<td>IGNORECASE</td>
+<td>如果为真，则进行忽略大小写的匹配</td>
+</tr>
+<tr>
+<td>NF</td>
+<td>一条记录的字段的数目</td>
+</tr>
+<tr>
+<td>NR</td>
+<td>已经读出的记录数，就是行号，从1开始</td>
+</tr>
+<tr>
+<td>OFMT</td>
+<td>数字的输出格式(默认值是%.6g)</td>
+</tr>
+<tr>
+<td>OFS</td>
+<td>输出记录分隔符（输出换行符），输出时用指定的符号代替换行符</td>
+</tr>
+<tr>
+<td>ORS</td>
+<td>输出记录分隔符(默认值是一个换行符)</td>
+</tr>
+<tr>
+<td>RLENGTH</td>
+<td>由match函数所匹配的字符串的长度</td>
+</tr>
+<tr>
+<td>RS</td>
+<td>记录分隔符(默认是一个换行符)</td>
+</tr>
+<tr>
+<td>RSTART</td>
+<td>由match函数所匹配的字符串的第一个位置</td>
+</tr>
+<tr>
+<td>SUBSEP</td>
+<td>数组下标分隔符(默认值是/034)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>使用正则，字符串匹配</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 输出第二列包含 &quot;th&quot;，并打印第二列与第四列</span><br><span class="line">$ awk &apos;$2 ~ /th/ &#123;print $2,$4&#125;&apos; log.txt</span><br><span class="line">---------------------------------------------</span><br><span class="line">this a</span><br></pre></td></tr></table></figure>
+<p><strong>~ 表示模式开始。// 中是模式。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 输出包含&quot;re&quot; 的行</span><br><span class="line">$ awk &apos;/re/ &apos; log.txt</span><br><span class="line">---------------------------------------------</span><br><span class="line">3 Are you like awk</span><br><span class="line">10 There are orange,apple,mongo</span><br></pre></td></tr></table></figure>
+<p><strong>忽略大小写</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ awk &apos;BEGIN&#123;IGNORECASE=1&#125; /this/&apos; log.txt</span><br><span class="line">---------------------------------------------</span><br><span class="line">2 this is a test</span><br><span class="line">This&apos;s a test</span><br></pre></td></tr></table></figure>
+<p><strong>模式取反</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ awk &apos;$2 !~ /th/ &#123;print $2,$4&#125;&apos; log.txt</span><br><span class="line">---------------------------------------------</span><br><span class="line">Are like</span><br><span class="line">a</span><br><span class="line">There orange,apple,mongo</span><br><span class="line">$ awk &apos;!/th/ &#123;print $2,$4&#125;&apos; log.txt</span><br><span class="line">---------------------------------------------</span><br><span class="line">Are like</span><br><span class="line">a</span><br><span class="line">There orange,apple,mongo</span><br></pre></td></tr></table></figure>
+<p><strong>awk脚本</strong></p>
+<p>关于awk脚本，我们需要注意两个关键词BEGIN和END。</p>
+<ul>
+<li>BEGIN{ 这里面放的是执行前的语句 }</li>
+<li>END {这里面放的是处理完所有的行后要执行的语句 }</li>
+<li>{这里面放的是处理每一行时要执行的语句}</li>
+</ul>
+<p>假设有这么一个文件（学生成绩表）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ cat score.txt</span><br><span class="line">Marry   2143 78 84 77</span><br><span class="line">Jack    2321 66 78 45</span><br><span class="line">Tom     2122 48 77 71</span><br><span class="line">Mike    2537 87 97 95</span><br><span class="line">Bob     2415 40 57 62</span><br></pre></td></tr></table></figure>
+<p>我们的awk脚本如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">$ cat cal.awk</span><br><span class="line">#!/bin/awk -f</span><br><span class="line">#运行前</span><br><span class="line">BEGIN &#123;</span><br><span class="line">    math = 0</span><br><span class="line">    english = 0</span><br><span class="line">    computer = 0</span><br><span class="line"> </span><br><span class="line">    printf &quot;NAME    NO.   MATH  ENGLISH  COMPUTER   TOTAL\n&quot;</span><br><span class="line">    printf &quot;---------------------------------------------\n&quot;</span><br><span class="line">&#125;</span><br><span class="line">#运行中</span><br><span class="line">&#123;</span><br><span class="line">    math+=$3</span><br><span class="line">    english+=$4</span><br><span class="line">    computer+=$5</span><br><span class="line">    printf &quot;%-6s %-6s %4d %8d %8d %8d\n&quot;, $1, $2, $3,$4,$5, $3+$4+$5</span><br><span class="line">&#125;</span><br><span class="line">#运行后</span><br><span class="line">END &#123;</span><br><span class="line">    printf &quot;---------------------------------------------\n&quot;</span><br><span class="line">    printf &quot;  TOTAL:%10d %8d %8d \n&quot;, math, english, computer</span><br><span class="line">    printf &quot;AVERAGE:%10.2f %8.2f %8.2f\n&quot;, math/NR, english/NR, computer/NR</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们来看一下执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ awk -f cal.awk score.txt</span><br><span class="line">NAME    NO.   MATH  ENGLISH  COMPUTER   TOTAL</span><br><span class="line">---------------------------------------------</span><br><span class="line">Marry  2143     78       84       77      239</span><br><span class="line">Jack   2321     66       78       45      189</span><br><span class="line">Tom    2122     48       77       71      196</span><br><span class="line">Mike   2537     87       97       95      279</span><br><span class="line">Bob    2415     40       57       62      159</span><br><span class="line">---------------------------------------------</span><br><span class="line">  TOTAL:       319      393      350</span><br><span class="line">AVERAGE:     63.80    78.60    70.00</span><br></pre></td></tr></table></figure>
+<p><strong>另外一些实例</strong></p>
+<p>AWK的hello world程序为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BEGIN &#123; print &quot;Hello, world!&quot; &#125;</span><br></pre></td></tr></table></figure>
+<p>计算文件大小</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ls -l *.txt | awk &apos;&#123;sum+=$6&#125; END &#123;print sum&#125;&apos;</span><br><span class="line">--------------------------------------------------</span><br><span class="line">666581</span><br></pre></td></tr></table></figure>
+<p>从文件中找出长度大于80的行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk &apos;length&gt;80&apos; log.txt</span><br></pre></td></tr></table></figure>
+<p>打印九九乘法表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">seq 9 | sed &apos;H;g&apos; | awk -v RS=&apos;&apos; &apos;&#123;for(i=1;i&lt;=NF;i++)printf(&quot;%dx%d=%d%s&quot;, i, NR, i*NR, i==NR?&quot;\n&quot;:&quot;\t&quot;)&#125;&apos;</span><br></pre></td></tr></table></figure>
+<h4 id="2-sed"><a href="#2-sed" class="headerlink" title="2.sed"></a>2.sed</h4><p>Linux sed命令是利用script来处理文本文件。</p>
+<p>sed可依照script的指令，来处理、编辑文本文件。</p>
+<p>Sed主要用来自动编辑一个或多个文件；简化对文件的反复操作；编写转换程序等。</p>
+<p><strong>语法</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed [-hnV][-e&lt;script&gt;][-f&lt;script文件&gt;][文本文件]</span><br></pre></td></tr></table></figure>
+<p><strong>参数说明</strong>：</p>
+<ul>
+<li>-e<script>或–expression=<script> 以选项中指定的script来处理输入的文本文件。</li>
+<li>-f&lt;script文件&gt;或–file=&lt;script文件&gt; 以选项中指定的script文件来处理输入的文本文件。</li>
+<li>-h或–help 显示帮助。</li>
+<li>-n或–quiet或–silent 仅显示script处理后的结果。</li>
+<li>-V或–version 显示版本信息。</li>
+</ul>
+<p><strong>动作说明</strong>：</p>
+<ul>
+<li>a ：新增， a 的后面可以接字串，而这些字串会在新的一行出现(目前的下一行)～</li>
+<li>c ：取代， c 的后面可以接字串，这些字串可以取代 n1,n2 之间的行！</li>
+<li>d ：删除，因为是删除啊，所以 d 后面通常不接任何东西；</li>
+<li>i ：插入， i 的后面可以接字串，而这些字串会在新的一行出现(目前的上一行)；</li>
+<li>p ：打印，亦即将某个选择的数据印出。通常 p 会与参数 sed -n 一起运行～</li>
+<li><p>s ：取代，可以直接进行取代的工作哩！通常这个 s 的动作可以搭配正规表示法！例如 1,20s/old/new/g </p>
+<p><strong>实例</strong></p>
+</li>
+</ul>
+<p>在testfile文件的第四行后添加一行，并将结果输出到标准输出，在命令行提示符下输入如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed -e 4a\newLine testfile</span><br></pre></td></tr></table></figure>
+<p>首先查看testfile中的内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cat testfile #查看testfile 中的内容  </span><br><span class="line">HELLO LINUX!  </span><br><span class="line">Linux is a free unix-type opterating system.  </span><br><span class="line">This is a linux testfile!  </span><br><span class="line">Linux test</span><br></pre></td></tr></table></figure>
+<p>使用sed命令后，输出结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ sed -e 4a\newline testfile #使用sed 在第四行后添加新字符串  </span><br><span class="line">HELLO LINUX! #testfile文件原有的内容  </span><br><span class="line">Linux is a free unix-type opterating system.  </span><br><span class="line">This is a linux testfile!  </span><br><span class="line">Linux test  </span><br><span class="line">newline</span><br></pre></td></tr></table></figure>
+<p><strong>以行为单位的新增/删除</strong></p>
+<p>将 /etc/passwd 的内容列出并且列印行号，同时，请将第 2~5 行删除！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@www ~]# nl /etc/passwd | sed &apos;2,5d&apos;</span><br><span class="line">1 root:x:0:0:root:/root:/bin/bash</span><br><span class="line">6 sync:x:5:0:sync:/sbin:/bin/sync</span><br><span class="line">7 shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown</span><br><span class="line">.....(后面省略).....</span><br></pre></td></tr></table></figure>
+<p>sed 的动作为 ‘2,5d’ ，那个 d 就是删除！因为 2-5 行给他删除了，所以显示的数据就没有 2-5 行罗～ 另外，注意一下，原本应该是要下达 sed -e 才对，没有 -e 也行啦！同时也要注意的是， sed 后面接的动作，请务必以 ‘’ 两个单引号括住喔！</p>
+<p>只要删除第 2 行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nl /etc/passwd | sed &apos;2d&apos;</span><br></pre></td></tr></table></figure>
+<p>要删除第 3 到最后一行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nl /etc/passwd | sed &apos;3,$d&apos;</span><br></pre></td></tr></table></figure>
+<p>在第二行后(亦即是加在第三行)加上『drink tea?』字样！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@www ~]# nl /etc/passwd | sed &apos;2a drink tea&apos;</span><br><span class="line">1 root:x:0:0:root:/root:/bin/bash</span><br><span class="line">2 bin:x:1:1:bin:/bin:/sbin/nologin</span><br><span class="line">drink tea</span><br><span class="line">3 daemon:x:2:2:daemon:/sbin:/sbin/nologin</span><br><span class="line">.....(后面省略).....</span><br></pre></td></tr></table></figure>
+<p>那如果是要在第二行前</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nl /etc/passwd | sed &apos;2i drink tea&apos;</span><br></pre></td></tr></table></figure>
+<p>如果是要增加两行以上，在第二行后面加入两行字，例如『Drink tea or …..』与『drink beer?』</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@www ~]# nl /etc/passwd | sed &apos;2a Drink tea or ......\</span><br><span class="line">&gt; drink beer ?&apos;</span><br><span class="line">1 root:x:0:0:root:/root:/bin/bash</span><br><span class="line">2 bin:x:1:1:bin:/bin:/sbin/nologin</span><br><span class="line">Drink tea or ......</span><br><span class="line">drink beer ?</span><br><span class="line">3 daemon:x:2:2:daemon:/sbin:/sbin/nologin</span><br><span class="line">.....(后面省略).....</span><br></pre></td></tr></table></figure>
+<p>每一行之间都必须要以反斜杠『 \ 』来进行新行的添加喔！所以，上面的例子中，我们可以发现在第一行的最后面就有 \ 存在。</p>
+<p><strong>以行为单位的替换与显示</strong></p>
+<p>将第2-5行的内容取代成为『No 2-5 number』呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@www ~]# nl /etc/passwd | sed &apos;2,5c No 2-5 number&apos;</span><br><span class="line">1 root:x:0:0:root:/root:/bin/bash</span><br><span class="line">No 2-5 number</span><br><span class="line">6 sync:x:5:0:sync:/sbin:/bin/sync</span><br><span class="line">.....(后面省略).....</span><br></pre></td></tr></table></figure>
+<p>透过这个方法我们就能够将数据整行取代了！</p>
+<p>仅列出 /etc/passwd 文件内的第 5-7 行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@www ~]# nl /etc/passwd | sed -n &apos;5,7p&apos;</span><br><span class="line">5 lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin</span><br><span class="line">6 sync:x:5:0:sync:/sbin:/bin/sync</span><br><span class="line">7 shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown</span><br></pre></td></tr></table></figure>
+<p>可以透过这个 sed 的以行为单位的显示功能， 就能够将某一个文件内的某些行号选择出来显示。</p>
+<p><strong>数据的搜寻并显示</strong></p>
+<p>搜索 /etc/passwd有root关键字的行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">nl /etc/passwd | sed &apos;/root/p&apos;</span><br><span class="line">1  root:x:0:0:root:/root:/bin/bash</span><br><span class="line">1  root:x:0:0:root:/root:/bin/bash</span><br><span class="line">2  daemon:x:1:1:daemon:/usr/sbin:/bin/sh</span><br><span class="line">3  bin:x:2:2:bin:/bin:/bin/sh</span><br><span class="line">4  sys:x:3:3:sys:/dev:/bin/sh</span><br><span class="line">5  sync:x:4:65534:sync:/bin:/bin/sync</span><br><span class="line">....下面忽略</span><br></pre></td></tr></table></figure>
+<p>如果root找到，除了输出所有行，还会输出匹配行。</p>
+<p>使用-n的时候将只打印包含模板的行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nl /etc/passwd | sed -n &apos;/root/p&apos;</span><br><span class="line">1  root:x:0:0:root:/root:/bin/bash</span><br></pre></td></tr></table></figure>
+<p><strong>数据的搜寻并删除</strong></p>
+<p>删除/etc/passwd所有包含root的行，其他行输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">nl /etc/passwd | sed  &apos;/root/d&apos;</span><br><span class="line">2  daemon:x:1:1:daemon:/usr/sbin:/bin/sh</span><br><span class="line">3  bin:x:2:2:bin:/bin:/bin/sh</span><br><span class="line">....下面忽略</span><br><span class="line">#第一行的匹配root已经删除了</span><br></pre></td></tr></table></figure>
+<p><strong>数据的搜寻并执行命令</strong></p>
+<p>搜索/etc/passwd,找到root对应的行，执行后面花括号中的一组命令，每个命令之间用分号分隔，这里把bash替换为blueshell，再输出这行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nl /etc/passwd | sed -n &apos;/bash/&#123;s/bash/blueshell/;p;q&#125;&apos;    </span><br><span class="line">1  root:x:0:0:root:/root:/bin/blueshell</span><br></pre></td></tr></table></figure>
+<p>最后的q是退出。</p>
+<p><strong>数据的搜寻并替换</strong></p>
+<p>除了整行的处理模式之外， sed 还可以用行为单位进行部分数据的搜寻并取代。基本上 sed 的搜寻与替代的与 vi 相当的类似！他有点像这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed &apos;s/要被取代的字串/新的字串/g&apos;</span><br></pre></td></tr></table></figure>
+<p>先观察原始信息，利用 /sbin/ifconfig 查询 IP</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@www ~]# /sbin/ifconfig eth0</span><br><span class="line">eth0 Link encap:Ethernet HWaddr 00:90:CC:A6:34:84</span><br><span class="line">inet addr:192.168.1.100 Bcast:192.168.1.255 Mask:255.255.255.0</span><br><span class="line">inet6 addr: fe80::290:ccff:fea6:3484/64 Scope:Link</span><br><span class="line">UP BROADCAST RUNNING MULTICAST MTU:1500 Metric:1</span><br><span class="line">.....(以下省略).....</span><br></pre></td></tr></table></figure>
+<p>本机的ip是192.168.1.100。</p>
+<p>将 IP 前面的部分予以删除</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@www ~]# /sbin/ifconfig eth0 | grep &apos;inet addr&apos; | sed &apos;s/^.*addr://g&apos;</span><br><span class="line">192.168.1.100 Bcast:192.168.1.255 Mask:255.255.255.0</span><br></pre></td></tr></table></figure>
+<p>接下来则是删除后续的部分，亦即： 192.168.1.100 Bcast:192.168.1.255 Mask:255.255.255.0</p>
+<p>将 IP 后面的部分予以删除</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@www ~]# /sbin/ifconfig eth0 | grep &apos;inet addr&apos; | sed &apos;s/^.*addr://g&apos; | sed &apos;s/Bcast.*$//g&apos;</span><br><span class="line">192.168.1.100</span><br></pre></td></tr></table></figure>
+<h4 id="3-wc命令"><a href="#3-wc命令" class="headerlink" title="3.wc命令"></a>3.wc命令</h4><p>Linux wc命令用于计算字数。</p>
+<p>利用wc指令我们可以计算文件的Byte数、字数、或是列数，若不指定文件名称、或是所给予的文件名为”-“，则wc指令会从标准输入设备读取数据。</p>
+<p><strong>语法</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wc [-clw][--help][--version][文件...]</span><br></pre></td></tr></table></figure>
+<p><strong>参数</strong>：</p>
+<ul>
+<li>-c或–bytes或–chars 只显示Bytes数。</li>
+<li>-l或–lines 只显示行数。</li>
+<li>-w或–words 只显示字数。</li>
+<li>–help 在线帮助。</li>
+<li>–version 显示版本信息。</li>
+</ul>
+<p><strong>实例</strong></p>
+<p>在默认的情况下，wc将计算指定文件的行数、字数，以及字节数。使用的命令为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wc testfile</span><br></pre></td></tr></table></figure>
+<p> 如果想同时统计多个文件的信息，例如同时统计testfile、testfile_1、testfile_2，可使用如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wc testfile testfile_1 testfile_2   #统计三个文件的信息</span><br></pre></td></tr></table></figure>
+<h4 id="4-grep命令"><a href="#4-grep命令" class="headerlink" title="4. grep命令"></a>4. grep命令</h4><p>Linux grep命令用于查找文件里符合条件的字符串。</p>
+<p>grep指令用于查找内容包含指定的范本样式的文件，如果发现某文件的内容符合所指定的范本样式，预设grep指令会把含有范本样式的那一列显示出来。若不指定任何文件名称，或是所给予的文件名为”-“，则grep指令会从标准输入设备读取数据。</p>
+<p><strong>语法</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep [-abcEFGhHilLnqrsvVwxy][-A&lt;显示列数&gt;][-B&lt;显示列数&gt;][-C&lt;显示列数&gt;][-d&lt;进行动作&gt;][-e&lt;范本样式&gt;][-f&lt;范本文件&gt;][--help][范本样式][文件或目录...]</span><br></pre></td></tr></table></figure>
+<p><strong>参数</strong>：</p>
+<ul>
+<li><strong>-a 或 –text</strong> : 不要忽略二进制的数据。</li>
+<li><strong>-A&lt;显示行数&gt; 或 –after-context=&lt;显示行数&gt;</strong> : 除了显示符合范本样式的那一列之外，并显示该行之后的内容。</li>
+<li><strong>-b 或 –byte-offset</strong> : 在显示符合样式的那一行之前，标示出该行第一个字符的编号。</li>
+<li><strong>-B&lt;显示行数&gt; 或 –before-context=&lt;显示行数&gt;</strong> : 除了显示符合样式的那一行之外，并显示该行之前的内容。</li>
+<li><strong>-c 或 –count</strong> : 计算符合样式的列数。</li>
+<li><strong>-C&lt;显示行数&gt; 或 –context=&lt;显示行数&gt;或-&lt;显示行数&gt;</strong> : 除了显示符合样式的那一行之外，并显示该行之前后的内容。</li>
+<li><strong>-d &lt;动作&gt; 或 –directories=&lt;动作&gt;</strong> : 当指定要查找的是目录而非文件时，必须使用这项参数，否则grep指令将回报信息并停止动作。</li>
+<li><strong>-e&lt;范本样式&gt; 或 –regexp=&lt;范本样式&gt;</strong> : 指定字符串做为查找文件内容的样式。</li>
+<li><strong>-E 或 –extended-regexp</strong> : 将样式为延伸的普通表示法来使用。</li>
+<li><strong>-f&lt;规则文件&gt; 或 –file=&lt;规则文件&gt;</strong> : 指定规则文件，其内容含有一个或多个规则样式，让grep查找符合规则条件的文件内容，格式为每行一个规则样式。</li>
+<li><strong>-F 或 –fixed-regexp</strong> : 将样式视为固定字符串的列表。</li>
+<li><strong>-G 或 –basic-regexp</strong> : 将样式视为普通的表示法来使用。</li>
+<li><strong>-h 或 –no-filename</strong> : 在显示符合样式的那一行之前，不标示该行所属的文件名称。</li>
+<li><strong>-H 或 –with-filename</strong> : 在显示符合样式的那一行之前，表示该行所属的文件名称。</li>
+<li><strong>-i 或 –ignore-case</strong> : 忽略字符大小写的差别。</li>
+<li><strong>-l 或 –file-with-matches</strong> : 列出文件内容符合指定的样式的文件名称。</li>
+<li><strong>-L 或 –files-without-match</strong> : 列出文件内容不符合指定的样式的文件名称。</li>
+<li><strong>-n 或 –line-number</strong> : 在显示符合样式的那一行之前，标示出该行的列数编号。</li>
+<li><strong>-q 或 –quiet或–silent</strong> : 不显示任何信息。</li>
+<li><strong>-r 或 –recursive</strong> : 此参数的效果和指定”-d recurse”参数相同。</li>
+<li><strong>-s 或 –no-messages</strong> : 不显示错误信息。</li>
+<li><strong>-v 或 –revert-match</strong> : 显示不包含匹配文本的所有行。</li>
+<li><strong>-V 或 –version</strong> : 显示版本信息。</li>
+<li><strong>-w 或 –word-regexp</strong> : 只显示全字符合的列。</li>
+<li><strong>-x –line-regexp</strong> : 只显示全列符合的列。</li>
+<li><strong>-y</strong> : 此参数的效果和指定”-i”参数相同。</li>
+</ul>
+</script></li></ul>
+  </section>
+</article>
+
+  <div class="sharing grid">
+  <section class="profile grid-item grid">
+    <img class="avatar" src="http://7xrcp8.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" />
+    <div class="grid-item">
+      <p class="title"> lyyourc </p>
+      <p class="subtitle"> You Are The JavaScript In My HTML </p>
+    <div>
+  </section>
+
+  <section class="share-btns">
+    <!-- <p> share it if you like it~ </p> -->
+    <a
+  class="twitter-share-button"
+  data-size="large"
+  data-via="DrakeLeung"
+  href="https://twitter.com/intent/tweet?text=<strong>1.awk</stron"
+>
+  Tweet
+</a>
+
+<script>
+  window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  js.async = true;
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));
+</script>
+
+  </section>
+</div>
+
+
+  
+    
+<section class="article-comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+<script>
+  var disqus_shortname = 'drakeleung';
+  
+  var disqus_url = '//harold.me/2018/07/05/linux常用命令/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+  
+</main>
+
+</body>
+</html>

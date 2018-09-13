@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>关于Hive | lyyourc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/app.css">
+  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+  
+</head>
+
+<body>
+  <nav class="app-nav">
+  
+    
+      <a href="/.">home</a>
+    
+  
+    
+      <a href="/archives">archive</a>
+    
+  
+    
+      <a href="/atom.xml">rss</a>
+    
+  
+</nav>
+
+  <main class="post">
+  <article>
+  <h1 class="article-title">
+    <a href="/2018/03/17/关于HIVE/">关于Hive</a>
+  </h1>
+
+  <section class="article-meta">
+    <p class="article-date">March 17 2018</p>
+  </section>
+
+  <section class="article-entry">
+    <blockquote>
+<p>本篇博客主要来自于本人学习&lt;&lt;Hadoop权威指南&gt;&gt;Hive部分的笔记和一些理解</p>
+</blockquote>
+<p>Hive是构建在Hadoop上的数据仓库框架,它把SQL查询转换为一系列在Hadoop集群上运行的作业,它的数据组织为表,元数据(eg.表模式)存储在metastore数据库中. metastore默认模本式为运行在本机上.</p>
+<h2 id="Hive-shell环境"><a href="#Hive-shell环境" class="headerlink" title="Hive shell环境"></a>Hive shell环境</h2><p>HiveQL是Hive的查询语言,类似Mysql,运行方式有:<br>  <a id="more"></a></p>
+<ul>
+<li><p><strong>交互模式</strong> : hive命令进入shell</p>
+<blockquote>
+<p>第一次使用时会花几秒时间,因为系统采用<strong>“延迟”</strong>策略,直到执行第一个命令才在运行hive命令的那个位置下的metastore_db目录中创建metastore数据库.</p>
+</blockquote>
+</li>
+<li><p><strong>非交互模式</strong> :<br><code>hive -f script.q</code> -f选项运行指定文件中的命令<br><code>hive -e &#39;SELECT * FROM DUMMY&#39;</code> -e选项在行内嵌入命令</p>
+</li>
+</ul>
+<p><strong>用到的HiveQL特有的关键字</strong>:</p>
+<blockquote>
+<p><code>create table records (year STRING, temperature INT, quality INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY &#39;\t&#39;;</code></p>
+</blockquote>
+<ul>
+<li>ROW FORMAT : 声明数据文件的每一行是由制表符分割的文本</li>
+</ul>
+<blockquote>
+<p><code>LOAD DATA LOCAL INPATH &#39;input/ncdc/micro-tab/sample.txt&#39; OVERWRITE INTO TABLE records;</code></p>
+</blockquote>
+<ul>
+<li><p>告诉Hive将本地文件放入其仓库目录,此操作并不解析文件或将它存储为内部数据库格式,因为Hive不强制使用任何特定文件格式. 在Hive中,表存储为目录,可由hive.metastore.warehouse.dir控制目录位置.</p>
+</li>
+<li><p>OVERWRITE    : 删除表对应目录中的所有文件</p>
+</li>
+</ul>
+<blockquote>
+<p><code>select year ,MAX(temperature) from records where temperature != 9999 and quality in (0,1,4,5,9) group by year;</code></p>
+</blockquote>
+<ul>
+<li>Hive 将查询转化为一个作业并执行作业,将结果打印到console</li>
+</ul>
+<p><strong>Hive设置属性优先级(顺序递减)</strong>:</p>
+<pre><code>. SET命令
+. 命令行 -hiveconf选项
+. hive-site.xml 和 Hadoop站点文件
+. Hive默认值和Hadoop默认值
+</code></pre><h2 id="MetaStore"><a href="#MetaStore" class="headerlink" title="MetaStore"></a><strong><em>MetaStore</em></strong></h2><p>metastore是Hive元数据的存放地,包括<em>服务</em>和<em>后台数据</em>的存储,默认情况下metastore和Hive运行在同个JVM,包含一个内嵌的以本地磁盘作为存储的<a href="https://www.cnblogs.com/zuzZ/p/8107915.html" target="_blank" rel="noopener">Derby数据库</a>实例,称为<strong>内嵌metastore配置</strong>.</p>
+<blockquote>
+<p>内嵌配置的缺点:每次只有一个内嵌Derby数据库可访问磁盘上的数据库文件,一次只能为每个metast打开一个Hive会话.</p>
+</blockquote>
+<p>要支持多个会话,需使用一个独立的数据库,称为<strong>本地metastore配置</strong>需要设置本地Mysql的用户名,密码等,还可以利用<strong>远程metastore配置</strong>使得一个或多个metastore服务器和Hive服务器运行在不同进程内,客户端不需数据库凭据.</p>
+<h2 id="传统数据库与Hive对比"><a href="#传统数据库与Hive对比" class="headerlink" title="传统数据库与Hive对比"></a>传统数据库与Hive对比</h2><ol>
+<li><p>传统数据库: <strong>写时模式</strong>,表的模式在加载时强制确定</p>
+<blockquote>
+<p>缺点: 加载慢,需要读取数据进行解析-&gt;序列化-&gt;以内部格式存入磁盘.<br>优点: 有利于提升查询性能,因为可以对列进行索引,对数据压缩.</p>
+</blockquote>
+<p>Hive: <strong>读时模式</strong>,在查询时才验证数据模式,加载迅速,仅仅是文件的复制和移动</p>
+</li>
+<li><p>更新,事务和索引</p>
+<p>  HDFS不支持就地更新,插入,更新删除操作引起的一切变化都被保存在一个增量文件中,由metastore在后台运行的mapreduce作业会定期将增量文件合并到基表.</p>
+<p> Hive引入了表级和分区级的锁,由ZooKeeper透明管理,用户不用执行获得和释放锁的操作.</p>
+<p> Hive索引分为<em>紧凑</em>和<em>位图</em>索引,可插拔,紧凑索引存储每个值的HDFS块号而不是文件内偏移量,不会占用过多磁盘空间;位图索引使用压缩的bitset来高效存储具有特殊值的行,适用于具有极少取值的列.</p>
+</li>
+</ol>
+<h2 id="表"><a href="#表" class="headerlink" title="表"></a>表</h2><p>Hive中的表在逻辑上由存储的数据和描述表中数据形式的相关元数据组成.<em>数据</em>一般存放在HDFS上,也可以是其他Hadoop文件系统,Hive把<em>元数据</em>存放在关系型数据库</p>
+<p><strong>托管表和外部表</strong><br>Hive创建表时,默认由Hive管理数据,将数据移入它的”仓库目录”,称为<em>托管表</em>.另一种方式是<em>外部表</em>,Hive到仓库目录以外的位置访问数据. 区别体现在DROP 和 LOAD上.</p>
+<ul>
+<li><p>托管表:</p>
+<blockquote>
+<p>加载操作就是文件系统中文件移动或重命名,执行速度快,如果要手动检查是否满足模式,可以通过查询为缺失字段返回的空值NULL才知道不匹配的行.<br><code>load data local inpath &#39;input/hive/dummy.txt&#39; into table managed_table;</code><br>执行删除操作后,它的元数据和数据会被一起删除,在HDFS中可以看到删除表后/user/hive/warehouse中的managed_table也被删除了.<br><code>drop table managed_table;</code></p>
+</blockquote>
+</li>
+<li><p>外部表</p>
+<blockquote>
+<p>创建表示需要指明外部数据的位置,定义时Hive不会检查外部位置是否存在,故可以在创建表之后再创建数据<br><code>create external table external_table (dummy STRING) LOCATION /user/harold/external_table</code>;<br>丢弃外部表时,Hive只会删除元数据,不会删除数据</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>分区和桶</strong><br>Hive把表组织成<em>分区</em>,使用分区可以加快数据分片的查询速度.表或分区可以进一部分为桶(bucket)它会为数据提供额外的结构以获得更高效的查询处理.</p>
+<ul>
+<li><em>分区</em> : 分区使得表对限制到某个特定范围的数据的查询变得非常高效(比如按照日期分区),只需扫描查询范围内分区中的文件,而且不会影响大范围查询的执行.一个表可以以多个维度分区,即进行子分区.</li>
+</ul>
+<p>分区是在创建表时用PARTITIONED BY子句定义的:</p>
+<blockquote>
+<p><code>CREATE TABLE logs (ts BIGINT, line STRING) PARTITIONED BY (dt STRING, country      STRING);</code></p>
+</blockquote>
+<p>  在将数据加载到分区表时,要显示指定分区值:</p>
+<blockquote>
+<p><code>LOAD DATA LOCAL INPATH &#39;input/hive/partitions/file1&#39; INTO TABLE logs PARTITION (dt=&#39;2001-01-01&#39;, country=&#39;GB&#39;);</code><br><code>SHOW PARTITON logs;</code> 可以展示表中的分区</p>
+</blockquote>
+<ul>
+<li><p><em>桶</em> :<br>  将表或分区组织成桶的理由:</p>
+<blockquote>
+<p>. 获得高效的查询处理效率<br>. 使取样更高效<br>创建被划分成桶的表:<br><code>CREATE TABLE bucketed_users (id INT, name STRING) CLUSTERED BY (id) INTO 4 BUCKETS;</code><br> 桶中的数据可以根据一个列或者多个列排序,这样对每个桶的连接变成了高效的归并排序,提升了map端连接的效率:<br><code>CREATE TABLE bucketed_users (id INT, name STRING) CLUSTERED BY (id) SORTED BY (id) INTO 4 BUCKETS;</code></p>
+</blockquote>
+<p> Hive并不检查数据文件中的桶是否和表定义中的桶一致,无论是桶的数量还是用来划分的列, 如果不匹配会 ,查询时会碰到错误或未定义的结果.<br> 将一个没有划分桶的数据集users填充进分桶后的表的步骤如下:</p>
+<blockquote>
+<p><code>SET hive.enforce.bucketing=true;</code> 这样Hive就知道用表中声明的数量来创建桶<br><code>INSERT OVERWRITE TABLE bucketed_users SELECT * FROM users;</code>Insert 即可</p>
+</blockquote>
+</li>
+</ul>
+<p>物理上,每个桶就是表目录中的一个文件,一个作业产生的桶(输出文件)和reduce任务个数相同.</p>
+<p>用TABLESAMPLE子句对表取样:<br><code>SELECT * FROM bucketed_users TABLESAMPLE(BUCKET 1 OUT OF 4 ON id);</code><br>和<br><code>SELECT * FROM users TABLESAMPLE(BUCKET 1 OUT OF 4 ON id);</code></p>
+<p>得到的结果一样.</p>
+<p><strong>存储格式</strong></p>
+<p> Hive从两个维度对表的存储进行管理:</p>
+<ul>
+<li>行格式: 行和行中的字段如何存储,行格式由SerDe(Serializer-Deserializer)定义. 当作为反序列化工具使用时(即查询表),SerDe将把文件中字节形式的数据反序列化为Hive内部操作行时所使用的对象形式,作为序列化工具时(INSERT,CTAS),表的SerDe会把Hive的数据行内部表示形式序列化成字节形式并写道输出文件中.</li>
+<li>文件格式: 一行中字段容器的格式</li>
+</ul>
+<p><em>默认的存储格式—-分隔的文本</em></p>
+<p>在创建表时如果没有用ROW FORMAT或STORED AS子句,Hive所使用的默认格式是分隔的文本,每行存储一个数据行.</p>
+<p>默认行内分隔符不是制表符,而是ASCII控制码集合中的Control-A,原因是它出现在字段文本中的可能性较小,Hive中无法对分隔符进行转义,因此挑选一个不会在数据字段中用到的字符作为分隔符非常重要.</p>
+<blockquote>
+<p>集合类的默认分隔符为Control-B,用于分隔ARRAY,STRUCT或MAP的键值对中的元素<br>默认的映射键(map key)分隔符为Control-C,用于分隔map的键和值<br>表中各行用换行符分隔<br>可以用hexdump查看输出文件的分隔符</p>
+</blockquote>
+<p>Hive支持8级分隔符,对应ASCII编码的1-8,但只能重载前三个.可用8进制形式表示分隔符,如001表示Control-A.</p>
+<p>Hivene内部使用LazySimpleSerDe来处理这种分隔格式以及面向行的MapReduce文本输入输出格式,他对字段的反序列化是延时处理的,只有在访问字段时才进行反序列化.</p>
+<p><em>二进制存储格式: 顺序文件 Avro数据文件 Parquet文件 RCFile ORCFile</em></p>
+<p>二进制格式:</p>
+<ol>
+<li>面向行的格式(Avro,顺序文件): 适合同时处理一行中很多列<blockquote>
+<p><code>SET hive.exec.compress.output=true;</code><br><code>SET avro.output.codec=snappy;</code><br><code>CREATE TABLE ... STORE AS AVRO;</code><br>可以将表存储为Avro格式</p>
+</blockquote>
+</li>
+<li>面向列的格式(Parquet文件 RCFile ORCFile): 对于只访问表中一小部分列的查询有效</li>
+</ol>
+<p>使用定制的SerDe: RegexSerDe</p>
+<blockquote>
+<p><code>REATE TABLE stations (usaf STRING, wban STRING, name STRING) ROW FORMAT SERDE &#39;org.apache.hadoop.hive.contrib.serde2.RegexSerDe&#39; WITH SERDEPROPERTIES (&quot;input.regex&quot; = &quot;(\\d{6}) (\\d{5}) (\\.{29}) .*&quot;);</code></p>
+<p>使用SERDE关键字和JAVA类完整类名指明使用哪个SerDe.用 WITH SERDEPROPERTIES设置SERDE的额外属性.</p>
+<p><code>LOAD DATA LOCAL INPATH &quot;input/ncdc/metadata/stations-fixed-width.txt&quot; INTO TABLE stations;</code></p>
+<p><code>hive&gt; SELECT * FROM stations LIMIT 4;
+OK
+010000    99999    BOGUS NORWAY
+010003    99999    BOGUS NORWAY
+010010    99999    JAN MAYEN
+010013    99999    ROST</code><br>效率比较低,一般用二进制存储格式</p>
+</blockquote>
+<p><em>导入数据</em></p>
+<blockquote>
+<p><strong>INSERT语句</strong><br>动态分区插入:</p>
+<blockquote>
+<p><code>INSERT OVERWRITE TABLE target PARTITION(dt) SELECT COL1, CLO2, dt FROM source</code></p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p><strong>多表插入</strong></p>
+<blockquote>
+<p><code>FROM records2</code><br><code>INSERT OVERWRITE TABLE stations_by_year SELECT year,COUNT(DISTINCT station) GROUP BY year</code><br><code>INSERT OVERWRITE TABLE records_by_year SELECT year, COUNT(1) GROUP BY year</code><br><code>INSERT OVERWRITE TABLE good_records_by_year SELECT year, COUNT(1) WHERE temperature != 9999 AND quality IN (0, 1, 4, 5, 9) GROUP BY year;</code><br>比单表效率高,只需扫一遍原表就可以生成多个不想交的输出</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p><strong>CTAS</strong><br><code>CREATA TABLE target AS SELECT col1, col2 FROM source;</code><br>CTAS操作是原子的,如select查询由于某种原因失败,则不会创建表target</p>
+</blockquote>
+<p><em>表的修改</em><br>Hive使用读时模式,创建表后可以灵活的支持对表的修改,但是需要警惕确保修改数据以符合新的结构.</p>
+<blockquote>
+<p><code>ALTER TABLE source RENAME TO target;</code></p>
+</blockquote>
+<p>重命名表,在更新元数据以外ALTER TABLE还把表目录移到新名称对应的目录下,对于外部表则只更新元数据.</p>
+<blockquote>
+<p><code>ALTER TABLE target ADD COLUMNS (cols3 STRING);</code></p>
+</blockquote>
+<p>添加新的列cols3在已有(非分区)列的后面,数据文件并没有更新,原来的查询会为cols3的结果返回null,Hive不允许更新已有的记录,故一般创建一个定义了新列的新表.然后使用SELECT语句把数据填充进去.</p>
+<p><em>表的丢弃</em><br>DROP TABLE;删除表中数据和元数据(外部表数据除外)<br>TRUNCATE TABLE my_table;删除表内所有数据,但保留定义(对外部表不起作用)<br>CREATE TABLE new_table LIKE existing_table;达到类似TRUNCATE的目的.</p>
+<h2 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h2><p><strong>排序和聚集</strong></p>
+<ul>
+<li>ORDER BY : 对输入执行并行全排序</li>
+<li>SORT BY : 为每个reducer产生一个排序文件</li>
+<li>DISTRIBUTE BY : 控制特定行到某个reducer,便于后续的聚集操作<blockquote>
+<p><code>FROM records2 SELECT year, temperature DISTRIBUTE BY year SORT BY year ASC, temperature DESC;</code></p>
+</blockquote>
+</li>
+</ul>
+<p><strong>MapReduce脚本</strong><br>TRANSFORM,MAP,REDUCE子句可在Hive中调用外部脚本或程序.</p>
+<blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;<span class="comment">#is_good_quality.py</span></span><br><span class="line">&gt;<span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin:</span><br><span class="line">    (year,temp,q) = line.strip().split()</span><br><span class="line">    <span class="keyword">if</span> (temp != <span class="string">"9999"</span> <span class="keyword">and</span> re.match(<span class="string">"[01459]"</span>),q)):</span><br><span class="line">        print(<span class="string">"%s\t%s"</span> % (year, temp))</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p><code>ADD FILE /input/is_good_quality.py;</code> 在Hive中注册脚本,Hive将脚本文件传到Hadoop集群<br><code>FROM records2 select TRANSFORM(year,temperature,quality) USING &#39;is_good_quality.py&#39; as year, temperature;</code> </p>
+</blockquote>
+<p>这一实例并未使用reducer.如果要使用嵌套模式,可以指定map和reduce函数:</p>
+<blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;FROM (</span><br><span class="line">  FROM records2</span><br><span class="line">  MAP year, temperature, quality</span><br><span class="line">  USING <span class="string">'is_good_quality.py'</span></span><br><span class="line">  AS year, temperature) map_output</span><br><span class="line">REDUCE year, temperature</span><br><span class="line">USING <span class="string">'max_temperature_reduce.py'</span></span><br><span class="line">AS year, temperature;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>和<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">FROM (</span><br><span class="line">  FROM records2</span><br><span class="line">  SELECT TRANSFORM(year, temperature, quality)</span><br><span class="line">  USING <span class="string">'is_good_quality.py'</span></span><br><span class="line">  AS year, temperature) map_output</span><br><span class="line">SELECT TRANSFORM(year, temperature)</span><br><span class="line">USING <span class="string">'max_temperature_reduce.py'</span></span><br><span class="line">AS year, temperature;</span><br></pre></td></tr></table></figure></p>
+<p>结果一致</p>
+<p><strong>连接</strong></p>
+<p><em>内连接</em>:输入表之间每次匹配都会在输出行里生成一行:</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;SELECT * FROM sales;</span><br><span class="line">Joe	2</span><br><span class="line">Hank	4</span><br><span class="line">Ali	0</span><br><span class="line">Eve	3</span><br><span class="line">Hank	2</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt; SELECT * FROM things;</span><br><span class="line">2	Tie</span><br><span class="line">4	Coat</span><br><span class="line">3	Hat</span><br><span class="line">1	Scarf</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT sales.*, things.* FROM sales JOIN things ON (sales.id = things.id);</span><br><span class="line">Joe	2	2	Tie</span><br><span class="line">Hank	4	4	Coat</span><br><span class="line">Eve	3	3	Hat</span><br><span class="line">Hank	2	2	Tie</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>JOIN子句中的顺序很重要:一般将最大的表放到最后,因为JOIN前一阶段生成的数据会存在于Reducer的buffer中，通过stream最后面的表，直接从Reducer的buffer中读取已经缓冲的中间结果数据（这个中间结果数据可能是JOIN顺序中，前面表连接的结果的Key，数据量相对较小，内存开销就小），这样，与后面的大表进行连接时，只需要从buffer中读取缓存的Key，与大表中的指定Key进行连接，速度会更快，也可能避免内存缓冲区溢出.(出自<a href="http://shiyanjun.cn/archives/588.html" target="_blank" rel="noopener">简单之美</a>)</p>
+</blockquote>
+<p>Hive只支持等值连接,在连接谓词中只能使用等号,还可以在在查询中使用多个JOIN…ON…子句来连接多个表,Hive会智能的以最少的MapReduce作业数来执行连接.单个连接用一个MR作业实现,如果多个连接条件中使用了相同的列那么平均每个连接可以使用少于一个MR作业来实现.</p>
+<p><strong>外连接</strong><br>外连接可以找到表中不能匹配的数据行:</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;左连接</span><br><span class="line">SELECT sales.*, things.* FROM sales LEFT OUTER JOIN things ON (sales.id = things.id);</span><br><span class="line">Joe	2	2	Tie</span><br><span class="line">Hank	4	4	Coat</span><br><span class="line">Ali	0	NULL	NULL</span><br><span class="line">Eve	3	3	Hat</span><br><span class="line">Hank	2	2	Tie</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>当然Hive也支持右连接和全外连接:</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SELECT sales.*, things.* FROM sales RIGHT OUTER JOIN things ON (sales.id = things.id);</span><br><span class="line">Joe	2	2	Tie</span><br><span class="line">Hank	2	2	Tie</span><br><span class="line">Hank	4	4	Coat</span><br><span class="line">Eve	3	3	Hat</span><br><span class="line">NULL	NULL	1	Scarf</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;SELECT sales.*, things.* FROM sales FULL OUTER JOIN things ON (sales.id = things.id)</span><br><span class="line">&gt;Ali	0	NULL	NULL</span><br><span class="line">NULL	NULL	1	Scarf</span><br><span class="line">Hank	2	2	Tie</span><br><span class="line">Joe	2	2	Tie</span><br><span class="line">Eve	3	3	Hat</span><br><span class="line">Hank	4	4	Coat</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p><strong>半连接</strong><br>LEFT SEMI JOIN:</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select * from sales left semi join things on (sales.id = things.id);</span><br><span class="line">Joe	2</span><br><span class="line">Hank	4</span><br><span class="line">Eve	3</span><br><span class="line">Hank	2</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>右表只能在ON子句中出现,不能在SELECT表达式中引用右表.</p>
+<p><strong>map连接</strong><br>如果有一个连接表小到足以放入内存,Hive就将较小的表放入每个mapper的内存来执行连接操作.<br>map连接不适用Reducer,因此对于RIGHT或者FULL OUTER JOIN无效,因为只有在对所有输入上进行聚集的步骤(reduce)才能检测到那个数据行无法匹配.<br>map连接可以利用分桶的表,因为作用于左侧表的桶的mapper加载右侧表中对应的桶即可执行连接.需要<code>SET hive.optimize.bucketmapjoin=true</code>启用优化选项.</p>
+<p><strong>子查询</strong><br>子查询是内嵌在另一个SQL语句中的SELECT语句,Hive只允许子查询出现在SELECT语句的FROM子句中,或某些特殊情况下的WHERE子句中.</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;hive&gt; SELECT station, year, AVG(max_temperature)</span><br><span class="line">     FROM (</span><br><span class="line">     SELECT station, year, MAX(temperature) AS max_temperature</span><br><span class="line">     FROM records2</span><br><span class="line">     WHERE temperature != 9999 AND quality IN (0,1,4,5,9)</span><br><span class="line">     GROUP BY station, year</span><br><span class="line">     ) mt</span><br><span class="line">     GROUP BY station, year;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>外层查询像访问表那样访问子查询的结果,所以必须为子查询赋予一个别名(mt),子查询中的列必须有唯一的名称,以便外层访问引用这些列.</p>
+<p><strong>视图</strong><br>用SELECT语句定义的虚表,可以限制用户,使其只能访问被授权可以看到的表的子集.Hive中,创建视图并不把视图物化存储到磁盘上,视图的SELECT语句只在执行引用视图的语句时才执行.要手工物化视图,可以新建一个表,将视图内容存储到新表中.<br>创建方式:CREATE VIEW</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; CREATE VIEW valid_records AS SELECT * FROM records2 WHERE temperature != 9999 AND quality IN (0,1,4,5,9);</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>创建视图时并不执行查询,查询只是存储在metastore中,SHOW TABLES命令结果包含视图,可用DESCRIBE EXTENDED view_name来查看视图的详细信息.<br><img src="/home/harold/Pictures/Selection_021.png" alt=""></p>
+</blockquote>
+<p>Hive可以把使用视图的查询组织为一系列作业,效果与不使用视图一样.即使在执行时,Hive也不会再不必要的情况下物化视图.</p>
+<p>Hive中的视图是只读的,无法通过视图为基表加载或插入数据.</p>
+<h2 id="用户定义函数—-UDF"><a href="#用户定义函数—-UDF" class="headerlink" title="用户定义函数—-UDF"></a>用户定义函数—-UDF</h2><p>用户定义函数(user-defined function)必须用Java编写,其他语言可以用之前用过的<code>SELECT TRANSFORM</code>查询.</p>
+<p>Hive三种UDF, 他们所接受的输入和产生的输出的数据行的数量不同 :</p>
+<ul>
+<li>普通UDF : 作用于单个数据行,产生一个数据行</li>
+<li>用户定义聚集函数 UDAF : 接受多个数据行,产生一个输出行, 类似COUNT , MAX</li>
+<li>用户定义表生成函数 UDTF : 作用于单个数据行, 产生多个输出行</li>
+</ul>
+<p><em>UDTF</em>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; create table arrays (x ARRAY&lt;STRING&gt;) ROW</span><br><span class="line">    &gt; FORMAT DELIMITED</span><br><span class="line">    &gt; FIELDS TERMINATED BY &apos;\001&apos;</span><br><span class="line">    &gt; COLLECTION ITEMS TERMINATED BY &apos;\002&apos;;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; SELECT * FROM arrays;</span><br><span class="line">OK</span><br><span class="line">[&quot;a&quot;,&quot;b&quot;]</span><br><span class="line">[&quot;c&quot;,&quot;d&quot;,&quot;e&quot;]</span><br></pre></td></tr></table></figure>
+<p>explode UDTF对表进行变换,为数组中的每一项输出一行.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; SELECT explode(x) AS y from arrays;</span><br><span class="line">OK</span><br><span class="line">a</span><br><span class="line">b</span><br><span class="line">c</span><br><span class="line">d</span><br><span class="line">e</span><br></pre></td></tr></table></figure></p>
+<p>常用的UDTF还有SPLIT() 等,还有更强大的LATERAL VIEW查询,笔者会在之后的博客详细介绍.</p>
+<p><strong>写UDF</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.commons.lang.StringUtils;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hive.ql.exec.UDF;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.Text;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Strip</span> <span class="keyword">extends</span> <span class="title">UDF</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Text result = <span class="keyword">new</span> Text();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Text <span class="title">evaluate</span> <span class="params">(Text str)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (str == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        result.set(StringUtils.strip(str.toString()));</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Text <span class="title">evaluate</span><span class="params">(Text str, String stripChars)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(str == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        result.set(StringUtils.strip(str.toString(), stripChars));</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>一个UDF必须满足:</p>
+<ol>
+<li>是org.apache.hadoop.hive.ql.exec.UDF的子类</li>
+<li>至少实现了evaluate()方法</li>
+</ol>
+<p>evaluate()不是由接口定义的,它接受的参数个数和类型以及返回值都是不确定的,Hive会检查UDF,看能否找到相匹配的evaluate().</p>
+<p>使用UDF:<br>1.在metastore中注册函数并用CTREATE FUNCTION为它取名:</p>
+<blockquote>
+<p>CREATE FUNCTION strip AS ‘com.hadoopbook.hive.Strip’ USING JAR ‘path/hive-example.jar’</p>
+</blockquote>
+<p>2.使用内置函数:</p>
+<blockquote>
+<p>SELECT strip(‘ bee ‘) FROM dummy; UDF名对大小写不敏感</p>
+</blockquote>
+<p>3.删除函数:</p>
+<blockquote>
+<p>DROP FUNCTION strip;</p>
+</blockquote>
+<p>4.用TEMPORARY创建仅在Hive会话期间有效的函数,不在metastore中持久化:</p>
+<blockquote>
+<p><code>ADD JAR /path/hive-example.jar;</code><br><code>CREATE TEMPORARY FUNCTION strip AS &#39;com.hadoopbook.hive.Strip&#39;;</code></p>
+</blockquote>
+<p><strong>写UDAF</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.hadoop.hive.ql.exec.UDAF;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hive.ql.exec.UDAFEvaluator;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.IntWritable;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Maximum</span> <span class="keyword">extends</span> <span class="title">UDAF</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MaximumIntUDAFEvaluator</span> <span class="keyword">implements</span> <span class="title">UDAFEvaluator</span></span>&#123;</span><br><span class="line">        <span class="keyword">private</span> IntWritable result;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            result = <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">iterate</span><span class="params">(IntWritable value)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (value == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (result == <span class="keyword">null</span>) &#123;</span><br><span class="line">                result = <span class="keyword">new</span> IntWritable(value.get());</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                result.set(Math.max(result.get(), value.get()));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> IntWritable <span class="title">terminatePartial</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">merge</span><span class="params">(IntWritable other)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> iterate(other);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> IntWritable <span class="title">terminate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>UDAF必须是org.apache.hadoop.hive.ql.exec.UDAF的子类(<em>UDAF类已经过时弃用了，现在是实现GenericUDAFResolver2接口,请看本博客另一篇相关的文内容</em>), 且包含一个或多个嵌套的实现了Org.apache.hadoop.hive.ql.exec.UDAFEvaluator的<em>静态类</em>.</p>
+<p>一个计算函数必须实现以下五个方法:</p>
+<ul>
+<li><p>init() : 负责初始化计算函数并设置他的内部状态</p>
+</li>
+<li><p>inerate() : 每次对一个新值进行聚集计算都会调用此方法,iterate()接受的参数和Hive中被调用函数的参数是对应的.</p>
+</li>
+<li><p>terminate() : Hive需要部分聚集结果时会调用此方法,这个方法必须返回一个封装了聚集计算当前状态的对象.</p>
+</li>
+<li><p>merge()方法 : 在Hive合并两个部分聚集值时会调用merge()方法.该方法接受一个对象作为输入,其类型必须和terminatePartial()方法的返回类型一致.</p>
+</li>
+<li><p>terminate()方法 : Hive需要最终聚集结果时会调用此方法</p>
+</li>
+<li><p>计算流程见下图:<br><img src="http://p5s7d12ls.bkt.clouddn.com/18-3-18/61809116.jpg" alt=""></p>
+</li>
+</ul>
+
+  </section>
+</article>
+
+  <div class="sharing grid">
+  <section class="profile grid-item grid">
+    <img class="avatar" src="http://7xrcp8.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" />
+    <div class="grid-item">
+      <p class="title"> lyyourc </p>
+      <p class="subtitle"> You Are The JavaScript In My HTML </p>
+    <div>
+  </section>
+
+  <section class="share-btns">
+    <!-- <p> share it if you like it~ </p> -->
+    <a
+  class="twitter-share-button"
+  data-size="large"
+  data-via="DrakeLeung"
+  href="https://twitter.com/intent/tweet?text=ockquote>
+<p>本篇博客主要来"
+>
+  Tweet
+</a>
+
+<script>
+  window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  js.async = true;
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));
+</script>
+
+  </section>
+</div>
+
+
+  
+    
+<section class="article-comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+<script>
+  var disqus_shortname = 'drakeleung';
+  
+  var disqus_url = '//harold.me/2018/03/17/关于HIVE/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+  
+</main>
+
+</body>
+</html>

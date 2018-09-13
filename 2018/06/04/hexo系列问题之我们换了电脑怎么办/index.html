@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>hexo系列问题之我们换了电脑怎么办 | lyyourc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/app.css">
+  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+  
+</head>
+
+<body>
+  <nav class="app-nav">
+  
+    
+      <a href="/.">home</a>
+    
+  
+    
+      <a href="/archives">archive</a>
+    
+  
+    
+      <a href="/atom.xml">rss</a>
+    
+  
+</nav>
+
+  <main class="post">
+  <article>
+  <h1 class="article-title">
+    <a href="/2018/06/04/hexo系列问题之我们换了电脑怎么办/">hexo系列问题之我们换了电脑怎么办</a>
+  </h1>
+
+  <section class="article-meta">
+    <p class="article-date">June 04 2018</p>
+  </section>
+
+  <section class="article-entry">
+    <p>问题<br>我们如果换了电脑怎么办？我们把hexo文件从一个电脑cope到另外一个电脑吗?答案肯定不是这样的，因为这里面有好多依赖包，好几万个文件呢，这样显然不合理</p>
+<p>解决方案<br>我们初步的解决方案是把我们的文件提交到git上，利用git来管理它，我是这样解决的： 在现有的XXX.github.io项目上创建一个分支来管理<br><a id="more"></a> </p>
+<ol>
+<li>克隆gitHub上的XXX.github.io项目的文件到本地 </li>
+</ol>
+<p>git clone <a href="https://github.com/yourname/xxx.github.io.git" target="_blank" rel="noopener">https://github.com/yourname/xxx.github.io.git</a> </p>
+<ol>
+<li>删除文件夹里除了.git的其他所有文件 </li>
+<li>把hexo项目文件下的所有文件全部复制过来 </li>
+<li>里面应该有一个叫.gitignore的文件，如果没有就输入 touch .gitignore，创建一个 </li>
+<li>.gitignore文件里应该是这些内容 </li>
+</ol>
+<p>.DS_Store<br>Thumbs.db<br>db.json<br><em>.log<br>node_modules/<br>public/<br>.deploy</em>/ </p>
+<ol>
+<li>创建一个叫hexo的分支并切换到这个分支上 </li>
+</ol>
+<p>git checkout -b hexo </p>
+<ol>
+<li>提交复制过来的文件到暂存区 </li>
+</ol>
+<p>git add –all </p>
+<ol>
+<li>提交 </li>
+</ol>
+<p>git commit -m “新建分支资源文件” </p>
+<ol>
+<li>推送分支到github </li>
+</ol>
+<p>git push –set-upstream origin hexo </p>
+<p>到这一步我们就基本上搞定了，以后再跟新了博客就直接 git push就可以了，hexo的操作跟以前一样不变。 </p>
+<ol>
+<li><p>今后无论什么时候想要在其他电脑上面用hexo写博客，就直接把创建的分支克隆下来，npm install安装依赖之后就可以用了。<br>克隆分支的操作<br>git clone -b hexo <a href="https://github.com/yourname/xxx.github.io.git" target="_blank" rel="noopener">https://github.com/yourname/xxx.github.io.git</a> </p>
+</li>
+<li><p>因为上面创建的是一个名字叫hexo的分支，所以这里-b后面的是hexo，再把后面的gitHub的地址换成你自己的hexo博客的地址就可以了。 </p>
+</li>
+<li>这样做完了以后，每次写完博客发布之后不要忘了还要git push把源文件推到分支上。</li>
+</ol>
+
+  </section>
+</article>
+
+  <div class="sharing grid">
+  <section class="profile grid-item grid">
+    <img class="avatar" src="http://7xrcp8.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" />
+    <div class="grid-item">
+      <p class="title"> lyyourc </p>
+      <p class="subtitle"> You Are The JavaScript In My HTML </p>
+    <div>
+  </section>
+
+  <section class="share-btns">
+    <!-- <p> share it if you like it~ </p> -->
+    <a
+  class="twitter-share-button"
+  data-size="large"
+  data-via="DrakeLeung"
+  href="https://twitter.com/intent/tweet?text=问题<br>我们如果换了电脑怎么办？我们"
+>
+  Tweet
+</a>
+
+<script>
+  window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  js.async = true;
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));
+</script>
+
+  </section>
+</div>
+
+
+  
+    
+<section class="article-comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+<script>
+  var disqus_shortname = 'drakeleung';
+  
+  var disqus_url = '//harold.me/2018/06/04/hexo系列问题之我们换了电脑怎么办/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+  
+</main>
+
+</body>
+</html>

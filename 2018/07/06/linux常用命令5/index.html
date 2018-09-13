@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>linux常用命令————more、less、cmp、split、colrm、look | lyyourc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/app.css">
+  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+  
+</head>
+
+<body>
+  <nav class="app-nav">
+  
+    
+      <a href="/.">home</a>
+    
+  
+    
+      <a href="/archives">archive</a>
+    
+  
+    
+      <a href="/atom.xml">rss</a>
+    
+  
+</nav>
+
+  <main class="post">
+  <article>
+  <h1 class="article-title">
+    <a href="/2018/07/06/linux常用命令5/">linux常用命令————more、less、cmp、split、colrm、look</a>
+  </h1>
+
+  <section class="article-meta">
+    <p class="article-date">July 06 2018</p>
+  </section>
+
+  <section class="article-entry">
+    <p><strong>1.more</strong></p>
+<p>Linux more 命令类似 cat ，不过会以一页一页的形式显示，更方便使用者逐页阅读，而最基本的指令就是按空白键（space）就往下一页显示，按 b 键就会往回（back）一页显示，而且还有搜寻字串的功能（与 vi 相似），使用中的说明文件，请按 h 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">more [-dlfpcsu] [-num] [+/pattern] [+linenum] [fileNames..]</span><br></pre></td></tr></table></figure>
+<a id="more"></a>     
+<p> <strong>参数</strong>：</p>
+<ul>
+<li>-num 一次显示的行数</li>
+<li>-d 提示使用者，在画面下方显示 [Press space to continue, ‘q’ to quit.] ，如果使用者按错键，则会显示 [Press ‘h’ for instructions.] 而不是 ‘哔’ 声</li>
+<li>-l 取消遇见特殊字元 ^L（送纸字元）时会暂停的功能</li>
+<li>-f 计算行数时，以实际上的行数，而非自动换行过后的行数（有些单行字数太长的会被扩展为两行或两行以上）</li>
+<li>-p 不以卷动的方式显示每一页，而是先清除萤幕后再显示内容</li>
+<li>-c 跟 -p 相似，不同的是先显示内容再清除其他旧资料</li>
+<li>-s 当遇到有连续两行以上的空白行，就代换为一行的空白行</li>
+<li>-u 不显示下引号 （根据环境变数 TERM 指定的 terminal 而有所不同）</li>
+<li>+/pattern 在每个文档显示前搜寻该字串（pattern），然后从该字串之后开始显示</li>
+<li>+num 从第 num 行开始显示</li>
+<li>fileNames 欲显示内容的文档，可为复数个数</li>
+</ul>
+<p>常用操作命令</p>
+<ul>
+<li>Enter 向下n行，需要定义。默认为1行</li>
+<li>Ctrl+F 向下滚动一屏</li>
+<li>空格键 向下滚动一屏</li>
+<li>Ctrl+B 返回上一屏</li>
+<li>= 输出当前行的行号</li>
+<li>：f 输出文件名和当前行的行号</li>
+<li>V 调用vi编辑器</li>
+<li>!命令 调用Shell，并执行命令</li>
+<li>q 退出more</li>
+</ul>
+<p><strong>2.less</strong></p>
+<p>less 与 more 类似，但使用 less 可以随意浏览文件，而 more 仅能向前移动，却不能向后移动，而且 less 在查看之前不会加载整个文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">less [参数] 文件</span><br></pre></td></tr></table></figure>
+<p><strong>参数说明</strong>：</p>
+<ul>
+<li>-b &lt;缓冲区大小&gt; 设置缓冲区的大小</li>
+<li>-e 当文件显示结束后，自动离开</li>
+<li>-f 强迫打开特殊文件，例如外围设备代号、目录和二进制文件</li>
+<li>-g 只标志最后搜索的关键词</li>
+<li>-i 忽略搜索时的大小写</li>
+<li>-m 显示类似more命令的百分比</li>
+<li>-N 显示每行的行号</li>
+<li>-o &lt;文件名&gt; 将less 输出的内容在指定文件中保存起来</li>
+<li>-Q 不使用警告音</li>
+<li>-s 显示连续空行为一行</li>
+<li>-S 行过长时间将超出部分舍弃</li>
+<li>-x &lt;数字&gt; 将”tab”键显示为规定的数字空格</li>
+<li>/字符串：向下搜索”字符串”的功能</li>
+<li>?字符串：向上搜索”字符串”的功能</li>
+<li>n：重复前一个搜索（与 / 或 ? 有关）</li>
+<li>N：反向重复前一个搜索（与 / 或 ? 有关）</li>
+<li>b 向后翻一页</li>
+<li>d 向后翻半页</li>
+<li>h 显示帮助界面</li>
+<li>Q 退出less 命令</li>
+<li>u 向前滚动半页</li>
+<li>y 向前滚动一行</li>
+<li>空格键 滚动一页</li>
+<li>回车键 滚动一行</li>
+<li>[pagedown]： 向下翻动一页</li>
+<li>[pageup]： 向上翻动一页</li>
+</ul>
+<p><strong>3.cmp</strong></p>
+<p>Linux cmp命令用于比较两个文件是否有差异。</p>
+<p>当相互比较的两个文件完全一样时，则该指令不会显示任何信息。若发现有所差异，预设会标示出第一个不同之处的字符和列数编号。若不指定任何文件名称或是所给予的文件名为”-“，则cmp指令会从标准输入设备读取数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmp [-clsv][-i &lt;字符数目&gt;][--help][第一个文件][第二个文件]</span><br></pre></td></tr></table></figure>
+<p><strong>参数</strong>：</p>
+<ul>
+<li>-c或–print-chars 　除了标明差异处的十进制字码之外，一并显示该字符所对应字符。</li>
+<li>-i&lt;字符数目&gt;或–ignore-initial=&lt;字符数目&gt; 　指定一个数目。</li>
+<li>-l或–verbose 　标示出所有不一样的地方。</li>
+<li>-s或–quiet或–silent 　不显示错误信息。</li>
+<li>-v或–version 　显示版本信息。</li>
+<li><p>–help 　在线帮助。</p>
+<p>要确定两个文件是否相同，请输入：</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmp prog.o.bak prog.o</span><br></pre></td></tr></table></figure>
+<p><strong>4.split</strong></p>
+<p>Linux split命令用于将一个文件分割成数个。</p>
+<p>该指令将大文件分割成较小的文件，在默认情况下将按照每1000行切割成一个小文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">split [--help][--version][-&lt;行数&gt;][-b &lt;字节&gt;][-C &lt;字节&gt;][-l &lt;行数&gt;][要切割的文件][输出文件名]</span><br></pre></td></tr></table></figure>
+<p><strong>参数说明</strong>：</p>
+<ul>
+<li>-&lt;行数&gt; : 指定每多少行切成一个小文件</li>
+<li>-b&lt;字节&gt; : 指定每多少字节切成一个小文件</li>
+<li>–help : 在线帮助</li>
+<li>–version : 显示版本信息</li>
+<li>-C&lt;字节&gt; : 与参数”-b”相似，但是在切 割时将尽量维持每行的完整性</li>
+<li><p>[输出文件名] : 设置切割后文件的前置文件名， split会自动在前置文件名后再加上编号</p>
+<p>使用指令”split”将文件”README”每6行切割成一个文件，输入如下命令：</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ split -6 README       #将README文件每六行分割成一个文件</span><br></pre></td></tr></table></figure>
+<p>以上命令执行后，指令”split”会将原来的大文件”README”切割成多个以”x”开头的小文件。而在这些小文件中，每个文件都只有6行内容。</p>
+<p>使用指令”ls”查看当前目录结构，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ls                                #执行ls指令  </span><br><span class="line">#获得当前目录结构  </span><br><span class="line">README xaa xad xag xab xae xah xac xaf xai</span><br></pre></td></tr></table></figure>
+<p><strong>5.colrm</strong></p>
+<p>Linux colrm命令用于滤掉指定的列。</p>
+<p>colrm指令从标准输入设备读取书记，转而输出到标准输出设备。如果不加任何参数，则该指令不会过滤任何一行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">colrm [开始行数编号&lt;结束行数编号&gt;]</span><br></pre></td></tr></table></figure>
+<p><strong>参数说明：</strong></p>
+<ul>
+<li>开始列数编号： 指定要删除的列的起始编号。</li>
+<li>结束列数编号：指定要删除的列的结束编号，有时候这个参数可以省略。</li>
+</ul>
+<p>按回车键后，光标将在第一行闪烁，等待标准输入，此时输入字符，如”Hello Linux！”，再按回车键后第二行将出现与第一行相同内容，此时按Ctrl+C组合键可以退出。终端中显示的内容如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cmd@hdd-desktop:~$ colrm  </span><br><span class="line">Hello Linux! #输入Hello Linux！字符串  </span><br><span class="line">Hello Linux! #输出刚才输入的字符串Hello Linux！</span><br></pre></td></tr></table></figure>
+<p>如想要删除第4 列之后的所有内容，可以使用如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">colrm 4</span><br></pre></td></tr></table></figure>
+<p>类似于上例，此时标准输入等待输入，用户输入字符串按回车键后，将输出如下结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cmd@hdd-desktop:~$ colrm 4  </span><br><span class="line">Hello Linux! #输入Hello Linux！字符串  </span><br><span class="line">Hel #输出删除了第4列以后所有内容的字符串</span><br></pre></td></tr></table></figure>
+<p>删除指定列的内容。如删除第4列到第6列的内容，可使用如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">colrm 4 6</span><br></pre></td></tr></table></figure>
+<p>输出的结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cmd@hdd-desktop:~$ colrm 4 6  </span><br><span class="line">Hello Linux! #输入Hello Linux！字符串  </span><br><span class="line">HelLinux! #输出删除了从第4列到第6列字符的字符串</span><br></pre></td></tr></table></figure>
+<p><strong>6.look</strong></p>
+<p>Linux look命令用于查询单词。</p>
+<p>look指令用于英文单字的查询。您仅需给予它欲查询的字首字符串，它会显示所有开头字符串符合该条件的单字。</p>
+<p><code>look [-adf][-t&lt;字尾字符串&gt;][字首字符串][字典文件]</code></p>
+<p><strong>参数说明</strong>：</p>
+<ul>
+<li>-a 使用另一个字典文件web2，该文件也位于/usr/dict目录下。</li>
+<li>-d 只对比英文字母和数字，其余一慨忽略不予比对。</li>
+<li>-f 忽略字符大小写差别。</li>
+<li>-t&lt;字尾字符串&gt; 设置字尾字符串。</li>
+</ul>
+<p>为了查找在testfile文件中以字母L开头的所有的行，可以输入如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">look L testfile</span><br></pre></td></tr></table></figure>
+<p>原文件testfile中的内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cat testfile #查看testfile 文件内容  </span><br><span class="line">HELLO LINUX!  </span><br><span class="line">Linux is a free unix-type opterating system.  </span><br><span class="line">This is a linux testfile!  </span><br><span class="line">Linux test</span><br></pre></td></tr></table></figure>
+  </section>
+</article>
+
+  <div class="sharing grid">
+  <section class="profile grid-item grid">
+    <img class="avatar" src="http://7xrcp8.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" />
+    <div class="grid-item">
+      <p class="title"> lyyourc </p>
+      <p class="subtitle"> You Are The JavaScript In My HTML </p>
+    <div>
+  </section>
+
+  <section class="share-btns">
+    <!-- <p> share it if you like it~ </p> -->
+    <a
+  class="twitter-share-button"
+  data-size="large"
+  data-via="DrakeLeung"
+  href="https://twitter.com/intent/tweet?text=<strong>1.more</stro"
+>
+  Tweet
+</a>
+
+<script>
+  window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  js.async = true;
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));
+</script>
+
+  </section>
+</div>
+
+
+  
+    
+<section class="article-comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+<script>
+  var disqus_shortname = 'drakeleung';
+  
+  var disqus_url = '//harold.me/2018/07/06/linux常用命令5/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+  
+</main>
+
+</body>
+</html>

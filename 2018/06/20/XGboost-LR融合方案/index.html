@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>XGboost+LR融合方案 | lyyourc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/app.css">
+  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+  
+</head>
+
+<body>
+  <nav class="app-nav">
+  
+    
+      <a href="/.">home</a>
+    
+  
+    
+      <a href="/archives">archive</a>
+    
+  
+    
+      <a href="/atom.xml">rss</a>
+    
+  
+</nav>
+
+  <main class="post">
+  <article>
+  <h1 class="article-title">
+    <a href="/2018/06/20/XGboost-LR融合方案/">XGboost+LR融合方案</a>
+  </h1>
+
+  <section class="article-meta">
+    <p class="article-date">June 20 2018</p>
+  </section>
+
+  <section class="article-entry">
+    <p>最近在做比赛，是一道用户活跃度预测的题目，在讨论中发现大牛说XGboost+LR融合效果不错，想要动手试一下，学习笔记记录在此处，之前已经翻译过关于BoostTree的ppt，有兴趣的可以移步到本站的<a href="https://harold1994.github.io/2018/05/28/BoostTrees%E7%AE%80%E4%BB%8B/" target="_blank" rel="noopener">另一篇博客</a>.</p>
+<a id="more"></a>
+<p>本博客借鉴了以下博客的内容：</p>
+<p><a href="https://blog.csdn.net/a358463121/article/details/77993198?locationNum=10&amp;fps=1" target="_blank" rel="noopener">https://blog.csdn.net/a358463121/article/details/77993198?locationNum=10&amp;fps=1</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1006009" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1006009</a></p>
+<p><a href="https://www.deeplearn.me/1797.html" target="_blank" rel="noopener">https://www.deeplearn.me/1797.html</a></p>
+<p>LR (逻辑回归) 算法因其简单有效，成为工业界最常用的算法之一。但 LR  算法是线性模型，不能捕捉到非线性信息，需要大量特征工程找到特征组合。为了发现有效的特征组合，Facebook 在 2014年介绍了通过 GBDT （Gradient Boost Decision Tree）+ LR 的方案 （XGBoost 是 GBDT 的后续发展）。随后 Kaggle 竞赛实践证明此思路的有效性。</p>
+<h4 id="1-XGBoost-LR-的原理"><a href="#1-XGBoost-LR-的原理" class="headerlink" title="1. XGBoost + LR 的原理"></a>1. XGBoost + LR 的原理</h4><p>XGBoost + LR 融合方式原理很简单。先用数据训练一个 XGBoost 模型，然后将训练数据中的实例给 XGBoost 模型得到实例的叶子节点，然后将叶子节点当做特征训练一个 LR 模型。它的核心思想是将boosting看作是一个将样本进行非线性变换的方法。那么我们处理特征变换的一般方法有：</p>
+<ul>
+<li>对于连续的特征：一个简单的非线性变化就是将特征划分到不同的区域(bin)，然后再将这些区域的编号看作一个离散的特征来进行训练。这也就是俗称的连续变量离散化方法，这有非常多的方法可以完成这项事情。</li>
+<li>对于离散的特征：我们可以直接对离散特征做一个笛卡尔积从而得到一系列特征的组合，当然有些组合是没用的，那些没用的组合可以删掉。</li>
+</ul>
+<p>XGBoost + LR 的结构如下所示。</p>
+<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-6-20/29693732.jpg" alt=""></p>
+<p>我们知道对每一个样本，都对应着每颗树上的一个叶子结点，比如说如上图，我们一共训练了2颗树，一共有5个叶子结点，那么我们可以将这5个叶子结点进行编号，然后用1- k ont  hot来表示他们的取值，如果x样本在第一颗树中经过映射到达第2个叶子结点，在第二颗树上到达第二棵树上的第一个叶子结点，那么我们就可以得到样本经过变化后的向量为 [0,1,0,1,0] ,这5个数就表示叶子结点的，1对应的就是将样本是否落在了这个叶子结点上。直观来看，我们将一个样本向量，经过变换成了一个0,1的向量。最后我们使用经过变换后的特征再放进任意一个训练器中训练，比如说LR。需要注意的是在 sklearn 或者 xgboost 输出的结果都是叶子节点的 index，所以需要自己动手去做 onehot 编码，然后交给 lr 训练，onehot 你可以在 sklearn 的预处理包中调用即可</p>
+<h4 id="2-XGBoost-叶子节点不能取代特征工程"><a href="#2-XGBoost-叶子节点不能取代特征工程" class="headerlink" title="2. XGBoost 叶子节点不能取代特征工程"></a>2. XGBoost 叶子节点不能取代特征工程</h4><p>为了验证 XGBoost + LR 是尝试自动替代特征工程的方法，还只是一种特征工程的方法，我们在自己业务的数据上做了一些实验。下图便是实验结果，其中: “xgboost+lr1” 是 XGBoost 的叶子节点特征、原始属性特征和二阶交叉特征一起给 LR 进行训练；”xgboost+lr2” 则只有叶子节点特征给 LR；”lr1” 是原始属性特征和二阶交叉特征; “lr2” 只有原始属性特征。</p>
+<p><img src="https://blog-10039692.file.myqcloud.com/1505977730620_2673_1505977730658.png" alt="img"></p>
+<p>从上面的实验来看：1) “xgboost+lr2” 明显弱于 “lr1” 方法，说明只用叶子节点特征的 XGBoost + LR 弱于有特征工程的 LR 算法。即 XGBoost 叶子节点不能取代特征工程，XGBoost + LR 无法取代传统的特征工程。2) “xgboost+lr1” 取得了所有方法中的最好效果，说明了保留原来的特征工程 XGBoost + LR 方法拥有比较好的效果。即 XGBoost 叶子节点特征是一种有效的特征，XGBoost + LR 是一种有效的特征工程手段。</p>
+<p>上面的实验结果和我同事二哥之前的实验结果一致。在他实验中没有进行二阶交叉的特征工程技巧，结果 XGBoost &gt; XGBoost + LR &gt; LR，其中 XGBoost +LR 类似我们的 “xgboost+lr2” 和 LR 类似于我们的 “lr2”。</p>
+<h4 id="3-强大的-XGBoost"><a href="#3-强大的-XGBoost" class="headerlink" title="3. 强大的 XGBoost"></a>3. 强大的 XGBoost</h4><p>只用 XGBoost 叶子节点特征， XGBoost + LR 接近或者弱于 XGBoost 。在下图中，我们发现 XGBoost 的每个叶子节点都有权重 w, 一个实例的预测值和这个实例落入的叶子节点的权重之和有关。</p>
+<p><img src="https://blog-10039692.file.myqcloud.com/1505977752394_385_1505977752517.png" alt="img"></p>
+<p>如果二分类 XGBoost 使用了 sgmoid 做激活函数, 即参数为 “binary:logistic”, 则 XGBoost 的最终预测值等于 sgmoid(叶子节点的权重之和)。而 LR 的最终预测值等于 sgmoid (特征对应的权重之后)。因此 LR 只要学到叶子节点的权重，即可以将 XGBoost 模型复现出来。因此理论上，如果 LR 能学到更好的权重，即使只有叶子节点特征的 XGBoost + LR 效果应该好于 XGBoost。总结起来，XGBoost + LR 相当于对 XGBoost 的权重进行 reweight。</p>
+<p>但是从上面的结果来看，XGBoost + LR 要接近或者弱于 XGBoost。XGBoost 赋予叶子节点的权重是很不错的，LR 学到的权重无法明显地超过它。</p>
+<h4 id="4-XGboost-LR实例"><a href="#4-XGboost-LR实例" class="headerlink" title="4.XGboost+LR实例"></a>4.XGboost+LR实例</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> xgboost <span class="keyword">as</span> xgb</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_svmlight_file</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> roc_curve, auc, roc_auc_score</span><br><span class="line"><span class="keyword">from</span> sklearn.externals <span class="keyword">import</span> joblib</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span>  OneHotEncoder</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> scipy.sparse <span class="keyword">import</span> hstack</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">xgb_feature_encode</span><span class="params">(libsvmFileNameInitial)</span>:</span></span><br><span class="line"> </span><br><span class="line">    <span class="comment"># load 样本数据</span></span><br><span class="line">    X_all, y_all = load_svmlight_file(libsvmFileNameInitial)</span><br><span class="line"> </span><br><span class="line">    <span class="comment"># 训练/测试数据分割</span></span><br><span class="line">    X_train, X_test, y_train, y_test = train_test_split(X_all, y_all, test_size = <span class="number">0.3</span>, random_state = <span class="number">42</span>)</span><br><span class="line"> </span><br><span class="line">    <span class="comment"># 定义模型</span></span><br><span class="line">    xgboost = xgb.XGBClassifier(nthread=<span class="number">4</span>, learning_rate=<span class="number">0.08</span>,</span><br><span class="line">                            n_estimators=<span class="number">50</span>, max_depth=<span class="number">5</span>, gamma=<span class="number">0</span>, subsample=<span class="number">0.9</span>, colsample_bytree=<span class="number">0.5</span>)</span><br><span class="line">    <span class="comment"># 训练学习</span></span><br><span class="line">    xgboost.fit(X_train, y_train)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 预测及 AUC 评测</span></span><br><span class="line">    y_pred_test = xgboost.predict_proba(X_test)[:, <span class="number">1</span>]</span><br><span class="line">    xgb_test_auc = roc_auc_score(y_test, y_pred_test)</span><br><span class="line">    print(<span class="string">'xgboost test auc: %.5f'</span> % xgb_test_auc)</span><br><span class="line"> </span><br><span class="line">    <span class="comment"># xgboost 编码原有特征</span></span><br><span class="line">    X_train_leaves = xgboost.apply(X_train)</span><br><span class="line">    X_test_leaves = xgboost.apply(X_test)</span><br><span class="line">    <span class="comment"># 训练样本个数</span></span><br><span class="line">    train_rows = X_train_leaves.shape[<span class="number">0</span>]</span><br><span class="line">    <span class="comment"># 合并编码后的训练数据和测试数据</span></span><br><span class="line">    X_leaves = np.concatenate((X_train_leaves, X_test_leaves), axis=<span class="number">0</span>)</span><br><span class="line">    X_leaves = X_leaves.astype(np.int32)</span><br><span class="line"> </span><br><span class="line">    (rows, cols) = X_leaves.shape</span><br><span class="line"> </span><br><span class="line">    <span class="comment"># 记录每棵树的编码区间</span></span><br><span class="line">    cum_count = np.zeros((<span class="number">1</span>, cols), dtype=np.int32)</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(cols):</span><br><span class="line">        <span class="keyword">if</span> j == <span class="number">0</span>:</span><br><span class="line">            cum_count[<span class="number">0</span>][j] = len(np.unique(X_leaves[:, j]))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            cum_count[<span class="number">0</span>][j] = len(np.unique(X_leaves[:, j])) + cum_count[<span class="number">0</span>][j<span class="number">-1</span>]</span><br><span class="line"> </span><br><span class="line">    print(<span class="string">'Transform features genenrated by xgboost...'</span>)</span><br><span class="line">    <span class="comment"># 对所有特征进行 ont-hot 编码，注释部分是直接使用 onehot 函数，结果输出保证是 libsvm 格式也可以使用</span></span><br><span class="line">    <span class="comment">#sklearn 中的 dump_svmlight_file 操作，这个文件代码是参考别人的代码，这些点都是可以优化的。</span></span><br><span class="line"> </span><br><span class="line">    <span class="comment"># onehot=OneHotEncoder()</span></span><br><span class="line">    <span class="comment"># onehot.fit(X_leaves)</span></span><br><span class="line">    <span class="comment"># x_leaves_encode=onehot.transform(X_leaves)</span></span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(cols):</span><br><span class="line">        keyMapDict = &#123;&#125;</span><br><span class="line">        <span class="keyword">if</span> j == <span class="number">0</span>:</span><br><span class="line">            initial_index = <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            initial_index = cum_count[<span class="number">0</span>][j<span class="number">-1</span>]+<span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(rows):</span><br><span class="line">            <span class="keyword">if</span> X_leaves[i, j] <span class="keyword">not</span> <span class="keyword">in</span> keyMapDict:</span><br><span class="line">                keyMapDict[X_leaves[i, j]] = initial_index</span><br><span class="line">                X_leaves[i, j] = initial_index</span><br><span class="line">                initial_index = initial_index + <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                X_leaves[i, j] = keyMapDict[X_leaves[i, j]]</span><br><span class="line"> </span><br><span class="line">    <span class="comment"># 基于编码后的特征，将特征处理为 libsvm 格式且写入文件</span></span><br><span class="line">    print(<span class="string">'Write xgboost learned features to file ...'</span>)</span><br><span class="line">    xgbFeatureLibsvm = open(<span class="string">'xgb_feature_libsvm'</span>, <span class="string">'w'</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(rows):</span><br><span class="line">        <span class="keyword">if</span> i &lt; train_rows:</span><br><span class="line">            xgbFeatureLibsvm.write(str(y_train[i]))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            xgbFeatureLibsvm.write(str(y_test[i-train_rows]))</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(cols):</span><br><span class="line">            xgbFeatureLibsvm.write(<span class="string">' '</span>+str(X_leaves[i, j])+<span class="string">':1.0'</span>)</span><br><span class="line">        xgbFeatureLibsvm.write(<span class="string">'\n'</span>)</span><br><span class="line">    xgbFeatureLibsvm.close()</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">xgboost_lr_train</span><span class="params">(xgbfeaturefile, origin_libsvm_file)</span>:</span></span><br><span class="line"> </span><br><span class="line">    <span class="comment"># load xgboost 特征编码后的样本数据</span></span><br><span class="line">    X_xg_all, y_xg_all = load_svmlight_file(xgbfeaturefile)</span><br><span class="line">    X_train, X_test, y_train, y_test = train_test_split(X_xg_all, y_xg_all, test_size = <span class="number">0.3</span>, random_state = <span class="number">42</span>)</span><br><span class="line"> </span><br><span class="line">    <span class="comment"># load 原始样本数据</span></span><br><span class="line">    X_all, y_all = load_svmlight_file(origin_libsvm_file)</span><br><span class="line">    X_train_origin, X_test_origin, y_train_origin, y_test_origin = train_test_split(X_all, y_all, test_size = <span class="number">0.3</span>, random_state = <span class="number">42</span>)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">    <span class="comment"># lr 对原始特征样本模型训练</span></span><br><span class="line">    lr = LogisticRegression(n_jobs=<span class="number">-1</span>, C=<span class="number">0.1</span>, penalty=<span class="string">'l1'</span>)</span><br><span class="line">    lr.fit(X_train_origin, y_train_origin)</span><br><span class="line">    joblib.dump(lr, <span class="string">'lr_orgin.m'</span>)</span><br><span class="line">    <span class="comment"># 预测及 AUC 评测</span></span><br><span class="line">    y_pred_test = lr.predict_proba(X_test_origin)[:, <span class="number">1</span>]</span><br><span class="line">    lr_test_auc = roc_auc_score(y_test_origin, y_pred_test)</span><br><span class="line">    print(<span class="string">'基于原有特征的 LR AUC: %.5f'</span> % lr_test_auc)</span><br><span class="line"> </span><br><span class="line">    <span class="comment"># lr 对 load xgboost 特征编码后的样本模型训练</span></span><br><span class="line">    lr = LogisticRegression(n_jobs=<span class="number">-1</span>, C=<span class="number">0.1</span>, penalty=<span class="string">'l1'</span>)</span><br><span class="line">    lr.fit(X_train, y_train)</span><br><span class="line">    joblib.dump(lr, <span class="string">'lr_xgb.m'</span>)</span><br><span class="line">    <span class="comment"># 预测及 AUC 评测</span></span><br><span class="line">    y_pred_test = lr.predict_proba(X_test)[:, <span class="number">1</span>]</span><br><span class="line">    lr_test_auc = roc_auc_score(y_test, y_pred_test)</span><br><span class="line">    print(<span class="string">'基于 Xgboost 特征编码后的 LR AUC: %.5f'</span> % lr_test_auc)</span><br><span class="line"> </span><br><span class="line">    <span class="comment"># 基于原始特征组合 xgboost 编码后的特征</span></span><br><span class="line">    X_train_ext = hstack([X_train_origin, X_train])</span><br><span class="line">    <span class="keyword">del</span>(X_train)</span><br><span class="line">    <span class="keyword">del</span>(X_train_origin)</span><br><span class="line">    X_test_ext = hstack([X_test_origin, X_test])</span><br><span class="line">    <span class="keyword">del</span>(X_test)</span><br><span class="line">    <span class="keyword">del</span>(X_test_origin)</span><br><span class="line"> </span><br><span class="line">    <span class="comment"># lr 对组合后的新特征的样本进行模型训练</span></span><br><span class="line">    lr = LogisticRegression(n_jobs=<span class="number">-1</span>, C=<span class="number">0.1</span>, penalty=<span class="string">'l1'</span>)</span><br><span class="line">    lr.fit(X_train_ext, y_train)</span><br><span class="line">    joblib.dump(lr, <span class="string">'lr_ext.m'</span>)</span><br><span class="line">    <span class="comment"># 预测及 AUC 评测</span></span><br><span class="line">    y_pred_test = lr.predict_proba(X_test_ext)[:, <span class="number">1</span>]</span><br><span class="line">    lr_test_auc = roc_auc_score(y_test, y_pred_test)</span><br><span class="line">    print(<span class="string">'基于组合特征的 LR AUC: %.5f'</span> % lr_test_auc)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    xgb_feature_encode(<span class="string">"/Users/leiyang/xgboost/demo/data/agaricus.txt.train"</span>)</span><br><span class="line">    xgboost_lr_train(<span class="string">"xgb_feature_libsvm"</span>,<span class="string">"/Users/leiyang/xgboost/demo/data/agaricus.txt.train"</span>)</span><br></pre></td></tr></table></figure>
+
+  </section>
+</article>
+
+  <div class="sharing grid">
+  <section class="profile grid-item grid">
+    <img class="avatar" src="http://7xrcp8.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" />
+    <div class="grid-item">
+      <p class="title"> lyyourc </p>
+      <p class="subtitle"> You Are The JavaScript In My HTML </p>
+    <div>
+  </section>
+
+  <section class="share-btns">
+    <!-- <p> share it if you like it~ </p> -->
+    <a
+  class="twitter-share-button"
+  data-size="large"
+  data-via="DrakeLeung"
+  href="https://twitter.com/intent/tweet?text=最近在做比赛，是一道用户活跃度预测的题目"
+>
+  Tweet
+</a>
+
+<script>
+  window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  js.async = true;
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));
+</script>
+
+  </section>
+</div>
+
+
+  
+    
+<section class="article-comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+<script>
+  var disqus_shortname = 'drakeleung';
+  
+  var disqus_url = '//harold.me/2018/06/20/XGboost-LR融合方案/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+  
+</main>
+
+</body>
+</html>

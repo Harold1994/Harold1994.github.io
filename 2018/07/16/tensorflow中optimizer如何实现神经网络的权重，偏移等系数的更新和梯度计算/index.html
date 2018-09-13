@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>tensorflow中optimizer如何实现神经网络的权重，偏移等系数的更新和梯度计算 | lyyourc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/app.css">
+  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+  
+</head>
+
+<body>
+  <nav class="app-nav">
+  
+    
+      <a href="/.">home</a>
+    
+  
+    
+      <a href="/archives">archive</a>
+    
+  
+    
+      <a href="/atom.xml">rss</a>
+    
+  
+</nav>
+
+  <main class="post">
+  <article>
+  <h1 class="article-title">
+    <a href="/2018/07/16/tensorflow中optimizer如何实现神经网络的权重，偏移等系数的更新和梯度计算/">tensorflow中optimizer如何实现神经网络的权重，偏移等系数的更新和梯度计算</a>
+  </h1>
+
+  <section class="article-meta">
+    <p class="article-date">July 16 2018</p>
+  </section>
+
+  <section class="article-entry">
+    <p>文章转自：<a href="https://blog.csdn.net/shenxiaoming77/article/details/77197708" target="_blank" rel="noopener">https://blog.csdn.net/shenxiaoming77/article/details/77197708</a></p>
+<p><strong>1.案例代码：</strong></p>
+<p>建立抽象模型</p>
+<a id="more"></a> 
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">x = tf.placeholder(tf.float32, [<span class="keyword">None</span>, <span class="number">784</span>])</span><br><span class="line">y = tf.placeholder(tf.float32, [<span class="keyword">None</span>, <span class="number">10</span>])  <span class="comment">#实际分布的概率值</span></span><br><span class="line"></span><br><span class="line">w = tf.Variable(tf.zeros([<span class="number">784</span>, <span class="number">10</span>]))</span><br><span class="line">b = tf.Variable(tf.zeros(<span class="number">10</span>))</span><br><span class="line"></span><br><span class="line">a = tf.nn.softmax(tf.matmul(x, w) + b)  <span class="comment">#基于softmax多分类得到的预测概率</span></span><br><span class="line"><span class="comment">#定义损失函数和训练方法</span></span><br><span class="line">cross_entropy = tf.reduce_mean(-tf.reduce_sum(y * tf.log(a), reduction_indices=[<span class="number">1</span>]))  <span class="comment">#交叉熵</span></span><br><span class="line"></span><br><span class="line">optimizer = tf.train.GradientDescentOptimizer(<span class="number">0.5</span>)  <span class="comment">#梯度下降优化算法，学习步长为0.5</span></span><br><span class="line"></span><br><span class="line">train = optimizer.minimize(cross_entropy)  <span class="comment">#训练目标: 最小化损失函数</span></span><br><span class="line">init = tf.global_variables_initializer()</span><br><span class="line">print(<span class="string">'start to run session:'</span>)</span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(init)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2000</span>):</span><br><span class="line">        batch_xs, batch_ys = mnist.train.next_batch(<span class="number">100</span>)</span><br><span class="line">        sess.run(train, feed_dict=&#123;x : batch_xs, y : batch_ys&#125;)</span><br><span class="line">    <span class="comment">#test trained model</span></span><br><span class="line">    correct_prediction = tf.equal(tf.argmax(a, <span class="number">1</span>), tf.argmax(y, <span class="number">1</span>))</span><br><span class="line">    accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))</span><br><span class="line">    <span class="keyword">print</span> (sess.run(accuracy, feed_dict=&#123;x : mnist.test.images, y : mnist.test.labels&#125;))</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>第一步：</p>
+<ul>
+<li>神经网络模型系数w,  b 声明Variable变量，其中默认trainable=True, 那么这些variable变量就会自动放入到TensorFlow系统的<code>GraphKey.TRAINABLE_VARIABLES</code>列表中</li>
+<li>后面进行不断的目标函数优化，梯度计算过程中，这些变量就会被新的梯度进行更新，达到权重系数更新的目标。</li>
+</ul>
+</li>
+<li><p>第二步：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cross_entropy = tf.reduce_mean(-tf.reduce_sum(y * tf.log(a), reduction_indices=[<span class="number">1</span>]))  <span class="comment">#交叉熵</span></span><br><span class="line">optimizer = tf.train.GradientDescentOptimizer(<span class="number">0.5</span>)  <span class="comment">#梯度下降优化算法，学习步长为0.5</span></span><br><span class="line">train = optimizer.minimize(cross_entropy)  <span class="comment">#训练目标: 最小化损失函数</span></span><br></pre></td></tr></table></figure>
+<p>​    这里定义损失函数，优化算法以及最终训练模型这三个operation， 前后存在的任务依赖关系，在TensorFlow的graph中这些operation会形成保存依赖关系，最终session执行train 这个operation时，会根据依赖关系，往前搜索，找到最早的operation，开始一步步往下执行，最早的operation 即为w、b 等声明的这些op。</p>
+<p>​    在optimizer.minimize函数中， 主要执行两个函数：<strong>compute_gradients </strong>函数和 <strong>apply_gradients</strong>函数</p>
+<ul>
+<li>compute_gradients 对var_list中的变量(没有特别指定var_list,则默认更新GraphKey.TRAINABLE_VARIABLES中的变量)，计算loss的梯度</li>
+<li>apply_gradients 作用为将计算得到的梯度用于更新 var_list中的变量，如果没有指定var_list， 则更新GraphKey.TRAINABLE_VARIABLES中的变量</li>
+</ul>
+</li>
+</ul>
+
+  </section>
+</article>
+
+  <div class="sharing grid">
+  <section class="profile grid-item grid">
+    <img class="avatar" src="http://7xrcp8.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" />
+    <div class="grid-item">
+      <p class="title"> lyyourc </p>
+      <p class="subtitle"> You Are The JavaScript In My HTML </p>
+    <div>
+  </section>
+
+  <section class="share-btns">
+    <!-- <p> share it if you like it~ </p> -->
+    <a
+  class="twitter-share-button"
+  data-size="large"
+  data-via="DrakeLeung"
+  href="https://twitter.com/intent/tweet?text=文章转自：<a href="https:"
+>
+  Tweet
+</a>
+
+<script>
+  window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  js.async = true;
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));
+</script>
+
+  </section>
+</div>
+
+
+  
+    
+<section class="article-comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+<script>
+  var disqus_shortname = 'drakeleung';
+  
+  var disqus_url = '//harold.me/2018/07/16/tensorflow中optimizer如何实现神经网络的权重，偏移等系数的更新和梯度计算/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+  
+</main>
+
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>MLlib-聚类 | lyyourc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/app.css">
+  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+  
+</head>
+
+<body>
+  <nav class="app-nav">
+  
+    
+      <a href="/.">home</a>
+    
+  
+    
+      <a href="/archives">archive</a>
+    
+  
+    
+      <a href="/atom.xml">rss</a>
+    
+  
+</nav>
+
+  <main class="post">
+  <article>
+  <h1 class="article-title">
+    <a href="/2018/06/30/MLlib-聚类/">MLlib-聚类</a>
+  </h1>
+
+  <section class="article-meta">
+    <p class="article-date">June 30 2018</p>
+  </section>
+
+  <section class="article-entry">
+    <p><strong>1.k-means</strong></p>
+<p>K-means是一个常用的聚类算法来将数据点按预定的簇数进行聚集。K-means算法的基本思想是：以空间中k个点为中心进行聚类，对最靠近他们的对象归类。通过迭代的方法，逐次更新各聚类中心的值，直至得到最好的聚类结果。</p>
+<p>假设要把样本集分为c个类别，算法描述如下：</p>
+<a id="more"></a> 
+<p>（1）适当选择c个类的初始中心；</p>
+<p>（2）在第k次迭代中，对任意一个样本，求其到c个中心的距离，将该样本归到距离最短的中心所在的类；</p>
+<p>（3）利用均值等方法更新该类的中心值；</p>
+<p>（4）对于所有的c个聚类中心，如果利用（2）（3）的迭代法更新后，值保持不变，则迭代结束，否则继续迭代。</p>
+<p>MLlib工具包含并行的K-means++算法，称为kmeans||。Kmeans是一个Estimator，它在基础模型之上产生一个KMeansModel。</p>
+<p><strong>输入列</strong> </p>
+<table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th>类型(s)</th>
+<th>默认的</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>featuresCol</td>
+<td>Vector</td>
+<td>“features”</td>
+<td>Feature vector</td>
+</tr>
+</tbody>
+</table>
+<p><strong>输出列</strong> </p>
+<table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th>类型(s)</th>
+<th>默认的</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>predictionCol</td>
+<td>Int</td>
+<td>“prediction”</td>
+<td>Predicted cluster center</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">KMeansExample</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> spark = <span class="type">SparkSession</span>.builder()</span><br><span class="line">      .appName(<span class="string">"KMeansExample"</span>)</span><br><span class="line">      .master(<span class="string">"local"</span>)</span><br><span class="line">      .getOrCreate()</span><br><span class="line">    <span class="keyword">val</span> dataset = spark.read.format(<span class="string">"libsvm"</span>).load(<span class="string">"data/mllib/sample_kmeans_data.txt"</span>)</span><br><span class="line">    <span class="keyword">val</span> kmeans = <span class="keyword">new</span> <span class="type">KMeans</span>().setK(<span class="number">2</span>).setSeed(<span class="number">1</span>L)</span><br><span class="line">    <span class="keyword">val</span> model = kmeans.fit(dataset)</span><br><span class="line">    <span class="comment">// 评估平方误差的总和。</span></span><br><span class="line">    <span class="keyword">val</span> <span class="type">WSSSE</span> = model.computeCost(dataset)</span><br><span class="line">    println(<span class="string">s"Within Set Sum of Squared Errors = <span class="subst">$&#123;WSSSE&#125;</span>"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 显示结果</span></span><br><span class="line">    println(<span class="string">"Cluster Centers: "</span>)</span><br><span class="line">    model.clusterCenters.foreach(println)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>2. 文档主题生成模型LDA</strong></p>
+<p>LDA（Latent Dirichlet Allocation）是一种文档主题生成模型，也称为一个三层贝叶斯概率模型，包含词、主题和文档三层结构。所谓生成模型，就是说，我们认为一篇文章的每个词都是通过“以一定概率选择了某个主题，并从这个主题中以一定概率选择某个词语”这样一个过程得到。文档到主题服从多项式分布，主题到词服从多项式分布。</p>
+<p>LDA是一种非监督机器学习技术，可以用来识别大规模文档集（document collection）或语料库（corpus）中潜藏的主题信息。它采用了词袋（bag of words）的方法，这种方法将每一篇文档视为一个词频向量，从而将文本信息转化为了易于建模的数字信息。但是词袋方法没有考虑词与词之间的顺序，这简化了问题的复杂性，同时也为模型的改进提供了契机。每一篇文档代表了一些主题所构成的一个概率分布，而每一个主题又代表了很多单词所构成的一个概率分布。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">LDAExample</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> spark = <span class="type">SparkSession</span>.builder()</span><br><span class="line">      .appName(<span class="string">"LDAExample"</span>)</span><br><span class="line">      .master(<span class="string">"local"</span>)</span><br><span class="line">      .getOrCreate()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> dataset = spark.read.format(<span class="string">"libsvm"</span>)</span><br><span class="line">      .load(<span class="string">"data/mllib/sample_lda_libsvm_data.txt"</span>)</span><br><span class="line"><span class="comment">// K: 需推断的主题（簇）的数目</span></span><br><span class="line">    <span class="keyword">val</span> lda = <span class="keyword">new</span> <span class="type">LDA</span>().setK(<span class="number">10</span>).setMaxIter(<span class="number">10</span>)</span><br><span class="line">    <span class="keyword">val</span> model = lda.fit(dataset)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> ll = model.logLikelihood(dataset)</span><br><span class="line">    <span class="keyword">val</span> lp = model.logPerplexity(dataset)</span><br><span class="line">    println(<span class="string">s"The lower bound on the log likelihood of the entire corpus: <span class="subst">$ll</span>"</span>)</span><br><span class="line">    println(<span class="string">s"The upper bound bound on perplexity: <span class="subst">$lp</span>"</span>)</span><br><span class="line">    <span class="comment">// 描述topics</span></span><br><span class="line">    <span class="keyword">val</span> topics = model.describeTopics(<span class="number">3</span>)</span><br><span class="line">    println(<span class="string">"The topics described by their top-weighted terms:"</span>)</span><br><span class="line">    topics.show(<span class="literal">false</span>)</span><br><span class="line">    <span class="comment">// 显示结果</span></span><br><span class="line">    <span class="keyword">val</span> transformed = model.transform(dataset)</span><br><span class="line">    transformed.show(<span class="literal">false</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>3. 高斯混合模型</strong></p>
+<p>混合高斯模型描述数据点以一定的概率服从k种高斯子分布的一种混合分布。Spark.ml使用EM算法给出一组样本的极大似然模型。</p>
+<p><strong>输出列</strong> </p>
+<table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th>类型(s)</th>
+<th>默认的</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>predictionCol</td>
+<td>Int</td>
+<td>“prediction”</td>
+<td>预测集群中心</td>
+</tr>
+<tr>
+<td>probabilityCol</td>
+<td>Vector</td>
+<td>“probability”</td>
+<td>每个集群的概率</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">GaussianMixtureExample</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> spark = <span class="type">SparkSession</span>.builder()</span><br><span class="line">      .appName(<span class="string">"LDAExample"</span>)</span><br><span class="line">      .master(<span class="string">"local"</span>)</span><br><span class="line">      .getOrCreate()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> dataset = spark.read.format(<span class="string">"libsvm"</span>)</span><br><span class="line">      .load(<span class="string">"data/mllib/sample_kmeans_data.txt"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> gmm = <span class="keyword">new</span> <span class="type">GaussianMixture</span>()</span><br><span class="line">      .setK(<span class="number">2</span>)</span><br><span class="line">    <span class="keyword">val</span> model = gmm.fit(dataset)</span><br><span class="line">    <span class="keyword">for</span> (i &lt;<span class="number">-0</span> until model.getK)</span><br><span class="line">      println(<span class="string">s"Gaussian <span class="subst">$i</span>:\nweight=<span class="subst">$&#123;model.weights(i)&#125;</span>\n"</span> +</span><br><span class="line">        <span class="string">s"mu=<span class="subst">$&#123;model.gaussians(i).mean&#125;</span>\nsigma=\n<span class="subst">$&#123;model.gaussians(i).cov&#125;</span>\n"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>​                                                                        </p>
+
+  </section>
+</article>
+
+  <div class="sharing grid">
+  <section class="profile grid-item grid">
+    <img class="avatar" src="http://7xrcp8.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" />
+    <div class="grid-item">
+      <p class="title"> lyyourc </p>
+      <p class="subtitle"> You Are The JavaScript In My HTML </p>
+    <div>
+  </section>
+
+  <section class="share-btns">
+    <!-- <p> share it if you like it~ </p> -->
+    <a
+  class="twitter-share-button"
+  data-size="large"
+  data-via="DrakeLeung"
+  href="https://twitter.com/intent/tweet?text=<strong>1.k-means</s"
+>
+  Tweet
+</a>
+
+<script>
+  window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  js.async = true;
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));
+</script>
+
+  </section>
+</div>
+
+
+  
+    
+<section class="article-comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+<script>
+  var disqus_shortname = 'drakeleung';
+  
+  var disqus_url = '//harold.me/2018/06/30/MLlib-聚类/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+  
+</main>
+
+</body>
+</html>

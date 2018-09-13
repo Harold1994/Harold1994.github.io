@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>linux常用命令————crontab、du、df、sort | lyyourc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/app.css">
+  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+  
+</head>
+
+<body>
+  <nav class="app-nav">
+  
+    
+      <a href="/.">home</a>
+    
+  
+    
+      <a href="/archives">archive</a>
+    
+  
+    
+      <a href="/atom.xml">rss</a>
+    
+  
+</nav>
+
+  <main class="post">
+  <article>
+  <h1 class="article-title">
+    <a href="/2018/07/05/linux常用命令2/">linux常用命令————crontab、du、df、sort</a>
+  </h1>
+
+  <section class="article-meta">
+    <p class="article-date">July 05 2018</p>
+  </section>
+
+  <section class="article-entry">
+    <p><strong>1.crontab</strong></p>
+<p>Linux crontab是用来定期执行程序的命令。</p>
+<p>当安装完成操作系统之后，默认便会启动此任务调度命令。</p>
+<p>crond命令每分锺会定期检查是否有要执行的工作，如果有要执行的工作便会自动执行该工作。</p>
+<p>而linux任务调度的工作主要分为以下两类：</p>
+<ul>
+<li>1、系统执行的工作：系统周期性所要执行的工作，如备份系统数据、清理缓存</li>
+<li>2、个人执行的工作：某个用户定期要做的工作，例如每隔10分钟检查邮件服务器是否有新信，这些工作可由每个用户自行设置</li>
+</ul>
+<a id="more"></a> 
+<p><strong>语法</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crontab [ -u user ] file</span><br></pre></td></tr></table></figure>
+<p>或</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crontab [ -u user ] &#123; -l | -r | -e &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<p>crontab 是用来让使用者在固定时间或固定间隔执行程序之用，换句话说，也就是类似使用者的时程表。</p>
+<p>-u user 是指设定指定 user 的时程表，这个前提是你必须要有其权限(比如说是 root)才能够指定他人的时程表。如果不使用 -u user 的话，就是表示设定自己的时程表。</p>
+<p><strong>参数说明</strong>：</p>
+<ul>
+<li>-e : 执行文字编辑器来设定时程表，内定的文字编辑器是 VI，如果你想用别的文字编辑器，则请先设定 VISUAL 环境变数来指定使用那个文字编辑器(比如说 setenv VISUAL joe)</li>
+<li>-r : 删除目前的时程表</li>
+<li>-l : 列出目前的时程表</li>
+</ul>
+<p>时程表的格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f1 f2 f3 f4 f5 program</span><br></pre></td></tr></table></figure>
+<ul>
+<li>其中 f1 是表示分钟，f2 表示小时，f3 表示一个月份中的第几日，f4 表示月份，f5 表示一个星期中的第几天。program 表示要执行的程序。</li>
+<li>当 f1 为 <em> 时表示每分钟都要执行 program，f2 为 </em> 时表示每小时都要执行程序，其馀类推</li>
+<li>当 f1 为 a-b 时表示从第 a 分钟到第 b 分钟这段时间内要执行，f2 为 a-b 时表示从第 a 到第 b 小时都要执行，其馀类推</li>
+<li>当 f1 为 <em>/n 时表示每 n 分钟个时间间隔执行一次，f2 为 </em>/n 表示每 n 小时个时间间隔执行一次，其馀类推</li>
+<li>当 f1 为 a, b, c,… 时表示第 a, b, c,… 分钟要执行，f2 为 a, b, c,… 时表示第 a, b, c…个小时要执行，其馀类推</li>
+</ul>
+<p>使用者也可以将所有的设定先存放在文件中，用 crontab file 的方式来设定时程表。</p>
+<p><strong>实例：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 * * * * /bin/ls</span><br></pre></td></tr></table></figure>
+<p>在 12 月内, 每天的早上 6 点到 12 点，每隔 3 个小时 0 分钟执行一次 /usr/bin/backup</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 6-12/3 * 12 * /usr/bin/backup</span><br></pre></td></tr></table></figure>
+<p>周一到周五每天下午 5:00 寄一封信给 <a href="mailto:alex@domain.name" target="_blank" rel="noopener">alex@domain.name</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 17 * * 1-5 mail -s &quot;hi&quot; alex@domain.name &lt; /tmp/maildata</span><br></pre></td></tr></table></figure>
+<p>每月每天的午夜 0 点 20 分, 2 点 20 分, 4 点 20 分….执行 echo “haha”</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">20 0-23/2 * * * echo &quot;haha&quot;</span><br></pre></td></tr></table></figure>
+<p>下面再看看几个具体的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">0 */2 * * * /sbin/service httpd restart  意思是每两个小时重启一次apache </span><br><span class="line"></span><br><span class="line">50 7 * * * /sbin/service sshd start  意思是每天7：50开启ssh服务 </span><br><span class="line"></span><br><span class="line">50 22 * * * /sbin/service sshd stop  意思是每天22：50关闭ssh服务 </span><br><span class="line"></span><br><span class="line">0 0 1,15 * * fsck /home  每月1号和15号检查/home 磁盘 </span><br><span class="line"></span><br><span class="line">1 * * * * /home/bruce/backup  每小时的第一分执行 /home/bruce/backup这个文件 </span><br><span class="line"></span><br><span class="line">00 03 * * 1-5 find /home &quot;*.xxx&quot; -mtime +4 -exec rm &#123;&#125; \;  每周一至周五3点钟，在目录/home中，查找文件名为*.xxx的文件，并删除4天前的文件。</span><br><span class="line"></span><br><span class="line">30 6 */10 * * ls  意思是每月的1、11、21、31日是的6：30执行一次ls命令</span><br></pre></td></tr></table></figure>
+<p><strong>注意：</strong>当程序在你所指定的时间执行后，系统会寄一封信给你，显示该程序执行的内容，若是你不希望收到这样的信，请在每一行空一格之后加上 &gt; /dev/null 2&gt;&amp;1 即可</p>
+<p><strong>crond服务</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/sbin/service crond start    //启动服务</span><br><span class="line">/sbin/service crond stop     //关闭服务</span><br><span class="line">/sbin/service crond restart  //重启服务</span><br><span class="line">/sbin/service crond reload   //重新载入配置</span><br></pre></td></tr></table></figure>
+<p>查看crontab服务状态：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service crond status</span><br></pre></td></tr></table></figure>
+<p>手动启动crontab服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service crond start</span><br></pre></td></tr></table></figure>
+<p>查看crontab服务是否已设置为开机启动，执行命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ntsysv</span><br></pre></td></tr></table></figure>
+<p>加入开机自动启动：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chkconfig –level 35 crond on</span><br></pre></td></tr></table></figure>
+<p> <strong>2.du</strong></p>
+<p>Linux du命令用于显示目录或文件的大小。</p>
+<p>du会显示指定的目录或文件所占用的磁盘空间。</p>
+<p><strong>语法</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">du [-abcDhHklmsSx][-L &lt;符号连接&gt;][-X &lt;文件&gt;][--block-size][--exclude=&lt;目录或文件&gt;][--max-depth=&lt;目录层数&gt;][--help][--version][目录或文件]</span><br></pre></td></tr></table></figure>
+<p><strong>参数说明</strong>：</p>
+<ul>
+<li>-a或-all 显示目录中个别文件的大小。</li>
+<li>-b或-bytes 显示目录或文件大小时，以byte为单位。</li>
+<li>-c或–total 除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和。</li>
+<li>-D或–dereference-args 显示指定符号连接的源文件大小。</li>
+<li>-h或–human-readable 以K，M，G为单位，提高信息的可读性。</li>
+<li>-H或–si 与-h参数相同，但是K，M，G是以1000为换算单位。</li>
+<li>-k或–kilobytes 以1024 bytes为单位。</li>
+<li>-l或–count-links 重复计算硬件连接的文件。</li>
+<li>-L&lt;符号连接&gt;或–dereference&lt;符号连接&gt; 显示选项中所指定符号连接的源文件大小。</li>
+<li>-m或–megabytes 以1MB为单位。</li>
+<li>-s或–summarize 仅显示总计。</li>
+<li>-S或–separate-dirs 显示个别目录的大小时，并不含其子目录的大小。</li>
+<li>-x或–one-file-xystem 以一开始处理时的文件系统为准，若遇上其它不同的文件系统目录则略过。</li>
+<li>-X&lt;文件&gt;或–exclude-from=&lt;文件&gt; 在&lt;文件&gt;指定目录或文件。</li>
+<li>–exclude=&lt;目录或文件&gt; 略过指定的目录或文件。</li>
+<li>–max-depth=&lt;目录层数&gt; 超过指定层数的目录后，予以忽略。</li>
+<li>–help 显示帮助。</li>
+<li><p>–version 显示版本信息。</p>
+<p><strong>实例</strong></p>
+</li>
+</ul>
+<p>显示目录或者文件所占空间:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># du</span><br><span class="line">608     ./test6</span><br><span class="line">308     ./test4</span><br><span class="line">4       ./scf/lib</span><br><span class="line">4       ./scf/service/deploy/product</span><br><span class="line">4       ./scf/service/deploy/info</span><br><span class="line">12      ./scf/service/deploy</span><br><span class="line">16      ./scf/service</span><br><span class="line">4       ./scf/doc</span><br><span class="line">4       ./scf/bin</span><br><span class="line">32      ./scf</span><br><span class="line">8       ./test3</span><br><span class="line">1288    .</span><br></pre></td></tr></table></figure>
+<p>只显示当前目录下面的子目录的目录大小和当前目录的总的大小，最下面的1288为当前目录的总大小</p>
+<p>显示指定文件所占空间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># du log2012.log </span><br><span class="line">300     log2012.log</span><br></pre></td></tr></table></figure>
+<p>方便阅读的格式显示test目录所占空间情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># du -h test</span><br><span class="line">608K    test/test6</span><br><span class="line">308K    test/test4</span><br><span class="line">4.0K    test/scf/lib</span><br><span class="line">4.0K    test/scf/service/deploy/product</span><br><span class="line">4.0K    test/scf/service/deploy/info</span><br><span class="line">12K     test/scf/service/deploy</span><br><span class="line">16K     test/scf/service</span><br><span class="line">4.0K    test/scf/doc</span><br><span class="line">4.0K    test/scf/bin</span><br><span class="line">32K     test/scf</span><br><span class="line">8.0K    test/test3</span><br><span class="line">1.3M    test</span><br></pre></td></tr></table></figure>
+<p><strong>实践：</strong></p>
+<p>​    怎么查看用户组中占用存储空间最多的前5个用户？</p>
+<p>​    答：du -s /home| sort -n|tail -5</p>
+<p><strong>3.df</strong></p>
+<p>Linux df命令用于显示目前在Linux系统上的文件系统的磁盘使用情况统计。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df [选项]... [FILE]...</span><br></pre></td></tr></table></figure>
+<ul>
+<li>文件-a, –all 包含所有的具有 0 Blocks 的文件系统</li>
+<li>文件–block-size={SIZE} 使用 {SIZE} 大小的 Blocks</li>
+<li>文件-h, –human-readable 使用人类可读的格式(预设值是不加这个选项的…)</li>
+<li>文件-H, –si 很像 -h, 但是用 1000 为单位而不是用 1024</li>
+<li>文件-i, –inodes 列出 inode 资讯，不列出已使用 block</li>
+<li>文件-k, –kilobytes 就像是 –block-size=1024</li>
+<li>文件-l, –local 限制列出的文件结构</li>
+<li>文件-m, –megabytes 就像 –block-size=1048576</li>
+<li>文件–no-sync 取得资讯前不 sync (预设值)</li>
+<li>文件-P, –portability 使用 POSIX 输出格式</li>
+<li>文件–sync 在取得资讯前 sync</li>
+<li>文件-t, –type=TYPE 限制列出文件系统的 TYPE</li>
+<li>文件-T, –print-type 显示文件系统的形式</li>
+<li>文件-x, –exclude-type=TYPE 限制列出文件系统不要显示 TYPE</li>
+<li>文件-v (忽略)</li>
+<li>文件–help 显示这个帮手并且离开</li>
+<li>文件–version 输出版本资讯并且离开 </li>
+</ul>
+<p><strong>4.quota</strong></p>
+<p>Linux quota命令用于显示磁盘已使用的空间与限制。</p>
+<p>执行quota指令，可查询磁盘空间的限制，并得知已使用多少空间。</p>
+<p><strong>语法</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">quota [-quvV][用户名称...] 或 quota [-gqvV][群组名称...]</span><br></pre></td></tr></table></figure>
+<p><strong>参数说明</strong>：</p>
+<ul>
+<li>-g 列出群组的磁盘空间限制。</li>
+<li>-q 简明列表，只列出超过限制的部分。</li>
+<li>-u 列出用户的磁盘空间限制。</li>
+<li>-v 显示该用户或群组，在所有挂入系统的存储设备的空间限制。</li>
+<li>-V 显示版本信息。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># quota -guvs    &lt;==显示目前执行者（就是 root ）的 quota 值 </span><br><span class="line"># quota -uvs test &lt;==显示 test 这个使用者的 quota 值</span><br></pre></td></tr></table></figure>
+<p><strong>5.sort</strong></p>
+<p>Linux sort命令用于将文本文件内容加以排序。</p>
+<p>sort可针对文本文件的内容，以行为单位来排序。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sort [-bcdfimMnr][-o&lt;输出文件&gt;][-t&lt;分隔字符&gt;][+&lt;起始栏位&gt;-&lt;结束栏位&gt;][--help][--verison][文件]</span><br></pre></td></tr></table></figure>
+<p><strong>参数说明</strong>：</p>
+<ul>
+<li>-b 忽略每行前面开始出的空格字符。</li>
+<li>-c 检查文件是否已经按照顺序排序。</li>
+<li>-d 排序时，处理英文字母、数字及空格字符外，忽略其他的字符。</li>
+<li>-f 排序时，将小写字母视为大写字母。</li>
+<li>-i 排序时，除了040至176之间的ASCII字符外，忽略其他的字符。</li>
+<li>-m 将几个排序好的文件进行合并。</li>
+<li>-M 将前面3个字母依照月份的缩写进行排序。</li>
+<li>-n 依照数值的大小排序。</li>
+<li>-o&lt;输出文件&gt; 将排序后的结果存入指定的文件。</li>
+<li>-r 以相反的顺序来排序。</li>
+<li>-t&lt;分隔字符&gt; 指定排序时所用的栏位分隔字符。</li>
+<li>+&lt;起始栏位&gt;-&lt;结束栏位&gt; 以指定的栏位来排序，范围由起始栏位到结束栏位的前一栏位。</li>
+<li>–help 显示帮助。</li>
+<li>–version 显示版本信息。</li>
+</ul>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>在使用sort命令以默认的式对文件的行进行排序，使用的命令如下： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sort testfile</span><br></pre></td></tr></table></figure>
+  </section>
+</article>
+
+  <div class="sharing grid">
+  <section class="profile grid-item grid">
+    <img class="avatar" src="http://7xrcp8.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" />
+    <div class="grid-item">
+      <p class="title"> lyyourc </p>
+      <p class="subtitle"> You Are The JavaScript In My HTML </p>
+    <div>
+  </section>
+
+  <section class="share-btns">
+    <!-- <p> share it if you like it~ </p> -->
+    <a
+  class="twitter-share-button"
+  data-size="large"
+  data-via="DrakeLeung"
+  href="https://twitter.com/intent/tweet?text=<strong>1.crontab</s"
+>
+  Tweet
+</a>
+
+<script>
+  window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  js.async = true;
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));
+</script>
+
+  </section>
+</div>
+
+
+  
+    
+<section class="article-comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+<script>
+  var disqus_shortname = 'drakeleung';
+  
+  var disqus_url = '//harold.me/2018/07/05/linux常用命令2/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+  
+</main>
+
+</body>
+</html>

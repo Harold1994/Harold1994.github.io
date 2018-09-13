@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>MLlib---ML管道 | lyyourc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/app.css">
+  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+  
+</head>
+
+<body>
+  <nav class="app-nav">
+  
+    
+      <a href="/.">home</a>
+    
+  
+    
+      <a href="/archives">archive</a>
+    
+  
+    
+      <a href="/atom.xml">rss</a>
+    
+  
+</nav>
+
+  <main class="post">
+  <article>
+  <h1 class="article-title">
+    <a href="/2018/06/25/MLlib-ML管道/">MLlib---ML管道</a>
+  </h1>
+
+  <section class="article-meta">
+    <p class="article-date">June 25 2018</p>
+  </section>
+
+  <section class="article-entry">
+    <h4 id="一、从RDD到DataFrame"><a href="#一、从RDD到DataFrame" class="headerlink" title="一、从RDD到DataFrame"></a>一、从RDD到DataFrame</h4><p>在之前的几篇MLlib机器学习博文中，使用的都是基于RDD的api,从Spark 2.0开始，spark.mllib软件包中的基于<a href="http://spark.apache.org/docs/latest/programming-guide.html#resilient-distributed-datasets-rdds" target="_blank" rel="noopener">RDD</a>的API已进入维护模式。 Spark的主要学习API现在是spark.ml包中基于<a href="http://www.apache.wiki/pages/viewpage.action?pageId=2883736" target="_blank" rel="noopener">DataFrame</a>的API。所以之后的博文都会以DataFrame为主，进入正题之前先说一下DataFrame相对于RDD的优点：</p>
+<ul>
+<li>DataFrames提供比RDD更加用户友好的API。 DataFrames的许多好处包括Spark Datasources，SQL / DataFrame查询，Tungsten和Catalyst优化以及跨语言的统一API。</li>
+<li>用于MLlib的基于DataFrame的API为ML算法和跨多种语言提供了统一的API。</li>
+<li>DataFrames有助于实际的ML管道，特别是特征转换。</li>
+</ul>
+<a id="more"></a> 
+<p>DataFrame是一种不可变的结构化的分布式数据集合，数据被组织在已命名的表格中，像我们常使用的表格，这使得处理大数据集更加方便。</p>
+<p>关于RDD,DataFrame,DataSet的优缺点，<a href="https://databricks.com/blog/2016/07/14/a-tale-of-three-apache-spark-apis-rdds-dataframes-and-datasets.html" target="_blank" rel="noopener">这篇文章</a>进行了很细致的描述，这里不再赘述。</p>
+<h4 id="二、Pipelines的主要概念"><a href="#二、Pipelines的主要概念" class="headerlink" title="二、Pipelines的主要概念"></a>二、Pipelines的主要概念</h4><p>ML Pipelines提供了构建在 DataFrames 之上的一系列上层 API，帮助用户创建和调整切合实际的 ML Pipelines.<strong>MLlib</strong> 将机器学习算法的API标准化，以便将多种算法更容易地组合成单个 <strong>Pipeline</strong> （管道）或者工作流。</p>
+<ul>
+<li><strong>DataFrame</strong>（数据模型）：<strong>ML API</strong> 将从<strong>Spark SQL</strong>查出来的 <strong>DataFrame</strong> 作为 <strong>ML</strong> 的数据集,数据集支持许多数据类型。例如,一个 <strong>DataFrame</strong> 可以有不同的列储存 text（文本）、feature（特征向量）、true labels（标注）、predictions（预测结果）等机器学习数据类型.</li>
+<li><strong>Transformer</strong>（转换器）：使用 <strong>Transformer</strong> 将一个 <strong>DataFrame</strong> 转换成另一个 <strong>DataFrame</strong> 的算法，例如，一个 <strong>ML Model</strong> 是一个 <strong>Transformer,</strong>它将带有特征的 <strong>DataFrame</strong> 转换成带有预测结果的 <strong>DataFrame.</strong></li>
+<li><strong>Estimator</strong>（模型学习器）：<strong>Estimator</strong> 是一个适配 <strong>DataFrame</strong> 来生成 <strong>Transformer（转换器）</strong>的算法.例如,一个学习算法就是一个 <strong>Estimator</strong> 训练 <strong>DataFrame</strong> 并产生一个模型的过程<strong>.</strong></li>
+<li><strong>Pipeline</strong>（管道）：Pipeline 将多个 <strong>Transformers</strong> 和 <strong>Estimators</strong> 绑在一起形成一个工作流.</li>
+<li><strong>Parameter</strong>（参数）：所有的 <strong>Transformers</strong> 和 <strong>Estimators</strong> 都已经使用标准的 <strong>API</strong> 来指定参数.</li>
+</ul>
+<h5 id="1-DataFrame"><a href="#1-DataFrame" class="headerlink" title="1.DataFrame"></a>1.DataFrame</h5><p>机器学习可以应用于各种各样的数据类型，比如向量，文本，图形和结构化数据API采用 Spark Sql 的 DataFrame 就是为了支持各种各样的数据类型.</p>
+<p>DataFrame支持许多基本的结构化的数据，另外除了 Spark SQL guide 列举的类型,DataFrame 还支持使用 ML Vector类型。</p>
+<p>DataFrame 可以用标准的 RDD 显式或者非显式创建。DataFrame 中的列是有名称的．</p>
+<h5 id="2-PipeLines组件"><a href="#2-PipeLines组件" class="headerlink" title="2.PipeLines组件"></a>2.PipeLines组件</h5><ul>
+<li><p>转换器Transformers</p>
+<p>转换器是特征变换和机器学习模型的抽象。转换器必须实现transform方法，这个方法将一个 DataFrame 转换成另一个 DataFrame，通常是附加一个或者多个列。比如：</p>
+<ul>
+<li>一个特征变换器是输入一个 DataFrame，读取一个列（比如：text），将其映射成一个新列（比如，特征向量），然后输出一个新的 DataFrame 并包含这个映射的列.</li>
+<li>一个机器学习模型是输入一个 DataFrame，读取包含特征向量的列,预测每个特征向量的标签,并输出一个新的 DataFrame ，并附加预测标签作为一列.</li>
+</ul>
+</li>
+<li><p>模型学习器Estimators</p>
+<p>Estimators 模型学习器是拟合和训练数据的机器学习算法或者其他算法的抽象。技术上来说, Estimator实现 fit()方法，这个方法输入一个 DataFrame*并产生一个 <strong>Model</strong> 即一个 <strong>Transformer</strong>（转换器）。举个例子，一个机器学习算法是一个 <strong>Estimator</strong> 模型学习器,比如这个算法是 <strong>LogisticRegression</strong>（逻辑回归），调用 <strong>fit()</strong> 方法训练出一个 <strong>LogisticRegressionModel,</strong>这是一个 <strong>Model,</strong>因此也是一个 Transformer（转换器）.</p>
+</li>
+<li><p>Pipeline组件的参数</p>
+<p><strong>Transformer.transform()</strong> 和 <strong>Estimator.fit()</strong> 都是无状态。以后,可以通过替换概念来支持有状态算法.每一个 <strong>Transformer</strong>（转换器）和 <strong>Estimator （</strong>模型学习器）都有一个唯一的ID，这在指定参数上非常有用</p>
+</li>
+</ul>
+<h4 id="三、PipeLine"><a href="#三、PipeLine" class="headerlink" title="三、PipeLine"></a>三、PipeLine</h4><p>在机器学习中,通常会执行一系列算法来处理和学习模型，比如，一个简单的文本文档处理流程可能包括这几个步骤：</p>
+<ul>
+<li>把每个文档的文本分割成单词.</li>
+<li>将这些单词转换成一个数值型特征向量.</li>
+<li>使用特征向量和标签学习一个预测模型.</li>
+</ul>
+<p><strong>MLlib</strong> 代表一个流水线,就是一个 <strong>Pipeline（管道）</strong>，<strong>Pipeline</strong>（管道） 包含了一系列有特定顺序的管道步骤Transformers** 和 Estimator。</p>
+<p>一个 <strong>pipeline</strong> 由多个步骤组成，每一个步骤都是一个 <strong>Transformer</strong>（转换器）或者 <strong>Estimator</strong>（模型学习器）。这些步骤按顺序执行，输入的 <strong>DataFrame</strong> 在通过每个阶段时进行转换。在 <strong>Transformer</strong> （转换器）步骤中，<strong>DataFrame</strong> 会调用 <strong>transform()</strong> 方法；在 <strong>Estimator（</strong>模型学习器）步骤中，<strong>fit()</strong> 方法被调用并产生一个 <strong>Transformer</strong>（转换器）(会成为 <strong>PipelineModel</strong>（管道模型）的一部分,或者适配 <strong>Pipeline</strong> ),并且 <strong>DataFrame</strong> 会调用这个 转换器的transform()方法.</p>
+<p><img src="http://spark.apache.org/docs/latest/img/ml-Pipeline.png" alt="http://spark.apache.org/docs/latest/img/ml-Pipeline.png"></p>
+<p>如上图所示,顶部的一行代表 <strong>Pipeline</strong>（管道）有三个步骤。分词器和 HashingTF（词频））是转换器，第三个是模型学习器。下面一行表示流经管道的数据,其中圆柱表示 DataFrame。最初的DataFrame 有少量的文本文档和标签, 会调用 Pipeline.fit() 方法.Tokenizer.transform()方法将原始文本分割成单词,并将这些单词作为一列添加到 DataFrame。接下HashingTF.transform() 方法将单词列转换成特征向量,并向 DataFrame 添加带有这些向量的新列。由于<strong>LogisticRegression</strong>是一个模型学习器，<strong>Pipeline</strong> 会首先调用 <strong>LogisticRegression.fit()</strong> 来生成一个<strong>LogisticRegressionModel</strong>,然后在DataFrame 传送到下一个步骤之前调用 LogisticRegressionModel的transform() 方法。</p>
+<p>同时 <strong>Pipeline</strong> 也是一个模型学习器。因此,Pipeline的fit()方法运行完之后,会生成一个 PipelineModel,即一个<strong>Transformer</strong>（转换器）,<strong>PipelineModel</strong> 用来在测试的时候使用。</p>
+<p><img src="http://spark.apache.org/docs/latest/img/ml-PipelineModel.png" alt="http://spark.apache.org/docs/latest/img/ml-PipelineModel.png"></p>
+<p>在上图中，<strong>PipelineModel</strong> 有和原始的 <strong>Pipeline（管道）</strong>一样的步骤，但是在原始 <strong>Pipeline</strong> 所有的 <strong>Estimators （</strong>模型学习器）都会变成 <strong>Transformers</strong>（转换器）。当在测试集上调用 PipelineModel的 transform() 方法时,数据会按顺序通过装配的管道。每个步骤的 <strong>transform()</strong> 方法都会更新数据集并将 <strong>DataFrame</strong> 传递到下一个步骤.`</p>
+<p><strong>Pipeline</strong> 和 <strong>PipelineModel 有助于</strong>确保了训练集和测试集经过相同的处理步骤.</p>
+<h4 id="四、PipeLine实例"><a href="#四、PipeLine实例" class="headerlink" title="四、PipeLine实例"></a>四、PipeLine实例</h4><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">EstimatorTransformerParamExample</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> spark = <span class="type">SparkSession</span>.builder()</span><br><span class="line">      .appName(<span class="string">"EstimatorTransformerParamExample"</span>)</span><br><span class="line">      .master(<span class="string">"local"</span>)</span><br><span class="line">      .getOrCreate()</span><br><span class="line">    <span class="comment">//创建训练集</span></span><br><span class="line">    <span class="keyword">val</span> training = spark.createDataFrame(<span class="type">Seq</span>(</span><br><span class="line">      (<span class="number">1.0</span>, <span class="type">Vectors</span>.dense(<span class="number">0.0</span>, <span class="number">1.1</span>, <span class="number">0.1</span>)),</span><br><span class="line">      (<span class="number">0.0</span>, <span class="type">Vectors</span>.dense(<span class="number">2.0</span>, <span class="number">1.0</span>, <span class="number">-1.0</span>)),</span><br><span class="line">      (<span class="number">0.0</span>, <span class="type">Vectors</span>.dense(<span class="number">2.0</span>, <span class="number">1.3</span>, <span class="number">1.0</span>)),</span><br><span class="line">      (<span class="number">1.0</span>, <span class="type">Vectors</span>.dense(<span class="number">0.0</span>, <span class="number">1.2</span>, <span class="number">-0.5</span>))</span><br><span class="line">    )).toDF(<span class="string">"label"</span>, <span class="string">"features"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//创建逻辑回归实例，这是一个模型学习器</span></span><br><span class="line">    <span class="keyword">val</span> lr = <span class="keyword">new</span> <span class="type">LogisticRegression</span>()</span><br><span class="line">    <span class="comment">//打印默认参数</span></span><br><span class="line"><span class="comment">//    println("LogisticRegression parameters:\n" + lr.explainParam() + "\n")</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//设置自定义参数</span></span><br><span class="line">    lr.setMaxIter(<span class="number">10</span>)</span><br><span class="line">      .setRegParam(<span class="number">0.01</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//用默认参数学习一个模型</span></span><br><span class="line">    <span class="keyword">val</span> model1 = lr.fit(training)</span><br><span class="line">    <span class="comment">//model1是一个由模型学习器产生的转换器，我们可以看到它在ｆｉｔ时用的参数</span></span><br><span class="line">    print(<span class="string">"Model 1 was fit using parameters:"</span> + model1.parent.extractParamMap)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//可以使用ParaMap指定参数</span></span><br><span class="line">    <span class="keyword">val</span> paramMap = <span class="type">ParamMap</span>(lr.maxIter -&gt; <span class="number">20</span>)</span><br><span class="line">      .put(lr.maxIter, <span class="number">30</span>) <span class="comment">//将会覆盖之前的maxIter</span></span><br><span class="line">      .put(lr.regParam -&gt; <span class="number">0.1</span>, lr.threshold -&gt; <span class="number">0.55</span>) <span class="comment">//指定多个参数</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//可以合并两个ParamMap</span></span><br><span class="line">    <span class="keyword">val</span> paramMap2 = <span class="type">ParamMap</span>(lr.probabilityCol -&gt; <span class="string">"myPro"</span>)</span><br><span class="line">    <span class="comment">//改变输出列名</span></span><br><span class="line">    <span class="keyword">val</span> paramMapCombined = paramMap ++ paramMap2</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> model2 = lr.fit(training, paramMapCombined)</span><br><span class="line">    print(<span class="string">"Model 2 was fit using parameters: "</span> + model2.parent.extractParamMap)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//构造测试集</span></span><br><span class="line">    <span class="keyword">val</span> test = spark.createDataFrame(<span class="type">Seq</span>(</span><br><span class="line">      (<span class="number">1.0</span>, <span class="type">Vectors</span>.dense(<span class="number">-1.0</span>, <span class="number">1.5</span>, <span class="number">1.3</span>)),</span><br><span class="line">      (<span class="number">0.0</span>, <span class="type">Vectors</span>.dense(<span class="number">3.0</span>, <span class="number">2.0</span>, <span class="number">-0.1</span>)),</span><br><span class="line">      (<span class="number">1.0</span>, <span class="type">Vectors</span>.dense(<span class="number">0.0</span>, <span class="number">2.2</span>, <span class="number">-1.5</span>))</span><br><span class="line">    )).toDF(<span class="string">"label"</span>, <span class="string">"features"</span>)</span><br><span class="line"></span><br><span class="line">    model2.transform(test)</span><br><span class="line">      .select(<span class="string">"features"</span>, <span class="string">"label"</span>, <span class="string">"myPro"</span>, <span class="string">"prediction"</span>)</span><br><span class="line">      .collect()</span><br><span class="line">      .foreach &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="type">Row</span>(features: <span class="type">Vector</span>, label: <span class="type">Double</span>, prob: <span class="type">Vector</span>, prediction: <span class="type">Double</span>) =&gt;</span><br><span class="line">        println(<span class="string">s"(<span class="subst">$features</span>, <span class="subst">$label</span>) -&gt; prob=<span class="subst">$prob</span>, prediction=<span class="subst">$prediction</span>"</span>)</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">PipelineExample</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> spark = <span class="type">SparkSession</span>.builder()</span><br><span class="line">      .appName(<span class="string">"PipelineExample"</span>)</span><br><span class="line">      .master(<span class="string">"local"</span>)</span><br><span class="line">      .getOrCreate()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> training = spark.createDataFrame(<span class="type">Seq</span>(</span><br><span class="line">      (<span class="number">0</span>L, <span class="string">"a b c d e spark"</span>, <span class="number">1.0</span>),</span><br><span class="line">      (<span class="number">1</span>L, <span class="string">"b d"</span>, <span class="number">0.0</span>),</span><br><span class="line">      (<span class="number">2</span>L, <span class="string">"spark f g h"</span>, <span class="number">1.0</span>),</span><br><span class="line">      (<span class="number">3</span>L, <span class="string">"hadoop mapreduce"</span>, <span class="number">0.0</span>)</span><br><span class="line">    )).toDF(<span class="string">"id"</span>,<span class="string">"text"</span>,<span class="string">"label"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> tokenizer = <span class="keyword">new</span> <span class="type">Tokenizer</span>()</span><br><span class="line">      .setInputCol(<span class="string">"text"</span>)</span><br><span class="line">      .setOutputCol(<span class="string">"words"</span>)</span><br><span class="line">    <span class="keyword">val</span> hashingTF = <span class="keyword">new</span> <span class="type">HashingTF</span>()</span><br><span class="line">      .setNumFeatures(<span class="number">1000</span>)</span><br><span class="line">      .setInputCol(tokenizer.getOutputCol)</span><br><span class="line">      .setOutputCol(<span class="string">"features"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> lr = <span class="keyword">new</span> <span class="type">LogisticRegression</span>()</span><br><span class="line">      .setMaxIter(<span class="number">10</span>)</span><br><span class="line">      .setRegParam(<span class="number">0.001</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> pipeline = <span class="keyword">new</span> <span class="type">Pipeline</span>()</span><br><span class="line">      .setStages(<span class="type">Array</span>(tokenizer,hashingTF,lr))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> model = pipeline.fit(training)</span><br><span class="line"></span><br><span class="line">    model.write.overwrite().save(<span class="string">"/tmp/spark-logistic-regression-model"</span>)</span><br><span class="line">    pipeline.write.overwrite().save(<span class="string">"/tmp/unfit-lr-model"</span>)</span><br><span class="line">    <span class="keyword">val</span> sameModel = <span class="type">PipelineModel</span>.load(<span class="string">"/tmp/spark-logistic-regression-model"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> test = spark.createDataFrame(<span class="type">Seq</span>(</span><br><span class="line">      (<span class="number">4</span>L, <span class="string">"spark i j k"</span>),</span><br><span class="line">      (<span class="number">5</span>L, <span class="string">"l m n"</span>),</span><br><span class="line">      (<span class="number">6</span>L, <span class="string">"spark hadoop spark"</span>),</span><br><span class="line">      (<span class="number">7</span>L, <span class="string">"apache hadoop"</span>)</span><br><span class="line">    )).toDF(<span class="string">"id"</span>, <span class="string">"text"</span>)</span><br><span class="line"></span><br><span class="line">    model.transform(test)</span><br><span class="line">      .select(<span class="string">"id"</span>, <span class="string">"text"</span>, <span class="string">"probability"</span>, <span class="string">"prediction"</span>)</span><br><span class="line">      .collect()</span><br><span class="line">      .foreach &#123; <span class="keyword">case</span> <span class="type">Row</span>(id: <span class="type">Long</span>, text: <span class="type">String</span>, prob: <span class="type">Vector</span>, prediction: <span class="type">Double</span>) =&gt;</span><br><span class="line">        println(<span class="string">s"(<span class="subst">$id</span>, <span class="subst">$text</span>) --&gt; prob=<span class="subst">$prob</span>, prediction=<span class="subst">$prediction</span>"</span>)</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+  </section>
+</article>
+
+  <div class="sharing grid">
+  <section class="profile grid-item grid">
+    <img class="avatar" src="http://7xrcp8.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" />
+    <div class="grid-item">
+      <p class="title"> lyyourc </p>
+      <p class="subtitle"> You Are The JavaScript In My HTML </p>
+    <div>
+  </section>
+
+  <section class="share-btns">
+    <!-- <p> share it if you like it~ </p> -->
+    <a
+  class="twitter-share-button"
+  data-size="large"
+  data-via="DrakeLeung"
+  href="https://twitter.com/intent/tweet?text= id="一、从RDD到DataFram"
+>
+  Tweet
+</a>
+
+<script>
+  window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  js.async = true;
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));
+</script>
+
+  </section>
+</div>
+
+
+  
+    
+<section class="article-comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+<script>
+  var disqus_shortname = 'drakeleung';
+  
+  var disqus_url = '//harold.me/2018/06/25/MLlib-ML管道/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+  
+</main>
+
+</body>
+</html>

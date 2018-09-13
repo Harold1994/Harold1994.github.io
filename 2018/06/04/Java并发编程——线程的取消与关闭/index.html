@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Java并发编程——线程的取消与关闭 | lyyourc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/app.css">
+  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+  
+</head>
+
+<body>
+  <nav class="app-nav">
+  
+    
+      <a href="/.">home</a>
+    
+  
+    
+      <a href="/archives">archive</a>
+    
+  
+    
+      <a href="/atom.xml">rss</a>
+    
+  
+</nav>
+
+  <main class="post">
+  <article>
+  <h1 class="article-title">
+    <a href="/2018/06/04/Java并发编程——线程的取消与关闭/">Java并发编程——线程的取消与关闭</a>
+  </h1>
+
+  <section class="article-meta">
+    <p class="article-date">June 04 2018</p>
+  </section>
+
+  <section class="article-entry">
+    <p>Java没有提供任何机制来安全的终止线程，但是提供了<strong>中断</strong>（Interruption），这是一种协作机制，能够使一个线程终止另外一个线程。</p>
+<h4 id="一、任务取消"><a href="#一、任务取消" class="headerlink" title="一、任务取消"></a>一、任务取消</h4><ul>
+<li>可取消操作：如果外部代码能在某个正常操作完成之前将其置入“完成”状态，称这个任务可取消</li>
+<li>取消某个操作的原因：<a id="more"></a> 
+<ul>
+<li>用户请求取消</li>
+<li>有时间限制的操作：计时器超时时，取消正在进行的任务</li>
+<li>应用程序事件；应用程序对某个问题空间进行分解并搜索，从而不同任务可以搜索问题空间中的不同区域当其中一个任务找到了解决方案时，其他所有正在搜索的任务都要被取消</li>
+<li>错误</li>
+<li>关闭</li>
+</ul>
+</li>
+</ul>
+<p>Java中没有安全的抢占式方法来停止线程，只有一些协作的机制，其中一种协作机制能设置某个“已请求取消”标志，而任务将定期的查看该标志。如果设置了这个标志，任务将提前结束<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span>  harold</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Title</span>:</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: 使用volatile类型的域来保存取消状态</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/5/29下午5:18</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PrimeGenerator</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> List&lt;BigInteger&gt; primes = <span class="keyword">new</span> ArrayList&lt;BigInteger&gt;();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> cancled;</span><br><span class="line">    <span class="comment">//持续的枚举素数</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        BigInteger p = BigInteger.ONE;</span><br><span class="line">        <span class="keyword">while</span> (!cancled) &#123;</span><br><span class="line">            p = p.nextProbablePrime();</span><br><span class="line">            <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">                primes.add(p);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cancel</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        cancled = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> List&lt;BigInteger&gt; <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;BigInteger&gt;(primes);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="comment">//让素数生成器1s后取消</span></span><br><span class="line">        PrimeGenerator generator = <span class="keyword">new</span> PrimeGenerator();</span><br><span class="line">        <span class="keyword">new</span> Thread(generator).start();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            SECONDS.sleep(<span class="number">1</span>);</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            generator.cancel();</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(generator.get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>1.中断</strong></p>
+<p>PrimeGenerator中的取消机制最终会使得任务退出，但退出时需要花费一定时间。更严重的是，当使用这种方法的任务调用了一个阻塞方法，如BlockingQueue.put，任务可能永远不会检查取消标志，因此永远不会结束。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> harold</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Title</span>: BrokenPrimeProducer</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: 不可靠的取消操作将把生产者置于阻塞的操作中</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/5/29下午5:38</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BrokenPrimeProducer</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> BlockingQueue&lt;BigInteger&gt; queue;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> cancelled = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BrokenPrimeProducer</span><span class="params">(BlockingQueue&lt;BigInteger&gt; queue)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.queue = queue;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            BigInteger p = BigInteger.ONE;</span><br><span class="line">            <span class="keyword">while</span> (!cancelled) &#123;</span><br><span class="line">                queue.put(p = p.nextProbablePrime());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException consumed)&#123;</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cancel</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        cancelled = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//消费者</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">consumerPrimes</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        BlockingQueue&lt;BigInteger&gt; primes = <span class="keyword">new</span> BlockingQueue&lt;BigInteger&gt;() &#123;</span><br><span class="line">          ...</span><br><span class="line">        &#125;;</span><br><span class="line">        BrokenPrimeProducer producer = <span class="keyword">new</span> BrokenPrimeProducer(primes);</span><br><span class="line">        producer.start();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">while</span> (needMorePrimes()) &#123;</span><br><span class="line">                consume(primes.take());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            producer.cancel();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>一些特殊的阻塞库的方法支持中断，线程可以通过这种机制来通知另一个线程，告诉它在合适的时候停止当前工作，并转而执行其他工作。</p>
+<p>每个线程都有一个boolean类型的中断状态，线程中断时，这个状态将被设置为true。在Thread中包含了<strong>中断线程</strong>和<em>查询中断</em>的方法。</p>
+<blockquote>
+<p>Thread中的中断方法：</p>
+<p>public void interrupt():中断目标线程</p>
+<p>public boolean isInterrupted():查询目标线程的中断状态</p>
+<p>public static boolean interrupted():清除当前线程的中断状态，并返回它之前的值</p>
+</blockquote>
+<p>阻塞库方法，如Thread.sleep()和Object.wait()等，都会检查线程何时中断，并在发现中断时提前返回。</p>
+<ul>
+<li>阻塞库方法响应中断执行的操作包括：<ul>
+<li>清除中断状态 </li>
+<li>抛出InterruptedException异常</li>
+<li>表示阻塞操作由于中断而提前结束</li>
+</ul>
+</li>
+</ul>
+<p>当线程在非阻塞状态下中断时，它的中断状态将被设置，然后根据将被取消的操作来检查中断状态以判断发生了中断。</p>
+<blockquote>
+<p>调用interrupt并不意味着立即停止目标线程正在进行的工作，而只是传递了请求中断的消息。</p>
+</blockquote>
+<blockquote>
+<p>注意：使用静态方法interrupted时应该小心，它会清除当前线程的中断状态。如果在调用interrupted时返回了true，除非想要屏蔽这个中断，否则必须对它作出处理——可以抛出InterruptedException或者再次调用interrupt来恢复中断状态。</p>
+</blockquote>
+<p>通常，中断是取消的最合理方式。<br> <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> lihe</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Title</span>: PrimeProducer</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: 通过中断来取消</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/5/29下午6:48</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PrimeProducer</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> BlockingQueue&lt;BigInteger&gt; queue;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PrimeProducer</span><span class="params">(BlockingQueue&lt;BigInteger&gt; queue)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.queue = queue;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            BigInteger p = BigInteger.ONE;</span><br><span class="line">            <span class="comment">//显式执行检测可以使代码对中断有更高的响应性</span></span><br><span class="line">            <span class="keyword">while</span> (!Thread.currentThread().isInterrupted()) &#123;</span><br><span class="line">                queue.put(p.nextProbablePrime());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">           <span class="comment">//允许线程退出</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cancel</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        interrupt();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>2.中断策略</strong></p>
+<p>中断策略指定线程如何解释某个中断请求，最合理的中断策略是某种形式的线程级（thread——level）取消操作或者服务级（Service-Level）取消操作：尽快退出，在必要时清理，通知某个所有者该线程已经退出。</p>
+<p>一个中断请求可以有一个或多个接收者，中断线程池中的某个工作者线程，同时意味着“取消当前任务”和“关闭工作者线程”。线程应该只能由其所有者中断，所有者可以将线程的中断策略信息封装到某个合适的取消机制中，例如shutdown方法。</p>
+<p><strong>3.响应中断</strong></p>
+<p>在调用可中断的阻塞函数时，有两种策略可用于处理InterruptedException：</p>
+<ul>
+<li>传递异常，从而使你的方法也成为可中断的方法，通过throws InterruptedException</li>
+<li>恢复中断状态，从而使调用栈上层代码能够对其进行处理，通过再次调用interrut()方法</li>
+</ul>
+<blockquote>
+<p>只有实现了线程中断策略的代码才可以屏蔽中断请求（catch块中捕获异常却不做处理），在常规的任务和库代码中都不应该屏蔽中断请求‘</p>
+</blockquote>
+<p>对于一些不支持取消但仍可以调用可中断阻塞方法的操作，它们必须在循环中调用这些方法。并在发现中断后重新尝试。这种情况下，应该在本地保存中断状态，并在返回前恢复中断状态而不是在捕获InterruptedException时恢复状态，如果过早的设置中断状态，可能会引起无限循环，因为大多数阻塞方法会在入口处检查中断状态，摒弃在发现该状态已被设置时会立即抛出interruptedException.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> harold</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Title</span>: getNextTask</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: 不可取消的任务在退出前恢复中断</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/5/31下午2:10</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> Task <span class="title">getNextTask</span><span class="params">(BlockingQueue&lt;Task&gt; queue)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">boolean</span> interrupted = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> queue.take();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                interrupted = <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (interrupted)</span><br><span class="line">            Thread.currentThread().interrupt();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>4.通过Future实现取消</strong></p>
+<p>ExecutorService.submit将返回一个Future来描述任务。Future.cancel带有一个boolean类型的参数mayInterruptIfRunning，表示取消操作是否成功（只是表示任务能否接收中断，而不是表示任务能否检测并处理中断）。</p>
+<p><strong>5.处理不可中断的阻塞</strong><br>并非所有方法或阻塞机制都能响应中断，例如一个线程执行同步的Socket I/O或者等待获得内置锁而阻塞，那么中断请求只能设置线程的中断状态，此外没有其他作用。对于由于执行不可中断操作而被阻塞的线程，可以使用类似于中断的手段来停止这些线程，前提是知道线程阻塞的原因：</p>
+<ul>
+<li>Java.io包中的同步Socket I/O：虽然InputStream，OutputStream中的read、write方法不会响应中断，但关闭底层的套接字，可以使得正在执行read和write等方法而被阻塞的线程抛出SocketException</li>
+<li>Java.io包中的同步I/O：当中断一个正在InterruptableChannel上等待的线程时，会抛出closedByInterruptedException并关闭链路。</li>
+<li>获取某个锁：如果一个线程由于等待某个内置锁而阻塞，他将无法响应中断，因为线程默认它肯定会获得锁，所以不会理会中断请求。但在Lock类中提供了lockInterruptibly方法，该方法允许在等待一个锁的同时仍能响应中断。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> harold</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Title</span>: ReaderThread</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: 通过改写interrupt方法将给标准的取消操作封装在Thread中</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/6/1下午1:12</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReaderThread</span>  <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Socket socket;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> InputStream inputStream;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ReaderThread</span><span class="params">(Socket socket, InputStream inputStream)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.socket = socket;</span><br><span class="line">        <span class="keyword">this</span>.inputStream = inputStream;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">interrupt</span><span class="params">()</span> </span>&#123;<span class="comment">//既能处理标准中断，又能关闭底层套接字</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            socket.close();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">super</span>.interrupt();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">byte</span> [] mbuffer = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">128</span>];</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">int</span> count = inputStream.read(mbuffer);</span><br><span class="line">                <span class="keyword">if</span> (count &lt; <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (count &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    processBuffer(buf, count);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                <span class="comment">/*</span></span><br><span class="line"><span class="comment">                允许线程退出</span></span><br><span class="line"><span class="comment">                 */</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>6.采用newTaskFor来封装非标准的取消</strong><br>newTaskFor是一个工厂方法，他将创建Future来创建任务。newTaskFor还能返回一个RunnableFuture接口，该接口扩展了Future和Runnable。通过定制表示任务的Future可以改变Future.cancel行为</p>
+
+  </section>
+</article>
+
+  <div class="sharing grid">
+  <section class="profile grid-item grid">
+    <img class="avatar" src="http://7xrcp8.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" />
+    <div class="grid-item">
+      <p class="title"> lyyourc </p>
+      <p class="subtitle"> You Are The JavaScript In My HTML </p>
+    <div>
+  </section>
+
+  <section class="share-btns">
+    <!-- <p> share it if you like it~ </p> -->
+    <a
+  class="twitter-share-button"
+  data-size="large"
+  data-via="DrakeLeung"
+  href="https://twitter.com/intent/tweet?text=Java没有提供任何机制来安全的终止线程"
+>
+  Tweet
+</a>
+
+<script>
+  window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  js.async = true;
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));
+</script>
+
+  </section>
+</div>
+
+
+  
+    
+<section class="article-comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+<script>
+  var disqus_shortname = 'drakeleung';
+  
+  var disqus_url = '//harold.me/2018/06/04/Java并发编程——线程的取消与关闭/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+  
+</main>
+
+</body>
+</html>

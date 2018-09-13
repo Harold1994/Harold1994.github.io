@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>shell程序设计(一) | lyyourc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/app.css">
+  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+  
+</head>
+
+<body>
+  <nav class="app-nav">
+  
+    
+      <a href="/.">home</a>
+    
+  
+    
+      <a href="/archives">archive</a>
+    
+  
+    
+      <a href="/atom.xml">rss</a>
+    
+  
+</nav>
+
+  <main class="post">
+  <article>
+  <h1 class="article-title">
+    <a href="/2018/07/09/shell程序设计/">shell程序设计(一)</a>
+  </h1>
+
+  <section class="article-meta">
+    <p class="article-date">July 09 2018</p>
+  </section>
+
+  <section class="article-entry">
+    <p>shell是一个作为用户与Linux系统间借口的程序，它允许用户向操作系统输入需要执行的命令。可以使用<code>&lt;</code>和<code>&gt;</code>对输入输出重定向，使用<code>|</code>在同时执行的程序之间实现数据的管道传递，使用<code>${...}</code>获取子进程的输出。</p>
+<h4 id="一、管道与重定向"><a href="#一、管道与重定向" class="headerlink" title="一、管道与重定向"></a>一、管道与重定向</h4><p><strong>1.重定向输出</strong></p>
+<p><code>ls -l &gt; test.txt</code>,这条命令将ls命令的输出保存到test.txt中，文件描述符0代表一个程序的标准输入、1代表标准输出、2代表标准错误输出。上面例子通过<code>&gt;</code>将标准输出重定向到一个文，默认情况下，如果该文件已经存在，他的文件将被覆盖。想改变默认行为，可以通过<code>set -o noclobber</code>命令设置noclobber选项，从而阻止重定向操作对一个已有文件的覆盖。通过<code>set -o noclobber</code>取消该选项。</p>
+<a id="more"></a> 
+<p>可以使用    &gt;&gt; 操作符将输出文件附加到一个文件中，如<code>ps &gt;&gt; test.txt</code></p>
+<p>想对标准输出重定向，需要把想重定向的文件描述符编号加在&gt;操作符前面，例如使用<code>2&gt; err.log</code> 将标准错误流重定向到errl.log。下面的命令将标准输出和标准错误输出分别重定向到不同文件：<br><code>kill -HUP 1234 &gt; killout.txt 2&gt;killerr.txt</code></p>
+<p>可以用<code>&gt;&amp;</code>结合两个流重定向到一个文件：</p>
+<p><code>kill -l 1234 &gt; killouterr.txt 2&gt;&amp;1</code>，这条命令将标准输出和标准错误输出都重定向到一个文件，这里的<strong>操作符顺序</strong>很重要，含义是“将标准输出流重定向到killouterr.txt ，然后将标准错误流输出重定向到与标准输出相同的地方”。</p>
+<p>​    因为可以通过返回码了解kill命令的执行结果，所以通常不需要保存标准输出和错误的内容，可以通过回收站/dev/null有效的丢弃所有输出信息：<code>kill -l 1234 &gt;/dev/null 2&amp;&gt;1</code></p>
+<p><strong>2.重定向输入</strong></p>
+<p><code>more &lt; kill.txt</code></p>
+<p><strong>3.管道</strong></p>
+<p>可以使用<code>|</code>来连接进程，在Linux下通过管道连接的进程可以<strong>同时运行</strong>，并且随着数据流在它们之间自动协调。</p>
+<p>例如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> ps &gt; psout.txt</span><br><span class="line"><span class="meta">$</span> sort psout.txt &gt; pssort.txt</span><br></pre></td></tr></table></figure>
+<p>可以用: </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> ps | sort &gt; pssort.txt</span><br></pre></td></tr></table></figure>
+<p>代替。</p>
+<p>允许连接的进程数目是没有限制的，想查看系统之所有进程名字，但不包括shell,可以用如下命令:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> ps -xo comm | sort | uniq | grep -v sh | more</span><br></pre></td></tr></table></figure>
+<p>上面命令先按照字母排序ps命令的输出，再用uniq去除相同名字的进程，然后用grep  -v删除名字为sh的进程，最终分页显示。</p>
+<blockquote>
+<p>如果有一系列命令需要执行，先用的输出文件是在这一组命令被创建的同时立刻被创建或者写入烦人，所以绝不要在命令流中使用相同的文件名。</p>
+</blockquote>
+<h4 id="二、-作为程序设计语言的shell"><a href="#二、-作为程序设计语言的shell" class="headerlink" title="二、 作为程序设计语言的shell"></a>二、 作为程序设计语言的shell</h4><p>shell运行的方式有两种，可以通过输入一系列命令让shelljiaohu执行，也可以将命令保存到一个文件中，然后将该文件作为一个程序来调用。</p>
+<p><strong>1.交互式程序</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>列出包含“机器“二字的文件</span><br><span class="line"><span class="meta">$</span> for file in * </span><br><span class="line"><span class="meta">&gt;</span> do </span><br><span class="line"><span class="meta">&gt;</span> if grep -l 机器 $file</span><br><span class="line"><span class="meta">&gt;</span> then </span><br><span class="line"><span class="meta">&gt;</span> more $file</span><br><span class="line"><span class="meta">&gt;</span> fi</span><br><span class="line"><span class="meta">&gt;</span> done</span><br></pre></td></tr></table></figure>
+<p>有更有效的方法执行上面简单的操作：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">more `grep -l 机器 *`</span><br></pre></td></tr></table></figure>
+<p>或者：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">more $(grep -l 机器 *)</span><br></pre></td></tr></table></figure>
+<p>此外 <code>grep -l 机器 *</code>将列出所有包含”机器“的文件名。</p>
+<p><strong>2.创建脚本</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>! /bin/sh</span><br><span class="line">for file in *</span><br><span class="line">do</span><br><span class="line">    if grep -q 机器 $file</span><br><span class="line">    then</span><br><span class="line">      echo $file</span><br><span class="line">    fi</span><br><span class="line">done</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+<p>第一行注释<code>#！</code>告诉系统同一行上紧跟在他后面的那个参数是用来执行本文件的程序，exit命令的作用是确保脚本程序能够返回一个有意义的退出码。在shell中，0表示成功。</p>
+<h4 id="三、shell的语法"><a href="#三、shell的语法" class="headerlink" title="三、shell的语法"></a>三、shell的语法</h4><p><strong>1.变量</strong></p>
+<p>在shell中，使用变量之前通常不需要事先声明，默认情况下，所有变量都被看作字符串并以字符串来存储，即使被赋值为数字也是如此，Linux是大小写敏感的，shell认为Foo与foo是不同的。</p>
+<p>在shell中，可以通过在变量名前加一个<code>$</code>符号来访问它的内容，要为变量赋值时，只需要使用变量名，该变量会根据需要自动创建。一种检查方式是在变量名前加一个 <code>$</code>符号，再用echo命令将它的内容输出到终端。</p>
+<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-7-9/46189301.jpg" alt=""></p>
+<blockquote>
+<p>注意：如果字符串中包含空格，就必须用引号将他们括起来，此外，<strong>等号两边不能有空格</strong></p>
+</blockquote>
+<p>可以用<code>read</code>命令将用户的输入赋值给一个变量，这个命令需要一个参数，即准备读入用户输入数据的变量名，然后他会等待用户输入数据，用户按下回车,read结束,从终端读取一个变量时，一般不需要使用引号，</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> read test</span><br><span class="line">harsdjkask</span><br><span class="line"><span class="meta">$</span> echo $test</span><br><span class="line">harsdjkask</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>使用引号</p>
+<p>​    一般情况下，脚本文件中的参数以空白字符分隔，如果想要在一个参数中包含一个或多个空白字符，就必须给参数加上引号。</p>
+<p>​    如果把一个<code>$</code>变量表达式放在双引号中，程序执行到这一行时会把变量替换为它的值；如果放到<strong>单引号中就不会发生替换</strong>现象，可以通过在<code>$</code>前加上一个<code>\</code>字符以取消它的特殊含义。字符串通常放在双引号中，以防止变量被空白字符分开，同时又允许<code>$</code>扩展。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>！ /bin/sh</span><br><span class="line">myvar="Hi there"</span><br><span class="line">echo $myvar</span><br><span class="line">echo "$myvar"</span><br><span class="line">echo '$myvar'</span><br><span class="line">echo \$myvar</span><br><span class="line"></span><br><span class="line">echo "enter some thing"</span><br><span class="line">read myvar</span><br><span class="line"></span><br><span class="line">echo '$myvar' noe equals $myvar</span><br><span class="line">exit 0 </span><br><span class="line">输出：</span><br><span class="line">Hi there</span><br><span class="line">Hi there</span><br><span class="line"><span class="meta">$</span>myvar</span><br><span class="line"><span class="meta">$</span>myvar</span><br><span class="line">enter some thing</span><br><span class="line">123</span><br><span class="line"><span class="meta">$</span>myvar noe equals 12</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>环境变量</p>
+<p>在一个shell脚本开始执行时，会根据环境设置中的值进行初始化，通常用大写字母做名字，以便和普通变量区分。</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>环境变量</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$HOME</td>
+<td>当前用户家目录</td>
+</tr>
+<tr>
+<td>$PATH</td>
+<td>用冒号分隔的用来搜索命令的目录列表</td>
+</tr>
+<tr>
+<td>$PS1</td>
+<td>命令提示符，通常是$</td>
+</tr>
+<tr>
+<td>$PS2</td>
+<td>二级提示符，提示后续输入，通常是&gt;</td>
+</tr>
+<tr>
+<td>$IFS</td>
+<td>输入域分隔符，shell读取输入时，它给出用来分隔单词的一组字符，通常是空格、制表符</td>
+</tr>
+<tr>
+<td>$0</td>
+<td>shell脚本的名字</td>
+</tr>
+<tr>
+<td>$#</td>
+<td>传递给脚本的参数个数</td>
+</tr>
+<tr>
+<td>$$</td>
+<td>shell脚本进程号</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>参数变量</p>
+<p>如果脚本程序在调用时带有参数，一些额外变量就会被创建。及时==即使没有任何参数，环境变量$#也任然存在，只不过是0.</p>
+<p>| 参数变量       | 说    明                                                     |<br>| ————– | ———————————————————— |<br>| <code>$1</code>, <code>$2</code>,… | 脚本程序的参数                                               |<br>| $<em>             | 列出所有参数，各个参数用环境变量IFS中第一个字符分隔开。      |<br>| $@             | $</em>的一个变体，不使用IFS环境变量，所以及时IFS为空，参数也不会挤在一起 |</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">harold@harold-Lenovo-G510:~$ IFS=''</span><br><span class="line">harold@harold-Lenovo-G510:~$ set foo bar bam</span><br><span class="line">harold@harold-Lenovo-G510:~$ echo "$@"</span><br><span class="line">foo bar bam</span><br><span class="line">harold@harold-Lenovo-G510:~$ echo "$*"</span><br><span class="line">foobarbam</span><br><span class="line">harold@harold-Lenovo-G510:~$ unset IFS</span><br><span class="line">harold@harold-Lenovo-G510:~$ echo "$*"</span><br><span class="line">foo bar bam</span><br></pre></td></tr></table></figure>
+<p>一般使用$@是个明智的选择。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>! /bin/sh</span><br><span class="line">salutation="Hello"</span><br><span class="line">echo $salutation</span><br><span class="line">echo "the program $0 is now running"</span><br><span class="line">echo "the second parameter is $2"</span><br><span class="line">echo "the 1st  parameter is $1"</span><br><span class="line">echo "the parameter list is $*"</span><br><span class="line">echo "the user's home dir is $HOME"</span><br><span class="line"></span><br><span class="line">echo "Please enter a new greeting"</span><br><span class="line">read salutation</span><br><span class="line"></span><br><span class="line">echo $salutation</span><br><span class="line">echo the script is now completed</span><br><span class="line">exit 0</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">./try_var.sh foo bar baz</span><br><span class="line">Hello</span><br><span class="line">the program ./try_var.sh is now running</span><br><span class="line">the second parameter is bar</span><br><span class="line">the 1st  parameter is foo</span><br><span class="line">the parameter list is foo bar baz</span><br><span class="line">the user's home dir is /home/harold</span><br><span class="line">Please enter a new greeting</span><br><span class="line">gello</span><br><span class="line">gello</span><br><span class="line">the script is now completed</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+  </section>
+</article>
+
+  <div class="sharing grid">
+  <section class="profile grid-item grid">
+    <img class="avatar" src="http://7xrcp8.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" />
+    <div class="grid-item">
+      <p class="title"> lyyourc </p>
+      <p class="subtitle"> You Are The JavaScript In My HTML </p>
+    <div>
+  </section>
+
+  <section class="share-btns">
+    <!-- <p> share it if you like it~ </p> -->
+    <a
+  class="twitter-share-button"
+  data-size="large"
+  data-via="DrakeLeung"
+  href="https://twitter.com/intent/tweet?text=shell是一个作为用户与Linux系统"
+>
+  Tweet
+</a>
+
+<script>
+  window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  js.async = true;
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));
+</script>
+
+  </section>
+</div>
+
+
+  
+    
+<section class="article-comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+<script>
+  var disqus_shortname = 'drakeleung';
+  
+  var disqus_url = '//harold.me/2018/07/09/shell程序设计/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+  
+</main>
+
+</body>
+</html>

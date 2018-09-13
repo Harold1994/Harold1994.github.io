@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>scala——Actor、柯里化与隐式转换 | lyyourc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/app.css">
+  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+  
+</head>
+
+<body>
+  <nav class="app-nav">
+  
+    
+      <a href="/.">home</a>
+    
+  
+    
+      <a href="/archives">archive</a>
+    
+  
+    
+      <a href="/atom.xml">rss</a>
+    
+  
+</nav>
+
+  <main class="post">
+  <article>
+  <h1 class="article-title">
+    <a href="/2018/04/28/scala——Actor、柯里化与隐式转换/">scala——Actor、柯里化与隐式转换</a>
+  </h1>
+
+  <section class="article-meta">
+    <p class="article-date">April 28 2018</p>
+  </section>
+
+  <section class="article-entry">
+    <ul>
+<li><p>高阶函数：<br>接受一个或多个函数作为输入或输出一个函数的函数称为高阶函数</p>
+<a id="more"></a>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; <span class="keyword">val</span> func : <span class="type">Int</span> =&gt; <span class="type">Int</span> = x =&gt; x*x</span><br><span class="line">func: <span class="type">Int</span> =&gt; <span class="type">Int</span> = $$<span class="type">Lambda</span>$<span class="number">1046</span>/<span class="number">1620041759</span>@<span class="number">2687725</span>a</span><br><span class="line"></span><br><span class="line">scala&gt; func(<span class="number">4</span>)</span><br><span class="line">res0: <span class="type">Int</span> = <span class="number">16</span></span><br><span class="line">scala&gt; <span class="keyword">val</span> arr = <span class="type">Array</span>(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>)</span><br><span class="line">arr: <span class="type">Array</span>[<span class="type">Int</span>] = <span class="type">Array</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>)</span><br><span class="line"></span><br><span class="line">scala&gt; arr.map(x =&gt; func(x))<span class="comment">//匿名函数</span></span><br><span class="line">res1: <span class="type">Array</span>[<span class="type">Int</span>] = <span class="type">Array</span>(<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>)</span><br><span class="line"></span><br><span class="line">scala&gt; <span class="function"><span class="keyword">def</span> <span class="title">m1</span></span>(x :<span class="type">Int</span>) = x*x</span><br><span class="line">m1: (x: <span class="type">Int</span>)<span class="type">Int</span></span><br><span class="line"></span><br><span class="line">scala&gt; arr.map(x =&gt; m1(x))<span class="comment">//方法转换为函数</span></span><br><span class="line">res2: <span class="type">Array</span>[<span class="type">Int</span>] = <span class="type">Array</span>(<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>)</span><br><span class="line"></span><br><span class="line">scala&gt; arr.map(m1)</span><br><span class="line">res3: <span class="type">Array</span>[<span class="type">Int</span>] = <span class="type">Array</span>(<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>)</span><br><span class="line"></span><br><span class="line">scala&gt; arr.map(func)</span><br><span class="line">res4: <span class="type">Array</span>[<span class="type">Int</span>] = <span class="type">Array</span>(<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>柯里化：</p>
+<p>将接受多个参数的函数转变为接受一个参数的函数的过程</p>
+<p>柯里化方法会在上下文中找最的隐式的值，作为柯里化方法的值，如果有多个隐式的值会报错</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; arr.map(func)</span><br><span class="line">res4: <span class="type">Array</span>[<span class="type">Int</span>] = <span class="type">Array</span>(<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>)</span><br><span class="line"></span><br><span class="line">scala&gt; <span class="function"><span class="keyword">def</span> <span class="title">currying</span></span>(x: <span class="type">Int</span>)(y: <span class="type">Int</span>) = x * y</span><br><span class="line">currying: (x: <span class="type">Int</span>)(y: <span class="type">Int</span>)<span class="type">Int</span></span><br><span class="line"></span><br><span class="line">scala&gt; currying(<span class="number">3</span>)(<span class="number">4</span>)</span><br><span class="line">res5: <span class="type">Int</span> = <span class="number">12</span></span><br><span class="line"></span><br><span class="line">scala&gt; <span class="keyword">val</span> curry = currying(<span class="number">3</span>) _<span class="comment">//柯里化方法第一种用法</span></span><br><span class="line">curry: <span class="type">Int</span> =&gt; <span class="type">Int</span> = $$<span class="type">Lambda</span>$<span class="number">1187</span>/<span class="number">1535571147</span>@<span class="number">468646</span>ea</span><br><span class="line"></span><br><span class="line">scala&gt; curry(<span class="number">4</span>)</span><br><span class="line">res6: <span class="type">Int</span> = <span class="number">12</span></span><br><span class="line"></span><br><span class="line">scala&gt; <span class="function"><span class="keyword">def</span> <span class="title">m1</span></span>(x: <span class="type">Int</span>, y: <span class="type">Int</span>) = x*y</span><br><span class="line">m1: (x: <span class="type">Int</span>, y: <span class="type">Int</span>)<span class="type">Int</span></span><br><span class="line"></span><br><span class="line">scala&gt; m1(<span class="number">5</span>,<span class="number">10</span>)</span><br><span class="line">res8: <span class="type">Int</span> = <span class="number">50</span></span><br><span class="line"></span><br><span class="line">scala&gt; <span class="function"><span class="keyword">def</span> <span class="title">m2</span></span>(x:<span class="type">Int</span>)(<span class="keyword">implicit</span> y :<span class="type">Int</span> = <span class="number">5</span>) = x * y<span class="comment">//柯里化的第2种用法，指定默认值，调用是不指定参数就使用默认值</span></span><br><span class="line">m2: (x: <span class="type">Int</span>)(<span class="keyword">implicit</span> y: <span class="type">Int</span>)<span class="type">Int</span></span><br><span class="line"></span><br><span class="line">scala&gt; m2(<span class="number">4</span>)</span><br><span class="line">res9: <span class="type">Int</span> = <span class="number">20</span></span><br><span class="line"></span><br><span class="line">scala&gt; m2(<span class="number">4</span>)(<span class="number">6</span>)</span><br><span class="line">res11: <span class="type">Int</span> = <span class="number">24</span></span><br><span class="line"></span><br><span class="line">scala&gt; <span class="keyword">implicit</span> <span class="keyword">val</span> x = <span class="number">100</span><span class="comment">//设置一个隐式的量</span></span><br><span class="line">x: <span class="type">Int</span> = <span class="number">100</span></span><br><span class="line"></span><br><span class="line">scala&gt; m2(<span class="number">4</span>)</span><br><span class="line">res12: <span class="type">Int</span> = <span class="number">400</span></span><br><span class="line"></span><br><span class="line">scala&gt; <span class="keyword">implicit</span> <span class="keyword">val</span> y = <span class="number">200</span><span class="comment">//设置第二个隐式的量</span></span><br><span class="line">y: <span class="type">Int</span> = <span class="number">200</span></span><br><span class="line"></span><br><span class="line">scala&gt; m2(<span class="number">5</span>)<span class="comment">//此时会发生错误，因为有两个隐式量</span></span><br><span class="line">&lt;console&gt;:<span class="number">15</span>: error: ambiguous <span class="keyword">implicit</span> values:</span><br><span class="line"> both value x of <span class="class"><span class="keyword">type</span> <span class="title">=&gt;</span> <span class="title">Int</span></span></span><br><span class="line"><span class="class"> <span class="title">and</span> <span class="title">value</span> <span class="title">y</span> <span class="title">of</span> <span class="title">type</span> <span class="title">=&gt;</span> <span class="title">Int</span></span></span><br><span class="line"><span class="class"> <span class="title">match</span> <span class="title">expected</span> <span class="title">type</span> <span class="title">Int</span></span></span><br><span class="line"><span class="class">       <span class="title">m2</span>(<span class="params">5</span>)</span></span><br><span class="line"><span class="class">         <span class="title">^</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">scala&gt;</span> <span class="title">val</span> <span class="title">arr</span> </span>= <span class="type">Array</span>((<span class="string">"scala"</span>,<span class="number">1</span>),(<span class="string">"scala"</span>,<span class="number">2</span>),(<span class="string">"scala"</span>,<span class="number">3</span>))</span><br><span class="line">arr: <span class="type">Array</span>[(<span class="type">String</span>, <span class="type">Int</span>)] = <span class="type">Array</span>((scala,<span class="number">1</span>), (scala,<span class="number">2</span>), (scala,<span class="number">3</span>))</span><br><span class="line"></span><br><span class="line">scala&gt; arr.foldLeft(<span class="number">0</span>)(_ + _._2)</span><br><span class="line">res14: <span class="type">Int</span> = <span class="number">6</span></span><br><span class="line"></span><br><span class="line">scala&gt; <span class="function"><span class="keyword">def</span> <span class="title">curry</span></span>(x:<span class="type">Int</span>) = (y:<span class="type">Int</span>) =&gt; x * y</span><br><span class="line">curry: (x: <span class="type">Int</span>)<span class="type">Int</span> =&gt; <span class="type">Int</span></span><br><span class="line"></span><br><span class="line">scala&gt; <span class="keyword">val</span> func = curry(<span class="number">2</span>)<span class="comment">//柯里化方法第3中用法</span></span><br><span class="line">func: <span class="type">Int</span> =&gt; <span class="type">Int</span> = $$<span class="type">Lambda</span>$<span class="number">1058</span>/<span class="number">191351920</span>@<span class="number">45</span>c9b3</span><br><span class="line"></span><br><span class="line">scala&gt; func(<span class="number">3</span>)</span><br><span class="line">res0: <span class="type">Int</span> = <span class="number">6</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Content</span> </span>&#123;<span class="comment">//这个静态块只有放在Currying上面才能用a或b替代默认值，因为scala是顺序编译执行的</span></span><br><span class="line">  <span class="keyword">implicit</span> <span class="keyword">val</span> a = <span class="string">"java"</span></span><br><span class="line">  <span class="keyword">implicit</span> <span class="keyword">val</span> b = <span class="string">"python"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">CurryingDemo</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">m1</span></span>(str: <span class="type">String</span>)(<span class="keyword">implicit</span> name : <span class="type">String</span> = <span class="string">"scala"</span>) = &#123;</span><br><span class="line">    println(str + name)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    m1(<span class="string">"Hi~"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>隐式转换与隐式参数</p>
+<ol>
+<li>作用：能够丰富现有类库的功能，对类的方法进行增强</li>
+<li>隐式转换函数：以implicit关键字声明带有单个参数的函数</li>
+<li>隐式转换用到了装饰模式和门面模式</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">ImplicitContext</span> </span>&#123;</span><br><span class="line">  <span class="keyword">implicit</span> <span class="class"><span class="keyword">object</span> <span class="title">OrderingGirl</span> <span class="keyword">extends</span> <span class="title">Ordering</span>[<span class="type">Girl</span>]</span>&#123;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">compare</span></span>(x: <span class="type">Girl</span>, y: <span class="type">Girl</span>): <span class="type">Int</span> = <span class="keyword">if</span> (x.faveValue &gt; y.faveValue) <span class="number">1</span> <span class="keyword">else</span>  <span class="number">-1</span>&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Girl</span>(<span class="params">val name: <span class="type">String</span>, var faveValue: <span class="type">Int</span></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">toString</span></span>: <span class="type">String</span> = <span class="string">s"name:<span class="subst">$name</span>"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Goddess</span>[<span class="type">T</span>: <span class="type">Ordering</span>](<span class="params">val v1 :<span class="type">T</span>, val v2: <span class="type">T</span></span>) </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">choose</span></span>()(<span class="keyword">implicit</span> ord :<span class="type">Ordering</span>[<span class="type">T</span>]) =<span class="keyword">if</span> (ord.gt(v1,v2)) v1 <span class="keyword">else</span> v2</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Goddess</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">import</span> <span class="type">ImplicitContext</span>.<span class="type">OrderingGirl</span></span><br><span class="line">    <span class="keyword">val</span> g1 = <span class="keyword">new</span> <span class="type">Girl</span>(<span class="string">"lili"</span>,<span class="number">90</span>)</span><br><span class="line">    <span class="keyword">val</span> g2 = <span class="keyword">new</span> <span class="type">Girl</span>(<span class="string">"huahua"</span>,<span class="number">70</span>)</span><br><span class="line">    <span class="keyword">val</span> goddess = <span class="keyword">new</span> <span class="type">Goddess</span>(g1, g2)</span><br><span class="line">    <span class="keyword">val</span> res = goddess.choose()</span><br><span class="line">    println(res)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>泛型</p>
+<p>[B &lt;: A]  UpperBound 上界： B类型的上界是A类型，即B类型的父类是A类型</p>
+<p>[B &gt;: A] LowerBound 下界： B类型的下界是A类型，即B类型的子类是A类型</p>
+<p>[B &lt;% A]  ViewBound 表示B类型要转换成A类型，需要一个隐式转换函数</p>
+<p>[B : A]  ContextBound 需要一个隐式转换的值</p>
+</li>
+</ul>
+<p>[-A, +B]</p>
+<p>​    [-A]  逆变，作为参数类型。如果A是T的子类，那C[T]是C[A]的子类</p>
+<p>​    [+B ]协变，作为返回类型。如果B是T的子类，那么C[B]是C[T]的子类</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">上界 UpperBound</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UpperBoundDemo</span>[<span class="type">T</span> &lt;: <span class="type">Comparable</span>[<span class="type">T</span>]] </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">select</span></span>(first: <span class="type">T</span>, second: <span class="type">T</span>) = &#123;</span><br><span class="line">    <span class="keyword">if</span> (first.compareTo(second) &gt; <span class="number">0</span>)</span><br><span class="line">      first</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">      second</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">UpperBoundDemo</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> u = <span class="keyword">new</span> <span class="type">UpperBoundDemo</span>[<span class="type">MissRight</span>]</span><br><span class="line">    <span class="keyword">val</span> m1 = <span class="keyword">new</span> <span class="type">MissRight</span>(<span class="string">"LILI"</span>, <span class="number">95</span>)</span><br><span class="line">    <span class="keyword">val</span> m2 = <span class="keyword">new</span> <span class="type">MissRight</span>(<span class="string">"erniu"</span>, <span class="number">999</span>)</span><br><span class="line"></span><br><span class="line">    println(u.select(m1, m2))</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MissRight</span>(<span class="params">val name: <span class="type">String</span>, val faceValue: <span class="type">Int</span></span>) <span class="keyword">extends</span> <span class="title">Comparable</span>[<span class="type">MissRight</span>] </span>&#123;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">compareTo</span></span>(o: <span class="type">MissRight</span>): <span class="type">Int</span> = &#123;</span><br><span class="line">    <span class="keyword">this</span>.faceValue - o.faceValue</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">toString</span></span>: <span class="type">String</span> = <span class="string">s"name:<span class="subst">$name</span>"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+  </section>
+</article>
+
+  <div class="sharing grid">
+  <section class="profile grid-item grid">
+    <img class="avatar" src="http://7xrcp8.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" />
+    <div class="grid-item">
+      <p class="title"> lyyourc </p>
+      <p class="subtitle"> You Are The JavaScript In My HTML </p>
+    <div>
+  </section>
+
+  <section class="share-btns">
+    <!-- <p> share it if you like it~ </p> -->
+    <a
+  class="twitter-share-button"
+  data-size="large"
+  data-via="DrakeLeung"
+  href="https://twitter.com/intent/tweet?text=>
+<li><p>高阶函数：<br>接受"
+>
+  Tweet
+</a>
+
+<script>
+  window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  js.async = true;
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));
+</script>
+
+  </section>
+</div>
+
+
+  
+    
+<section class="article-comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+<script>
+  var disqus_shortname = 'drakeleung';
+  
+  var disqus_url = '//harold.me/2018/04/28/scala——Actor、柯里化与隐式转换/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+  
+</main>
+
+</body>
+</html>
