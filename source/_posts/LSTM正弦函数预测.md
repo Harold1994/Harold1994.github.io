@@ -1,7 +1,7 @@
 ---
 title: LSTM正弦函数预测
 date: 2018-09-12 08:47:28
-tags: [机器学习, tensorflow, 深度学习]]
+tags: [机器学习, tensorflow, 深度学习]
 ---
 
 ```python
