@@ -1,7 +1,7 @@
 ---
 title: TCP与UDP
 date: 2018-06-24 10:16:19
-tags: [TCP, UDP, 计算机网络]
+tags: [计算机基础, 计算机网络]
 ---
 
 > OSI参考模型：
