@@ -8,19 +8,19 @@
   <link rel="dns-prefetch" href="//harold.me">
   <title>Redis高级特性 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一、降低内存占用降低Redis内存占用有助于减少创建快照和加载快照所需的时间，提升载入AOF文件时的效率，缩短从服务器进行同步所需的时间，并且能让Redis存储更多的数据而无需添加额外的硬件。 主要有三种技术：  短结构 分片 打包存储二进制位和字节  1.短结构在散列、列表、和有序集合的长度较短或者体积较小的时候，Redis可以选择使用压缩列表(ziplist)来存储这些结构，压缩列表是列表，散">
+  <meta name="description" content="一、降低内存占用降低Redis内存占用有助于减少创建快照和加载快照所需的时间，提升载入AOF文件时的效率，缩短从服务器进行同步所需的时间，并且能让Redis存储更多的数据而无需添加额外的硬件。 主要有三种技术：  短结构 分片 打包存储二进制位和字节">
 <meta name="keywords" content="大数据,NoSQL,Redis">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis高级特性">
 <meta property="og:url" content="//harold.me/2018/09/27/Redis高级特性/index.html">
 <meta property="og:site_name" content="Harold的博客">
-<meta property="og:description" content="一、降低内存占用降低Redis内存占用有助于减少创建快照和加载快照所需的时间，提升载入AOF文件时的效率，缩短从服务器进行同步所需的时间，并且能让Redis存储更多的数据而无需添加额外的硬件。 主要有三种技术：  短结构 分片 打包存储二进制位和字节  1.短结构在散列、列表、和有序集合的长度较短或者体积较小的时候，Redis可以选择使用压缩列表(ziplist)来存储这些结构，压缩列表是列表，散">
+<meta property="og:description" content="一、降低内存占用降低Redis内存占用有助于减少创建快照和加载快照所需的时间，提升载入AOF文件时的效率，缩短从服务器进行同步所需的时间，并且能让Redis存储更多的数据而无需添加额外的硬件。 主要有三种技术：  短结构 分片 打包存储二进制位和字节">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-9-27/26093308.jpg">
-<meta property="og:updated_time" content="2018-09-29T02:07:20.381Z">
+<meta property="og:updated_time" content="2018-10-01T10:30:13.629Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis高级特性">
-<meta name="twitter:description" content="一、降低内存占用降低Redis内存占用有助于减少创建快照和加载快照所需的时间，提升载入AOF文件时的效率，缩短从服务器进行同步所需的时间，并且能让Redis存储更多的数据而无需添加额外的硬件。 主要有三种技术：  短结构 分片 打包存储二进制位和字节  1.短结构在散列、列表、和有序集合的长度较短或者体积较小的时候，Redis可以选择使用压缩列表(ziplist)来存储这些结构，压缩列表是列表，散">
+<meta name="twitter:description" content="一、降低内存占用降低Redis内存占用有助于减少创建快照和加载快照所需的时间，提升载入AOF文件时的效率，缩短从服务器进行同步所需的时间，并且能让Redis存储更多的数据而无需添加额外的硬件。 主要有三种技术：  短结构 分片 打包存储二进制位和字节">
 <meta name="twitter:image" content="http://p5s7d12ls.bkt.clouddn.com/18-9-27/26093308.jpg">
   
   
@@ -216,6 +216,7 @@
 <li>分片</li>
 <li>打包存储二进制位和字节</li>
 </ul>
+<a id="more"></a>
 <h5 id="1-短结构"><a href="#1-短结构" class="headerlink" title="1.短结构"></a>1.短结构</h5><p>在散列、列表、和有序集合的<strong>长度较短或者体积较小</strong>的时候，Redis可以选择使用<strong>压缩列表(ziplist)</strong>来存储这些结构，压缩列表是列表，散列和有序集合的一种非结构化的表示，它会以序列化的方式存储数据，这些数据每次被读取的时候都需要进行解码，每次被写入的时候要进行局部编码，可能要移动内存里的数据。</p>
 <p>Redis存储长列表的方式见下图：</p>
 <p><img src="http://p5s7d12ls.bkt.clouddn.com/18-9-27/26093308.jpg" alt=""></p>

@@ -17,7 +17,7 @@
 <meta property="og:description" content="一、字面量、值、变量和类型 变量var可以重新赋值，但是不可以改变它指定的类型，所以不能将一个变量赋值为不兼容的类型  操作符命名不可包涵中括号和点号，但是可以是一个或多个除了反引号外的任意字符，所有这些字符包围在一对反引号中，用反引号包围的名字可以是Scala中的保留字，如true, while,=和var 1234567scala&amp;gt; val a.b = 25&amp;lt;console&amp;gt;">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-9-29/98683302.jpg">
-<meta property="og:updated_time" content="2018-09-30T08:53:25.963Z">
+<meta property="og:updated_time" content="2018-10-01T10:29:54.711Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Scala查漏补缺——表达式、条件式和函数">
 <meta name="twitter:description" content="一、字面量、值、变量和类型 变量var可以重新赋值，但是不可以改变它指定的类型，所以不能将一个变量赋值为不兼容的类型  操作符命名不可包涵中括号和点号，但是可以是一个或多个除了反引号外的任意字符，所有这些字符包围在一对反引号中，用反引号包围的名字可以是Scala中的保留字，如true, while,=和var 1234567scala&amp;gt; val a.b = 25&amp;lt;console&amp;gt;">
@@ -216,10 +216,12 @@
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; <span class="keyword">val</span> a.b = <span class="number">25</span></span><br><span class="line">&lt;console&gt;:<span class="number">11</span>: error: not found: value a</span><br><span class="line">       <span class="keyword">val</span> a.b = <span class="number">25</span></span><br><span class="line">           ^</span><br><span class="line"></span><br><span class="line">scala&gt; <span class="keyword">val</span> `a.b` = <span class="number">25</span></span><br><span class="line">a.b: <span class="type">Int</span> = <span class="number">25</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>Scala中没有基本类型的概念，它的核心数值类型类型是同名的核心JVM类型的包装器，包装JVM类型可以确保Scala和Java互操作，且Scala可以使用所有Java库</p>
-<a id="more"></a>
 </li>
 <li><p>与Java不同，Scala中的相等操作符（==）会检查真正的相等性，而不是对象引用相等性。</p>
 </li>
+</ul>
+<a id="more"></a>
+<ul>
 <li><p>可以用三重引号创建多行String，多行字符串是字面量，其中的反斜杠不代表特殊字符的开头</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; <span class="keyword">val</span> greeting = <span class="string">""</span><span class="string">" she suggerfvnfjkljnfkls</span></span><br><span class="line"><span class="string">     | njknjkl,nmkl\fcsdf\\sdfsdf(\n)</span></span><br><span class="line"><span class="string">     | dfnhjskf"</span><span class="string">""</span></span><br><span class="line">greeting: <span class="type">String</span> =</span><br><span class="line"><span class="string">" she suggerfvnfjkljnfkls</span></span><br><span class="line"><span class="string">njknjkl,nmkl\fcsdf\\sdfsdf(\n)</span></span><br><span class="line"><span class="string">dfnhjskf"</span></span><br></pre></td></tr></table></figure>
 </li>
