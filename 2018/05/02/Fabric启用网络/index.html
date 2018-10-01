@@ -215,56 +215,56 @@
 <ul>
 <li>生成证书和密钥：</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">../bin/cryptogen generate --config=./crypto-config.yaml</span><br></pre></td></tr></table></figure>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">../bin/cryptogen <span class="keyword">generate</span> --<span class="keyword">config</span>=./crypto-<span class="keyword">config</span><span class="variable">.yaml</span></span><br></pre></td></tr></table></figure>
 <p>证书和密钥（即MSP材料）将被输出到第一个网络目录根目录下的一个目录 -  crypto-config中。</p>
 <ul>
 <li><p>需要告诉configtxgen工具在哪里查找它需要获取的configtx.yaml文件。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export FABRIC_CFG_PATH=$PWD</span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">export</span> <span class="attribute">FABRIC_CFG_PATH</span>=<span class="variable">$PWD</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>调用configtxgen工具来创建ordererc初始块：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">../bin/configtxgen -profile TwoOrgsOrdererGenesis -outputBlock ./channel-artifacts/genesis.block</span><br></pre></td></tr></table></figure>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">..<span class="regexp">/bin/</span>configtxgen -profile TwoOrgsOrdererGenesis -outputBlock .<span class="regexp">/channel-artifacts/g</span>enesis.block</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p><strong>创建一个通道配置事务</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export CHANNEL_NAME=mychannel  &amp;&amp; ../bin/configtxgen -profile TwoOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID $CHANNEL_NAME</span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">export</span> <span class="attribute">CHANNEL_NAME</span>=mychannel  &amp;&amp; <span class="built_in">..</span>/bin/configtxgen -profile TwoOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID <span class="variable">$CHANNEL_NAME</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li><p>接下来，我们将在我们正在构建的频道上为Org1定义锚点。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">../bin/configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/Org1MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org1MSP</span><br></pre></td></tr></table></figure>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">..<span class="regexp">/bin/</span>configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate .<span class="regexp">/channel-artifacts/</span>Org1MSPanchors.tx -channelID <span class="variable">$CHANNEL_NAME</span> -asOrg Org1MSP</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>为Org2定义锚点</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">../bin/configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/Org2MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org2MSP</span><br></pre></td></tr></table></figure>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">..<span class="regexp">/bin/</span>configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate .<span class="regexp">/channel-artifacts/</span>Org2MSPanchors.tx -channelID <span class="variable">$CHANNEL_NAME</span> -asOrg Org2MSP</span><br></pre></td></tr></table></figure>
 <p><strong>启动网络</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose -f docker-compose-cli.yaml up -d</span><br></pre></td></tr></table></figure>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose -f docker-compose-<span class="keyword">cli</span>.yaml up -<span class="built_in">d</span></span><br></pre></td></tr></table></figure>
 <p><strong>环境变量</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it cli bash</span><br></pre></td></tr></table></figure>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -<span class="keyword">it</span> cli bash</span><br></pre></td></tr></table></figure>
 <ul>
 <li>之前，我们使用configtxgen工具生成了配置交易channel.tx。我们将会传递这个交易到orderer作为创建channel请求的一部分</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export CHANNEL_NAME=mychannel</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peer channel create -o orderer.example.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">加入peer0.org1.example.com到通道。</span><br><span class="line"> peer channel join -b mychannel.block</span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">export</span> <span class="attribute">CHANNEL_NAME</span>=mychannel</span><br></pre></td></tr></table></figure>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peer channel create -o orderer<span class="selector-class">.example</span><span class="selector-class">.com</span>:<span class="number">7050</span> -c <span class="variable">$CHANNEL_NAME</span> -f ./channel-artifacts/channel<span class="selector-class">.tx</span> --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer<span class="selector-class">.example</span><span class="selector-class">.com</span>/msp/tlscacerts/tlsca<span class="selector-class">.example</span><span class="selector-class">.com-cert</span><span class="selector-class">.pem</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">加入peer0.org1.example.com到通道。</span><br><span class="line"><span class="built_in"> peer </span>channel join -b mychannel.block</span><br></pre></td></tr></table></figure>
 <ul>
 <li>我们只需加入peer0.org2.example.com，以便我们可以正确更新我们通道中的锚点定义，而不是加入每个点。</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp CORE_PEER_ADDRESS=peer0.org2.example.com:7051 CORE_PEER_LOCALMSPID=&quot;Org2MSP&quot; CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt peer channel join -b mychannel.block</span><br></pre></td></tr></table></figure>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2<span class="selector-class">.example</span><span class="selector-class">.com</span>/users/Admin@org2<span class="selector-class">.example</span><span class="selector-class">.com</span>/msp CORE_PEER_ADDRESS=peer0<span class="selector-class">.org2</span><span class="selector-class">.example</span><span class="selector-class">.com</span>:<span class="number">7051</span> CORE_PEER_LOCALMSPID=<span class="string">"Org2MSP"</span> CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2<span class="selector-class">.example</span><span class="selector-class">.com</span>/peers/peer0<span class="selector-class">.org2</span><span class="selector-class">.example</span><span class="selector-class">.com</span>/tls/ca<span class="selector-class">.crt</span> peer channel join -<span class="selector-tag">b</span> mychannel.block</span><br></pre></td></tr></table></figure>
 <ul>
 <li>应用程序通过链接代码与区块链分类帐进行交互。 因此，我们需要在每个将执行并支持我们的交易的对等方上安装链代码，然后在通道上实例化链代码。</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peer chaincode install -n mycc -v 1.0 -p github.com/chaincode/chaincode_example02/go/</span><br></pre></td></tr></table></figure>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peer chaincode install -n mycc -v <span class="number">1.0</span> -p github.com<span class="regexp">/chaincode/</span>chaincode_example02<span class="regexp">/go/</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>接下来，实例化通道上的链式代码。 这将初始化通道上的链代码，设置链代码的认可政策，并为目标对等体启动链代码容器。 记下-P参数。 这是我们的政策，我们指定所需的交易背书水平，以验证此链代码。</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peer chaincode instantiate -o orderer.example.com:7050 --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C $CHANNEL_NAME -n mycc -l node -v 1.0 -c &apos;&#123;&quot;Args&quot;:[&quot;init&quot;,&quot;a&quot;, &quot;100&quot;, &quot;b&quot;,&quot;200&quot;]&#125;&apos; -P &quot;OR (&apos;Org1MSP.peer&apos;,&apos;Org2MSP.peer&apos;)&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peer chaincode instantiate -o orderer<span class="selector-class">.example</span><span class="selector-class">.com</span>:<span class="number">7050</span> --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer<span class="selector-class">.example</span><span class="selector-class">.com</span>/msp/tlscacerts/tlsca<span class="selector-class">.example</span><span class="selector-class">.com-cert</span><span class="selector-class">.pem</span> -C <span class="variable">$CHANNEL_NAME</span> -n mycc -l node -v <span class="number">1.0</span> -c <span class="string">'&#123;"Args":["init","a", "100", "b","200"]&#125;'</span> -P <span class="string">"OR ('Org1MSP.peer','Org2MSP.peer')"</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>让我们查询a的值以确保链代码已正确实例化并且状态DB已填充。 查询的语法如下所示：</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peer chaincode query -C $CHANNEL_NAME -n mycc -c &apos;&#123;&quot;Args&quot;:[&quot;query&quot;,&quot;a&quot;]&#125;&apos;</span><br></pre></td></tr></table></figure>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peer chaincode <span class="keyword">query</span> -C <span class="variable">$CHANNEL_NAME</span> -<span class="keyword">n</span> mycc -c '&#123;<span class="string">"Args"</span>:[<span class="string">"query"</span>,<span class="string">"a"</span>]&#125;'</span><br></pre></td></tr></table></figure>
 <ul>
 <li>现在让我们将10从a移动到b。 该事务将切断一个新块并更新状态DB。 invoke的语法如下所示：</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peer chaincode invoke -o orderer.example.com:7050  --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem  -C $CHANNEL_NAME -n mycc -c &apos;&#123;&quot;Args&quot;:[&quot;invoke&quot;,&quot;a&quot;,&quot;b&quot;,&quot;10&quot;]&#125;&apos;</span><br></pre></td></tr></table></figure>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peer chaincode invoke -o orderer<span class="selector-class">.example</span><span class="selector-class">.com</span>:<span class="number">7050</span>  --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer<span class="selector-class">.example</span><span class="selector-class">.com</span>/msp/tlscacerts/tlsca<span class="selector-class">.example</span><span class="selector-class">.com-cert</span><span class="selector-class">.pem</span>  -C <span class="variable">$CHANNEL_NAME</span> -n mycc -c <span class="string">'&#123;"Args":["invoke","a","b","10"]&#125;'</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li><p>再查询</p>
 <figure class="highlight plain"><figcaption><span>chaincode query -c $channel_name -n mycc -c '&#123;"args":["query","a"]&#125;'</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peer chaincode query -C $CHANNEL_NAME -n mycc -c &apos;&#123;&quot;Args&quot;:[&quot;query&quot;,&quot;a&quot;]&#125;&apos;</span><br></pre></td></tr></table></figure>
@@ -495,14 +495,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
@@ -523,11 +515,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -539,7 +531,27 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Redis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">scala</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -551,11 +563,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color1">分布式算法</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -567,7 +579,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">分布式算法</a>
+                <a href="javascript:void(0)" class="js-tag color1">tensorflow，深度学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -579,19 +591,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">tensorflow，深度学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Hive</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Redis</a>
               </li>
              
               <li class="article-tag-list-item">
