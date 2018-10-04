@@ -6,20 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//harold.me">
-  <title>scala——actor，Akka | Harold的博客</title>
+  <title>Spark_2.3.0源码分析——1_Spark背景 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Actor Actor是消息并发模型 Scala中的Actor能够实现并行编程的强大功能，是基于事件的并发机制 Scala是运用消息（message）的发送和接收来实现多线程 使用scala能更容易的实现多线程应用的开发">
-<meta name="keywords" content="scala">
+  <meta name="description" content="从今天开始阅读Spark 2.3.0的源码，以加深对Spark的理解，之后会有Hadoop、kafka的源码分析，希望自己能坚持下来✊。 我会参照着官方的技术文档和一本参考书《Saprk技术内幕》完成本次分析，书的版本较老，因此会将其作为一个支撑框架，具体的内容会以实际源码和技术文档为主。下载源码和编译的过程网上有许多教程，这里不赘述。">
+<meta name="keywords" content="大数据,Spark">
 <meta property="og:type" content="article">
-<meta property="og:title" content="scala——actor，Akka">
-<meta property="og:url" content="//harold.me/2018/04/29/scala——actor，Akka/index.html">
+<meta property="og:title" content="Spark_2.3.0源码分析——1_Spark背景">
+<meta property="og:url" content="//harold.me/2018/10/02/Spark-2-3-0源码分析——1-Spark背景/index.html">
 <meta property="og:site_name" content="Harold的博客">
-<meta property="og:description" content="Actor Actor是消息并发模型 Scala中的Actor能够实现并行编程的强大功能，是基于事件的并发机制 Scala是运用消息（message）的发送和接收来实现多线程 使用scala能更容易的实现多线程应用的开发">
+<meta property="og:description" content="从今天开始阅读Spark 2.3.0的源码，以加深对Spark的理解，之后会有Hadoop、kafka的源码分析，希望自己能坚持下来✊。 我会参照着官方的技术文档和一本参考书《Saprk技术内幕》完成本次分析，书的版本较老，因此会将其作为一个支撑框架，具体的内容会以实际源码和技术文档为主。下载源码和编译的过程网上有许多教程，这里不赘述。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-13T09:22:18.529Z">
+<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-10-2/44831219.jpg">
+<meta property="og:updated_time" content="2018-10-02T14:47:34.003Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="scala——actor，Akka">
-<meta name="twitter:description" content="Actor Actor是消息并发模型 Scala中的Actor能够实现并行编程的强大功能，是基于事件的并发机制 Scala是运用消息（message）的发送和接收来实现多线程 使用scala能更容易的实现多线程应用的开发">
+<meta name="twitter:title" content="Spark_2.3.0源码分析——1_Spark背景">
+<meta name="twitter:description" content="从今天开始阅读Spark 2.3.0的源码，以加深对Spark的理解，之后会有Hadoop、kafka的源码分析，希望自己能坚持下来✊。 我会参照着官方的技术文档和一本参考书《Saprk技术内幕》完成本次分析，书的版本较老，因此会将其作为一个支撑框架，具体的内容会以实际源码和技术文档为主。下载源码和编译的过程网上有许多教程，这里不赘述。">
+<meta name="twitter:image" content="http://p5s7d12ls.bkt.clouddn.com/18-10-2/44831219.jpg">
   
   
     <link rel="icon" href="/favicon.png">
@@ -187,55 +189,52 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-scala——actor，Akka" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Spark-2-3-0源码分析——1-Spark背景" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      scala——actor，Akka
+      Spark_2.3.0源码分析——1_Spark背景
     </h1>
   
 
         
-        <a href="/2018/04/29/scala——actor，Akka/" class="archive-article-date">
-  	<time datetime="2018-04-29T11:27:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-29</time>
+        <a href="/2018/10/02/Spark-2-3-0源码分析——1-Spark背景/" class="archive-article-date">
+  	<time datetime="2018-10-02T13:50:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-02</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <ul>
-<li><p>Actor</p>
-<p>Actor是消息并发模型</p>
-<p>Scala中的Actor能够实现并行编程的强大功能，是基于事件的并发机制</p>
-<p>Scala是运用消息（message）的发送和接收来实现多线程</p>
-<p>使用scala能更容易的实现多线程应用的开发</p>
+        <p>从今天开始阅读Spark 2.3.0的源码，以加深对Spark的理解，之后会有Hadoop、kafka的源码分析，希望自己能坚持下来✊。</p>
+<p>我会参照着官方的技术文档和一本参考书《Saprk技术内幕》完成本次分析，书的版本较老，因此会将其作为一个支撑框架，具体的内容会以实际源码和技术文档为主。下载源码和编译的过程网上有许多教程，这里不赘述。</p>
 <a id="more"></a>
-</li>
-<li><p>Java并发编程和Scala Actor编程的区别</p>
-<p>Scala的Actor类似于Java的多线程编程，但是Scala的Actor提供的模型与多线程有所不同</p>
-<p>Scala的Actor尽可能的避免锁和共享状态，从而避免多线程并发时出现资源争用的情况，进而提高多线程编程的性能，此外，Scala Actor还可以避免死锁等一系列传统多线程问题。</p>
-<p>Java中多数使用的是可变状态的对象资源，对这些资源进行共享来实现多线程编程的话，控制好资源竞争与防止对象状态被意外修改是非常重要的，而对象的不变性也是难以保证的。</p>
-<p>在scala中，可以通过复制不可变状态的资源（即对象）的一个副本，再基于Actor的消息发送、接收机制进行并行编程</p>
-</li>
-<li><p>Actor方法执行顺序：</p>
-<ol>
-<li>调用start()方法启动Actor</li>
-<li>执行act()方法</li>
-<li>向Actor发送消息</li>
-</ol>
-</li>
-<li><p>发送消息的方式：</p>
-<ol>
-<li>！ 发送异步消息，没有返回值</li>
-<li>！? 发送同步消息，等待返回值</li>
-<li>！！ 发送异步消息，返回值是Future[Any]</li>
-</ol>
-</li>
+<h4 id="一、技术背景"><a href="#一、技术背景" class="headerlink" title="一、技术背景"></a>一、技术背景</h4><p>Apache Spark 是一个快速的, 多用途的集群计算系统。 它提供了 Java, Scala, Python 和 R 的高级 API，以及一个支持通用的执行图计算的优化过的引擎. 它还支持一组丰富的高级工具, 包括使用 SQL 处理结构化数据处理的 <a href="http://spark.apachecn.org/docs/cn/2.2.0/sql-programming-guide.html" target="_blank" rel="noopener">Spark SQL</a>, 用于机器学习的 <a href="http://spark.apachecn.org/docs/cn/2.2.0/ml-guide.html" target="_blank" rel="noopener">MLlib</a>, 用于图计算的 <a href="http://spark.apachecn.org/docs/cn/2.2.0/graphx-programming-guide.html" target="_blank" rel="noopener">GraphX</a>, 以及 <a href="http://spark.apachecn.org/docs/cn/2.2.0/streaming-programming-guide.html" target="_blank" rel="noopener">Spark Streaming</a>。</p>
+<p>​    像 MapReduce 和 Dryad 等分布式计算框架已经广泛应用于大数据集的分析. 这些系统可以让用户不用担心分布式工作以及容错, 而是使用一系列的高层次的操作 api 来达到并行计算的目的.</p>
+<p>​    虽然当前的框架提供了大量的对访问利用计算资源的抽象, 但是它们缺少了对利用分布式内存的抽象.样使的它们在处理需要在多个计算之间复用中间结果的应用的时候会非常的不高效. 数据的复用在迭代机器学习和图计算领域（比如 PageRank, K-means 以及线性回归等算法）是很常见的. 在交互式数据挖掘中, 一个用户会经常对一个相同的数据子集进行多次不同的特定查询, 所以数据复用在交互式数据挖掘也是很常见的. 然而, 目前的大部分的框架对计算之间的数据复用的处理方式就是将中间数据写到一个靠稳定的系统中（比如分布式文件系统）, 这样会由于数据的复制备份, 磁盘的 I/O 以及数据的序列化而致应用任务执行很费时间.</p>
+<p>​    大多数现有的集群计算系统都是基于非循环的数据流模型。即从稳定的物理存储(如分布式文件系统)中加载记录，记录被传入由一组确定性操作构成的DAG，然后写回稳定存储。DAG数据流能在运行时实现任务调度和故障恢复。基于数据流的框架并不明确支持工作集，所以需要将数据输出到磁盘，然后在每次查询时重新加载，这会带来较大的开销。针对以上问题，Spark实现了一种分布式内存抽象，称为弹性分布式数据集（Resilient distributed Dataset,RDD）。它支持基于工作集的应用，同时具有数据流的特点：<strong>自动容错、位置感知性调度和可伸缩性</strong>。RDD允许用户在执行多个查询时显式的将工作集换存在内存中，后续查询能够重用工作集，这提高了查询速度。</p>
+<p>​    RDD提供了一种高度受限的共享内存模型，即RDD是只读记录分区的集合，只能通过在其他RDD执行确定的转换操作而创建。RDD通过Lineage来重建丢失的分区：一个RDD中包含了如何从其他RDD衍生所必须的相关信息，从而不需要检查点操作就可以重建丢失的数据分区。</p>
+<h4 id="二、Spark架构综述"><a href="#二、Spark架构综述" class="headerlink" title="二、Spark架构综述"></a>二、Spark架构综述</h4><p>如图所示：<img src="http://p5s7d12ls.bkt.clouddn.com/18-10-2/44831219.jpg" alt=""></p>
+<ul>
+<li>Driver是用户编写的的数据处理逻辑，这个逻辑中包含用户创建的SparkContext</li>
+<li>SparkContext是用户逻辑与Spark集群的主要交互接口，它会和Cluster Manager交互，包括向它申请资源等。</li>
+<li>Cluster Manager负责集群的资源管理和调度。</li>
+<li>Worker Node是集群中可以执行计算的节点</li>
+<li>Executor是在一个Worker Node上为某应用启动的一个进程，该进程负责运行任务，并负责将数据存在内存或磁盘上。每个应用都有各自独立的Executor，计算最终在计算节点的Executer上执行。</li>
+<li>Task是被送到某个Executer上的计算单元</li>
 </ul>
+<hr>
+<p>用户从最开始的提交到最终的执行计算，需要经历以下几个阶段：</p>
+<ol>
+<li>用户创建SparkContext时，新创建的SparkContext实例会连接到Cluster Manager。Cluster Manager根据用户提交时设置的CPU和内存等信息为本次提交分配资源，启动Executor。</li>
+<li>Driver会将用户程序划分为不同的阶段，每个执行阶段由一组完全相同的Task组成，这些Task分别作用于不同的分区。在阶段划分完成和Task创建后，Driver会向Executor发送Task。</li>
+<li>Executor接收到Task后，下载Task的运行时依赖，之后执行Task，并将Task的运行状态汇报给Driver</li>
+<li>Driver根据收到的Task运行状态来处理不同的状态更新。有两种Task，Shuffle Map Task实现数据的重新洗牌，洗牌结果保存在Executor所在节点的文件系统中；Result Task负责生成结果数据</li>
+<li>Driver不断的调用Task，将Task发送到Executor执行，知道所有Task都正确执行或者超过执行次数限制仍未成功。</li>
+</ol>
 
       
 
@@ -249,7 +248,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">scala</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
         		</li>
       		
 		</ul>
@@ -268,18 +271,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/05/02/Fabric启用网络/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/10/02/Spark-2-3-0源码分析——2-RDD实现/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Fabric启用网络
+          Spark_2.3.0源码分析——2_RDD实现
         
       </div>
     </a>
   
   
-    <a href="/2018/04/28/scala——Actor、柯里化与隐式转换/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">scala——Actor、柯里化与隐式转换</div>
+    <a href="/2018/10/02/Scala查漏补缺——高级类型/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Scala查漏补缺——高级类型</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -306,7 +309,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    目录，不存在的…
+                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#一、技术背景"><span class="toc-number">1.</span> <span class="toc-text">一、技术背景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二、Spark架构综述"><span class="toc-number">2.</span> <span class="toc-text">二、Spark架构综述</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -323,8 +326,8 @@
   <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
 <script>
   var cloudTieConfig = {
-    url: "//harold.me/2018/04/29/scala——actor，Akka/", 
-    sourceId: "scala——actor，Akka",
+    url: "//harold.me/2018/10/02/Spark-2-3-0源码分析——1-Spark背景/", 
+    sourceId: "Spark-2-3-0源码分析——1-Spark背景",
     productKey: "true",
     target: "cloud-tie-wrapper"
   };
