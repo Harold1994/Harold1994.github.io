@@ -216,7 +216,7 @@
 <li><em>POST</em> - 向指定的资源提交要被处理的数据</li>
 </ul>
 <h2 id="GET-方法"><a href="#GET-方法" class="headerlink" title="GET 方法"></a>GET 方法</h2><p>请注意，查询字符串（名称/值对）是在 GET 请求的 URL 中发送的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/test/demo_form.asp?name1=value1&amp;name2=value2</span><br></pre></td></tr></table></figure>
+<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/test/demo<span class="number">_f</span>orm.asp?name<span class="number">1</span>=<span class="keyword">value</span><span class="number">1</span>&amp;name<span class="number">2</span>=<span class="keyword">value</span><span class="number">2</span></span><br></pre></td></tr></table></figure>
 <p>有关 GET 请求的其他一些注释：</p>
 <ul>
 <li>GET 请求可被缓存</li>
@@ -227,7 +227,7 @@
 <li>GET 请求只应当用于取回数据</li>
 </ul>
 <h2 id="POST-方法"><a href="#POST-方法" class="headerlink" title="POST 方法"></a>POST 方法</h2><p>请注意，查询字符串（名称/值对）是在 POST 请求的 HTTP 消息主体中发送的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">POST /test/demo_form.asp HTTP/1.1</span><br><span class="line">Host: xxx.com</span><br><span class="line">name1=value1&amp;name2=value2</span><br></pre></td></tr></table></figure>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">POST /test/demo_form<span class="selector-class">.asp</span> HTTP/<span class="number">1.1</span></span><br><span class="line">Host: xxx.com</span><br><span class="line">name1=value1&amp;name2=value2</span><br></pre></td></tr></table></figure>
 <p>有关 POST 请求的其他一些注释：</p>
 <ul>
 <li>POST 请求不会被缓存</li>
@@ -433,6 +433,19 @@
         </div>
         
         
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是-HTTP？"><span class="toc-number">1.</span> <span class="toc-text">什么是 HTTP？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#两种-HTTP-请求方法：GET-和-POST"><span class="toc-number">2.</span> <span class="toc-text">两种 HTTP 请求方法：GET 和 POST</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GET-方法"><span class="toc-number">3.</span> <span class="toc-text">GET 方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#POST-方法"><span class="toc-number">4.</span> <span class="toc-text">POST 方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#比较-GET-与-POST"><span class="toc-number">5.</span> <span class="toc-text">比较 GET 与 POST</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他-HTTP-请求方法"><span class="toc-number">6.</span> <span class="toc-text">其他 HTTP 请求方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-HTTP请求方式："><span class="toc-number">7.</span> <span class="toc-text">Java HTTP请求方式：</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
     </div>
 </aside>
 
@@ -595,14 +608,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
@@ -623,11 +628,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -636,6 +641,22 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">MLlib</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Redis</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -687,11 +708,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Redis</a>
+                <a href="javascript:void(0)" class="js-tag color1">Scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -767,6 +784,18 @@ MathJax.Hub.Queue(function() {
 
     
     	<section class="tools-section tools-section-friends" q-show="friends">
+  		
+        <ul class="search-ul">
+          
+            <li class="search-li">
+              <a href="http://www.54tianzhisheng.cn/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接1</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://www.v2ex.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接2</a>
+            </li>
+          
+        </ul>
   		
     	</section>
     

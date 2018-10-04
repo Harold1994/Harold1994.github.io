@@ -184,6 +184,414 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Scala查漏补缺——高级类型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/02/Scala查漏补缺——高级类型/">Scala查漏补缺——高级类型</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/02/Scala查漏补缺——高级类型/" class="archive-article-date">
+  	<time datetime="2018-10-02T03:58:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="一、元组和函数值类"><a href="#一、元组和函数值类" class="headerlink" title="一、元组和函数值类"></a>一、元组和函数值类</h4><p>​    有一组常规的类来支持元组和函数值的特殊语法，创建类似<code>（1，2，true)</code>的元组和<code>（n: String） =&gt; s&quot;hello, $n&quot;</code>的函数字面量这些实例的语法快捷方式很简短，而且很有表述性，但是它们的具体实现只是<strong>普通的类</strong>。也就是说元组和函数值这些高层构造是由安全的、类型参数化的类支持的。</p>
+<p>​    元组实现的是<code>TupleX[Y]</code>case类的实例，X是一个1-22的数，表示其元数（输入参数的个数），类型参数Y可以是单个类型参数，对应Tuple1，或者两个类型参数，对应Tuple2，直到22个类型参数。Tuple1[A]只有一个字段<code>_1</code>,Tuple2[A,B]有字段<code>_1</code>和<code>_2</code>,以此类推。用小括号创建元组时，会用这个值实例化一个参数个数相同的元组类。换句话说，元组的表述性语法实际上就是case类的快捷方式。</p>
+        
+          <a class="article-more-a" href="/2018/10/02/Scala查漏补缺——高级类型/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Scala</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/02/Scala查漏补缺——高级类型/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Scala查漏补缺——对象、Case类和Trait" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/01/Scala查漏补缺——对象、Case类和Trait/">Scala查漏补缺——对象、Case类和Trait</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/01/Scala查漏补缺——对象、Case类和Trait/" class="archive-article-date">
+  	<time datetime="2018-10-01T13:32:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="一、对象"><a href="#一、对象" class="headerlink" title="一、对象"></a>一、对象</h4><p>​    对象(object)是一个类类型，只能有不超过1个实例，在面向对象设计中称为一个<strong>单例</strong>，对象不适用new创建的，只需要按名直接访问。对象会在首次访问时在当前JVM中自动实例化，也即在第一次访问它之前，对象并不会实例化。<br>​    Scala中的对象提供了类似Java中“静态”和“全局”的功能，不过将它们与可实例化的类解耦合。对象和类没有完全解耦合，对象可以扩展另一个类，从而在一个全局实例中使用它的字段和方法。</p>
+        
+          <a class="article-more-a" href="/2018/10/01/Scala查漏补缺——对象、Case类和Trait/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Scala</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/01/Scala查漏补缺——对象、Case类和Trait/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Scala集合" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/30/Scala集合/">Scala查漏补缺——集合</a>
+    </h1>
+  
+
+        
+        <a href="/2018/09/30/Scala集合/" class="archive-article-date">
+  	<time datetime="2018-09-30T08:54:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-30</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li><p>Cons操作符：Scala支持使用cons(construct)操作构建列表，使用Nil作为基础，使用右结合的cons操作符::绑定元素，就可以构建一个链表。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; <span class="keyword">val</span> numbers = <span class="number">1</span> :: <span class="number">2</span> :: <span class="number">3</span> :: <span class="type">Nil</span></span><br><span class="line">numbers: <span class="type">List</span>[<span class="type">Int</span>] = <span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">scala&gt; <span class="keyword">val</span> first = <span class="type">Nil</span>.::(<span class="number">1</span>)</span><br><span class="line">first: <span class="type">List</span>[<span class="type">Int</span>] = <span class="type">List</span>(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">scala&gt; first.tail==<span class="type">Nil</span></span><br><span class="line">res19: <span class="type">Boolean</span> = <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>::只是List的一个方法，它的参数取一个值，这个值会成为新的表头，表尾为调用::的列表。</p>
+        
+          <a class="article-more-a" href="/2018/09/30/Scala集合/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">scala</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/09/30/Scala集合/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Scala查漏补缺" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/29/Scala查漏补缺/">Scala查漏补缺——表达式、条件式和函数</a>
+    </h1>
+  
+
+        
+        <a href="/2018/09/29/Scala查漏补缺/" class="archive-article-date">
+  	<time datetime="2018-09-29T02:22:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="一、字面量、值、变量和类型"><a href="#一、字面量、值、变量和类型" class="headerlink" title="一、字面量、值、变量和类型"></a>一、字面量、值、变量和类型</h4><ul>
+<li><p>变量var可以重新赋值，但是不可以改变它指定的类型，所以不能将一个变量赋值为不兼容的类型</p>
+</li>
+<li><p>操作符命名不可包涵中括号和点号，但是可以是一个或多个除了反引号外的任意字符，所有这些字符包围在一对反引号中，用反引号包围的名字可以是Scala中的保留字，如true, while,=和var</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; <span class="keyword">val</span> a.b = <span class="number">25</span></span><br><span class="line">&lt;console&gt;:<span class="number">11</span>: error: not found: value a</span><br><span class="line">       <span class="keyword">val</span> a.b = <span class="number">25</span></span><br><span class="line">           ^</span><br><span class="line"></span><br><span class="line">scala&gt; <span class="keyword">val</span> `a.b` = <span class="number">25</span></span><br><span class="line">a.b: <span class="type">Int</span> = <span class="number">25</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Scala中没有基本类型的概念，它的核心数值类型类型是同名的核心JVM类型的包装器，包装JVM类型可以确保Scala和Java互操作，且Scala可以使用所有Java库</p>
+</li>
+<li><p>与Java不同，Scala中的相等操作符（==）会检查真正的相等性，而不是对象引用相等性。</p>
+</li>
+</ul>
+        
+          <a class="article-more-a" href="/2018/09/29/Scala查漏补缺/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">scala</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/09/29/Scala查漏补缺/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Redis高级特性" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/27/Redis高级特性/">Redis高级特性</a>
+    </h1>
+  
+
+        
+        <a href="/2018/09/27/Redis高级特性/" class="archive-article-date">
+  	<time datetime="2018-09-27T01:41:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="一、降低内存占用"><a href="#一、降低内存占用" class="headerlink" title="一、降低内存占用"></a>一、降低内存占用</h4><p>降低Redis内存占用有助于减少创建快照和加载快照所需的时间，提升载入AOF文件时的效率，缩短从服务器进行同步所需的时间，并且能让Redis存储更多的数据而无需添加额外的硬件。</p>
+<p>主要有三种技术：</p>
+<ul>
+<li>短结构</li>
+<li>分片</li>
+<li>打包存储二进制位和字节</li>
+</ul>
+        
+          <a class="article-more-a" href="/2018/09/27/Redis高级特性/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">NoSQL</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Redis</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/09/27/Redis高级特性/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-操作系统基础" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -604,420 +1012,9 @@
 
 
   
-    <article id="post-Tensorflow——模型持久化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/16/Tensorflow——模型持久化/">Tensorflow——模型持久化</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/16/Tensorflow——模型持久化/" class="archive-article-date">
-  	<time datetime="2018-07-16T12:30:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>​    前一篇MNIST数字数字识别的代码在训练完成之后就直接退出了，并没有将训练得到的模型保存下来方便下次直接使用，为了让训练结果可复用，需要将训练得到的神经网络模型持久化。</p>
-<h4 id="一、持久化代码设计"><a href="#一、持久化代码设计" class="headerlink" title="一、持久化代码设计"></a>一、持久化代码设计</h4><p>ts提供了tf.train.Save类来还原一个神经网络,下面实现了持久化一个简单的tf模型，虽然只指定了一个文件路径，但是在文件目录下会出现三个文件，因为tf将计算图和图上参数取值分开保存。</p>
-        
-          <a class="article-more-a" href="/2018/07/16/Tensorflow——模型持久化/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">tensorflow</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/16/Tensorflow——模型持久化/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-tensorflow中optimizer如何实现神经网络的权重，偏移等系数的更新和梯度计算" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/16/tensorflow中optimizer如何实现神经网络的权重，偏移等系数的更新和梯度计算/">tensorflow中optimizer如何实现神经网络的权重，偏移等系数的更新和梯度计算</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/16/tensorflow中optimizer如何实现神经网络的权重，偏移等系数的更新和梯度计算/" class="archive-article-date">
-  	<time datetime="2018-07-15T16:38:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>文章转自：<a href="https://blog.csdn.net/shenxiaoming77/article/details/77197708" target="_blank" rel="noopener">https://blog.csdn.net/shenxiaoming77/article/details/77197708</a></p>
-<p><strong>1.案例代码：</strong></p>
-<p>建立抽象模型</p>
-        
-          <a class="article-more-a" href="/2018/07/16/tensorflow中optimizer如何实现神经网络的权重，偏移等系数的更新和梯度计算/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">tensorflow</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/16/tensorflow中optimizer如何实现神经网络的权重，偏移等系数的更新和梯度计算/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-tensorflow——MNIST数字识别问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/15/tensorflow——MNIST数字识别问题/">tensorflow——MNIST数字识别问题</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/15/tensorflow——MNIST数字识别问题/" class="archive-article-date">
-  	<time datetime="2018-07-15T13:40:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="一、-MNIST数据处理"><a href="#一、-MNIST数据处理" class="headerlink" title="一、 MNIST数据处理"></a>一、 MNIST数据处理</h4><p><strong>1. input_data.read_data_seTensorflow函数</strong></p>
-<p><strong>功能</strong>: 该函数生成的类能将MNIST数据集划分为train, validation和test三个数据集:</p>
-<ul>
-<li>train: 55000张图片</li>
-<li>validation: 5000张</li>
-<li>test: 10000张</li>
-</ul>
-<p>trian和validation组成了训练数据集. 每一张图片是一个长度为784(=28*28像素)的一维数组.</p>
-        
-          <a class="article-more-a" href="/2018/07/15/tensorflow——MNIST数字识别问题/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">tensorflow</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/15/tensorflow——MNIST数字识别问题/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-tenserflow——深层神经网络" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/14/tenserflow——深层神经网络/">tenserflow——深层神经网络</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/14/tenserflow——深层神经网络/" class="archive-article-date">
-  	<time datetime="2018-07-14T15:55:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="一、激活函数"><a href="#一、激活函数" class="headerlink" title="一、激活函数"></a>一、激活函数</h4><p>​    神经网络中激活函数的主要作用是提供网络的非线性建模能力，如不特别说明，激活函数一般而言是非线性函数。假设一个示例神经网络中仅包含线性卷积和全连接运算，那么该网络仅能够表达线性映射，即便增加网络的深度也依旧还是线性映射，难以有效建模实际环境中非线性分布的数据。加入（非线性）激活函数之后，深度神经网络才具备了分层的非线性映射学习能力。</p>
-        
-          <a class="article-more-a" href="/2018/07/14/tenserflow——深层神经网络/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">tensorflow</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/14/tenserflow——深层神经网络/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-leetcode——Mysql题目2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/14/leetcode——Mysql题目2/">leetcode——Mysql题目(二)</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/14/leetcode——Mysql题目2/" class="archive-article-date">
-  	<time datetime="2018-07-14T07:32:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="一、部门工资最高的员工"><a href="#一、部门工资最高的员工" class="headerlink" title="一、部门工资最高的员工"></a>一、部门工资最高的员工</h4><p><code>Employee</code> 表包含所有员工信息，每个员工有其对应的 Id, salary 和 department Id。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">+----+-------+--------+--------------+</span><br><span class="line">| Id | Name  | Salary | DepartmentId |</span><br><span class="line">+----+-------+--------+--------------+</span><br><span class="line">| 1  | Joe   | 70000  | 1            |</span><br><span class="line">| 2  | Henry | 80000  | 2            |</span><br><span class="line">| 3  | Sam   | 60000  | 2            |</span><br><span class="line">| 4  | Max   | 90000  | 1            |</span><br><span class="line">+----+-------+--------+--------------+</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2018/07/14/leetcode——Mysql题目2/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据库， Hive</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/14/leetcode——Mysql题目2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 
@@ -1157,14 +1154,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
@@ -1185,11 +1174,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1198,6 +1187,22 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">MLlib</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Redis</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1249,11 +1254,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Redis</a>
+                <a href="javascript:void(0)" class="js-tag color1">Scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1329,6 +1330,18 @@ MathJax.Hub.Queue(function() {
 
     
     	<section class="tools-section tools-section-friends" q-show="friends">
+  		
+        <ul class="search-ul">
+          
+            <li class="search-li">
+              <a href="http://www.54tianzhisheng.cn/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接1</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://www.v2ex.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接2</a>
+            </li>
+          
+        </ul>
   		
     	</section>
     

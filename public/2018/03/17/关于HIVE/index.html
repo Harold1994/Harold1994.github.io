@@ -395,13 +395,13 @@ OK
 <p><strong>连接</strong></p>
 <p><em>内连接</em>:输入表之间每次匹配都会在输出行里生成一行:</p>
 <blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;SELECT * FROM sales;</span><br><span class="line">Joe	2</span><br><span class="line">Hank	4</span><br><span class="line">Ali	0</span><br><span class="line">Eve	3</span><br><span class="line">Hank	2</span><br></pre></td></tr></table></figure>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;SELECT * FROM sales;</span><br><span class="line">Joe	<span class="number">2</span></span><br><span class="line">Hank	<span class="number">4</span></span><br><span class="line">Ali	<span class="number">0</span></span><br><span class="line">Eve	<span class="number">3</span></span><br><span class="line">Hank	<span class="number">2</span></span><br></pre></td></tr></table></figure>
 </blockquote>
 <blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt; SELECT * FROM things;</span><br><span class="line">2	Tie</span><br><span class="line">4	Coat</span><br><span class="line">3	Hat</span><br><span class="line">1	Scarf</span><br></pre></td></tr></table></figure>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt; SELECT * FROM things;</span><br><span class="line"><span class="number">2</span>	Tie</span><br><span class="line"><span class="number">4</span>	Coat</span><br><span class="line"><span class="number">3</span>	Hat</span><br><span class="line"><span class="number">1</span>	Scarf</span><br></pre></td></tr></table></figure>
 </blockquote>
 <blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT sales.*, things.* FROM sales JOIN things ON (sales.id = things.id);</span><br><span class="line">Joe	2	2	Tie</span><br><span class="line">Hank	4	4	Coat</span><br><span class="line">Eve	3	3	Hat</span><br><span class="line">Hank	2	2	Tie</span><br></pre></td></tr></table></figure>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT sales.*, things.* FROM sales JOIN things ON (sales.id = things.id);</span><br><span class="line">Joe	<span class="number">2</span>	<span class="number">2</span>	Tie</span><br><span class="line">Hank	<span class="number">4</span>	<span class="number">4</span>	Coat</span><br><span class="line">Eve	<span class="number">3</span>	<span class="number">3</span>	Hat</span><br><span class="line">Hank	<span class="number">2</span>	<span class="number">2</span>	Tie</span><br></pre></td></tr></table></figure>
 </blockquote>
 <blockquote>
 <p>JOIN子句中的顺序很重要:一般将最大的表放到最后,因为JOIN前一阶段生成的数据会存在于Reducer的buffer中，通过stream最后面的表，直接从Reducer的buffer中读取已经缓冲的中间结果数据（这个中间结果数据可能是JOIN顺序中，前面表连接的结果的Key，数据量相对较小，内存开销就小），这样，与后面的大表进行连接时，只需要从buffer中读取缓存的Key，与大表中的指定Key进行连接，速度会更快，也可能避免内存缓冲区溢出.(出自<a href="http://shiyanjun.cn/archives/588.html" target="_blank" rel="noopener">简单之美</a>)</p>
@@ -409,29 +409,29 @@ OK
 <p>Hive只支持等值连接,在连接谓词中只能使用等号,还可以在在查询中使用多个JOIN…ON…子句来连接多个表,Hive会智能的以最少的MapReduce作业数来执行连接.单个连接用一个MR作业实现,如果多个连接条件中使用了相同的列那么平均每个连接可以使用少于一个MR作业来实现.</p>
 <p><strong>外连接</strong><br>外连接可以找到表中不能匹配的数据行:</p>
 <blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;左连接</span><br><span class="line">SELECT sales.*, things.* FROM sales LEFT OUTER JOIN things ON (sales.id = things.id);</span><br><span class="line">Joe	2	2	Tie</span><br><span class="line">Hank	4	4	Coat</span><br><span class="line">Ali	0	NULL	NULL</span><br><span class="line">Eve	3	3	Hat</span><br><span class="line">Hank	2	2	Tie</span><br></pre></td></tr></table></figure>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;左连接</span><br><span class="line">SELECT sales.*, things.* FROM sales LEFT OUTER JOIN things ON (sales.id = things.id);</span><br><span class="line">Joe	<span class="number">2</span>	<span class="number">2</span>	Tie</span><br><span class="line">Hank	<span class="number">4</span>	<span class="number">4</span>	Coat</span><br><span class="line">Ali	<span class="number">0</span>	NULL	NULL</span><br><span class="line">Eve	<span class="number">3</span>	<span class="number">3</span>	Hat</span><br><span class="line">Hank	<span class="number">2</span>	<span class="number">2</span>	Tie</span><br></pre></td></tr></table></figure>
 </blockquote>
 <p>当然Hive也支持右连接和全外连接:</p>
 <blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SELECT sales.*, things.* FROM sales RIGHT OUTER JOIN things ON (sales.id = things.id);</span><br><span class="line">Joe	2	2	Tie</span><br><span class="line">Hank	2	2	Tie</span><br><span class="line">Hank	4	4	Coat</span><br><span class="line">Eve	3	3	Hat</span><br><span class="line">NULL	NULL	1	Scarf</span><br></pre></td></tr></table></figure>
 </blockquote>
 <blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;SELECT sales.*, things.* FROM sales FULL OUTER JOIN things ON (sales.id = things.id)</span><br><span class="line">&gt;Ali	0	NULL	NULL</span><br><span class="line">NULL	NULL	1	Scarf</span><br><span class="line">Hank	2	2	Tie</span><br><span class="line">Joe	2	2	Tie</span><br><span class="line">Eve	3	3	Hat</span><br><span class="line">Hank	4	4	Coat</span><br></pre></td></tr></table></figure>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;SELECT sales.*, things.* FROM sales FULL OUTER JOIN things ON (sales.id = things.id)</span><br><span class="line">&gt;Ali	<span class="number">0</span>	NULL	NULL</span><br><span class="line">NULL	NULL	<span class="number">1</span>	Scarf</span><br><span class="line">Hank	<span class="number">2</span>	<span class="number">2</span>	Tie</span><br><span class="line">Joe	<span class="number">2</span>	<span class="number">2</span>	Tie</span><br><span class="line">Eve	<span class="number">3</span>	<span class="number">3</span>	Hat</span><br><span class="line">Hank	<span class="number">4</span>	<span class="number">4</span>	Coat</span><br></pre></td></tr></table></figure>
 </blockquote>
 <p><strong>半连接</strong><br>LEFT SEMI JOIN:</p>
 <blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select * from sales left semi join things on (sales.id = things.id);</span><br><span class="line">Joe	2</span><br><span class="line">Hank	4</span><br><span class="line">Eve	3</span><br><span class="line">Hank	2</span><br></pre></td></tr></table></figure>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> sales <span class="keyword">left</span> <span class="keyword">semi</span> <span class="keyword">join</span> things <span class="keyword">on</span> (sales.id = things.id);</span><br><span class="line">Joe	2</span><br><span class="line">Hank	4</span><br><span class="line">Eve	3</span><br><span class="line">Hank	2</span><br></pre></td></tr></table></figure>
 </blockquote>
 <p>右表只能在ON子句中出现,不能在SELECT表达式中引用右表.</p>
 <p><strong>map连接</strong><br>如果有一个连接表小到足以放入内存,Hive就将较小的表放入每个mapper的内存来执行连接操作.<br>map连接不适用Reducer,因此对于RIGHT或者FULL OUTER JOIN无效,因为只有在对所有输入上进行聚集的步骤(reduce)才能检测到那个数据行无法匹配.<br>map连接可以利用分桶的表,因为作用于左侧表的桶的mapper加载右侧表中对应的桶即可执行连接.需要<code>SET hive.optimize.bucketmapjoin=true</code>启用优化选项.</p>
 <p><strong>子查询</strong><br>子查询是内嵌在另一个SQL语句中的SELECT语句,Hive只允许子查询出现在SELECT语句的FROM子句中,或某些特殊情况下的WHERE子句中.</p>
 <blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;hive&gt; SELECT station, year, AVG(max_temperature)</span><br><span class="line">     FROM (</span><br><span class="line">     SELECT station, year, MAX(temperature) AS max_temperature</span><br><span class="line">     FROM records2</span><br><span class="line">     WHERE temperature != 9999 AND quality IN (0,1,4,5,9)</span><br><span class="line">     GROUP BY station, year</span><br><span class="line">     ) mt</span><br><span class="line">     GROUP BY station, year;</span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;hive&gt; SELECT station, year, AVG(max_temperature)</span><br><span class="line">     <span class="keyword">FROM</span> (</span><br><span class="line">     SELECT station, year, MAX(temperature) AS max_temperature</span><br><span class="line">     <span class="keyword">FROM</span> records2</span><br><span class="line">     WHERE temperature != 9999 <span class="keyword">AND</span> quality <span class="keyword">IN</span> (0,1,4,5,9)</span><br><span class="line">    <span class="built_in"> GROUP </span>BY station, year</span><br><span class="line">     ) mt</span><br><span class="line">    <span class="built_in"> GROUP </span>BY station, year;</span><br></pre></td></tr></table></figure>
 </blockquote>
 <p>外层查询像访问表那样访问子查询的结果,所以必须为子查询赋予一个别名(mt),子查询中的列必须有唯一的名称,以便外层访问引用这些列.</p>
 <p><strong>视图</strong><br>用SELECT语句定义的虚表,可以限制用户,使其只能访问被授权可以看到的表的子集.Hive中,创建视图并不把视图物化存储到磁盘上,视图的SELECT语句只在执行引用视图的语句时才执行.要手工物化视图,可以新建一个表,将视图内容存储到新表中.<br>创建方式:CREATE VIEW</p>
 <blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; CREATE VIEW valid_records AS SELECT * FROM records2 WHERE temperature != 9999 AND quality IN (0,1,4,5,9);</span><br></pre></td></tr></table></figure>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="keyword">CREATE</span> <span class="keyword">VIEW</span> valid_records <span class="keyword">AS</span> <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> records2 <span class="keyword">WHERE</span> temperature != <span class="number">9999</span> <span class="keyword">AND</span> quality <span class="keyword">IN</span> (<span class="number">0</span>,<span class="number">1</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">9</span>);</span><br></pre></td></tr></table></figure>
 </blockquote>
 <blockquote>
 <p>创建视图时并不执行查询,查询只是存储在metastore中,SHOW TABLES命令结果包含视图,可用DESCRIBE EXTENDED view_name来查看视图的详细信息.<br><img src="/home/harold/Pictures/Selection_021.png" alt=""></p>
@@ -554,6 +554,19 @@ OK
             </div>
         </div>
         
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hive-shell环境"><span class="toc-number">1.</span> <span class="toc-text">Hive shell环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MetaStore"><span class="toc-number">2.</span> <span class="toc-text">MetaStore</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#传统数据库与Hive对比"><span class="toc-number">3.</span> <span class="toc-text">传统数据库与Hive对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#表"><span class="toc-number">4.</span> <span class="toc-text">表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查询数据"><span class="toc-number">5.</span> <span class="toc-text">查询数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用户定义函数—-UDF"><span class="toc-number">6.</span> <span class="toc-text">用户定义函数—-UDF</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
         
     </div>
 </aside>
@@ -717,14 +730,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
@@ -745,11 +750,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -758,6 +763,22 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">MLlib</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Redis</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -809,11 +830,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Redis</a>
+                <a href="javascript:void(0)" class="js-tag color1">Scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -889,6 +906,18 @@ MathJax.Hub.Queue(function() {
 
     
     	<section class="tools-section tools-section-friends" q-show="friends">
+  		
+        <ul class="search-ul">
+          
+            <li class="search-li">
+              <a href="http://www.54tianzhisheng.cn/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接1</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://www.v2ex.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接2</a>
+            </li>
+          
+        </ul>
   		
     	</section>
     
