@@ -536,6 +536,6 @@ private def getOrCreateShuffleMapStage(
   }
 ```
 
-**getMissingParentStage**方法用于获取stage未执行的Parent Stage。在上面方法中，获取到Parent Stage后，递归调用上面那个方法按照StageId小的先提交的原则，这个方法的逻辑和[DAGScheduler#getParentStages](http://blog.csdn.net/dabokele/article/details/51902617#t14)方法类似，这里不再分析了。总之就是根据当前Stage，递归调用其中的visit方法，依次对每一个Stage追溯其未运行的Parent Stage。 
+**getMissingParentStage**方法用于获取stage未执行的Parent Stage。在上面方法中，获取到Parent Stage后，递归调用上面那个方法按照StageId小的先提交的原则，这个方法的逻辑和[DAGScheduler#getParentStages方法类似，这里不再分析了。总之就是根据当前Stage，递归调用其中的visit方法，依次对每一个Stage追溯其未运行的Parent Stage。 
 
-当Stege的Parent Stage都运行完毕，才能调用这个方法真正的提交当前Stage中包含的Task。这个方法涉及到了Task，会在下一篇文章中进一步分析。
+当Stage的Parent Stage都运行完毕，才能调用submitMissingTasks方法真正的提交当前Stage中包含的Task。这个方法涉及到了Task，会在下一篇文章中进一步分析。
