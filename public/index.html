@@ -184,6 +184,283 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Spark-2-3-0源码分析——5-Task运算结果的处理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/06/Spark-2-3-0源码分析——5-Task运算结果的处理/">Spark-2-3-0源码分析——5-Task运算结果的处理</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/06/Spark-2-3-0源码分析——5-Task运算结果的处理/" class="archive-article-date">
+  	<time datetime="2018-10-06T09:12:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="一-Task运算结果的处理"><a href="#一-Task运算结果的处理" class="headerlink" title="一. Task运算结果的处理"></a>一. Task运算结果的处理</h4><p>执行流程： </p>
+<ol>
+<li><p>org.apache.spark.executor.TaskRunner.statusUpdate方法 </p>
+</li>
+<li><p>org.apache.spark.executor.CoarseGrainedExecutorBackend.statusUpdate方法 </p>
+</li>
+<li><p>org.apache.spark.scheduler.cluster.CoarseGrainedSchedulerBackend#DriverEndpoint.recieve方法，DriverEndPoint是内部类 </p>
+</li>
+<li><p>org.apache.spark.scheduler.TaskSchedulerImpl中的statusUpdate方法 </p>
+</li>
+<li><p>org.apache.spark.scheduler.TaskResultGetter.enqueueSuccessfulTask方法 </p>
+</li>
+<li><p>org.apache.spark.scheduler.DAGScheduler.handleTaskCompletion方法</p>
+</li>
+</ol>
+<p>Task在Executor执行完成时，会向Driver发送StatusUpdate的消息来通知Driver任务的状态更新为TaskStatus.FINISHED。</p>
+<p>Driver首先会将任务的状态更新通知TaskScheduler，然后在这个Executor上重新分配新的计算任务。</p>
+<p>我们从org.apache.spark.scheduler.cluster.CoarseGrainedSchedulerBackend.DriverEndpoint#receive的方法看起</p>
+<h6 id="A-org-apache-spark-scheduler-cluster-CoarseGrainedSchedulerBackend-DriverEndpoint-receive"><a href="#A-org-apache-spark-scheduler-cluster-CoarseGrainedSchedulerBackend-DriverEndpoint-receive" class="headerlink" title="A.org.apache.spark.scheduler.cluster.CoarseGrainedSchedulerBackend.DriverEndpoint#receive"></a>A.org.apache.spark.scheduler.cluster.CoarseGrainedSchedulerBackend.DriverEndpoint#receive</h6><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">receive</span></span>: <span class="type">PartialFunction</span>[<span class="type">Any</span>, <span class="type">Unit</span>] = &#123;</span><br><span class="line">      <span class="comment">// 接收StatusUpdate发送过来的消息</span></span><br><span class="line">      <span class="keyword">case</span> <span class="type">StatusUpdate</span>(executorId, taskId, state, data) =&gt;</span><br><span class="line">        <span class="comment">// 调用TaskSchedulerImpl中的statusUpdate方法</span></span><br><span class="line">        scheduler.statusUpdate(taskId, state, data.value)</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 如果Task的State是FINISHED, FAILED, KILLED, LOST其中一个</span></span><br><span class="line">        <span class="comment">// 就认为该Task结束</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="type">TaskState</span>.isFinished(state)) &#123;</span><br><span class="line">          executorDataMap.get(executorId) <span class="keyword">match</span> &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="type">Some</span>(executorInfo) =&gt;</span><br><span class="line">              <span class="comment">// 释放资源并重新分配</span></span><br><span class="line">              executorInfo.freeCores += scheduler.<span class="type">CPUS_PER_TASK</span></span><br><span class="line">              makeOffers(executorId)</span><br><span class="line">            <span class="keyword">case</span> <span class="type">None</span> =&gt;</span><br><span class="line">              <span class="comment">// Ignoring the update since we don't know about the executor.</span></span><br><span class="line">              logWarning(<span class="string">s"Ignored task status update (<span class="subst">$taskId</span> state <span class="subst">$state</span>) "</span> +</span><br><span class="line">                <span class="string">s"from unknown executor with ID <span class="subst">$executorId</span>"</span>)</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<h6 id="B-org-apache-spark-scheduler-TaskSchedulerImpl-statusUpdate"><a href="#B-org-apache-spark-scheduler-TaskSchedulerImpl-statusUpdate" class="headerlink" title="B. org.apache.spark.scheduler.TaskSchedulerImpl#statusUpdate"></a>B. org.apache.spark.scheduler.TaskSchedulerImpl#statusUpdate</h6><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">statusUpdate</span></span>(tid: <span class="type">Long</span>, state: <span class="type">TaskState</span>, serializedData: <span class="type">ByteBuffer</span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> failedExecutor: <span class="type">Option</span>[<span class="type">String</span>] = <span class="type">None</span></span><br><span class="line">  <span class="keyword">var</span> reason: <span class="type">Option</span>[<span class="type">ExecutorLossReason</span>] = <span class="type">None</span></span><br><span class="line">  synchronized &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      taskIdToTaskSetManager.get(tid) <span class="keyword">match</span> &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="type">Some</span>(taskSet) =&gt;</span><br><span class="line">          <span class="comment">// 如果Task的状态为Lost</span></span><br><span class="line">          <span class="comment">// 移除掉task的Executor</span></span><br><span class="line">          <span class="keyword">if</span> (state == <span class="type">TaskState</span>.<span class="type">LOST</span>) &#123;</span><br><span class="line">            <span class="comment">// TaskState.LOST is only used by the deprecated Mesos fine-grained scheduling mode,</span></span><br><span class="line">            <span class="comment">// where each executor corresponds to a single task, so mark the executor as failed.</span></span><br><span class="line">            <span class="keyword">val</span> execId = taskIdToExecutorId.getOrElse(tid, <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">IllegalStateException</span>(</span><br><span class="line">              <span class="string">"taskIdToTaskSetManager.contains(tid) &lt;=&gt; taskIdToExecutorId.contains(tid)"</span>))</span><br><span class="line">            <span class="keyword">if</span> (executorIdToRunningTaskIds.contains(execId)) &#123;</span><br><span class="line">              reason = <span class="type">Some</span>(</span><br><span class="line">                <span class="type">SlaveLost</span>(<span class="string">s"Task <span class="subst">$tid</span> was lost, so marking the executor as lost as well."</span>))</span><br><span class="line">              removeExecutor(execId, reason.get)</span><br><span class="line">              failedExecutor = <span class="type">Some</span>(execId)</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">if</span> (<span class="type">TaskState</span>.isFinished(state)) &#123;</span><br><span class="line">            <span class="comment">// 清理本地的数据结构</span></span><br><span class="line">            cleanupTaskState(tid)</span><br><span class="line">            <span class="comment">// 标志任务已结束，注意不一定成功完成</span></span><br><span class="line">            taskSet.removeRunningTask(tid)</span><br><span class="line">            <span class="comment">// 任务成功完成</span></span><br><span class="line">            <span class="keyword">if</span> (state == <span class="type">TaskState</span>.<span class="type">FINISHED</span>) &#123;</span><br><span class="line">              <span class="comment">// taskResultGetter为线程池，处理执行成功的情况</span></span><br><span class="line">              taskResultGetter.enqueueSuccessfulTask(taskSet, tid, serializedData)</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="type">Set</span>(<span class="type">TaskState</span>.<span class="type">FAILED</span>, <span class="type">TaskState</span>.<span class="type">KILLED</span>, <span class="type">TaskState</span>.<span class="type">LOST</span>).contains(state)) &#123;</span><br><span class="line">              <span class="comment">// 处理失败任务</span></span><br><span class="line">              taskResultGetter.enqueueFailedTask(taskSet, tid, state, serializedData)</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="type">None</span> =&gt;</span><br><span class="line">          logError(</span><br><span class="line">            (<span class="string">"Ignoring update with state %s for TID %s because its task set is gone (this is "</span> +</span><br><span class="line">              <span class="string">"likely the result of receiving duplicate task finished status updates) or its "</span> +</span><br><span class="line">              <span class="string">"executor has been marked as failed."</span>)</span><br><span class="line">              .format(state, tid))</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">      <span class="keyword">case</span> e: <span class="type">Exception</span> =&gt; logError(<span class="string">"Exception in statusUpdate"</span>, e)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>对于Task执行成功的情况，它会调用TaskResultGetter的enqueueSuccessfulTask方法进行处理，处理每次结果都是由一个Daemon线程池负责，默认由四个线程组成，可以通过spark.resultGetter.threads设置。</p>
+<h6 id="C-org-apache-spark-scheduler-TaskResultGetter-enqueueSuccessfulTask"><a href="#C-org-apache-spark-scheduler-TaskResultGetter-enqueueSuccessfulTask" class="headerlink" title="C. org.apache.spark.scheduler.TaskResultGetter#enqueueSuccessfulTask"></a>C. org.apache.spark.scheduler.TaskResultGetter#enqueueSuccessfulTask</h6><p>Executor在将结果会传到Driver时会根据结果的大小设置不同的策略：</p>
+<ul>
+<li>如果结果大于1G，会直接丢弃这个结果</li>
+<li>对于“较大”的结果，将其以tid为key存入blockManager，如果结果不大，则直接回传给Driver，这里的回传是直接通过AKKA的消息传递机制。</li>
+<li>其他的直接通过AKKA回传到Driver</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">enqueueSuccessfulTask</span></span>(</span><br><span class="line">      taskSetManager: <span class="type">TaskSetManager</span>,</span><br><span class="line">      tid: <span class="type">Long</span>,</span><br><span class="line">      serializedData: <span class="type">ByteBuffer</span>): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="comment">// 通过线程池来执行结果获取</span></span><br><span class="line">    getTaskResultExecutor.execute(<span class="keyword">new</span> <span class="type">Runnable</span> &#123;</span><br><span class="line">      <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">run</span></span>(): <span class="type">Unit</span> = <span class="type">Utils</span>.logUncaughtExceptions &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="keyword">val</span> (result, size) = serializer.get().deserialize[<span class="type">TaskResult</span>[_]](serializedData) <span class="keyword">match</span> &#123;</span><br><span class="line">              <span class="comment">// 结果是计算结果</span></span><br><span class="line">            <span class="keyword">case</span> directResult: <span class="type">DirectTaskResult</span>[_] =&gt;</span><br><span class="line">              <span class="comment">// 确定大小符合要求 &lt; 1G</span></span><br><span class="line">              <span class="keyword">if</span> (!taskSetManager.canFetchMoreResults(serializedData.limit())) &#123;</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">              &#125;</span><br><span class="line">              <span class="comment">// deserialize "value" without holding any lock so that it won't block other threads.</span></span><br><span class="line">              <span class="comment">// We should call it here, so that when it's called again in</span></span><br><span class="line">              <span class="comment">// "TaskSetManager.handleSuccessfulTask", it does not need to deserialize the value.</span></span><br><span class="line">              <span class="comment">// 反序列化value object</span></span><br><span class="line">              directResult.value(taskResultSerializer.get())</span><br><span class="line">              (directResult, serializedData.limit())</span><br><span class="line">            <span class="comment">// 结果保存在远程Worker节点的BlockManager当中</span></span><br><span class="line">            <span class="keyword">case</span> <span class="type">IndirectTaskResult</span>(blockId, size) =&gt;</span><br><span class="line">              <span class="comment">// 确定大小符合要求</span></span><br><span class="line">              <span class="keyword">if</span> (!taskSetManager.canFetchMoreResults(size)) &#123;</span><br><span class="line">                <span class="comment">// dropped by executor if size is larger than maxResultSize</span></span><br><span class="line">                sparkEnv.blockManager.master.removeBlock(blockId)</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">              &#125;</span><br><span class="line">              logDebug(<span class="string">"Fetching indirect task result for TID %s"</span>.format(tid))</span><br><span class="line">              scheduler.handleTaskGettingResult(taskSetManager, tid)</span><br><span class="line">              <span class="comment">// 从远程Worker获取结果</span></span><br><span class="line">              <span class="keyword">val</span> serializedTaskResult = sparkEnv.blockManager.getRemoteBytes(blockId)</span><br><span class="line">              <span class="keyword">if</span> (!serializedTaskResult.isDefined) &#123;</span><br><span class="line">                <span class="comment">// 如果在Executor的任务执行完成和Driver端去结果之间完全，Executor所在机器出现故障或者其他错误</span></span><br><span class="line">                <span class="comment">// 会导致获取结果失败</span></span><br><span class="line">                <span class="comment">// handleFailedTask会re-runTask，如果没有超过尝试次数</span></span><br><span class="line">                scheduler.handleFailedTask(</span><br><span class="line">                  taskSetManager, tid, <span class="type">TaskState</span>.<span class="type">FINISHED</span>, <span class="type">TaskResultLost</span>)</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">              &#125;</span><br><span class="line">              <span class="comment">// 反序列化远程获取的结果</span></span><br><span class="line">              <span class="keyword">val</span> deserializedResult = serializer.get().deserialize[<span class="type">DirectTaskResult</span>[_]](</span><br><span class="line">                serializedTaskResult.get.toByteBuffer)</span><br><span class="line">              <span class="comment">// force deserialization of referenced value</span></span><br><span class="line">              deserializedResult.value(taskResultSerializer.get())</span><br><span class="line">              <span class="comment">// 删除远程结果sparkEnv.blockManager.master.removeBlock(blockId)</span></span><br><span class="line">              sparkEnv.blockManager.master.removeBlock(blockId)</span><br><span class="line">              (deserializedResult, size)</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          <span class="comment">// 在从执行程序收到的累加器更新中设置任务结果大小。我们需要在驱动程序上执行此操作，</span></span><br><span class="line">          <span class="comment">// 因为如果我们在执行程序上执行此操作，那么在更新大小后我们将不得不再次序列化结果。</span></span><br><span class="line">          result.accumUpdates = result.accumUpdates.map &#123; a =&gt;</span><br><span class="line">            <span class="keyword">if</span> (a.name == <span class="type">Some</span>(<span class="type">InternalAccumulator</span>.<span class="type">RESULT_SIZE</span>)) &#123;</span><br><span class="line">              <span class="keyword">val</span> acc = a.asInstanceOf[<span class="type">LongAccumulator</span>]</span><br><span class="line">              assert(acc.sum == <span class="number">0</span>L, <span class="string">"task result size should not have been set on the executors"</span>)</span><br><span class="line">              acc.setValue(size.toLong)</span><br><span class="line">              acc</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              a</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="comment">// TaskSchedulerImpl处理获取到的结果</span></span><br><span class="line">          scheduler.handleSuccessfulTask(taskSetManager, tid, result)</span><br><span class="line">        &#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">          <span class="keyword">case</span> cnf: <span class="type">ClassNotFoundException</span> =&gt;</span><br><span class="line">            <span class="keyword">val</span> loader = <span class="type">Thread</span>.currentThread.getContextClassLoader</span><br><span class="line">            taskSetManager.abort(<span class="string">"ClassNotFound with classloader: "</span> + loader)</span><br><span class="line">          <span class="comment">// Matching NonFatal so we don't catch the ControlThrowable from the "return" above.</span></span><br><span class="line">          <span class="keyword">case</span> <span class="type">NonFatal</span>(ex) =&gt;</span><br><span class="line">            logError(<span class="string">"Exception while getting task result"</span>, ex)</span><br><span class="line">            taskSetManager.abort(<span class="string">"Exception while getting task result: %s"</span>.format(ex))</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h6 id="D-org-apache-spark-scheduler-TaskSchedulerImpl-handleSuccessfulTask"><a href="#D-org-apache-spark-scheduler-TaskSchedulerImpl-handleSuccessfulTask" class="headerlink" title="D. org.apache.spark.scheduler.TaskSchedulerImpl#handleSuccessfulTask"></a>D. org.apache.spark.scheduler.TaskSchedulerImpl#handleSuccessfulTask</h6><p>TaskSchedulerImpl中的handleSuccessfulTask方法将最终对计算结果进行处理，具有源码如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">handleSuccessfulTask</span></span>(</span><br><span class="line">    taskSetManager: <span class="type">TaskSetManager</span>,</span><br><span class="line">    tid: <span class="type">Long</span>,</span><br><span class="line">    taskResult: <span class="type">DirectTaskResult</span>[_]): <span class="type">Unit</span> = synchronized &#123;</span><br><span class="line">    <span class="comment">//调用TaskSetManager.handleSuccessfulTask方法进行处理</span></span><br><span class="line">  taskSetManager.handleSuccessfulTask(tid, taskResult)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="E-org-apache-spark-scheduler-TaskSetManager-handleSuccessfulTask"><a href="#E-org-apache-spark-scheduler-TaskSetManager-handleSuccessfulTask" class="headerlink" title="E. org.apache.spark.scheduler.TaskSetManager#handleSuccessfulTask"></a>E. org.apache.spark.scheduler.TaskSetManager#handleSuccessfulTask</h6><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Marks a task as successful and notifies the DAGScheduler that the task has ended.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">handleSuccessfulTask</span></span>(tid: <span class="type">Long</span>, result: <span class="type">DirectTaskResult</span>[_]): <span class="type">Unit</span> = &#123;</span><br><span class="line">  <span class="comment">// 获得TaskInfo</span></span><br><span class="line">  <span class="keyword">val</span> info = taskInfos(tid)</span><br><span class="line">  <span class="keyword">val</span> index = info.index</span><br><span class="line">  <span class="comment">// 标记taskfinish</span></span><br><span class="line">  info.markFinished(<span class="type">TaskState</span>.<span class="type">FINISHED</span>, clock.getTimeMillis())</span><br><span class="line">  <span class="comment">// 支持推测</span></span><br><span class="line">  <span class="keyword">if</span> (speculationEnabled) &#123;</span><br><span class="line">    successfulTaskDurations.insert(info.duration)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 从RunningTask中移除该task</span></span><br><span class="line">  removeRunningTask(tid)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 杀死所有其他与之相同的task的尝试</span></span><br><span class="line">  <span class="keyword">for</span> (attemptInfo &lt;- taskAttempts(index) <span class="keyword">if</span> attemptInfo.running) &#123;</span><br><span class="line">    logInfo(<span class="string">s"Killing attempt <span class="subst">$&#123;attemptInfo.attemptNumber&#125;</span> for task <span class="subst">$&#123;attemptInfo.id&#125;</span> "</span> +</span><br><span class="line">      <span class="string">s"in stage <span class="subst">$&#123;taskSet.id&#125;</span> (TID <span class="subst">$&#123;attemptInfo.taskId&#125;</span>) on <span class="subst">$&#123;attemptInfo.host&#125;</span> "</span> +</span><br><span class="line">      <span class="string">s"as the attempt <span class="subst">$&#123;info.attemptNumber&#125;</span> succeeded on <span class="subst">$&#123;info.host&#125;</span>"</span>)</span><br><span class="line">    killedByOtherAttempt(index) = <span class="literal">true</span></span><br><span class="line">    sched.backend.killTask(</span><br><span class="line">      attemptInfo.taskId,</span><br><span class="line">      attemptInfo.executorId,</span><br><span class="line">      interruptThread = <span class="literal">true</span>,</span><br><span class="line">      reason = <span class="string">"another attempt succeeded"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (!successful(index)) &#123;</span><br><span class="line">    <span class="comment">// 计数</span></span><br><span class="line">    tasksSuccessful += <span class="number">1</span></span><br><span class="line">    logInfo(<span class="string">s"Finished task <span class="subst">$&#123;info.id&#125;</span> in stage <span class="subst">$&#123;taskSet.id&#125;</span> (TID <span class="subst">$&#123;info.taskId&#125;</span>) in"</span> +</span><br><span class="line">      <span class="string">s" <span class="subst">$&#123;info.duration&#125;</span> ms on <span class="subst">$&#123;info.host&#125;</span> (executor <span class="subst">$&#123;info.executorId&#125;</span>)"</span> +</span><br><span class="line">      <span class="string">s" (<span class="subst">$tasksSuccessful</span>/<span class="subst">$numTasks</span>)"</span>)</span><br><span class="line">    <span class="comment">// Mark successful and stop if all the tasks have succeeded.</span></span><br><span class="line">    <span class="comment">// 若果有所task成功了，</span></span><br><span class="line">    <span class="comment">// 那么标记successful，并且停止</span></span><br><span class="line">    successful(index) = <span class="literal">true</span></span><br><span class="line">    <span class="keyword">if</span> (tasksSuccessful == numTasks) &#123;</span><br><span class="line">      isZombie = <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    logInfo(<span class="string">"Ignoring task-finished event for "</span> + info.id + <span class="string">" in stage "</span> + taskSet.id +</span><br><span class="line">      <span class="string">" because task "</span> + index + <span class="string">" has already completed successfully"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// This method is called by "TaskSchedulerImpl.handleSuccessfulTask" which holds the</span></span><br><span class="line">  <span class="comment">// "TaskSchedulerImpl" lock until exiting. To avoid the SPARK-7655 issue, we should not</span></span><br><span class="line">  <span class="comment">// "deserialize" the value when holding a lock to avoid blocking other threads. So we call</span></span><br><span class="line">  <span class="comment">// "result.value()" in "TaskResultGetter.enqueueSuccessfulTask" before reaching here.</span></span><br><span class="line">  <span class="comment">// Note: "result.value()" only deserializes the value when it's called at the first time, so</span></span><br><span class="line">  <span class="comment">// here "result.value()" just returns the value and won't block other threads.</span></span><br><span class="line">  <span class="comment">// 通知dagScheduler该task完成</span></span><br><span class="line">  sched.dagScheduler.taskEnded(tasks(index), <span class="type">Success</span>, result.value(), result.accumUpdates, info)</span><br><span class="line">  maybeFinishTaskSet()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="F-org-apache-spark-scheduler-DAGScheduler-taskEnded"><a href="#F-org-apache-spark-scheduler-DAGScheduler-taskEnded" class="headerlink" title="F.  org.apache.spark.scheduler.DAGScheduler#taskEnded"></a>F.  org.apache.spark.scheduler.DAGScheduler#taskEnded</h6><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">taskEnded</span></span>(</span><br><span class="line">     task: <span class="type">Task</span>[_],</span><br><span class="line">     reason: <span class="type">TaskEndReason</span>,</span><br><span class="line">     result: <span class="type">Any</span>,</span><br><span class="line">     accumUpdates: <span class="type">Seq</span>[<span class="type">AccumulatorV2</span>[_, _]],</span><br><span class="line">     taskInfo: <span class="type">TaskInfo</span>): <span class="type">Unit</span> = &#123;</span><br><span class="line">   eventProcessLoop.post(</span><br><span class="line">     <span class="comment">// 调用DAGSchedulerEventProcessLoop的post方法将CompletionEvent提交到事件队列中，</span></span><br><span class="line">     <span class="comment">// 交由eventThread进行处理，onReceive方法将处理该事件</span></span><br><span class="line">     <span class="type">CompletionEvent</span>(task, reason, result, accumUpdates, taskInfo))</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h6 id="G-org-apache-spark-scheduler-DAGSchedulerEventProcessLoop-doOnReceive"><a href="#G-org-apache-spark-scheduler-DAGSchedulerEventProcessLoop-doOnReceive" class="headerlink" title="G. org.apache.spark.scheduler.DAGSchedulerEventProcessLoop#doOnReceive"></a>G. org.apache.spark.scheduler.DAGSchedulerEventProcessLoop#doOnReceive</h6><p>DAGSchedulerEventProcessLoop的doOnReceive会对信号进行监听：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">doOnReceive</span></span>(event: <span class="type">DAGSchedulerEvent</span>): <span class="type">Unit</span> = event <span class="keyword">match</span> &#123;</span><br><span class="line">  <span class="comment">// 处理Job提交事件</span></span><br><span class="line">  <span class="keyword">case</span> <span class="type">JobSubmitted</span>(jobId, rdd, func, partitions, callSite, listener, properties) =&gt;</span><br><span class="line">    dagScheduler.handleJobSubmitted(jobId, rdd, func, partitions, callSite, listener, properties)</span><br><span class="line">    ...</span><br><span class="line">  <span class="keyword">case</span> completion: <span class="type">CompletionEvent</span> =&gt;</span><br><span class="line">    dagScheduler.handleTaskCompletion(completion)</span><br></pre></td></tr></table></figure>
+<h6 id="H"><a href="#H" class="headerlink" title="H."></a>H.</h6>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/06/Spark-2-3-0源码分析——5-Task运算结果的处理/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Spark-2-3-0源码分析——4-任务调度实现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/04/Spark-2-3-0源码分析——4-任务调度实现/">Spark-2-3-0源码分析——4-任务调度实现</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/04/Spark-2-3-0源码分析——4-任务调度实现/" class="archive-article-date">
+  	<time datetime="2018-10-04T13:55:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​    本文是Scheduler模块源码分析的第二篇，第一篇主要分析了DAGScheduler，本篇将结合Spark2.3.0的源码继续分析TaskScheduler和SchedulerBackend。</p>
+<h4 id="三、任务调度实现"><a href="#三、任务调度实现" class="headerlink" title="三、任务调度实现"></a>三、任务调度实现</h4><p>​    每个TaskScheduler都对应一个SchedulerBackend，其中TaskScheduler负责Application的不同Job之间的调度，在Task失败时重试的机制，并且为执行速度慢的Task启动备份的任务。而SchedulerBackend负责与Cluster Master交互，取得该Application分配得到的资源，并将这些资源传给TaskScheduler，由TaskScheduler为Task最终分配计算资源。</p>
+        
+          <a class="article-more-a" href="/2018/10/04/Spark-2-3-0源码分析——4-任务调度实现/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/04/Spark-2-3-0源码分析——4-任务调度实现/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Spark-2-3-0源码分析——3-Scheduler模块" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/04/Spark-2-3-0源码分析——3-Scheduler模块/">Spark-2-3-0源码分析——3-DAGScheduler模块</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/04/Spark-2-3-0源码分析——3-Scheduler模块/" class="archive-article-date">
+  	<time datetime="2018-10-04T07:36:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="一、模块概述"><a href="#一、模块概述" class="headerlink" title="一、模块概述"></a>一、模块概述</h4><h5 id="1-整体框架"><a href="#1-整体框架" class="headerlink" title="1. 整体框架"></a>1. 整体框架</h5><p>任务调度模块主要包括两大部分：</p>
+<ul>
+<li>DAGScheduler：分析用户提交的应用，建立DAG，划分Stage。</li>
+<li>TaskScheduler：通过Cluster Manager在集群的某个Worker的Executor上启动任务</li>
+</ul>
+<p>它们负责将用户提交的计算任务按DAG划分为不同的阶段，并将不同阶段的计算任务提交到集群进行最终的计算。</p>
+        
+          <a class="article-more-a" href="/2018/10/04/Spark-2-3-0源码分析——3-Scheduler模块/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/04/Spark-2-3-0源码分析——3-Scheduler模块/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Spark-2-3-0源码分析——2-RDD实现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -221,11 +498,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
         		</li>
       		
 		</ul>
@@ -302,11 +579,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
         		</li>
       		
 		</ul>
@@ -706,15 +983,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">NoSQL</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Redis</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
         		</li>
       		
 		</ul>
@@ -725,250 +1002,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/09/27/Redis高级特性/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-操作系统基础" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/21/操作系统基础/">操作系统基础</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/21/操作系统基础/" class="archive-article-date">
-  	<time datetime="2018-09-21T10:53:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="一、计算机系统概述"><a href="#一、计算机系统概述" class="headerlink" title="一、计算机系统概述"></a>一、计算机系统概述</h3><h4 id="1-信息-位-上下文"><a href="#1-信息-位-上下文" class="headerlink" title="1.信息 = 位 + 上下文"></a>1.信息 = 位 + 上下文</h4><p>源程序实际上是由0和1组成的位（又叫比特）序列，8个位被组织成一组，称为字节，每个字节表示程序中的某些文本字符。ASCII码其实就是用一个唯一的单字节大小的整数值来表示每个字符。程序以字节序列方式存储在文件中，每个字节都有一个整数值，对应于某些字符。</p>
-<p>只由ASCII字符构成的文件称为文本文件，其他文件都叫二进制文件。</p>
-<p>数字的机器表示方式与实际的证书和实数不同，他们是对真值的<em>有限近似</em></p>
-        
-          <a class="article-more-a" href="/2018/09/21/操作系统基础/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">计算机基础</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/21/操作系统基础/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Redis中的锁和信号量" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/21/Redis中的锁和信号量/">Redis中的锁和信号量</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/21/Redis中的锁和信号量/" class="archive-article-date">
-  	<time datetime="2018-09-21T02:01:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h3><p>Redis使用WATCH命令代替对数据行加锁，WATCH是一种<strong>乐观锁</strong>，因为它只会在数据被其他客户端抢先修改的情况下通知执行了这个命令的客户端，而不会阻止其他客户端对数据进行修改。</p>
-<p>WATCH,MULTI,EXEC组成的事务不具有可扩展性，因为程序在尝试完成一个事务的时候，可能因为事务执行失败而反复重试。</p>
-        
-          <a class="article-more-a" href="/2018/09/21/Redis中的锁和信号量/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">NoSQL</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Redis</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/21/Redis中的锁和信号量/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-图算法二" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/18/图算法二/">图算法（二）：图的高级问题</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/18/图算法二/" class="archive-article-date">
-  	<time datetime="2018-09-18T14:24:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>关于图的基本概念笔者在之前的<a href="https://harold1994.github.io/2018/07/03/图算法/" target="_blank" rel="noopener">博客</a>中已经介绍过，这篇博客介绍图算法比较高级的知识。包括最短路径问题，最小生成子图问题和拓扑排序等问题。</p>
-<h4 id="一、最短路径问题"><a href="#一、最短路径问题" class="headerlink" title="一、最短路径问题"></a>一、最短路径问题</h4><p>​    图的最短路径问题主要分为两类,单源最短路径问题和全对最短路径问题。单源最短路径问题指给点单个源点,求其到所有其它顶点之间的最短距离。而全对最短路径问题指所有顶点之间的最短路径问题。此外对于单对最短路径问题,从渐进意义上来看,目前还没有比最好的单元算法更快的算法来解决这一问题。</p>
-        
-          <a class="article-more-a" href="/2018/09/18/图算法二/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/18/图算法二/">展开全文 >></a>
         </p>
       
 
@@ -1116,15 +1149,11 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">区块链</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1136,23 +1165,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">并发</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1165,6 +1182,14 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1184,6 +1209,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
@@ -1192,7 +1221,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
+                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1209,6 +1238,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1256,15 +1289,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">协同过滤</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">ALS算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
               </li>
              
               <li class="article-tag-list-item">
