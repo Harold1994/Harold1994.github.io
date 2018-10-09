@@ -210,9 +210,9 @@
         <p>在 <a href="https://link.jianshu.com?t=https%3A%2F%2Fgithub.com%2Ftensorflow%2Ftensorflow%2Fissues%2F10179" target="_blank" rel="noopener">TensorFlow 的 这个 Issue</a> 可以看到，2017年5月已经支持<a href="https://link.jianshu.com?t=https%3A%2F%2Fhub.docker.com%2Fr%2Ftensorflow%2Ftensorflow%2Ftags%2F" target="_blank" rel="noopener">用 tag 提供不同的 image</a>。比如 <code>tensorflow/tensorflow:latest-py3</code> 就可以（安装并）打开 Python3 环境。</p>
 <p>结合目录映射的需要，输入命令完成映射并在 python3 环境下打开：</p>
 <a id="more"></a>     
-<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -p <span class="number">8888</span><span class="symbol">:</span><span class="number">8888</span> -v ~<span class="regexp">/WorkStation/</span>DeepLearning101-<span class="number">002</span>/<span class="symbol">:/WorkStation/DeepLearning101-</span><span class="number">002</span> -w /WorkStation/DeepLearning101-<span class="number">002</span> tensorflow/<span class="symbol">tensorflow:</span>latest-py3</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -p 8888:8888 -v ~/WorkStation/DeepLearning101-002/:/WorkStation/DeepLearning101-002 -w /WorkStation/DeepLearning101-002 tensorflow/tensorflow:latest-py3</span><br></pre></td></tr></table></figure>
 <p>然后用<code>docker ps -a</code>查看所有 image，然后使用命令 <code>docker rename CONTAINER ID XXX</code>，将默认的 Python2 的 image 重命名为 dl，将 Python3 的 image 重命名为 dlpy3：</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CONTAINER ID        IMAGE                              COMMAND                  CREATED             STATUS                      PORTS               NAMES</span><br><span class="line">f46533729239        tensorflow/tensorflo<span class="variable">w:latest</span>-<span class="keyword">py3</span>   <span class="string">"/run_jupyter.sh -..."</span>   <span class="number">11</span> minutes ago      Exited (<span class="number">0</span>) <span class="number">6</span> minutes ago                        dlpy3</span><br><span class="line">f7178713446b        tensorflow/tensorflow              <span class="string">"/run_jupyter.sh -..."</span>   <span class="number">42</span> minutes ago      Exited (<span class="number">0</span>) <span class="number">15</span> minutes ago                       <span class="keyword">dl</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CONTAINER ID        IMAGE                              COMMAND                  CREATED             STATUS                      PORTS               NAMES</span><br><span class="line">f46533729239        tensorflow/tensorflow:latest-py3   &quot;/run_jupyter.sh -...&quot;   11 minutes ago      Exited (0) 6 minutes ago                        dlpy3</span><br><span class="line">f7178713446b        tensorflow/tensorflow              &quot;/run_jupyter.sh -...&quot;   42 minutes ago      Exited (0) 15 minutes ago                       dl</span><br></pre></td></tr></table></figure>
 <p>以后就可以根据需要，打开不同 Python 环境的 image。</p>
 <p>文章内容来自：<a href="https://www.jianshu.com/p/8779099784b2" target="_blank" rel="noopener">https://www.jianshu.com/p/8779099784b2</a></p>
 
@@ -302,17 +302,6 @@
 
   
   
-  
-  <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
-<script>
-  var cloudTieConfig = {
-    url: "//harold.me/2018/07/06/tensorflow在Docker中切换Python版本/", 
-    sourceId: "tensorflow在Docker中切换Python版本",
-    productKey: "true",
-    target: "cloud-tie-wrapper"
-  };
-</script>
-<script src="//img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
   
 
   
@@ -433,11 +422,15 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
+                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -449,11 +442,23 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">并发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -466,14 +471,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -493,10 +490,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
@@ -505,7 +498,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -525,19 +518,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">计算机基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">分布式算法</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -550,6 +535,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Mahout</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">分布式算法</a>
               </li>
              
               <li class="article-tag-list-item">

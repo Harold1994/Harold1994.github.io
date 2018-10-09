@@ -234,9 +234,9 @@
 <p><strong>3.CountVectorizer</strong></p>
 <p>CountVectorizer和CountVectorizerModel旨在帮助将文本文档集合转换为标记数的向量。 当先验词典不可用时，CountVectorizer可以用作估计器来提取词汇表，并生成CountVectorizerModel。 该模型通过词汇生成文档的稀疏表示，然后可以将其传递给其他算法，如LDA。</p>
 <p>在拟合过程中，CountVectorizer将选择通过语料库按术语频率排序的top前几vocabSize词。 可选参数minDF还通过指定术语必须出现以包含在词汇表中的文档的最小数量（或小于1.0）来影响拟合过程。 另一个可选的二进制切换参数控制输出向量。 如果设置为true，则所有非零计数都设置为1.对于模拟二进制而不是整数的离散概率模型，这是非常有用的。假设我们有如下的DataFrame包含id和texts两列：</p>
-<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> id <span class="string">| texts</span></span><br><span class="line">----<span class="string">|----------</span></span><br><span class="line"> <span class="number">0</span>  <span class="string">| Array("</span>a<span class="string">", "</span>b<span class="string">", "</span>c<span class="string">")</span></span><br><span class="line"> <span class="number">1</span>  <span class="string">| Array("</span>a<span class="string">", "</span>b<span class="string">", "</span>b<span class="string">", "</span>c<span class="string">", "</span>a<span class="string">")</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> id | texts</span><br><span class="line">----|----------</span><br><span class="line"> 0  | Array(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;)</span><br><span class="line"> 1  | Array(&quot;a&quot;, &quot;b&quot;, &quot;b&quot;, &quot;c&quot;, &quot;a&quot;)</span><br></pre></td></tr></table></figure>
 <p>文本中的每一行都是Array[String]类型的文档。调用CountVectorizer的拟合产生一个具有词汇表（a, b, c）的CountVectorizerModel。然后转换后的输出列 包含“向量”这一列：</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> id | texts                           | <span class="type">vector</span></span><br><span class="line">----|---------------------------------|---------------</span><br><span class="line"> <span class="number">0</span>  | Array(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>)            | (<span class="number">3</span>,[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>],[<span class="number">1.0</span>,<span class="number">1.0</span>,<span class="number">1.0</span>])</span><br><span class="line"> <span class="number">1</span>  | Array(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>, <span class="string">"a"</span>)  | (<span class="number">3</span>,[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>],[<span class="number">2.0</span>,<span class="number">2.0</span>,<span class="number">1.0</span>])</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> id | texts                           | vector</span><br><span class="line">----|---------------------------------|---------------</span><br><span class="line"> 0  | Array(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;)            | (3,[0,1,2],[1.0,1.0,1.0])</span><br><span class="line"> 1  | Array(&quot;a&quot;, &quot;b&quot;, &quot;b&quot;, &quot;c&quot;, &quot;a&quot;)  | (3,[0,1,2],[2.0,2.0,1.0])</span><br></pre></td></tr></table></figure>
 <p>每个向量表示文档在词汇表上的标记数。</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">CountVectorizerExample</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> spark= <span class="type">SparkSession</span>.builder()</span><br><span class="line">      .master(<span class="string">"local"</span>)</span><br><span class="line">      .appName(<span class="string">"Word2VecExample"</span>)</span><br><span class="line">      .getOrCreate()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> df = spark.createDataFrame(<span class="type">Seq</span>(</span><br><span class="line">      (<span class="number">0</span>, <span class="type">Array</span>(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>,<span class="string">"d"</span>)),</span><br><span class="line">      (<span class="number">1</span>, <span class="type">Array</span>(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>, <span class="string">"a"</span>,<span class="string">"d"</span>,<span class="string">"d"</span>))</span><br><span class="line">    )).toDF(<span class="string">"id"</span>, <span class="string">"words"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> cvModel : <span class="type">CountVectorizerModel</span> = <span class="keyword">new</span> <span class="type">CountVectorizer</span>()</span><br><span class="line">      .setInputCol(<span class="string">"words"</span>)</span><br><span class="line">      .setOutputCol(<span class="string">"features"</span>)</span><br><span class="line">      .setVocabSize(<span class="number">3</span>)</span><br><span class="line">      .setMinDF(<span class="number">2</span>)</span><br><span class="line">      .fit(df)</span><br><span class="line">   <span class="comment">//也可以使用先验词汇</span></span><br><span class="line">    <span class="keyword">val</span> cvm = <span class="keyword">new</span> <span class="type">CountVectorizerModel</span>(<span class="type">Array</span>(<span class="string">"a"</span>,<span class="string">"b"</span>,<span class="string">"c"</span>))</span><br><span class="line">      .setInputCol(<span class="string">"words"</span>)</span><br><span class="line">      .setOutputCol(<span class="string">"result"</span>)</span><br><span class="line"></span><br><span class="line">    cvModel.transform(df).show(<span class="literal">false</span>)</span><br><span class="line"><span class="comment">//    cvm.transform(df).show(false)</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="二、特征变换"><a href="#二、特征变换" class="headerlink" title="二、特征变换"></a>二、特征变换</h4><p><strong>1.Tokenizer分词器</strong></p>
@@ -536,17 +536,6 @@
   
   
   
-  <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
-<script>
-  var cloudTieConfig = {
-    url: "//harold.me/2018/06/26/MLlib-特征的提取、转换与选择/", 
-    sourceId: "MLlib-特征的提取、转换与选择",
-    productKey: "true",
-    target: "cloud-tie-wrapper"
-  };
-</script>
-<script src="//img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
-  
 
   
 
@@ -666,11 +655,15 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
+                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -682,11 +675,23 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">并发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -699,14 +704,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -726,10 +723,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
@@ -738,7 +731,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -758,19 +751,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">计算机基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">分布式算法</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -783,6 +768,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Mahout</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">分布式算法</a>
               </li>
              
               <li class="article-tag-list-item">

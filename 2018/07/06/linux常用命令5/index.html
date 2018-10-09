@@ -209,7 +209,7 @@
       
         <p><strong>1.more</strong></p>
 <p>Linux more 命令类似 cat ，不过会以一页一页的形式显示，更方便使用者逐页阅读，而最基本的指令就是按空白键（space）就往下一页显示，按 b 键就会往回（back）一页显示，而且还有搜寻字串的功能（与 vi 相似），使用中的说明文件，请按 h 。</p>
-<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">more <span class="string">[-dlfpcsu]</span> <span class="string">[-num]</span> <span class="string">[+/pattern]</span> <span class="string">[+linenum]</span> <span class="string">[fileNames..]</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">more [-dlfpcsu] [-num] [+/pattern] [+linenum] [fileNames..]</span><br></pre></td></tr></table></figure>
 <a id="more"></a>     
 <p> <strong>参数</strong>：</p>
 <ul>
@@ -239,7 +239,7 @@
 </ul>
 <p><strong>2.less</strong></p>
 <p>less 与 more 类似，但使用 less 可以随意浏览文件，而 more 仅能向前移动，却不能向后移动，而且 less 在查看之前不会加载整个文件。</p>
-<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">less <span class="string">[参数]</span> 文件</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">less [参数] 文件</span><br></pre></td></tr></table></figure>
 <p><strong>参数说明</strong>：</p>
 <ul>
 <li>-b &lt;缓冲区大小&gt; 设置缓冲区的大小</li>
@@ -272,7 +272,7 @@
 <p><strong>3.cmp</strong></p>
 <p>Linux cmp命令用于比较两个文件是否有差异。</p>
 <p>当相互比较的两个文件完全一样时，则该指令不会显示任何信息。若发现有所差异，预设会标示出第一个不同之处的字符和列数编号。若不指定任何文件名称或是所给予的文件名为”-“，则cmp指令会从标准输入设备读取数据。</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmp [<span class="string">-clsv</span>][<span class="symbol">-i &lt;字符数目&gt;</span>][<span class="string">--help</span>][<span class="symbol">第一个文件</span>][<span class="string">第二个文件</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmp [-clsv][-i &lt;字符数目&gt;][--help][第一个文件][第二个文件]</span><br></pre></td></tr></table></figure>
 <p><strong>参数</strong>：</p>
 <ul>
 <li>-c或–print-chars 　除了标明差异处的十进制字码之外，一并显示该字符所对应字符。</li>
@@ -284,11 +284,11 @@
 <p>要确定两个文件是否相同，请输入：</p>
 </li>
 </ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">cmp</span> <span class="selector-tag">prog</span><span class="selector-class">.o</span><span class="selector-class">.bak</span> <span class="selector-tag">prog</span><span class="selector-class">.o</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmp prog.o.bak prog.o</span><br></pre></td></tr></table></figure>
 <p><strong>4.split</strong></p>
 <p>Linux split命令用于将一个文件分割成数个。</p>
 <p>该指令将大文件分割成较小的文件，在默认情况下将按照每1000行切割成一个小文件。</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">split [<span class="string">--help</span>][<span class="symbol">--version</span>][<span class="string">-&lt;行数&gt;</span>][<span class="symbol">-b &lt;字节&gt;</span>][<span class="string">-C &lt;字节&gt;</span>][<span class="symbol">-l &lt;行数&gt;</span>][<span class="string">要切割的文件</span>][<span class="symbol">输出文件名</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">split [--help][--version][-&lt;行数&gt;][-b &lt;字节&gt;][-C &lt;字节&gt;][-l &lt;行数&gt;][要切割的文件][输出文件名]</span><br></pre></td></tr></table></figure>
 <p><strong>参数说明</strong>：</p>
 <ul>
 <li>-&lt;行数&gt; : 指定每多少行切成一个小文件</li>
@@ -300,29 +300,29 @@
 <p>使用指令”split”将文件”README”每6行切割成一个文件，输入如下命令：</p>
 </li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> split -6 README       <span class="comment">#将README文件每六行分割成一个文件</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ split -6 README       #将README文件每六行分割成一个文件</span><br></pre></td></tr></table></figure>
 <p>以上命令执行后，指令”split”会将原来的大文件”README”切割成多个以”x”开头的小文件。而在这些小文件中，每个文件都只有6行内容。</p>
 <p>使用指令”ls”查看当前目录结构，如下所示：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ls                                <span class="comment">#执行ls指令  </span></span></span><br><span class="line"><span class="meta">#</span><span class="bash">获得当前目录结构  </span></span><br><span class="line">README xaa xad xag xab xae xah xac xaf xai</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ls                                #执行ls指令  </span><br><span class="line">#获得当前目录结构  </span><br><span class="line">README xaa xad xag xab xae xah xac xaf xai</span><br></pre></td></tr></table></figure>
 <p><strong>5.colrm</strong></p>
 <p>Linux colrm命令用于滤掉指定的列。</p>
 <p>colrm指令从标准输入设备读取书记，转而输出到标准输出设备。如果不加任何参数，则该指令不会过滤任何一行。</p>
-<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">colrm <span class="string">[开始行数编号&lt;结束行数编号&gt;]</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">colrm [开始行数编号&lt;结束行数编号&gt;]</span><br></pre></td></tr></table></figure>
 <p><strong>参数说明：</strong></p>
 <ul>
 <li>开始列数编号： 指定要删除的列的起始编号。</li>
 <li>结束列数编号：指定要删除的列的结束编号，有时候这个参数可以省略。</li>
 </ul>
 <p>按回车键后，光标将在第一行闪烁，等待标准输入，此时输入字符，如”Hello Linux！”，再按回车键后第二行将出现与第一行相同内容，此时按Ctrl+C组合键可以退出。终端中显示的内容如下所示：</p>
-<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmd</span><span class="bash">@hdd-desktop:~$ colrm  </span></span><br><span class="line"><span class="bash">Hello Linux! <span class="comment">#输入Hello Linux！字符串  </span></span></span><br><span class="line"><span class="bash">Hello Linux! <span class="comment">#输出刚才输入的字符串Hello Linux！</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cmd@hdd-desktop:~$ colrm  </span><br><span class="line">Hello Linux! #输入Hello Linux！字符串  </span><br><span class="line">Hello Linux! #输出刚才输入的字符串Hello Linux！</span><br></pre></td></tr></table></figure>
 <p>如想要删除第4 列之后的所有内容，可以使用如下命令：</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">colrm <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">colrm 4</span><br></pre></td></tr></table></figure>
 <p>类似于上例，此时标准输入等待输入，用户输入字符串按回车键后，将输出如下结果：</p>
-<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmd</span><span class="bash">@hdd-desktop:~$ colrm 4  </span></span><br><span class="line"><span class="bash">Hello Linux! <span class="comment">#输入Hello Linux！字符串  </span></span></span><br><span class="line"><span class="bash">Hel <span class="comment">#输出删除了第4列以后所有内容的字符串</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cmd@hdd-desktop:~$ colrm 4  </span><br><span class="line">Hello Linux! #输入Hello Linux！字符串  </span><br><span class="line">Hel #输出删除了第4列以后所有内容的字符串</span><br></pre></td></tr></table></figure>
 <p>删除指定列的内容。如删除第4列到第6列的内容，可使用如下命令：</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">colrm <span class="number">4</span> <span class="number">6</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">colrm 4 6</span><br></pre></td></tr></table></figure>
 <p>输出的结果如下：</p>
-<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmd</span><span class="bash">@hdd-desktop:~$ colrm 4 6  </span></span><br><span class="line"><span class="bash">Hello Linux! <span class="comment">#输入Hello Linux！字符串  </span></span></span><br><span class="line"><span class="bash">HelLinux! <span class="comment">#输出删除了从第4列到第6列字符的字符串</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cmd@hdd-desktop:~$ colrm 4 6  </span><br><span class="line">Hello Linux! #输入Hello Linux！字符串  </span><br><span class="line">HelLinux! #输出删除了从第4列到第6列字符的字符串</span><br></pre></td></tr></table></figure>
 <p><strong>6.look</strong></p>
 <p>Linux look命令用于查询单词。</p>
 <p>look指令用于英文单字的查询。您仅需给予它欲查询的字首字符串，它会显示所有开头字符串符合该条件的单字。</p>
@@ -335,9 +335,9 @@
 <li>-t&lt;字尾字符串&gt; 设置字尾字符串。</li>
 </ul>
 <p>为了查找在testfile文件中以字母L开头的所有的行，可以输入如下命令：</p>
-<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">look L testfile</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">look L testfile</span><br></pre></td></tr></table></figure>
 <p>原文件testfile中的内容如下：</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="keyword">cat</span> testfile #查看testfile 文件内容  </span><br><span class="line">HELLO LINUX!  </span><br><span class="line">Linux <span class="keyword">is</span> <span class="keyword">a</span> free unix-<span class="built_in">type</span> opterating <span class="built_in">system</span>.  </span><br><span class="line">This <span class="keyword">is</span> <span class="keyword">a</span> linux testfile!  </span><br><span class="line">Linux test</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cat testfile #查看testfile 文件内容  </span><br><span class="line">HELLO LINUX!  </span><br><span class="line">Linux is a free unix-type opterating system.  </span><br><span class="line">This is a linux testfile!  </span><br><span class="line">Linux test</span><br></pre></td></tr></table></figure>
       
 
       
@@ -420,17 +420,6 @@
 
   
   
-  
-  <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
-<script>
-  var cloudTieConfig = {
-    url: "//harold.me/2018/07/06/linux常用命令5/", 
-    sourceId: "linux常用命令5",
-    productKey: "true",
-    target: "cloud-tie-wrapper"
-  };
-</script>
-<script src="//img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
   
 
   
@@ -551,11 +540,15 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
+                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -567,11 +560,23 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">并发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -584,14 +589,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -611,10 +608,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
@@ -623,7 +616,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -643,19 +636,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">计算机基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">分布式算法</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -668,6 +653,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Mahout</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">分布式算法</a>
               </li>
              
               <li class="article-tag-list-item">

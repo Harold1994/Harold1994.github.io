@@ -20,7 +20,7 @@
 <meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-8-26/22839526.jpg">
 <meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-8-26/75329989.jpg">
 <meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-8-26/12091730.jpg">
-<meta property="og:updated_time" content="2018-09-21T10:56:40.767Z">
+<meta property="og:updated_time" content="2018-10-08T09:09:48.190Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="操作系统基础">
 <meta name="twitter:description" content="一、计算机系统概述1.信息 = 位 + 上下文源程序实际上是由0和1组成的位（又叫比特）序列，8个位被组织成一组，称为字节，每个字节表示程序中的某些文本字符。ASCII码其实就是用一个唯一的单字节大小的整数值来表示每个字符。程序以字节序列方式存储在文件中，每个字节都有一个整数值，对应于某些字符。 只由ASCII字符构成的文件称为文本文件，其他文件都叫二进制文件。 数字的机器表示方式与实际的证书和实">
@@ -281,9 +281,9 @@
 <h5 id="6-4-文件"><a href="#6-4-文件" class="headerlink" title="6.4 文件"></a>6.4 文件</h5><p>文件就是字节序列，每个I/O设备都可以看做文件，系统中所有输入输出都是通过使用Unix I/O的系统函数实现。</p>
 <h4 id="7-重要主题"><a href="#7-重要主题" class="headerlink" title="7.重要主题"></a>7.重要主题</h4><h5 id="7-1-Amdahl定律"><a href="#7-1-Amdahl定律" class="headerlink" title="7.1 Amdahl定律"></a>7.1 Amdahl定律</h5><p>Amdal定律描述了改善任何过程的一般原则，主要思想是：当对系统的某个部分加速时，其对系统整体性能的影响取决于该部分的重要性和加速程度。</p>
 <p>若执行某用用程序需要时间$T_{old}$，假设系统某部分所需执行时间与$T_{old}$比例为$\alpha$,而该部分提升比例为k,即该部分初始时间为$\alpha T_{old}$,现在需要时间为$(\alpha T_{old})/k$,因此总执行时间应为:</p>
-<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$T_&#123;<span class="keyword">new</span>&#125; = (<span class="number">1</span>-\<span class="built_in">alpha</span>)T_&#123;old&#125; + (\<span class="built_in">alpha</span> T_&#123;old&#125;)/k = T_&#123;old&#125;[(<span class="number">1</span>-\<span class="built_in">alpha</span>)+\<span class="built_in">alpha</span> /k]$</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$T_&#123;new&#125; = (1-\alpha)T_&#123;old&#125; + (\alpha T_&#123;old&#125;)/k = T_&#123;old&#125;[(1-\alpha)+\alpha /k]$</span><br></pre></td></tr></table></figure>
 <p> 由此计算加速比$S=T_{old}/T_{new}$为：</p>
-<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$S</span>=\frac 1&#123;(1-\<span class="keyword">alpha</span>)+\<span class="keyword">alpha</span> /k&#125;$</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$S=\frac 1&#123;(1-\alpha)+\alpha /k&#125;$</span><br></pre></td></tr></table></figure>
 <p>Amdahl的主要观点：要想显著提升整个系统，必须提升全系统中相当大部分的速度</p>
 
       
@@ -372,17 +372,6 @@
 
   
   
-  
-  <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
-<script>
-  var cloudTieConfig = {
-    url: "//harold.me/2018/09/21/操作系统基础/", 
-    sourceId: "操作系统基础",
-    productKey: "true",
-    target: "cloud-tie-wrapper"
-  };
-</script>
-<script src="//img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
   
 
   
@@ -503,11 +492,15 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
+                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -519,11 +512,23 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">并发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -536,14 +541,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -563,10 +560,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
@@ -575,7 +568,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -595,19 +588,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">计算机基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">分布式算法</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -620,6 +605,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Mahout</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">分布式算法</a>
               </li>
              
               <li class="article-tag-list-item">

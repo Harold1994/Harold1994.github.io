@@ -210,7 +210,7 @@
         <p><strong>1.read</strong></p>
 <p>Linux read命令用于从标准输入读取数值。</p>
 <p>read 内部命令被用来从标准输入读取单行数据。这个命令可以用来读取键盘输入，当使用重定向的时候，可以读取文件中的一行数据。</p>
-<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">read <span class="string">[-ers]</span> <span class="string">[-a aname]</span> <span class="string">[-d delim]</span> <span class="string">[-i text]</span> <span class="string">[-n nchars]</span> <span class="string">[-N nchars]</span> <span class="string">[-p prompt]</span> <span class="string">[-t timeout]</span> <span class="string">[-u fd]</span> <span class="string">[name ...]</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">read [-ers] [-a aname] [-d delim] [-i text] [-n nchars] [-N nchars] [-p prompt] [-t timeout] [-u fd] [name ...]</span><br></pre></td></tr></table></figure>
 <a id="more"></a>     
 <p><strong>参数说明:</strong></p>
 <ul>
@@ -225,20 +225,20 @@
 <li>-u 后面跟fd，从文件描述符中读入，该文件描述符可以是exec新开启的。</li>
 </ul>
 <p><strong>a、简单读取</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment">#这里默认会换行  </span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"输入网站名: "</span>  </span><br><span class="line"><span class="comment">#读取从键盘的输入  </span></span><br><span class="line"><span class="built_in">read</span> website  </span><br><span class="line"><span class="built_in">echo</span> <span class="string">"你输入的网站名是 <span class="variable">$website</span>"</span>  </span><br><span class="line"><span class="built_in">exit</span> 0  <span class="comment">#退出</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">#这里默认会换行  </span><br><span class="line">echo &quot;输入网站名: &quot;  </span><br><span class="line">#读取从键盘的输入  </span><br><span class="line">read website  </span><br><span class="line">echo &quot;你输入的网站名是 $website&quot;  </span><br><span class="line">exit 0  #退出</span><br></pre></td></tr></table></figure>
 <p><strong>b、-p 参数，允许在 read 命令行中直接指定一个提示</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">read</span> -p <span class="string">"输入网站名:"</span> website</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"你输入的网站名是 <span class="variable">$website</span>"</span> </span><br><span class="line"><span class="built_in">exit</span> 0</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">read -p &quot;输入网站名:&quot; website</span><br><span class="line">echo &quot;你输入的网站名是 $website&quot; </span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
 <p><strong>c.读取文件</strong></p>
 <p>每次调用 read 命令都会读取文件中的 “一行” 文本。当文件没有可读的行时，read 命令将以非零状态退出。</p>
 <p>通过什么样的方法将文件中的数据传给 read 呢？使用 cat 命令并通过管道将结果直接传送给包含 read 命令的 while 命令。</p>
 <p>测试文件 test.txt 内容如下：</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">123</span></span><br><span class="line"><span class="number">456</span></span><br><span class="line">runoob</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">123</span><br><span class="line">456</span><br><span class="line">runoob</span><br></pre></td></tr></table></figure>
 <p>测试代码：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">  </span><br><span class="line">count=1    <span class="comment"># 赋值语句，不加空格</span></span><br><span class="line">cat test.txt | <span class="keyword">while</span> <span class="built_in">read</span> line      <span class="comment"># cat 命令的输出作为read命令的输入,read读到&gt;的值放在line中</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">"Line <span class="variable">$count</span>:<span class="variable">$line</span>"</span></span><br><span class="line">   count=$[ <span class="variable">$count</span> + 1 ]          <span class="comment"># 注意中括号中的空格。</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"finish"</span></span><br><span class="line"><span class="built_in">exit</span> 0</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">  </span><br><span class="line">count=1    # 赋值语句，不加空格</span><br><span class="line">cat test.txt | while read line      # cat 命令的输出作为read命令的输入,read读到&gt;的值放在line中</span><br><span class="line">do</span><br><span class="line">   echo &quot;Line $count:$line&quot;</span><br><span class="line">   count=$[ $count + 1 ]          # 注意中括号中的空格。</span><br><span class="line">done</span><br><span class="line">echo &quot;finish&quot;</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
 <p><strong>2.col</strong></p>
 <p>Linux col命令用于过滤控制字符。</p>
 <p>在许多UNIX说明文件里，都有RLF控制字符。当我们运用shell特殊字符”&gt;”和”&gt;&gt;”，把说明文件的内容输出成纯文本文件时，控制字符会变成乱码，col指令则能有效滤除这些控制字符。</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">col [<span class="string">-bfx</span>][<span class="symbol">-l&lt;缓冲区列数&gt;</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">col [-bfx][-l&lt;缓冲区列数&gt;]</span><br></pre></td></tr></table></figure>
 <p><strong>参数</strong>：</p>
 <ul>
 <li>-b 过滤掉所有的控制字符，包括RLF和HRLF。</li>
@@ -249,12 +249,12 @@
 </li>
 </ul>
 <p>将man 命令的帮助文档保存为man_help，使用-b 参数过滤所有控制字符。在终端中使用如下命令：</p>
-<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">man</span> <span class="keyword">man</span> | col-b &gt; man_help</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">man man | col-b &gt; man_help</span><br></pre></td></tr></table></figure>
 <p><strong>3.tail</strong></p>
 <p>tail 命令可用于查看文件的内容，有一个常用的参数 -f 常用于查阅正在改变的日志文件。</p>
 <p>tail -f filename 会把 filename 文件里的最尾部的内容显示在屏幕上，并且不断刷新，只要 filename 更新就可以看到最新的文件内容。</p>
 <p><strong>命令格式：</strong></p>
-<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail <span class="string">[参数]</span> <span class="string">[文件]</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail [参数] [文件]</span><br></pre></td></tr></table></figure>
 <p><strong>参数：</strong></p>
 <ul>
 <li>-f 循环读取</li>
@@ -268,17 +268,17 @@
 <p>要显示 notes.log 文件的最后 10 行，请输入以下命令：</p>
 </li>
 </ul>
-<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail <span class="keyword">notes</span>.<span class="built_in">log</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail notes.log</span><br></pre></td></tr></table></figure>
 <p>要跟踪名为 notes.log 的文件的增长情况，请输入以下命令：</p>
-<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail -f <span class="keyword">notes</span>.<span class="built_in">log</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail -f notes.log</span><br></pre></td></tr></table></figure>
 <p>此命令显示 notes.log 文件的最后 10 行。当将某些行添加至 notes.log 文件时，tail 命令会继续显示这些行。 显示一直继续，直到您按下（Ctrl-C）组合键停止显示。</p>
 <p>显示文件 notes.log 的内容，从第 20 行至文件末尾:</p>
-<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail +20 <span class="keyword">notes</span>.<span class="built_in">log</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail +20 notes.log</span><br></pre></td></tr></table></figure>
 <p>显示文件 notes.log 的最后 10 个字符:</p>
-<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">tail</span> -<span class="keyword">c</span> <span class="number">10</span> notes.log</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail -c 10 notes.log</span><br></pre></td></tr></table></figure>
 <p><strong>4.cat</strong></p>
 <p>cat 命令用于连接文件并打印到标准输出设备上。</p>
-<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat <span class="string">[-AbeEnstTuv]</span> <span class="string">[--help]</span> <span class="string">[--version]</span> fileName</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat [-AbeEnstTuv] [--help] [--version] fileName</span><br></pre></td></tr></table></figure>
 <h3 id="参数说明："><a href="#参数说明：" class="headerlink" title="参数说明："></a>参数说明：</h3><p><strong>-n 或 –number</strong>：由 1 开始对所有输出的行数编号。</p>
 <p><strong>-b 或 –number-nonblank</strong>：和 -n 相似，只不过对于空白行不编号。</p>
 <p><strong>-s 或 –squeeze-blank</strong>：当遇到有连续两行以上的空白行，就代换为一行的空白行。</p>
@@ -294,7 +294,7 @@
 <ul>
 <li><strong>混合使用命令</strong></li>
 </ul>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">A.  tail web<span class="number">.2016</span><span class="number">-06</span><span class="number">-06.</span>log -n <span class="number">300</span> -f  </span><br><span class="line">    查看底部即最新<span class="number">300</span>条日志记录，并实时刷新      </span><br><span class="line"></span><br><span class="line">B.  grep 'nick' | tail web<span class="number">.2016</span><span class="number">-04</span><span class="number">-04.</span>log -C <span class="number">10</span>   </span><br><span class="line">    查看字符‘nick’前后<span class="number">10</span>条日志记录, 大写C  </span><br><span class="line"></span><br><span class="line">C.  cat -n test.log |tail -n +<span class="number">92</span>|head -n <span class="number">20</span>  </span><br><span class="line">    tail -n +<span class="number">92</span>表示查询<span class="number">92</span>行之后的日志  </span><br><span class="line">    head -n <span class="number">20</span> 则表示在前面的查询结果里再查前<span class="number">20</span>条记录</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">A.  tail web.2016-06-06.log -n 300 -f  </span><br><span class="line">    查看底部即最新300条日志记录，并实时刷新      </span><br><span class="line"></span><br><span class="line">B.  grep &apos;nick&apos; | tail web.2016-04-04.log -C 10   </span><br><span class="line">    查看字符‘nick’前后10条日志记录, 大写C  </span><br><span class="line"></span><br><span class="line">C.  cat -n test.log |tail -n +92|head -n 20  </span><br><span class="line">    tail -n +92表示查询92行之后的日志  </span><br><span class="line">    head -n 20 则表示在前面的查询结果里再查前20条记录</span><br></pre></td></tr></table></figure>
       
 
       
@@ -377,17 +377,6 @@
 
   
   
-  
-  <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
-<script>
-  var cloudTieConfig = {
-    url: "//harold.me/2018/07/05/linux常用命令4/", 
-    sourceId: "linux常用命令4",
-    productKey: "true",
-    target: "cloud-tie-wrapper"
-  };
-</script>
-<script src="//img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
   
 
   
@@ -508,11 +497,15 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
+                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -524,11 +517,23 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">并发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -541,14 +546,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -568,10 +565,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
@@ -580,7 +573,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -600,19 +593,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">计算机基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">分布式算法</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -625,6 +610,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Mahout</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">分布式算法</a>
               </li>
              
               <li class="article-tag-list-item">

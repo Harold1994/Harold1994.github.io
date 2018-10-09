@@ -9,7 +9,7 @@
   <title>数据算法——Spark的二次排序解决方案 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="在Saprk中解决二次排序问题，又以下两种解决方案：  方案一： 将一个给定的键的所有值读取并缓存到一个List数组，对数组中得值完成归约器排序，如果每个归约器键的值集很小，则本方案适用  方案二： 使用Spark框架对归约器值排序，这种方法“会为自然键增加部分或者整个值来创建一个组合键以实现排序目标”，本方法可伸缩，不受内存限制。">
-<meta name="keywords" content="机器学习,Spark,大数据,分布式算法">
+<meta name="keywords" content="大数据,机器学习,Spark,分布式算法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据算法——Spark的二次排序解决方案">
 <meta property="og:url" content="//harold.me/2018/06/07/数据算法——Spark的二次排序解决方案/index.html">
@@ -219,11 +219,11 @@
 </li>
 </ul>
 <p>输入格式：</p>
-<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">&lt;key&gt;</span><span class="section">&lt;,&gt;</span><span class="section">&lt;time&gt;</span><span class="section">&lt;,&gt;</span><span class="section">&lt;value&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;key&gt;&lt;,&gt;&lt;time&gt;&lt;,&gt;&lt;value&gt;</span><br></pre></td></tr></table></figure>
 <p>示例：</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">p,<span class="number">4</span>,<span class="number">40</span></span><br><span class="line">p,<span class="number">6</span>,<span class="number">20</span></span><br><span class="line">x,<span class="number">2</span>,<span class="number">9</span></span><br><span class="line">y,<span class="number">2</span>,<span class="number">5</span></span><br><span class="line">x,<span class="number">1</span>,<span class="number">3</span></span><br><span class="line">y,<span class="number">1</span>,<span class="number">7</span></span><br><span class="line">y,<span class="number">3</span>,<span class="number">1</span></span><br><span class="line">x,<span class="number">3</span>,<span class="number">6</span></span><br><span class="line">z,<span class="number">1</span>,<span class="number">4</span></span><br><span class="line">z,<span class="number">2</span>,<span class="number">8</span></span><br><span class="line">z,<span class="number">3</span>,<span class="number">7</span></span><br><span class="line">z,<span class="number">4</span>,<span class="number">0</span></span><br><span class="line">p,<span class="number">1</span>,<span class="number">10</span></span><br><span class="line">p,<span class="number">3</span>,<span class="number">60</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">p,4,40</span><br><span class="line">p,6,20</span><br><span class="line">x,2,9</span><br><span class="line">y,2,5</span><br><span class="line">x,1,3</span><br><span class="line">y,1,7</span><br><span class="line">y,3,1</span><br><span class="line">x,3,6</span><br><span class="line">z,1,4</span><br><span class="line">z,2,8</span><br><span class="line">z,3,7</span><br><span class="line">z,4,0</span><br><span class="line">p,1,10</span><br><span class="line">p,3,60</span><br></pre></td></tr></table></figure>
 <p><strong>期望输出：</strong></p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(z,&#123;<span class="number">1</span>=<span class="number">4</span>, <span class="number">2</span>=<span class="number">8</span>, <span class="number">3</span>=<span class="number">7</span>, <span class="number">4</span>=<span class="number">0</span>&#125;)</span><br><span class="line">(p,&#123;<span class="number">1</span>=<span class="number">10</span>, <span class="number">3</span>=<span class="number">60</span>, <span class="number">4</span>=<span class="number">40</span>, <span class="number">6</span>=<span class="number">20</span>&#125;)</span><br><span class="line">(x,&#123;<span class="number">1</span>=<span class="number">3</span>, <span class="number">2</span>=<span class="number">9</span>, <span class="number">3</span>=<span class="number">6</span>&#125;)</span><br><span class="line">(y,&#123;<span class="number">1</span>=<span class="number">7</span>, <span class="number">2</span>=<span class="number">5</span>, <span class="number">3</span>=<span class="number">1</span>&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(z,&#123;1=4, 2=8, 3=7, 4=0&#125;)</span><br><span class="line">(p,&#123;1=10, 3=60, 4=40, 6=20&#125;)</span><br><span class="line">(x,&#123;1=3, 2=9, 3=6&#125;)</span><br><span class="line">(y,&#123;1=7, 2=5, 3=1&#125;)</span><br></pre></td></tr></table></figure>
 <h4 id="一、方案一：内存中实现二次排序"><a href="#一、方案一：内存中实现二次排序" class="headerlink" title="一、方案一：内存中实现二次排序"></a>一、方案一：内存中实现二次排序</h4><p>算法：</p>
 <blockquote>
 <p>1.导入所需Java/Spark类</p>
@@ -257,15 +257,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -339,17 +339,6 @@
 
   
   
-  
-  <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
-<script>
-  var cloudTieConfig = {
-    url: "//harold.me/2018/06/07/数据算法——Spark的二次排序解决方案/", 
-    sourceId: "数据算法——Spark的二次排序解决方案",
-    productKey: "true",
-    target: "cloud-tie-wrapper"
-  };
-</script>
-<script src="//img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
   
 
   
@@ -470,11 +459,15 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
+                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -486,11 +479,23 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">并发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -503,14 +508,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -530,10 +527,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
@@ -542,7 +535,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -562,19 +555,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">计算机基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">分布式算法</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -587,6 +572,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Mahout</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">分布式算法</a>
               </li>
              
               <li class="article-tag-list-item">

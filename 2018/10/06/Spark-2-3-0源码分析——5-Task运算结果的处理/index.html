@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="//harold.me">
   <title>Spark-2-3-0源码分析——5-Task运算结果的处理 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一. Task运算结果的处理执行流程：   org.apache.spark.executor.TaskRunner.statusUpdate方法   org.apache.spark.executor.CoarseGrainedExecutorBackend.statusUpdate方法   org.apache.spark.scheduler.cluster.CoarseGrainedSche">
-<meta name="keywords" content="Spark,大数据">
+  <meta name="description" content="一. Task运算结果的处理TaskRunner将Task的执行状态汇报给Driver后，Driver会转给org.apache.spark.scheduler.TaskSchedulerImpl#statusUpdate。而在这里不同的状态有不同的处理： 1)       如果类型是TaskState.FINISHED，那么调用org.apache.spark.scheduler.TaskRes">
+<meta name="keywords" content="大数据,Spark">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spark-2-3-0源码分析——5-Task运算结果的处理">
 <meta property="og:url" content="//harold.me/2018/10/06/Spark-2-3-0源码分析——5-Task运算结果的处理/index.html">
 <meta property="og:site_name" content="Harold的博客">
-<meta property="og:description" content="一. Task运算结果的处理执行流程：   org.apache.spark.executor.TaskRunner.statusUpdate方法   org.apache.spark.executor.CoarseGrainedExecutorBackend.statusUpdate方法   org.apache.spark.scheduler.cluster.CoarseGrainedSche">
+<meta property="og:description" content="一. Task运算结果的处理TaskRunner将Task的执行状态汇报给Driver后，Driver会转给org.apache.spark.scheduler.TaskSchedulerImpl#statusUpdate。而在这里不同的状态有不同的处理： 1)       如果类型是TaskState.FINISHED，那么调用org.apache.spark.scheduler.TaskRes">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-10-06T13:07:27.645Z">
+<meta property="og:updated_time" content="2018-10-06T16:19:23.174Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark-2-3-0源码分析——5-Task运算结果的处理">
-<meta name="twitter:description" content="一. Task运算结果的处理执行流程：   org.apache.spark.executor.TaskRunner.statusUpdate方法   org.apache.spark.executor.CoarseGrainedExecutorBackend.statusUpdate方法   org.apache.spark.scheduler.cluster.CoarseGrainedSche">
+<meta name="twitter:description" content="一. Task运算结果的处理TaskRunner将Task的执行状态汇报给Driver后，Driver会转给org.apache.spark.scheduler.TaskSchedulerImpl#statusUpdate。而在这里不同的状态有不同的处理： 1)       如果类型是TaskState.FINISHED，那么调用org.apache.spark.scheduler.TaskRes">
   
   
     <link rel="icon" href="/favicon.png">
@@ -207,24 +207,20 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h4 id="一-Task运算结果的处理"><a href="#一-Task运算结果的处理" class="headerlink" title="一. Task运算结果的处理"></a>一. Task运算结果的处理</h4><p>执行流程： </p>
-<ol>
-<li><p>org.apache.spark.executor.TaskRunner.statusUpdate方法 </p>
-</li>
-<li><p>org.apache.spark.executor.CoarseGrainedExecutorBackend.statusUpdate方法 </p>
-</li>
-<li><p>org.apache.spark.scheduler.cluster.CoarseGrainedSchedulerBackend#DriverEndpoint.recieve方法，DriverEndPoint是内部类 </p>
-</li>
-<li><p>org.apache.spark.scheduler.TaskSchedulerImpl中的statusUpdate方法 </p>
-</li>
-<li><p>org.apache.spark.scheduler.TaskResultGetter.enqueueSuccessfulTask方法 </p>
-</li>
-<li><p>org.apache.spark.scheduler.DAGScheduler.handleTaskCompletion方法</p>
-</li>
-</ol>
-<p>Task在Executor执行完成时，会向Driver发送StatusUpdate的消息来通知Driver任务的状态更新为TaskStatus.FINISHED。</p>
-<p>Driver首先会将任务的状态更新通知TaskScheduler，然后在这个Executor上重新分配新的计算任务。</p>
-<p>我们从org.apache.spark.scheduler.cluster.CoarseGrainedSchedulerBackend.DriverEndpoint#receive的方法看起</p>
+        <h4 id="一-Task运算结果的处理"><a href="#一-Task运算结果的处理" class="headerlink" title="一. Task运算结果的处理"></a>一. Task运算结果的处理</h4><p>TaskRunner将Task的执行状态汇报给Driver后，Driver会转给org.apache.spark.scheduler.TaskSchedulerImpl#statusUpdate。而在这里不同的状态有不同的处理：</p>
+<p>1)       如果类型是TaskState.FINISHED，那么调用org.apache.spark.scheduler.TaskResultGetter#enqueueSuccessfulTask进行处理。</p>
+<a id="more"></a>
+<p>2)       如果类型是TaskState.FAILED或者TaskState.KILLED或者TaskState.LOST，调用org.apache.spark.scheduler.TaskResultGetter#enqueueFailedTask进行处理。对于TaskState.LOST，还需要将其所在的Executor标记为failed,并且根据更新后的Executor重新调度。</p>
+<p> enqueueSuccessfulTask的逻辑也比较简单，就是如果是IndirectTaskResult，那么需要通过blockid来获取结果：sparkEnv.blockManager.getRemoteBytes(blockId)；如果是DirectTaskResult，那么结果就无需远程获取了。然后调用</p>
+<p>1)       org.apache.spark.scheduler.TaskSchedulerImpl#handleSuccessfulTask</p>
+<p>2)       org.apache.spark.scheduler.TaskSetManager#handleSuccessfulTask</p>
+<p>3)       org.apache.spark.scheduler.DAGScheduler#taskEnded</p>
+<p>4)       org.apache.spark.scheduler.DAGScheduler#eventProcessActor</p>
+<p>5)       org.apache.spark.scheduler.DAGScheduler#handleTaskCompletion</p>
+<p>进行处理。核心逻辑都在第5个调用栈。</p>
+<p>如果task是ShuffleMapTask，那么它需要将结果通过某种机制告诉下游的Stage，以便于其可以作为下游Stage的输入。这个机制是怎么实现的？</p>
+<p>实际上，对于ShuffleMapTask来说，其结果实际上是org.apache.spark.scheduler.MapStatus；其序列化后存入了DirectTaskResult或者IndirectTaskResult中。而DAGScheduler#handleTaskCompletion通过下面的方式来获取这个结果：</p>
+<p>val status=event.result.asInstanceOf[MapStatus]</p>
 <h6 id="A-org-apache-spark-scheduler-cluster-CoarseGrainedSchedulerBackend-DriverEndpoint-receive"><a href="#A-org-apache-spark-scheduler-cluster-CoarseGrainedSchedulerBackend-DriverEndpoint-receive" class="headerlink" title="A.org.apache.spark.scheduler.cluster.CoarseGrainedSchedulerBackend.DriverEndpoint#receive"></a>A.org.apache.spark.scheduler.cluster.CoarseGrainedSchedulerBackend.DriverEndpoint#receive</h6><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">receive</span></span>: <span class="type">PartialFunction</span>[<span class="type">Any</span>, <span class="type">Unit</span>] = &#123;</span><br><span class="line">      <span class="comment">// 接收StatusUpdate发送过来的消息</span></span><br><span class="line">      <span class="keyword">case</span> <span class="type">StatusUpdate</span>(executorId, taskId, state, data) =&gt;</span><br><span class="line">        <span class="comment">// 调用TaskSchedulerImpl中的statusUpdate方法</span></span><br><span class="line">        scheduler.statusUpdate(taskId, state, data.value)</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 如果Task的State是FINISHED, FAILED, KILLED, LOST其中一个</span></span><br><span class="line">        <span class="comment">// 就认为该Task结束</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="type">TaskState</span>.isFinished(state)) &#123;</span><br><span class="line">          executorDataMap.get(executorId) <span class="keyword">match</span> &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="type">Some</span>(executorInfo) =&gt;</span><br><span class="line">              <span class="comment">// 释放资源并重新分配</span></span><br><span class="line">              executorInfo.freeCores += scheduler.<span class="type">CPUS_PER_TASK</span></span><br><span class="line">              makeOffers(executorId)</span><br><span class="line">            <span class="keyword">case</span> <span class="type">None</span> =&gt;</span><br><span class="line">              <span class="comment">// Ignoring the update since we don't know about the executor.</span></span><br><span class="line">              logWarning(<span class="string">s"Ignored task status update (<span class="subst">$taskId</span> state <span class="subst">$state</span>) "</span> +</span><br><span class="line">                <span class="string">s"from unknown executor with ID <span class="subst">$executorId</span>"</span>)</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
 <h6 id="B-org-apache-spark-scheduler-TaskSchedulerImpl-statusUpdate"><a href="#B-org-apache-spark-scheduler-TaskSchedulerImpl-statusUpdate" class="headerlink" title="B. org.apache.spark.scheduler.TaskSchedulerImpl#statusUpdate"></a>B. org.apache.spark.scheduler.TaskSchedulerImpl#statusUpdate</h6><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">statusUpdate</span></span>(tid: <span class="type">Long</span>, state: <span class="type">TaskState</span>, serializedData: <span class="type">ByteBuffer</span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> failedExecutor: <span class="type">Option</span>[<span class="type">String</span>] = <span class="type">None</span></span><br><span class="line">  <span class="keyword">var</span> reason: <span class="type">Option</span>[<span class="type">ExecutorLossReason</span>] = <span class="type">None</span></span><br><span class="line">  synchronized &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      taskIdToTaskSetManager.get(tid) <span class="keyword">match</span> &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="type">Some</span>(taskSet) =&gt;</span><br><span class="line">          <span class="comment">// 如果Task的状态为Lost</span></span><br><span class="line">          <span class="comment">// 移除掉task的Executor</span></span><br><span class="line">          <span class="keyword">if</span> (state == <span class="type">TaskState</span>.<span class="type">LOST</span>) &#123;</span><br><span class="line">            <span class="comment">// TaskState.LOST is only used by the deprecated Mesos fine-grained scheduling mode,</span></span><br><span class="line">            <span class="comment">// where each executor corresponds to a single task, so mark the executor as failed.</span></span><br><span class="line">            <span class="keyword">val</span> execId = taskIdToExecutorId.getOrElse(tid, <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">IllegalStateException</span>(</span><br><span class="line">              <span class="string">"taskIdToTaskSetManager.contains(tid) &lt;=&gt; taskIdToExecutorId.contains(tid)"</span>))</span><br><span class="line">            <span class="keyword">if</span> (executorIdToRunningTaskIds.contains(execId)) &#123;</span><br><span class="line">              reason = <span class="type">Some</span>(</span><br><span class="line">                <span class="type">SlaveLost</span>(<span class="string">s"Task <span class="subst">$tid</span> was lost, so marking the executor as lost as well."</span>))</span><br><span class="line">              removeExecutor(execId, reason.get)</span><br><span class="line">              failedExecutor = <span class="type">Some</span>(execId)</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">if</span> (<span class="type">TaskState</span>.isFinished(state)) &#123;</span><br><span class="line">            <span class="comment">// 清理本地的数据结构</span></span><br><span class="line">            cleanupTaskState(tid)</span><br><span class="line">            <span class="comment">// 标志任务已结束，注意不一定成功完成</span></span><br><span class="line">            taskSet.removeRunningTask(tid)</span><br><span class="line">            <span class="comment">// 任务成功完成</span></span><br><span class="line">            <span class="keyword">if</span> (state == <span class="type">TaskState</span>.<span class="type">FINISHED</span>) &#123;</span><br><span class="line">              <span class="comment">// taskResultGetter为线程池，处理执行成功的情况</span></span><br><span class="line">              taskResultGetter.enqueueSuccessfulTask(taskSet, tid, serializedData)</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="type">Set</span>(<span class="type">TaskState</span>.<span class="type">FAILED</span>, <span class="type">TaskState</span>.<span class="type">KILLED</span>, <span class="type">TaskState</span>.<span class="type">LOST</span>).contains(state)) &#123;</span><br><span class="line">              <span class="comment">// 处理失败任务</span></span><br><span class="line">              taskResultGetter.enqueueFailedTask(taskSet, tid, state, serializedData)</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="type">None</span> =&gt;</span><br><span class="line">          logError(</span><br><span class="line">            (<span class="string">"Ignoring update with state %s for TID %s because its task set is gone (this is "</span> +</span><br><span class="line">              <span class="string">"likely the result of receiving duplicate task finished status updates) or its "</span> +</span><br><span class="line">              <span class="string">"executor has been marked as failed."</span>)</span><br><span class="line">              .format(state, tid))</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">      <span class="keyword">case</span> e: <span class="type">Exception</span> =&gt; logError(<span class="string">"Exception in statusUpdate"</span>, e)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 <p>对于Task执行成功的情况，它会调用TaskResultGetter的enqueueSuccessfulTask方法进行处理，处理每次结果都是由一个Daemon线程池负责，默认由四个线程组成，可以通过spark.resultGetter.threads设置。</p>
@@ -241,7 +237,9 @@
 <h6 id="F-org-apache-spark-scheduler-DAGScheduler-taskEnded"><a href="#F-org-apache-spark-scheduler-DAGScheduler-taskEnded" class="headerlink" title="F.  org.apache.spark.scheduler.DAGScheduler#taskEnded"></a>F.  org.apache.spark.scheduler.DAGScheduler#taskEnded</h6><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">taskEnded</span></span>(</span><br><span class="line">     task: <span class="type">Task</span>[_],</span><br><span class="line">     reason: <span class="type">TaskEndReason</span>,</span><br><span class="line">     result: <span class="type">Any</span>,</span><br><span class="line">     accumUpdates: <span class="type">Seq</span>[<span class="type">AccumulatorV2</span>[_, _]],</span><br><span class="line">     taskInfo: <span class="type">TaskInfo</span>): <span class="type">Unit</span> = &#123;</span><br><span class="line">   eventProcessLoop.post(</span><br><span class="line">     <span class="comment">// 调用DAGSchedulerEventProcessLoop的post方法将CompletionEvent提交到事件队列中，</span></span><br><span class="line">     <span class="comment">// 交由eventThread进行处理，onReceive方法将处理该事件</span></span><br><span class="line">     <span class="type">CompletionEvent</span>(task, reason, result, accumUpdates, taskInfo))</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
 <h6 id="G-org-apache-spark-scheduler-DAGSchedulerEventProcessLoop-doOnReceive"><a href="#G-org-apache-spark-scheduler-DAGSchedulerEventProcessLoop-doOnReceive" class="headerlink" title="G. org.apache.spark.scheduler.DAGSchedulerEventProcessLoop#doOnReceive"></a>G. org.apache.spark.scheduler.DAGSchedulerEventProcessLoop#doOnReceive</h6><p>DAGSchedulerEventProcessLoop的doOnReceive会对信号进行监听：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">doOnReceive</span></span>(event: <span class="type">DAGSchedulerEvent</span>): <span class="type">Unit</span> = event <span class="keyword">match</span> &#123;</span><br><span class="line">  <span class="comment">// 处理Job提交事件</span></span><br><span class="line">  <span class="keyword">case</span> <span class="type">JobSubmitted</span>(jobId, rdd, func, partitions, callSite, listener, properties) =&gt;</span><br><span class="line">    dagScheduler.handleJobSubmitted(jobId, rdd, func, partitions, callSite, listener, properties)</span><br><span class="line">    ...</span><br><span class="line">  <span class="keyword">case</span> completion: <span class="type">CompletionEvent</span> =&gt;</span><br><span class="line">    dagScheduler.handleTaskCompletion(completion)</span><br></pre></td></tr></table></figure>
-<h6 id="H"><a href="#H" class="headerlink" title="H."></a>H.</h6>
+<h6 id="H-org-apache-spark-scheduler-DAGScheduler-handleTaskCompletion"><a href="#H-org-apache-spark-scheduler-DAGScheduler-handleTaskCompletion" class="headerlink" title="H. org.apache.spark.scheduler.DAGScheduler#handleTaskCompletion"></a>H. org.apache.spark.scheduler.DAGScheduler#handleTaskCompletion</h6><p>我们来看下DAGScheduler.handleTaskCompletion 处理失败任务部分的核心代码：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment">//重新提交任务</span></span><br><span class="line"> <span class="keyword">case</span> <span class="type">Resubmitted</span> =&gt;</span><br><span class="line">   logInfo(<span class="string">"Resubmitted "</span> + task + <span class="string">", so marking it as still running"</span>)</span><br><span class="line">   <span class="comment">//把任务加入的等待队列</span></span><br><span class="line">   stage.pendingPartitions += task.partitionId</span><br><span class="line"></span><br><span class="line"> <span class="comment">//获取结果失败</span></span><br><span class="line"> <span class="keyword">case</span> <span class="type">FetchFailed</span>(bmAddress, shuffleId, mapId, reduceId, failureMessage) =&gt;</span><br><span class="line">   <span class="keyword">val</span> failedStage = stageIdToStage(task.stageId)</span><br><span class="line">   <span class="keyword">val</span> mapStage = shuffleIdToMapStage(shuffleId)</span><br><span class="line">   <span class="comment">//若失败的尝试ID 不是 stage尝试ID，</span></span><br><span class="line">   <span class="comment">//则忽略这个失败</span></span><br><span class="line">   <span class="keyword">if</span> (failedStage.latestInfo.attemptId != task.stageAttemptId) &#123;</span><br><span class="line">     logInfo(<span class="string">s"Ignoring fetch failure from <span class="subst">$task</span> as it's from <span class="subst">$failedStage</span> attempt"</span> +</span><br><span class="line">       <span class="string">s" <span class="subst">$&#123;task.stageAttemptId&#125;</span> and there is a more recent attempt for that stage "</span> +</span><br><span class="line">       <span class="string">s"(attempt ID <span class="subst">$&#123;failedStage.latestInfo.attemptId&#125;</span>) running"</span>)</span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">     <span class="comment">//若失败的Stage还在运行队列，</span></span><br><span class="line">     <span class="comment">//标记这个Stage完成</span></span><br><span class="line">     <span class="keyword">if</span> (runningStages.contains(failedStage)) &#123;</span><br><span class="line">       logInfo(<span class="string">s"Marking <span class="subst">$failedStage</span> (<span class="subst">$&#123;failedStage.name&#125;</span>) as failed "</span> +</span><br><span class="line">         <span class="string">s"due to a fetch failure from <span class="subst">$mapStage</span> (<span class="subst">$&#123;mapStage.name&#125;</span>)"</span>)</span><br><span class="line">       markStageAsFinished(failedStage, <span class="type">Some</span>(failureMessage))</span><br><span class="line">     &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">       logDebug(<span class="string">s"Received fetch failure from <span class="subst">$task</span>, but its from <span class="subst">$failedStage</span> which is no "</span> +</span><br><span class="line">         <span class="string">s"longer running"</span>)</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">//若不允许重试，</span></span><br><span class="line">     <span class="comment">//则停止这个Stage</span></span><br><span class="line">     <span class="keyword">if</span> (disallowStageRetryForTest) &#123;</span><br><span class="line">       abortStage(failedStage, <span class="string">"Fetch failure will not retry stage due to testing config"</span>,</span><br><span class="line">         <span class="type">None</span>)</span><br><span class="line">     &#125; </span><br><span class="line">    <span class="comment">//若达到最大重试次数，</span></span><br><span class="line">    <span class="comment">//则停止这个Stage</span></span><br><span class="line">     <span class="keyword">else</span> <span class="keyword">if</span> (failedStage.failedOnFetchAndShouldAbort(task.stageAttemptId)) &#123;</span><br><span class="line">       abortStage(failedStage, <span class="string">s"<span class="subst">$failedStage</span> (<span class="subst">$&#123;failedStage.name&#125;</span>) "</span> +</span><br><span class="line">         <span class="string">s"has failed the maximum allowable number of "</span> +</span><br><span class="line">         <span class="string">s"times: <span class="subst">$&#123;Stage.MAX_CONSECUTIVE_FETCH_FAILURES&#125;</span>. "</span> +</span><br><span class="line">         <span class="string">s"Most recent failure reason: <span class="subst">$&#123;failureMessage&#125;</span>"</span>, <span class="type">None</span>)</span><br><span class="line">     &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">       <span class="keyword">if</span> (failedStages.isEmpty) &#123;</span><br><span class="line">       <span class="comment">//若失败的Stage中，没有个task完成了，</span></span><br><span class="line">       <span class="comment">//则重新提交Stage。</span></span><br><span class="line">       <span class="comment">//若果有完成的task的话，我们不能重新提交Stage，</span></span><br><span class="line">       <span class="comment">//因为有些task已经被调度过了。</span></span><br><span class="line">       <span class="comment">//task级别的重新提交是在TaskSetManager.handleFailedTask进行的</span></span><br><span class="line">         logInfo(<span class="string">s"Resubmitting <span class="subst">$mapStage</span> (<span class="subst">$&#123;mapStage.name&#125;</span>) and "</span> +</span><br><span class="line">           <span class="string">s"<span class="subst">$failedStage</span> (<span class="subst">$&#123;failedStage.name&#125;</span>) due to fetch failure"</span>)</span><br><span class="line">         messageScheduler.schedule(<span class="keyword">new</span> <span class="type">Runnable</span> &#123;</span><br><span class="line">           <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">run</span></span>(): <span class="type">Unit</span> = eventProcessLoop.post(<span class="type">ResubmitFailedStages</span>)</span><br><span class="line">         &#125;, <span class="type">DAGScheduler</span>.<span class="type">RESUBMIT_TIMEOUT</span>, <span class="type">TimeUnit</span>.<span class="type">MILLISECONDS</span>)</span><br><span class="line">       &#125;</span><br><span class="line">       failedStages += failedStage</span><br><span class="line">       failedStages += mapStage</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">// 移除OutputLoc中的数据</span></span><br><span class="line">     <span class="comment">// 取消注册mapOutputTracker</span></span><br><span class="line">     <span class="keyword">if</span> (mapId != <span class="number">-1</span>) &#123;</span><br><span class="line">       mapStage.removeOutputLoc(mapId, bmAddress)</span><br><span class="line">       mapOutputTracker.unregisterMapOutput(shuffleId, mapId, bmAddress)</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     <span class="comment">//当有executor上发生多次获取结果失败，</span></span><br><span class="line">     <span class="comment">//则标记这个executor丢失</span></span><br><span class="line">     <span class="keyword">if</span> (bmAddress != <span class="literal">null</span>) &#123;</span><br><span class="line">       handleExecutorLost(bmAddress.executorId, filesLost = <span class="literal">true</span>, <span class="type">Some</span>(task.epoch))</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line"> <span class="comment">//拒绝处理</span></span><br><span class="line"> <span class="keyword">case</span> commitDenied: <span class="type">TaskCommitDenied</span> =&gt;</span><br><span class="line">   <span class="comment">// 不做任何事,</span></span><br><span class="line">   <span class="comment">//让 TaskScheduler 来决定如何处理</span></span><br><span class="line"></span><br><span class="line"> <span class="comment">//异常</span></span><br><span class="line"> <span class="keyword">case</span> exceptionFailure: <span class="type">ExceptionFailure</span> =&gt;</span><br><span class="line">   <span class="comment">// 更新accumulator</span></span><br><span class="line">   updateAccumulators(event)</span><br><span class="line"></span><br><span class="line"> <span class="comment">//task结果丢失</span></span><br><span class="line"> <span class="keyword">case</span> <span class="type">TaskResultLost</span> =&gt;</span><br><span class="line"> <span class="comment">// 不做任何事,</span></span><br><span class="line"> <span class="comment">// 让 TaskScheduler 处理这些错误和重新提交任务</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// executor 丢失</span></span><br><span class="line"><span class="comment">// 任务被杀死</span></span><br><span class="line"><span class="comment">// 未知错误</span></span><br><span class="line"> <span class="keyword">case</span> _: <span class="type">ExecutorLostFailure</span> | <span class="type">TaskKilled</span> | <span class="type">UnknownReason</span> =&gt;</span><br><span class="line">   <span class="comment">// 不做任何事,</span></span><br><span class="line">   <span class="comment">// 若这task不断的错误，</span></span><br><span class="line">   <span class="comment">// TaskScheduler 会停止 job</span></span><br></pre></td></tr></table></figure>
+
       
 
       
@@ -254,11 +252,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
         		</li>
       		
 		</ul>
@@ -276,6 +274,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2018/10/08/滴滴实习总结/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          滴滴实习总结
+        
+      </div>
+    </a>
   
   
     <a href="/2018/10/04/Spark-2-3-0源码分析——4-任务调度实现/" id="article-nav-older" class="article-nav-link-wrap">
@@ -306,7 +313,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#一-Task运算结果的处理"><span class="toc-number">1.</span> <span class="toc-text">一. Task运算结果的处理</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#A-org-apache-spark-scheduler-cluster-CoarseGrainedSchedulerBackend-DriverEndpoint-receive"><span class="toc-number">1.0.1.</span> <span class="toc-text">A.org.apache.spark.scheduler.cluster.CoarseGrainedSchedulerBackend.DriverEndpoint#receive</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#B-org-apache-spark-scheduler-TaskSchedulerImpl-statusUpdate"><span class="toc-number">1.0.2.</span> <span class="toc-text">B. org.apache.spark.scheduler.TaskSchedulerImpl#statusUpdate</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#C-org-apache-spark-scheduler-TaskResultGetter-enqueueSuccessfulTask"><span class="toc-number">1.0.3.</span> <span class="toc-text">C. org.apache.spark.scheduler.TaskResultGetter#enqueueSuccessfulTask</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#D-org-apache-spark-scheduler-TaskSchedulerImpl-handleSuccessfulTask"><span class="toc-number">1.0.4.</span> <span class="toc-text">D. org.apache.spark.scheduler.TaskSchedulerImpl#handleSuccessfulTask</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#E-org-apache-spark-scheduler-TaskSetManager-handleSuccessfulTask"><span class="toc-number">1.0.5.</span> <span class="toc-text">E. org.apache.spark.scheduler.TaskSetManager#handleSuccessfulTask</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#F-org-apache-spark-scheduler-DAGScheduler-taskEnded"><span class="toc-number">1.0.6.</span> <span class="toc-text">F.  org.apache.spark.scheduler.DAGScheduler#taskEnded</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#G-org-apache-spark-scheduler-DAGSchedulerEventProcessLoop-doOnReceive"><span class="toc-number">1.0.7.</span> <span class="toc-text">G. org.apache.spark.scheduler.DAGSchedulerEventProcessLoop#doOnReceive</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#H"><span class="toc-number">1.0.8.</span> <span class="toc-text">H.</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#一-Task运算结果的处理"><span class="toc-number">1.</span> <span class="toc-text">一. Task运算结果的处理</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#A-org-apache-spark-scheduler-cluster-CoarseGrainedSchedulerBackend-DriverEndpoint-receive"><span class="toc-number">1.0.1.</span> <span class="toc-text">A.org.apache.spark.scheduler.cluster.CoarseGrainedSchedulerBackend.DriverEndpoint#receive</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#B-org-apache-spark-scheduler-TaskSchedulerImpl-statusUpdate"><span class="toc-number">1.0.2.</span> <span class="toc-text">B. org.apache.spark.scheduler.TaskSchedulerImpl#statusUpdate</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#C-org-apache-spark-scheduler-TaskResultGetter-enqueueSuccessfulTask"><span class="toc-number">1.0.3.</span> <span class="toc-text">C. org.apache.spark.scheduler.TaskResultGetter#enqueueSuccessfulTask</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#D-org-apache-spark-scheduler-TaskSchedulerImpl-handleSuccessfulTask"><span class="toc-number">1.0.4.</span> <span class="toc-text">D. org.apache.spark.scheduler.TaskSchedulerImpl#handleSuccessfulTask</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#E-org-apache-spark-scheduler-TaskSetManager-handleSuccessfulTask"><span class="toc-number">1.0.5.</span> <span class="toc-text">E. org.apache.spark.scheduler.TaskSetManager#handleSuccessfulTask</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#F-org-apache-spark-scheduler-DAGScheduler-taskEnded"><span class="toc-number">1.0.6.</span> <span class="toc-text">F.  org.apache.spark.scheduler.DAGScheduler#taskEnded</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#G-org-apache-spark-scheduler-DAGSchedulerEventProcessLoop-doOnReceive"><span class="toc-number">1.0.7.</span> <span class="toc-text">G. org.apache.spark.scheduler.DAGSchedulerEventProcessLoop#doOnReceive</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#H-org-apache-spark-scheduler-DAGScheduler-handleTaskCompletion"><span class="toc-number">1.0.8.</span> <span class="toc-text">H. org.apache.spark.scheduler.DAGScheduler#handleTaskCompletion</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -319,17 +326,6 @@
 
   
   
-  
-  <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
-<script>
-  var cloudTieConfig = {
-    url: "//harold.me/2018/10/06/Spark-2-3-0源码分析——5-Task运算结果的处理/", 
-    sourceId: "Spark-2-3-0源码分析——5-Task运算结果的处理",
-    productKey: "true",
-    target: "cloud-tie-wrapper"
-  };
-</script>
-<script src="//img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
   
 
   
@@ -450,11 +446,15 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
+                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -466,11 +466,23 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">并发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -483,14 +495,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -510,10 +514,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
@@ -522,7 +522,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -542,19 +542,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">计算机基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">分布式算法</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -567,6 +559,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Mahout</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">分布式算法</a>
               </li>
              
               <li class="article-tag-list-item">
