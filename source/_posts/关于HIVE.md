@@ -20,7 +20,7 @@ HiveQL是Hive的查询语言,类似Mysql,运行方式有:
 *	**非交互模式** : 
 	`hive -f script.q` -f选项运行指定文件中的命令
 	`hive -e 'SELECT * FROM DUMMY'` -e选项在行内嵌入命令
-    
+   
 **用到的HiveQL特有的关键字**:
 
 >`create table records (year STRING, temperature INT, quality INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t';`
@@ -63,11 +63,11 @@ metastore是Hive元数据的存放地,包括*服务*和*后台数据*的存储,�
 2. 更新,事务和索引
 
  	HDFS不支持就地更新,插入,更新删除操作引起的一切变化都被保存在一个增量文件中,由metastore在后台运行的mapreduce作业会定期将增量文件合并到基表.
-    
+​    
     Hive引入了表级和分区级的锁,由ZooKeeper透明管理,用户不用执行获得和释放锁的操作.
     
     Hive索引分为*紧凑*和*位图*索引,可插拔,紧凑索引存储每个值的HDFS块号而不是文件内偏移量,不会占用过多磁盘空间;位图索引使用压缩的bitset来高效存储具有特殊值的行,适用于具有极少取值的列.
-    
+
 表
 ---
 Hive中的表在逻辑上由存储的数据和描述表中数据形式的相关元数据组成.*数据*一般存放在HDFS上,也可以是其他Hadoop文件系统,Hive把*元数据*存放在关系型数据库
@@ -96,13 +96,14 @@ Hive把表组织成*分区*,使用分区可以加快数据分片的查询速度.
 
   在将数据加载到分区表时,要显示指定分区值:
  > `LOAD DATA LOCAL INPATH 'input/hive/partitions/file1' INTO TABLE logs PARTITION (dt='2001-01-01', country='GB');`
- > `SHOW PARTITON logs;` 可以展示表中的分区
+ >
+ > > `SHOW PARTITON logs;` 可以展示表中的分区
 
 - *桶* :
-	将表或分区组织成桶的理由:
+  将表或分区组织成桶的理由:
    > . 获得高效的查询处理效率
    > . 使取样更高效
-创建被划分成桶的表:
+  创建被划分成桶的表:
    >`CREATE TABLE bucketed_users (id INT, name STRING) CLUSTERED BY (id) INTO 4 BUCKETS;`
    桶中的数据可以根据一个列或者多个列排序,这样对每个桶的连接变成了高效的归并排序,提升了map端连接的效率:
    > `CREATE TABLE bucketed_users (id INT, name STRING) CLUSTERED BY (id) SORTED BY (id) INTO 4 BUCKETS;`
@@ -110,23 +111,24 @@ Hive把表组织成*分区*,使用分区可以加快数据分片的查询速度.
    Hive并不检查数据文件中的桶是否和表定义中的桶一致,无论是桶的数量还是用来划分的列, 如果不匹配会 ,查询时会碰到错误或未定义的结果.
    将一个没有划分桶的数据集users填充进分桶后的表的步骤如下:
    > `SET hive.enforce.bucketing=true;` 这样Hive就知道用表中声明的数量来创建桶
-   > `INSERT OVERWRITE TABLE bucketed_users SELECT * FROM users;`Insert 即可
-   
+   >
+   > > `INSERT OVERWRITE TABLE bucketed_users SELECT * FROM users;`Insert 即可
+
 物理上,每个桶就是表目录中的一个文件,一个作业产生的桶(输出文件)和reduce任务个数相同.
-   
+
 用TABLESAMPLE子句对表取样:
 `SELECT * FROM bucketed_users TABLESAMPLE(BUCKET 1 OUT OF 4 ON id);`
 和
 `SELECT * FROM users TABLESAMPLE(BUCKET 1 OUT OF 4 ON id);`
- 
+
 得到的结果一样.
- 
+
 **存储格式**
- 
+
  Hive从两个维度对表的存储进行管理:
  * 行格式: 行和行中的字段如何存储,行格式由SerDe(Serializer-Deserializer)定义. 当作为反序列化工具使用时(即查询表),SerDe将把文件中字节形式的数据反序列化为Hive内部操作行时所使用的对象形式,作为序列化工具时(INSERT,CTAS),表的SerDe会把Hive的数据行内部表示形式序列化成字节形式并写道输出文件中.
  * 文件格式: 一行中字段容器的格式
- 
+
 *默认的存储格式----分隔的文本*
 
 在创建表时如果没有用ROW FORMAT或STORED AS子句,Hive所使用的默认格式是分隔的文本,每行存储一个数据行.
@@ -169,7 +171,8 @@ OK
 *导入数据*
 > **INSERT语句**
 > 动态分区插入:
->>`INSERT OVERWRITE TABLE target PARTITION(dt) SELECT COL1, CLO2, dt FROM source`
+>
+> >`INSERT OVERWRITE TABLE target PARTITION(dt) SELECT COL1, CLO2, dt FROM source`
 
 >**多表插入**
 >>`FROM records2`
@@ -208,13 +211,14 @@ CREATE TABLE new_table LIKE existing_table;达到类似TRUNCATE的目的.
 **MapReduce脚本**
 TRANSFORM,MAP,REDUCE子句可在Hive中调用外部脚本或程序.
 > ``` python
->#is_good_quality.py
->import re
-import sys
-for line in sys.stdin:
-    (year,temp,q) = line.strip().split()
-    if (temp != "9999" and re.match("[01459]"),q)):
-        print("%s\t%s" % (year, temp))```
+> #is_good_quality.py
+> import re
+> import sys
+> for line in sys.stdin:
+>   (year,temp,q) = line.strip().split()
+>   if (temp != "9999" and re.match("[01459]"),q)):
+>       print("%s\t%s" % (year, temp))```
+> ```
 
 >`ADD FILE /input/is_good_quality.py;` 在Hive中注册脚本,Hive将脚本文件传到Hadoop集群
 >`FROM records2 select TRANSFORM(year,temperature,quality) USING 'is_good_quality.py' as year, temperature;` 
@@ -222,14 +226,15 @@ for line in sys.stdin:
 这一实例并未使用reducer.如果要使用嵌套模式,可以指定map和reduce函数:
 >```python
 >FROM (
-  FROM records2
-  MAP year, temperature, quality
-  USING 'is_good_quality.py'
-  AS year, temperature) map_output
-REDUCE year, temperature
-USING 'max_temperature_reduce.py'
-AS year, temperature;```
-和
+> FROM records2
+> MAP year, temperature, quality
+> USING 'is_good_quality.py'
+> AS year, temperature) map_output
+>REDUCE year, temperature
+>USING 'max_temperature_reduce.py'
+>AS year, temperature;```
+>和
+>```
 ```python
 FROM (
   FROM records2
@@ -273,12 +278,13 @@ Hive只支持等值连接,在连接谓词中只能使用等号,还可以在在�
 外连接可以找到表中不能匹配的数据行:
 >```
 >左连接
-SELECT sales.*, things.* FROM sales LEFT OUTER JOIN things ON (sales.id = things.id);
-Joe	2	2	Tie
-Hank	4	4	Coat
-Ali	0	NULL	NULL
-Eve	3	3	Hat
-Hank	2	2	Tie
+>SELECT sales.*, things.* FROM sales LEFT OUTER JOIN things ON (sales.id = things.id);
+>Joe	2	2	Tie
+>Hank	4	4	Coat
+>Ali	0	NULL	NULL
+>Eve	3	3	Hat
+>Hank	2	2	Tie
+>```
 ```
 当然Hive也支持右连接和全外连接:
 >```右连接
@@ -300,12 +306,13 @@ Hank	4	4	Coat
 **半连接**
 LEFT SEMI JOIN:
 >```
-select * from sales left semi join things on (sales.id = things.id);
-Joe	2
-Hank	4
-Eve	3
-Hank	2```
-右表只能在ON子句中出现,不能在SELECT表达式中引用右表.
+>select * from sales left semi join things on (sales.id = things.id);
+>Joe	2
+>Hank	4
+>Eve	3
+>Hank	2```
+>右表只能在ON子句中出现,不能在SELECT表达式中引用右表.
+>```
 
 **map连接**
 如果有一个连接表小到足以放入内存,Hive就将较小的表放入每个mapper的内存来执行连接操作.
@@ -316,13 +323,14 @@ map连接可以利用分桶的表,因为作用于左侧表的桶的mapper加载�
 子查询是内嵌在另一个SQL语句中的SELECT语句,Hive只允许子查询出现在SELECT语句的FROM子句中,或某些特殊情况下的WHERE子句中.
 >```
 >hive> SELECT station, year, AVG(max_temperature)
-     FROM (
-     SELECT station, year, MAX(temperature) AS max_temperature
-     FROM records2
-     WHERE temperature != 9999 AND quality IN (0,1,4,5,9)
-     GROUP BY station, year
-     ) mt
-     GROUP BY station, year;
+>    FROM (
+>    SELECT station, year, MAX(temperature) AS max_temperature
+>    FROM records2
+>    WHERE temperature != 9999 AND quality IN (0,1,4,5,9)
+>    GROUP BY station, year
+>    ) mt
+>    GROUP BY station, year;
+>```
 ```
 外层查询像访问表那样访问子查询的结果,所以必须为子查询赋予一个别名(mt),子查询中的列必须有唯一的名称,以便外层访问引用这些列.
 
@@ -348,13 +356,13 @@ Hive三种UDF, 他们所接受的输入和产生的输出的数据行的数量�
 * 用户定义表生成函数 UDTF : 作用于单个数据行, 产生多个输出行
 
 *UDTF*:
-```>
+​```>
 hive> create table arrays (x ARRAY<STRING>) ROW
     > FORMAT DELIMITED
     > FIELDS TERMINATED BY '\001'
     > COLLECTION ITEMS TERMINATED BY '\002';```
 
-```>
+​```>
 hive> SELECT * FROM arrays;
 OK
 ["a","b"]
@@ -373,7 +381,7 @@ e```
 常用的UDTF还有SPLIT() 等,还有更强大的LATERAL VIEW查询,笔者会在之后的博客详细介绍.
 
 **写UDF**
-```java
+​```java
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.hive.ql.exec.UDF;
 import org.apache.hadoop.io.Text;
@@ -419,7 +427,7 @@ evaluate()不是由接口定义的,它接受的参数个数和类型以及返回
 >`CREATE TEMPORARY FUNCTION strip AS 'com.hadoopbook.hive.Strip';`
 
 **写UDAF**
-```java
+​```java
 import org.apache.hadoop.hive.ql.exec.UDAF;
 import org.apache.hadoop.hive.ql.exec.UDAFEvaluator;
 import org.apache.hadoop.io.IntWritable;
@@ -470,12 +478,10 @@ UDAF必须是org.apache.hadoop.hive.ql.exec.UDAF的子类(*UDAF类已经过时�
 
 * terminate() : Hive需要部分聚集结果时会调用此方法,这个方法必须返回一个封装了聚集计算当前状态的对象.
 
-*  merge()方法 : 在Hive合并两个部分聚集值时会调用merge()方法.该方法接受一个对象作为输入,其类型必须和terminatePartial()方法的返回类型一致.
- 
-*  terminate()方法 : Hive需要最终聚集结果时会调用此方法
+* merge()方法 : 在Hive合并两个部分聚集值时会调用merge()方法.该方法接受一个对象作为输入,其类型必须和terminatePartial()方法的返回类型一致.
 
-*  计算流程见下图:
-![](http://p5s7d12ls.bkt.clouddn.com/18-3-18/61809116.jpg)
+* terminate()方法 : Hive需要最终聚集结果时会调用此方法
+
 
 
 

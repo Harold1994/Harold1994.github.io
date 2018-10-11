@@ -10,7 +10,12 @@ HBase是一个在HDFS上开发的面向列的分布式数据库,可以用来实�
 应用将数据存放在带标签的表中,表格的"单元格"由行和列的坐标交叉决定,是*有版本*的,版本号默认是自动分配的,为插入单元格的时间戳.单元格内容是未解释的字节数组.
  <!-- more-->
 
-![](http://p5s7d12ls.bkt.clouddn.com/18-3-21/37375528.jpg)
+| owide | Column Family | Column Family | Column Family | Column Family |      |      |      |      |      |      |      |      |
+| ----- | ------------- | ------------- | ------------- | ------------- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+|       | col1          | col2          | col3          | col1          | col2 | col3 | col1 | col2 | col3 | col1 | col2 | col3 |
+| 1     |               |               |               |               |      |      |      |      |      |      |      |      |
+| 2     |               |               |               |               |      |      |      |      |      |      |      |      |
+| 3     |               |               |               |               |      |      |      |      |      |      |      |      |
 
 表中行的键也是字节数组,行根据行的键进行排序,排序根据字节序进行,所有对表的访问都要通过表的主键,HBase不支持表中的其他列建立索引.
 行中的列被分为列族,同一个列族成员具有相同的前缀,info:format和info:geo都是列族info的成员,列族前缀必须是"可打印的",修饰符可以是任意字节,列族和修饰符用(:)分隔.
@@ -26,8 +31,6 @@ HBase对行的更新是原子的
 Hbase = 1个master节点 + 多个regionserver从属机
 主控机master负责启动一个全新的安装,把区域分配给注册的regionserver,恢复regionserver故障.
 regionserver负责将0个或者多个区域的管理和响应客户端的读写请求.还负责区域划分并告知master有新的子区域.
-
-![](http://p5s7d12ls.bkt.clouddn.com/18-3-21/16805306.jpg)
 HBase依赖于ZooKeeper,zookeeper集合体负责管理诸如hbase:meta目录表的位置以及当前集群主控机地址等重要信息.
 
 HBase使用基于SSH的机制来运行远程命令,其配置方式类似于Hadoop,HBase通过Hadoop文件系统API来持久化存储数据,但在默认情况下,HBase会将存储写入本地文件系统,因此需要把它的存储配置指向要使用的HDFS集群.
@@ -55,7 +58,7 @@ TABLE
 test
 1 row(s) in 0.0110 seconds```
 list输出所有表.
-```sql
+​```sql
 hbase(main):004:0> put 'test','row1','data:1','value1'
 0 row(s) in 0.1720 seconds
 
@@ -77,7 +80,7 @@ ROW                           COLUMN+CELL
  row3                         column=data:3, timestamp=1521615131948, value=valle3                              
 3 row(s) in 0.0210 seconds```
 在列表中三行插入数据,get获取第一行,scan预览表的内容.
-```sql
+​```sql
 hbase(main):003:0> disable 'test'
 0 row(s) in 2.3790 seconds
 
@@ -149,7 +152,7 @@ Configuration对象读入了程序classpath下hbase-site.xml等文件中的配�
 
 **MapReduce**
 HBase可以作为MR的源和输出,TableInputFormat类可以在区域边界进行分隔,使map能够拿到单个的区域进行处理,TableOutputFormat将把reduce的结果写入HBase;
-```java
+​```java
 public class SimpleRowCounter extends Configured implements Tool {
     static class RowCounterMapper extends TableMapper<ImmutableBytesWritable, Result> {
         public static enum Counters { Rows }
@@ -184,7 +187,7 @@ public class SimpleRowCounter extends Configured implements Tool {
  TableMapper是MR.Mapper的特化,他设定map输入类型由TableInputFormat来传递,输入键为ImmutableBytesWritable(行键), 值为Result(扫描行结果).TableMapReduceUtil.initTableMapperJob()对作业进行配置.
 
 **加载数据**将要写入的数据库必须在作业配置中通过设置TableOutoputFormat.OUTPUTTABLE属性来指定.
-```java
+​```java
         FileInputFormat.addInputPath(job, new Path(args[0]));
         job.getConfiguration().set(TableOutputFormat.OUTPUT_TABLE, "observations");
         job.setMapperClass(HBaseTemperatureMapper.class);
@@ -222,9 +225,4 @@ HBASE:
 分布式,面向列的数据存储系统,在HDFS上提供随机读写,聚焦于各种可伸缩问题,表可以很宽,很高,水平分区在上千个普通商用机节点复制.
 RDBMS:
 模式固定, 面向行,ACID性质,扩展性不强
-
-
-
-
-
-
+```
