@@ -16,12 +16,12 @@
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="一、降低内存占用降低Redis内存占用有助于减少创建快照和加载快照所需的时间，提升载入AOF文件时的效率，缩短从服务器进行同步所需的时间，并且能让Redis存储更多的数据而无需添加额外的硬件。 主要有三种技术：  短结构 分片 打包存储二进制位和字节">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-9-27/26093308.jpg">
-<meta property="og:updated_time" content="2018-10-01T10:30:13.629Z">
+<meta property="og:image" content="https://i.loli.net/2018/10/12/5bbff529abfc4.png">
+<meta property="og:updated_time" content="2018-10-12T01:13:23.404Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis高级特性">
 <meta name="twitter:description" content="一、降低内存占用降低Redis内存占用有助于减少创建快照和加载快照所需的时间，提升载入AOF文件时的效率，缩短从服务器进行同步所需的时间，并且能让Redis存储更多的数据而无需添加额外的硬件。 主要有三种技术：  短结构 分片 打包存储二进制位和字节">
-<meta name="twitter:image" content="http://p5s7d12ls.bkt.clouddn.com/18-9-27/26093308.jpg">
+<meta name="twitter:image" content="https://i.loli.net/2018/10/12/5bbff529abfc4.png">
   
   
     <link rel="icon" href="/favicon.png">
@@ -219,7 +219,7 @@
 <a id="more"></a>
 <h5 id="1-短结构"><a href="#1-短结构" class="headerlink" title="1.短结构"></a>1.短结构</h5><p>在散列、列表、和有序集合的<strong>长度较短或者体积较小</strong>的时候，Redis可以选择使用<strong>压缩列表(ziplist)</strong>来存储这些结构，压缩列表是列表，散列和有序集合的一种非结构化的表示，它会以序列化的方式存储数据，这些数据每次被读取的时候都需要进行解码，每次被写入的时候要进行局部编码，可能要移动内存里的数据。</p>
 <p>Redis存储长列表的方式见下图：</p>
-<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-9-27/26093308.jpg" alt=""></p>
+<p><img src="https://i.loli.net/2018/10/12/5bbff529abfc4.png" alt="屏幕快照 2018-10-11 下午10.34.13.png"></p>
 <p>可以看到用上面的方式存储数据的空间开销非常大，再来看压缩列表的结构：<br>压缩列表的每个节点由两个长度值和一个字符串组成，第一个数值记录前一个节点的长度，这个长度值被用于对压缩列表进行从后向前的遍历，第二个长度值记录当前节点长度，位于最后的是被存储得字符串，相对于存储长列表的方式，压缩列表避免存储额外的指针和元数据，降低了空间开销。</p>
 <p>对于体积较小的集合，如果整数包含的所有成员都可以被解释为十进制整数，而这些整数又处于平台的有符号整数范围之内，并且集合成员的数量又足够小的话，那么Redis就会以有序整数组的方式存储集合，又被称为<strong>整数集合intset</strong>，他可以降低内存消耗，还可以提升所有标准集合操作的执行速度。</p>
 <blockquote>

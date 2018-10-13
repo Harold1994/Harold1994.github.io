@@ -16,14 +16,14 @@
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="​    RDD是Spark最基本也是最根本的数据抽象，RDD提供了一种高度受限的共享内存，即RDD是只读的，并且只能通过其他RDD上的批量操作来创建，以此来实现容错。 ​    一般来说，分布式数据集的容错性有两种方式：数据检查点和记录数据的更新。对于大规模数据分析，数据检查点操作成本很高：需要通过数据中心的网络连接在机器之前复制庞大的数据集，而网络带宽往往比内存带宽低很多，同时还需要消耗更多的">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-10-3/33900205.jpg">
+<meta property="og:image" content="https://i.loli.net/2018/10/12/5bbff5af9a77a.png">
 <meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-10-3/54766668.jpg">
-<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-10-3/57110673.jpg">
-<meta property="og:updated_time" content="2018-10-04T07:32:31.316Z">
+<meta property="og:image" content="https://i.loli.net/2018/10/12/5bbff5cf7abcb.png">
+<meta property="og:updated_time" content="2018-10-12T01:16:14.177Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark_2.3.0源码分析——2_RDD实现">
 <meta name="twitter:description" content="​    RDD是Spark最基本也是最根本的数据抽象，RDD提供了一种高度受限的共享内存，即RDD是只读的，并且只能通过其他RDD上的批量操作来创建，以此来实现容错。 ​    一般来说，分布式数据集的容错性有两种方式：数据检查点和记录数据的更新。对于大规模数据分析，数据检查点操作成本很高：需要通过数据中心的网络连接在机器之前复制庞大的数据集，而网络带宽往往比内存带宽低很多，同时还需要消耗更多的">
-<meta name="twitter:image" content="http://p5s7d12ls.bkt.clouddn.com/18-10-3/33900205.jpg">
+<meta name="twitter:image" content="https://i.loli.net/2018/10/12/5bbff5af9a77a.png">
   
   
     <link rel="icon" href="/favicon.png">
@@ -218,11 +218,17 @@
 <p>RDDs 并不要始终被物化, 一个 RDD 有足够的信息知道自己是从哪个数据集计算而来的（就是所谓的依赖血统）, 这是一个非常强大的属性：其实, 一个程序你能引用一个不能从失败中重新构建的 RDD.同时具有数据流模型的特点：自动容错、位置感知调度、可伸缩性</p>
 <p>每个RDD有5个主要的属性：</p>
 <ul>
-<li>一组分片，即数据集的基本组成单位。对于RDD，每个分片都会被一个计算任务处理，并决定计算的粒度。每个分片会被逻辑映射成BolckManager的一个Block，而这个Block会被一个Task负责计算<img src="http://p5s7d12ls.bkt.clouddn.com/18-10-3/33900205.jpg" alt=""></li>
-<li>一个计算每个分片的函数：RDD中的计算以分片为单位，每个RDD都会实现compute函数以达到这个目的</li>
-<li>RDD之间的依赖关系：RDD之间会形成类似流水线的前后依赖关系，可以用与计算丢失的分区数据</li>
-<li>一个Partitioner，即RDD的分片函数：RDD实现了两种Partitioner，一种基于哈希，一种基于范围。Partitioner决定了RDD本身的分片数量，也决定了parent RDD Shuffle输出数量</li>
-<li>一个列表：存储每个Partition的优先位置（比如说HDFS的块位置）</li>
+<li><p>一组分片，即数据集的基本组成单位。对于RDD，每个分片都会被一个计算任务处理，并决定计算的粒度。每个分片会被逻辑映射成BolckManager的一个Block，而这个Block会被一个Task负责计算</p>
+<p><img src="https://i.loli.net/2018/10/12/5bbff5af9a77a.png" alt="屏幕快照 2018-10-11 下午10.33.32.png"></p>
+</li>
+<li><p>一个计算每个分片的函数：RDD中的计算以分片为单位，每个RDD都会实现compute函数以达到这个目的</p>
+</li>
+<li><p>RDD之间的依赖关系：RDD之间会形成类似流水线的前后依赖关系，可以用与计算丢失的分区数据</p>
+</li>
+<li><p>一个Partitioner，即RDD的分片函数：RDD实现了两种Partitioner，一种基于哈希，一种基于范围。Partitioner决定了RDD本身的分片数量，也决定了parent RDD Shuffle输出数量</p>
+</li>
+<li><p>一个列表：存储每个Partition的优先位置（比如说HDFS的块位置）</p>
+</li>
 </ul>
 <h5 id="1-RDD的创建"><a href="#1-RDD的创建" class="headerlink" title="1.RDD的创建"></a>1.RDD的创建</h5><ol>
 <li>由一个以存在Scala集合创建</li>
@@ -274,7 +280,7 @@
 <li><p>窄依赖：如果RDD与上游RDD分区是一对一的关系，那么RDD和其上游RDD之间的依赖关系属于窄依赖</p>
 </li>
 <li><p>宽依赖：parent RDDs 的一个分区可以被子 RDDs 的多个子分区所依赖</p>
-<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-10-3/57110673.jpg" alt=""></p>
+<p><img src="https://i.loli.net/2018/10/12/5bbff5cf7abcb.png" alt="屏幕快照 2018-10-11 下午10.33.52.png"></p>
 <p>以下两个原因使的这种区别很有用：<br>​    第一, 窄依赖可以使得在集群中一个机器节点的执行流计算所有父亲的分区数据, 比如, 我们可以将每一个元素应用了 map 操作后紧接着应用 filter 操作, 与此相反, 宽依赖需要父亲 RDDs 的所有分区数据准备好并且利用类似于 MapReduce 的操作将数据在不同的节点之间进行重新洗牌和网络传输. </p>
 <p>​    第二, 窄依赖从一个失败节点中恢复是非常高效的, 因为只需要重新计算相对应的父亲的分区数据就可以, 而且这个重新计算是在不同的节点进行并行重计算的, 与此相反, 在一个含有宽依赖的血缘关系 RDDs 图中, 一个节点的失败可能导致一些分区数据的丢失, 但是我们需要重新计算父 RDD 的所有分区的数据.</p>
 </li>

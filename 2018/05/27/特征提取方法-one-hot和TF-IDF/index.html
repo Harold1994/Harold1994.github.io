@@ -16,25 +16,17 @@
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="【转自https://www.cnblogs.com/lianyingteng/p/7755545.html】 one-hot 和 TF-IDF是目前最为常见的用于提取文本特征的方法，本文主要介绍两种方法的思想以及优缺点。 1. one-hot1.1 one-hot编码　　什么是one-hot编码？one-hot编码，又称独热编码、一位有效编码。其方法是使用N位状态寄存器来对N个状态进行编码，每个">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://images2017.cnblogs.com/blog/1251096/201710/1251096-20171030163200996-742440926.png">
-<meta property="og:image" content="https://images2017.cnblogs.com/blog/1251096/201710/1251096-20171030164625793-1703194224.png">
-<meta property="og:image" content="https://images2017.cnblogs.com/blog/1251096/201710/1251096-20171030165132480-1341638518.png">
-<meta property="og:image" content="https://images2017.cnblogs.com/blog/1251096/201710/1251096-20171030165731683-1946521226.png">
-<meta property="og:image" content="https://images2017.cnblogs.com/blog/1251096/201711/1251096-20171106103420622-1037006116.png">
-<meta property="og:image" content="https://images2017.cnblogs.com/blog/1251096/201711/1251096-20171106103811778-399990946.png">
-<meta property="og:image" content="https://images2017.cnblogs.com/blog/1251096/201711/1251096-20171106103938778-1278932628.png">
-<meta property="og:image" content="https://common.cnblogs.com/images/copycode.gif">
-<meta property="og:image" content="https://common.cnblogs.com/images/copycode.gif">
-<meta property="og:image" content="https://images2017.cnblogs.com/blog/1251096/201710/1251096-20171030184644027-2546042.png">
-<meta property="og:image" content="https://images2017.cnblogs.com/blog/1251096/201710/1251096-20171030185050808-1214386978.png">
-<meta property="og:image" content="https://images2017.cnblogs.com/blog/1251096/201710/1251096-20171030194100761-48755487.png">
-<meta property="og:image" content="https://common.cnblogs.com/images/copycode.gif">
-<meta property="og:image" content="https://common.cnblogs.com/images/copycode.gif">
-<meta property="og:updated_time" content="2018-09-13T09:22:18.536Z">
+<meta property="og:image" content="https://i.loli.net/2018/10/12/5bbff0a1e10cc.png">
+<meta property="og:image" content="https://i.loli.net/2018/10/12/5bbff1c57d4d5.png">
+<meta property="og:image" content="https://i.loli.net/2018/10/12/5bbff2326ecd4.png">
+<meta property="og:image" content="https://i.loli.net/2018/10/12/5bbff2856c466.png">
+<meta property="og:image" content="https://i.loli.net/2018/10/12/5bbff2ab34338.png">
+<meta property="og:image" content="https://i.loli.net/2018/10/12/5bbff2c3a5640.png">
+<meta property="og:updated_time" content="2018-10-12T01:03:20.172Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="特征提取方法:one-hot和TF-IDF">
 <meta name="twitter:description" content="【转自https://www.cnblogs.com/lianyingteng/p/7755545.html】 one-hot 和 TF-IDF是目前最为常见的用于提取文本特征的方法，本文主要介绍两种方法的思想以及优缺点。 1. one-hot1.1 one-hot编码　　什么是one-hot编码？one-hot编码，又称独热编码、一位有效编码。其方法是使用N位状态寄存器来对N个状态进行编码，每个">
-<meta name="twitter:image" content="https://images2017.cnblogs.com/blog/1251096/201710/1251096-20171030163200996-742440926.png">
+<meta name="twitter:image" content="https://i.loli.net/2018/10/12/5bbff0a1e10cc.png">
   
   
     <link rel="icon" href="/favicon.png">
@@ -225,14 +217,14 @@
         <p>【转自<a href="https://www.cnblogs.com/lianyingteng/p/7755545.html】" target="_blank" rel="noopener">https://www.cnblogs.com/lianyingteng/p/7755545.html】</a></p>
 <p>one-hot 和 TF-IDF是目前最为常见的用于提取文本特征的方法，本文主要介绍两种方法的思想以及优缺点。</p>
 <h2 id="1-one-hot"><a href="#1-one-hot" class="headerlink" title="1. one-hot"></a>1. one-hot</h2><h3 id="1-1-one-hot编码"><a href="#1-1-one-hot编码" class="headerlink" title="1.1 one-hot编码"></a>1.1 one-hot编码</h3><p>　　什么是one-hot编码？one-hot编码，又称独热编码、一位有效编码。其方法是使用N位状态寄存器来对N个状态进行编码，每个状态都有它独立的寄存器位，并且在任意时候，其中只有一位有效。<a id="more"></a>举个例子，假设我们有四个样本（行），每个样本有三个特征（列），如图：</p>
-<p>　　　　　　<img src="https://images2017.cnblogs.com/blog/1251096/201710/1251096-20171030163200996-742440926.png" alt="img"></p>
+<p><img src="https://i.loli.net/2018/10/12/5bbff0a1e10cc.png" alt="屏幕快照 2018-10-11 下午11.58.21.png"></p>
 <p>上图中我们已经对每个特征进行了普通的数字编码：我们的feature_1有两种可能的取值，比如是男/女，这里男用1表示，女用2表示。那么one-hot编码是怎么搞的呢？我们再拿feature_2来说明：</p>
 <p>这里feature_2 有4种取值（状态），我们就用4个状态位来表示这个特征，one-hot编码就是保证每个样本中的单个特征只有1位处于状态1，其他的都是0。</p>
-<p>　　　　　 <img src="https://images2017.cnblogs.com/blog/1251096/201710/1251096-20171030164625793-1703194224.png" alt="img"></p>
 <p>对于2种状态、三种状态、甚至更多状态都是这样表示，所以我们可以得到这些样本特征的新表示：</p>
-<p>　　　　　　<img src="https://images2017.cnblogs.com/blog/1251096/201710/1251096-20171030165132480-1341638518.png" alt="img"></p>
+<p><img src="https://i.loli.net/2018/10/12/5bbff1c57d4d5.png" alt="屏幕快照 2018-10-11 下午11.59.05.png">　　　　</p>
 <p>one-hot编码将每个状态位都看成一个特征。对于前两个样本我们可以得到它的特征向量分别为</p>
-<p>　　　　　<img src="https://images2017.cnblogs.com/blog/1251096/201710/1251096-20171030165731683-1946521226.png" alt="img"></p>
+<p><img src="https://i.loli.net/2018/10/12/5bbff2326ecd4.png" alt="屏幕快照 2018-10-11 下午11.59.26.png"></p>
+<p>　　　　</p>
 <h3 id="1-2-one-hot在提取文本特征上的应用"><a href="#1-2-one-hot在提取文本特征上的应用" class="headerlink" title="1.2 one-hot在提取文本特征上的应用"></a>1.2 one-hot在提取文本特征上的应用</h3><p>　　one hot在特征提取上属于词袋模型（bag of words）。关于如何使用one-hot抽取文本特征向量我们通过以下例子来说明。假设我们的语料库中有三段话：</p>
 <p>　　　　我爱中国</p>
 <p>　　　　爸爸妈妈爱我</p>
@@ -240,27 +232,23 @@
 <p>我们首先对预料库分离并获取其中所有的词，然后对每个此进行编号：</p>
 <p>　　　　1 我； 2 爱； 3 爸爸； 4 妈妈；5 中国</p>
 <p>然后使用one hot对每段话提取特征向量：</p>
-<p>　<img src="https://images2017.cnblogs.com/blog/1251096/201711/1251096-20171106103420622-1037006116.png" alt="img">；<img src="https://images2017.cnblogs.com/blog/1251096/201711/1251096-20171106103811778-399990946.png" alt="img">；<img src="https://images2017.cnblogs.com/blog/1251096/201711/1251096-20171106103938778-1278932628.png" alt="img"></p>
+<p><img src="https://i.loli.net/2018/10/12/5bbff2856c466.png" alt="屏幕快照 2018-10-11 下午11.59.40.png"></p>
 <p>因此我们得到了最终的特征向量为</p>
 <p>　　　　我爱中国 　-&gt;　　　1，1，0，0，1</p>
 <p>　　　　爸爸妈妈爱我　　-&gt;　　1，1，1，1，0</p>
 <p>　　　　爸爸妈妈爱中国　　-&gt;　　0，1，1，1，1</p>
 <h3 id="优缺点分析"><a href="#优缺点分析" class="headerlink" title="优缺点分析"></a>优缺点分析</h3><p><strong>优点：</strong>一是解决了分类器不好处理离散数据的问题，二是在一定程度上也起到了扩充特征的作用（上面样本特征数从3扩展到了9）</p>
 <p><strong>缺点：</strong>在文本特征表示上有些缺点就非常突出了。首先，它是一个词袋模型，不考虑词与词之间的顺序（文本中词的顺序信息也是很重要的）；其次，它假设词与词相互独立（在大多数情况下，词与词是相互影响的）；最后，它得到的特征是离散稀疏的。</p>
-<h3 id="sklearn实现one-hot-encode"><a href="#sklearn实现one-hot-encode" class="headerlink" title="sklearn实现one hot encode"></a>sklearn实现one hot encode</h3><p><a href="javascript:void(0" target="_blank" rel="noopener"><img src="https://common.cnblogs.com/images/copycode.gif" alt="复制代码"></a>;)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from sklearn import preprocessing  </span><br><span class="line">      </span><br><span class="line">enc = preprocessing.OneHotEncoder()  # 创建对象</span><br><span class="line">enc.fit([[0,0,3],[1,1,0],[0,2,1],[1,0,2]])   # 拟合</span><br><span class="line">array = enc.transform([[0,1,3]]).toarray()  # 转化</span><br><span class="line">print(array)</span><br></pre></td></tr></table></figure>
-<p><a href="javascript:void(0" target="_blank" rel="noopener"><img src="https://common.cnblogs.com/images/copycode.gif" alt="复制代码"></a>;)</p>
+<h3 id="sklearn实现one-hot-encode"><a href="#sklearn实现one-hot-encode" class="headerlink" title="sklearn实现one hot encode"></a>sklearn实现one hot encode</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from sklearn import preprocessing  </span><br><span class="line">      </span><br><span class="line">enc = preprocessing.OneHotEncoder()  # 创建对象</span><br><span class="line">enc.fit([[0,0,3],[1,1,0],[0,2,1],[1,0,2]])   # 拟合</span><br><span class="line">array = enc.transform([[0,1,3]]).toarray()  # 转化</span><br><span class="line">print(array)</span><br></pre></td></tr></table></figure>
 <h2 id="2-TF-IDF"><a href="#2-TF-IDF" class="headerlink" title="2. TF-IDF"></a>2. TF-IDF</h2><p>　　IF-IDF是信息检索（IR）中最常用的一种文本表示法。算法的思想也很简单，就是统计每个词出现的词频（TF），然后再为其附上一个权值参数（IDF）。举个例子：</p>
 <p>　　现在假设我们要统计一篇文档中的前10个关键词，应该怎么下手？首先想到的是统计一下文档中每个词出现的频率（TF），词频越高，这个词就越重要。但是统计完你可能会发现你得到的关键词基本都是“的”、“是”、“为”这样没有实际意义的词（停用词），这个问题怎么解决呢？你可能会想到为每个词都加一个权重，像这种”停用词“就加一个很小的权重（甚至是置为0），这个权重就是IDF。下面再来看看公式：</p>
-<p>　　<img src="https://images2017.cnblogs.com/blog/1251096/201710/1251096-20171030184644027-2546042.png" alt="img"><img src="https://images2017.cnblogs.com/blog/1251096/201710/1251096-20171030185050808-1214386978.png" alt="img"></p>
+<p><img src="https://i.loli.net/2018/10/12/5bbff2ab34338.png" alt="屏幕快照 2018-10-12 上午12.00.35.png"></p>
 <p>IF应该很容易理解就是计算词频，IDF衡量词的常见程度。为了计算IDF我们需要事先准备一个语料库用来模拟语言的使用环境，如果一个词越是常见，那么式子中分母就越大，逆文档频率就越小越接近于0。这里的分母+1是为了避免分母为0的情况出现。TF-IDF的计算公式如下：</p>
-<p>　　　<img src="https://images2017.cnblogs.com/blog/1251096/201710/1251096-20171030194100761-48755487.png" alt="img"></p>
+<p><img src="https://i.loli.net/2018/10/12/5bbff2c3a5640.png" alt="屏幕快照 2018-10-12 上午12.01.08.png"></p>
 <p>根据公式很容易看出，TF-IDF的值与该词在文章中出现的频率成正比，与该词在整个语料库中出现的频率成反比，因此可以很好的实现提取文章中关键词的目的。</p>
 <h3 id="优缺点分析-1"><a href="#优缺点分析-1" class="headerlink" title="优缺点分析"></a>优缺点分析</h3><p><strong>优点：</strong>简单快速，结果比较符合实际</p>
 <p><strong>缺点：</strong>单纯考虑词频，忽略了词与词的位置信息以及词与词之间的相互关系。</p>
-<h3 id="sklearn实现tfidf"><a href="#sklearn实现tfidf" class="headerlink" title="sklearn实现tfidf"></a>sklearn实现tfidf</h3><p><a href="javascript:void(0" target="_blank" rel="noopener"><img src="https://common.cnblogs.com/images/copycode.gif" alt="复制代码"></a>;)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.feature_extraction.text import CountVectorizer  </span><br><span class="line">from sklearn.feature_extraction.text import TfidfTransformer</span><br><span class="line"></span><br><span class="line">tag_list = [&apos;青年 吃货 唱歌&apos;,  </span><br><span class="line">            &apos;少年 游戏 叛逆&apos;,  </span><br><span class="line">            &apos;少年 吃货 足球&apos;] </span><br><span class="line"></span><br><span class="line">vectorizer = CountVectorizer() #将文本中的词语转换为词频矩阵  </span><br><span class="line">X = vectorizer.fit_transform(tag_list) #计算个词语出现的次数</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">word_dict = vectorizer.vocabulary_</span><br><span class="line">&#123;&apos;唱歌&apos;: 2, &apos;吃货&apos;: 1, &apos;青年&apos;: 6, &apos;足球&apos;: 5, &apos;叛逆&apos;: 0, &apos;少年&apos;: 3, &apos;游戏&apos;: 4&#125;</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">transformer = TfidfTransformer()  </span><br><span class="line">tfidf = transformer.fit_transform(X)  #将词频矩阵X统计成TF-IDF值  </span><br><span class="line">print(tfidf.toarray())</span><br></pre></td></tr></table></figure>
-<p><a href="javascript:void(0" target="_blank" rel="noopener"><img src="https://common.cnblogs.com/images/copycode.gif" alt="复制代码"></a>;)</p>
+<h3 id="sklearn实现tfidf"><a href="#sklearn实现tfidf" class="headerlink" title="sklearn实现tfidf"></a>sklearn实现tfidf</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.feature_extraction.text import CountVectorizer  </span><br><span class="line">from sklearn.feature_extraction.text import TfidfTransformer</span><br><span class="line"></span><br><span class="line">tag_list = [&apos;青年 吃货 唱歌&apos;,  </span><br><span class="line">            &apos;少年 游戏 叛逆&apos;,  </span><br><span class="line">            &apos;少年 吃货 足球&apos;] </span><br><span class="line"></span><br><span class="line">vectorizer = CountVectorizer() #将文本中的词语转换为词频矩阵  </span><br><span class="line">X = vectorizer.fit_transform(tag_list) #计算个词语出现的次数</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">word_dict = vectorizer.vocabulary_</span><br><span class="line">&#123;&apos;唱歌&apos;: 2, &apos;吃货&apos;: 1, &apos;青年&apos;: 6, &apos;足球&apos;: 5, &apos;叛逆&apos;: 0, &apos;少年&apos;: 3, &apos;游戏&apos;: 4&#125;</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">transformer = TfidfTransformer()  </span><br><span class="line">tfidf = transformer.fit_transform(X)  #将词频矩阵X统计成TF-IDF值  </span><br><span class="line">print(tfidf.toarray())</span><br></pre></td></tr></table></figure>
 
       
 

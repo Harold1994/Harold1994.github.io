@@ -16,12 +16,10 @@
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="1 关于TensorFlow TensorFlow 随着AlphaGo的胜利也火了起来。google又一次成为大家膜拜的大神了。google大神在引导这机器学习的方向。 同时docker 也是一个非常好的工具，大大的方便了开发环境的构建，之前需要配置安装。 看各种文档，现在只要一个 pull 一个 run 就可以把环境弄好了。 同时如果有写地方需要个性化定制，直接在docker的镜像上面再加一层补">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-7-6/87067696.jpg">
-<meta property="og:updated_time" content="2018-09-13T09:22:18.536Z">
+<meta property="og:updated_time" content="2018-10-11T16:10:25.413Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="用Docker安装tensorflow">
 <meta name="twitter:description" content="1 关于TensorFlow TensorFlow 随着AlphaGo的胜利也火了起来。google又一次成为大家膜拜的大神了。google大神在引导这机器学习的方向。 同时docker 也是一个非常好的工具，大大的方便了开发环境的构建，之前需要配置安装。 看各种文档，现在只要一个 pull 一个 run 就可以把环境弄好了。 同时如果有写地方需要个性化定制，直接在docker的镜像上面再加一层补">
-<meta name="twitter:image" content="http://p5s7d12ls.bkt.clouddn.com/18-7-6/87067696.jpg">
   
   
     <link rel="icon" href="/favicon.png">
@@ -222,8 +220,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir -p /data/tensorflow/notebooks</span><br><span class="line">docker run -it --rm --name myts -v /data/tensorflow/notebooks:/notebooks -p 8888:8888 daocloud.io/daocloud/tensorflow:latest12</span><br></pre></td></tr></table></figure>
 <p>启动的时候并不是daemon 模式的，而是前台模式，同时显示了运行的日志。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">W 06:48:13.425 NotebookApp] WARNING: The notebook server is listening on all IP addresses and not using encryption. This is not recommended.</span><br><span class="line">[I 06:48:13.432 NotebookApp] Serving notebooks from local directory: /notebooks</span><br><span class="line">[I 06:48:13.432 NotebookApp] 0 active kernels </span><br><span class="line">[I 06:48:13.432 NotebookApp] The Jupyter Notebook is running at: http://[all ip addresses on your system]:8888/?token=2031705799dc7a5d58bc51b1f406d8771f0fdf3086b95642</span><br><span class="line">[I 06:48:13.433 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).</span><br><span class="line">[C 06:48:13.433 NotebookApp] </span><br><span class="line"></span><br><span class="line">    Copy/paste this URL into your browser when you connect for the first time,</span><br><span class="line">    to login with a token:</span><br><span class="line">        http://localhost:8888/?token=2031705799dc7a5d58bc51b1f406d8771f0fdf3086b9564212345678910</span><br></pre></td></tr></table></figure>
-<p>打开浏览器就可以直接看到界面了，同时可以编辑内容：</p>
-<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-7-6/87067696.jpg" alt=""></p>
+<p>打开浏览器就可以直接看到界面了，同时可以编辑内容</p>
 <h4 id="4-固定token"><a href="#4-固定token" class="headerlink" title="4 固定token"></a>4 固定token</h4><hr>
 <p>vi run_jupyter.sh</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env bash</span><br><span class="line">jupyter notebook --no-browser --NotebookApp.token=&apos;token1234&apos; &gt; /notebooks/jupyter-notebook.log 12</span><br></pre></td></tr></table></figure>
