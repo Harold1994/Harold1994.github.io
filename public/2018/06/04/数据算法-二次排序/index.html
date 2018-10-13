@@ -16,12 +16,12 @@
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="一. 二次排序(secondary sort)问题的引出1. 二次排序: 在reduce阶段对与某个键关联的值排序,又称为键值转换; 2. MR中的排序: MapReduce框架会自动对mapper生成的键排序,说明在启动reducer之前,mapper生成的所有中间键值对必然是按键有序的.但是传入reducer的值并不是有序的,他们可能有任意的顺序,要想对reducer中的值进行排序,可以用二次">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-6-4/84337503.jpg">
-<meta property="og:updated_time" content="2018-09-13T09:22:18.534Z">
+<meta property="og:image" content="//harold.me/Users/harold/Desktop/屏幕快照%202018-10-11%20下午10.34.58.png">
+<meta property="og:updated_time" content="2018-10-11T15:50:38.149Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据算法——Hadoop的二次排序解决方案">
 <meta name="twitter:description" content="一. 二次排序(secondary sort)问题的引出1. 二次排序: 在reduce阶段对与某个键关联的值排序,又称为键值转换; 2. MR中的排序: MapReduce框架会自动对mapper生成的键排序,说明在启动reducer之前,mapper生成的所有中间键值对必然是按键有序的.但是传入reducer的值并不是有序的,他们可能有任意的顺序,要想对reducer中的值进行排序,可以用二次">
-<meta name="twitter:image" content="http://p5s7d12ls.bkt.clouddn.com/18-6-4/84337503.jpg">
+<meta name="twitter:image" content="//harold.me/Users/harold/Desktop/屏幕快照%202018-10-11%20下午10.34.58.png">
   
   
     <link rel="icon" href="/favicon.png">
@@ -227,7 +227,7 @@
 </li>
 </ul>
 <p><strong>1.中间键的排序顺序</strong></p>
-<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-6-4/84337503.jpg" alt=""></p>
+<p><img src="/Users/harold/Desktop/屏幕快照 2018-10-11 下午10.34.58.png" alt="屏幕快照 2018-10-11 下午10.34.58"></p>
 <p>要实现二次排序,我们需要控制中间键的排序顺序,以及reducer处理键的顺序,首先要在组合键中注入一个值(temperature),然后控制中间键的排序顺序.</p>
 <p>因为希望reducer按照温度排序,所以增加temperature.要用compareTo方法指出如何对DateTemperaturePair对象排序.</p>
 <blockquote>

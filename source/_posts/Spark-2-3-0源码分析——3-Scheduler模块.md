@@ -17,7 +17,7 @@ tags: [大数据, Spark]
 
 <!-- more-->
 
-![](http://p5s7d12ls.bkt.clouddn.com/18-10-4/61326963.jpg)
+![屏幕快照 2018-10-11 下午10.33.14.png](https://i.loli.net/2018/10/12/5bbff77a3be8c.png)
 
 #### 二、DAGScheduler实现
 
@@ -309,7 +309,7 @@ doOnReceive最终会调用dagScheduler.handleJobSubmitted，开始处理Job，�
 
 ##### 3.Stage的划分
 
-![](http://p5s7d12ls.bkt.clouddn.com/18-10-4/31527802.jpg)
+![屏幕快照 2018-10-11 下午10.33.21.png](https://i.loli.net/2018/10/12/5bbff7a09e4ff.png)
 
 ​	Stage的划分是从最后一个RDD开始的，也就是触发Action的那个RDD，比如上图中，在RDD G处调用了Action操作，在划分Stage时，会从G开始逆向分析，G依赖于B和F，其中对B是窄依赖，对F是宽依赖，所以F和G不能算在同一个Stage中，即在F和G之间会有一个Stage分界线。上图中还有一处宽依赖在A和B之间，所以这里还会分出一个Stage。最终形成了3个Stage，由于Stage1和Stage2是相互独立的，所以可以并发执行，等Stage1和Stage2准备就绪后，Stage3才能开始执行。 
 

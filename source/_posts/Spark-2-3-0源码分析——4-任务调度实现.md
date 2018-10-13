@@ -633,7 +633,7 @@ private def buildFairSchedulerPool(is: InputStream, fileName: String) {
 
 其调度逻辑如图所示：
 
-![](http://p5s7d12ls.bkt.clouddn.com/18-10-6/33465426.jpg)
+![屏幕快照 2018-10-11 下午10.32.58](/Users/harold/Desktop/屏幕快照 2018-10-11 下午10.32.58.png)
 
 ###### B. org.apache.spark.scheduler.FairSchedulableBuilder#addTaskSetManager
 

@@ -76,7 +76,7 @@ tags: scala
 
 * Scala类型
 
-  ![](http://p5s7d12ls.bkt.clouddn.com/18-9-29/98683302.jpg)
+  ![屏幕快照 2018-10-12 上午12.21.15.png](https://i.loli.net/2018/10/12/5bbff56624be3.png)
 
 * 布尔比较符&和&&
 

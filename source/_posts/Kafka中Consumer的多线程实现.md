@@ -12,11 +12,11 @@ Kafka 0.9版本开始推出了Java版本的consumer，优化了coordinator的设
 
 1 每个线程维护一个KafkaConsumer
 
-![img](https://images2015.cnblogs.com/blog/735367/201612/735367-20161202105906443-1609157006.png)
+![735367-20161202105906443-1609157006.png](https://i.loli.net/2018/10/12/5bbff4af830bf.png)
 
 2  维护一个或多个KafkaConsumer，同时维护多个事件处理线程(worker thread)
 
-![img](https://images2015.cnblogs.com/blog/735367/201612/735367-20161202110008787-550483601.png)
+![735367-20161202110008787-550483601.png](https://i.loli.net/2018/10/12/5bbff4c689f3b.png)
 
 当然，这种方法还可以有多个变种：比如每个worker线程有自己的处理队列。consumer根据某种规则或逻辑将消息放入不同的队列。不过总体思想还是相同的，故这里不做过多展开讨论了。
 
@@ -77,11 +77,7 @@ Kafka 0.9版本开始推出了Java版本的consumer，优化了coordinator的设
 37 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
-
 **ConsumerGroup类**
-
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
  1 package com.my.kafka.test;
@@ -109,11 +105,7 @@ Kafka 0.9版本开始推出了Java版本的consumer，优化了coordinator的设
 23 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
-
 **ConsumerMain类**
-
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
  1 public class ConsumerMain {
@@ -130,15 +122,11 @@ Kafka 0.9版本开始推出了Java版本的consumer，优化了coordinator的设
 12 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
-
  
 
 **方法2**
 
 **Worker类**
-
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
  1 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -160,11 +148,7 @@ Kafka 0.9版本开始推出了Java版本的consumer，优化了coordinator的设
 17 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
-
 **ConsumerHandler类**
-
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
  1 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -229,11 +213,7 @@ Kafka 0.9版本开始推出了Java版本的consumer，优化了coordinator的设
 60 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
-
 **Main类**
-
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
  1 public class Main {
@@ -253,7 +233,5 @@ Kafka 0.9版本开始推出了Java版本的consumer，优化了coordinator的设
 15     }
 16 }
 ```
-
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 　　总结一下，这两种方法或是模型都有各自的优缺点，在具体使用时需要根据自己实际的业务特点来选取对应的方法。就我个人而言，我比较推崇第二种方法以及背后的思想，即不要将很重的处理逻辑放入消费者的代码中，很多Kafka consumer使用者碰到的各种rebalance超时、coordinator重新选举、心跳无法维持等问题都来源于此。

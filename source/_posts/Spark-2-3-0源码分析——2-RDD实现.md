@@ -18,10 +18,16 @@ RDDs 并不要始终被物化, 一个 RDD 有足够的信息知道自己是从�
 
 每个RDD有5个主要的属性：
 
-* 一组分片，即数据集的基本组成单位。对于RDD，每个分片都会被一个计算任务处理，并决定计算的粒度。每个分片会被逻辑映射成BolckManager的一个Block，而这个Block会被一个Task负责计算![](http://p5s7d12ls.bkt.clouddn.com/18-10-3/33900205.jpg)
+* 一组分片，即数据集的基本组成单位。对于RDD，每个分片都会被一个计算任务处理，并决定计算的粒度。每个分片会被逻辑映射成BolckManager的一个Block，而这个Block会被一个Task负责计算
+
+  ![屏幕快照 2018-10-11 下午10.33.32.png](https://i.loli.net/2018/10/12/5bbff5af9a77a.png)
+
 * 一个计算每个分片的函数：RDD中的计算以分片为单位，每个RDD都会实现compute函数以达到这个目的
+
 * RDD之间的依赖关系：RDD之间会形成类似流水线的前后依赖关系，可以用与计算丢失的分区数据
+
 * 一个Partitioner，即RDD的分片函数：RDD实现了两种Partitioner，一种基于哈希，一种基于范围。Partitioner决定了RDD本身的分片数量，也决定了parent RDD Shuffle输出数量
+
 * 一个列表：存储每个Partition的优先位置（比如说HDFS的块位置）
 
 ##### 1.RDD的创建
@@ -100,7 +106,7 @@ RDD和它依赖的parent RDD的关系有两种不同的类型：
 
 * 宽依赖：parent RDDs 的一个分区可以被子 RDDs 的多个子分区所依赖
 
-  ![](http://p5s7d12ls.bkt.clouddn.com/18-10-3/57110673.jpg)
+  ![屏幕快照 2018-10-11 下午10.33.52.png](https://i.loli.net/2018/10/12/5bbff5cf7abcb.png)
 
   以下两个原因使的这种区别很有用：
   ​	第一, 窄依赖可以使得在集群中一个机器节点的执行流计算所有父亲的分区数据, 比如, 我们可以将每一个元素应用了 map 操作后紧接着应用 filter 操作, 与此相反, 宽依赖需要父亲 RDDs 的所有分区数据准备好并且利用类似于 MapReduce 的操作将数据在不同的节点之间进行重新洗牌和网络传输. 

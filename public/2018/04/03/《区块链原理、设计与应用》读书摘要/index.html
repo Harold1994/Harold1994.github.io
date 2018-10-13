@@ -16,13 +16,10 @@
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="实验室项目需要了解区块链的有关原理和技术，将自己的读书摘要记录到此处 一、技术核心概览定义与原理中本聪：区块链是用于记录比特币交易账目历史的数据结构Wikipedia：将区块链类比为一种分布式数据库技术，通过维护数据快的链式结构，维持持续增长的、不可篡改的数据记录">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-4-3/47102201.jpg">
-<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-4-3/43523210.jpg">
-<meta property="og:updated_time" content="2018-09-13T09:22:18.531Z">
+<meta property="og:updated_time" content="2018-10-11T15:31:01.352Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《区块链原理、设计与应用》读书摘要">
 <meta name="twitter:description" content="实验室项目需要了解区块链的有关原理和技术，将自己的读书摘要记录到此处 一、技术核心概览定义与原理中本聪：区块链是用于记录比特币交易账目历史的数据结构Wikipedia：将区块链类比为一种分布式数据库技术，通过维护数据快的链式结构，维持持续增长的、不可篡改的数据记录">
-<meta name="twitter:image" content="http://p5s7d12ls.bkt.clouddn.com/18-4-3/47102201.jpg">
   
   
     <link rel="icon" href="/favicon.png">
@@ -212,8 +209,8 @@
       
         <p>实验室项目需要了解区块链的有关原理和技术，将自己的读书摘要记录到此处</p>
 <h2 id="一、技术核心概览"><a href="#一、技术核心概览" class="headerlink" title="一、技术核心概览"></a>一、技术核心概览</h2><p><strong>定义与原理</strong><br>中本聪：区块链是用于记录比特币交易账目历史的数据结构<br>Wikipedia：将区块链类比为一种分布式数据库技术，通过维护数据快的链式结构，维持持续增长的、不可篡改的数据记录<br><a id="more"></a><br><strong>基本原理</strong><br>交易transaction：一次对账本的操作，导致账本状态的一次改变<br>区块block：计算一段时间内发生的所有交易和状态结果，是对当前账本状态的一次共识<br>链chain：由区块按照发生顺序串联而成，是整个账本状态变化的日志记录</p>
-<p>假设存在一个分布式账本，只允许添加、不允许删除。账本底层是数据结构一个线性链表，链表由一个个区块串联而成，后继区块记录前导区块的Hash值，新数据要加入，必须放到一个新的区块中，而这个块是否合法，可以通过计算哈希值的方式快速检验出来<br><img src="http://p5s7d12ls.bkt.clouddn.com/18-4-3/47102201.jpg" alt=""><br>工作量证明PoW:基于算力寻找nonce串的共识机制</p>
-<p><strong>技术演化和分类</strong><br>智能合约smart contract:提供除了货币交易外更灵活的合约功能，执行更复杂的操作<br><img src="http://p5s7d12ls.bkt.clouddn.com/18-4-3/43523210.jpg" alt=""></p>
+<p>假设存在一个分布式账本，只允许添加、不允许删除。账本底层是数据结构一个线性链表，链表由一个个区块串联而成，后继区块记录前导区块的Hash值，新数据要加入，必须放到一个新的区块中，而这个块是否合法，可以通过计算哈希值的方式快速检验出来<br>工作量证明PoW:基于算力寻找nonce串的共识机制</p>
+<p><strong>技术演化和分类</strong><br>智能合约smart contract:提供除了货币交易外更灵活的合约功能，执行更复杂的操作</p>
 <p>基于区块链的分布式账本特点：<br>1.维护一条不断增长的链，只能添加记录，发生过的记录不可修改<br>2.去中心化，或多中心化，无需集中控制而能达成共识，实现上尽量采用分布式<br>3.通过密码学的机制确保交易无法被抵赖和破坏，尽量保护用户信息和记录的隐私性</p>
 <p><em>分类</em>：</p>
 <ul>

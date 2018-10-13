@@ -693,5 +693,5 @@ private[spark] class LocalSchedulerBackend(
 
   三种Local部署模式图：
 
-  ![](http://p5s7d12ls.bkt.clouddn.com/18-10-11/7220770.jpg)
+  ![屏幕快照 2018-10-11 下午10.32.06](/Users/harold/Desktop/屏幕快照 2018-10-11 下午10.32.06.png)
 

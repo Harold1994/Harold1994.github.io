@@ -42,7 +42,7 @@ public SortedMap<Integer, T> topN(List<Tuple2<T, Integer>> L, int N) {
 
 首先将输入分区为小块，每个小块发送到一个mapper，每个mapper产生一个top N列表，然后将列表发送到reduce如，发出mapper输出时，使用同一个reducer键，这样所有mapper输出都将由一个reducer处理。
 
-![](http://p5s7d12ls.bkt.clouddn.com/18-6-11/20636935.jpg)
+![屏幕快照 2018-10-11 下午11.57.16.png](https://i.loli.net/2018/10/12/5bbff08986c39.png)
 
 **Mapper:**
 

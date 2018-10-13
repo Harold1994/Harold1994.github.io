@@ -84,8 +84,7 @@ public class App {
         reader.close();
         writer.close();
     }
-}```
-运行结果：
-![](http://p5s7d12ls.bkt.clouddn.com/18-4-10/23573009.jpg)
-Slope One推荐算法：使用线性函数结合用户和条目来估计接近程度，计算简单快速，对新用户推荐效果不错
+}
+```
 
+Slope One推荐算法：使用线性函数结合用户和条目来估计接近程度，计算简单快速，对新用户推荐效果不错

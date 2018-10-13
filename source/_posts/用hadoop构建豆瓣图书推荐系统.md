@@ -303,10 +303,9 @@ public class Step2 {
 Step2的输入是Step1的输出，
 map阶段：用正则表达式分割每行，利用双重循环构造每行中任意两个itemsId的组合作为键，用数字1作为值输出到Reducer
 reduce阶段：Mapper传来的数据已经按键分块，累加每种键下的值即可得到item1和item2出现在同一个评分列表中的次数，即得到图书的同现矩阵
-Step2的输出为：
-![](http://p5s7d12ls.bkt.clouddn.com/18-3-28/19253791.jpg)
 
-*4). Step3.java，合并同现矩阵和评分矩阵*
+* *4). Step3.java，合并同现矩阵和评分矩阵*
+
 ```java
 import hdfs.HdfsDAO;
 import org.apache.hadoop.conf.Configuration;
@@ -407,10 +406,6 @@ public class Step3 {
 ```
 Step3_1将用户评分矩阵拆分为itemId	userId:pref的形式输出，为了方便之后的计算
 Step3_2看起来输出结果与Step2相同
-Step3_1输出：
-![](http://p5s7d12ls.bkt.clouddn.com/18-3-28/9400783.jpg)
-Step3_1输出：
-![](http://p5s7d12ls.bkt.clouddn.com/18-3-28/22519877.jpg)
 
 *5). Step4.java，计算推荐结果列表*
 ```java
@@ -560,28 +555,24 @@ class Cooccurrence {
     public void setNum(int num) {
         this.num = num;
     }
-}```
+}
+```
 Step4的输入来自两个路径，分别是step3_1和step3_2的输出，
 map阶段：对输入的值进行分割，如果是同现矩阵其将被分割为`[101:102,3]`的形式，如果是评分矩阵将被分割为`[102,5:30]`的形式，然后以“：”为分隔符分别分割数组tokens中的元素，以此来判别输入是什么类型的矩阵。如果是同现矩阵，获取itemID1和itemID2以及num，在初始化时创建的静态map中填充以每一个itemID1为键，以List<Cooccurence>对象为值的数据，最后得到的map形象的表示为下图所示的方式：
-```
+
 {101：[cooccurence(101,101,5),cooccurence(101,102,3),...],
 ...
 106:[cooccurence(106,101,2),cooccurence(106,101,1),...],
 107:[cooccurence(107,101,1)}
-```
-如果输入来自用户评分矩阵，会先得到itemID，userID和评分pref，然后将userID设为键，利用itemID从上面的map中得到其对应的list，从list中可以得到*同现item*（通过`co.getItemID2()`）和*同现次数num*，对list中的每项都能得到一个输出，将输出值设为组合字符串“同现item，pref*同现num”，我将通过下图来解释第二项的意义，请读者自行体会。
 
-![](http://p5s7d12ls.bkt.clouddn.com/18-3-28/60596269.jpg)
-
-reduce阶段逻辑比较简单，将每个item对应的值加起来就是用户对这个item的推荐的程度。
+如果输入来自用户评分矩阵，会先得到itemID，userID和评分pref，然后将userID设为键，利用itemID从上面的map中得到其对应的list，从list中可以得到*同现item*（通过`co.getItemID2()`）和*同现次数num*，对list中的每项都能得到一个输出，将输出值设为组合字符串“同现item，pref*同现num”，reduce阶段逻辑比较简单，将每个item对应的值加起来就是用户对这个item的推荐的程度。
 Step4在执行的时候会报错：
-![](http://p5s7d12ls.bkt.clouddn.com/18-3-28/51842026.jpg)
 
 原因在于当输入是用户评分矩阵时，同现map并不是随时就绪的，可能不会先构造同现矩阵。因为hadoop从hdfs上读取小文件时，会先读占用空间大的文件，这样就不能保证先生成coocurenceMatrix了，所以Step4.java这个类不能使用，我们把矩阵乘法进行分开计算，先进行对于位置相乘Step4_Updata.java，最后进行加法Step4_Updata2.java
- 
+
 **5). Step4_Update.java，计算推荐结果列表**
 
-​```java
+```java
 import hdfs.HdfsDAO;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -705,10 +696,6 @@ public class Step4_Update {
 ```
 在Mapper的setup阶段，通过`split.getPath().getParent().getName()`来确定输入来自那个文件，如果来自用户评分矩阵，则输出以A：打头的值，否则以B：打头，键均为itemID
 redece阶段：键为item1，创建mapA和mapB，mapA的内容为（item2,num），mapB的值为(userId，pref),对于mapA中的每个item2和num，为每个user计算num*pref，输出的值为（userId，“itemID2,num*pref”）
-![](http://p5s7d12ls.bkt.clouddn.com/18-3-28/27264349.jpg)
-
-step4_update.java输出是：
-![](http://p5s7d12ls.bkt.clouddn.com/18-3-28/96688878.jpg) 
 
 **6).Step4_Update2.java:计算推荐结果**
 ```java
@@ -795,11 +782,11 @@ public class Step4_Update2 {
     }
 }
 ```
-较为简单，求和即可，结果如下：
-![](http://p5s7d12ls.bkt.clouddn.com/18-3-28/61332065.jpg)
+较为简单，求和即可
 五、程序开发：爬虫的编写
 本爬虫爬取图书的信息，未整理完毕，可以根据需求更改
 item.py
+
 ```python
 import scrapy
 
@@ -974,13 +961,8 @@ class BookPipeline(object):
     def process_item(self, item, spider):
         self.exporter.export_item(item)
         return item```
-
-部分结果
-
-![](http://p5s7d12ls.bkt.clouddn.com/18-3-28/51973032.jpg)
+```
 
 github地址：
 爬虫：https://github.com/Harold1994/doubanBooks
 推荐系统：https://github.com/Harold1994/HadoopFileRecommendation
-
-```

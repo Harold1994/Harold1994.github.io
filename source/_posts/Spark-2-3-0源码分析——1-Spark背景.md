@@ -24,7 +24,9 @@ Apache Spark 是一个快速的, 多用途的集群计算系统。 它提供了 
 
 #### 二、Spark架构综述
 
-如图所示：![](http://p5s7d12ls.bkt.clouddn.com/18-10-2/44831219.jpg)
+如图所示：
+
+![屏幕快照 2018-10-11 下午10.34.04.png](https://i.loli.net/2018/10/12/5bbff58e516bd.png)
 
 * Driver是用户编写的的数据处理逻辑，这个逻辑中包含用户创建的SparkContext
 * SparkContext是用户逻辑与Spark集群的主要交互接口，它会和Cluster Manager交互，包括向它申请资源等。

@@ -4,7 +4,7 @@ date: 2018-04-15 23:01:29
 tags: [JVM,  Java]
 ---
 Java虚拟机在执行Java程序的过程中会把它管理的内存划分为若干不同的数据区域。
-![](http://p5s7d12ls.bkt.clouddn.com/18-4-15/8172747.jpg)
+![屏幕快照 2018-10-12 上午12.15.58.png](https://i.loli.net/2018/10/12/5bbff4778db4b.png)
 
 <!-- more-->
 

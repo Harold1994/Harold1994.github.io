@@ -83,7 +83,7 @@ tags: [Java, 多线程, 并发]
 #### 四、阻塞方法与中断方法
 
 导致线程阻塞或暂停的原因：
-    
+​    
 
 - 等待I/O操作结束
 - 等待获得一个锁
@@ -457,12 +457,11 @@ public class Memorizer<A, V> implements Computerable<A, V> {
 ```
 
 Memorizer1使用HashMap和同步机制来保存之前的计算结果，HashMap非线程安全，于是对整个compute方法同步，这样可能用的时间比没有缓存用的更长，效果不好。
-![](http://p5s7d12ls.bkt.clouddn.com/18-5-23/48498421.jpg)
+
+![屏幕快照 2018-10-12 上午12.14.23.png](https://i.loli.net/2018/10/12/5bbff44c6571f.png)
 
 Memorizer2用ConcurrentHashMap代替HashMap，多线程可以并发的使用它，但是当两个线程同时调用compute时存在一个漏洞，可能会导致重复计算，与我们缓存的初衷违背。
-![](http://p5s7d12ls.bkt.clouddn.com/18-5-23/98285594.jpg)
 
 Memorizer3使用ConcurrentHashMap<A,Future<V>>，先检查某个相应的计算是否已经开始，若还未启动，就创建一个FutureTask，并注册到Map中，然后启动计算，若已启动，的等待现有的计算结果。但是有一个漏洞，仍然可能出现两个线程计算出相同的值，因为compute方法中的if代码块仍然是非原子的“先检查、再执行”操作。
-![](http://p5s7d12ls.bkt.clouddn.com/18-5-23/36335384.jpg)
 
 Memorizer是缓存的最终实现，当缓存的是Future而不是值时，将导致缓存污染问题：如果某个计算被取消或失败，那么在计算这个结果时将指明计算过程被取消或者失败。为避免这种情况，如果Memorizer发现计算被取消，那么将把Future从缓存中移出，如果监测到RuntimeException，也会移出Future。
