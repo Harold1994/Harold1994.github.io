@@ -135,7 +135,7 @@ Main类主要有两种工作方式：
 
 以SparkSubmitCommandBuilder为例，它的构造函数如下
 
-```
+```scala
 SparkSubmitCommandBuilder(List<String> args) {
   // 是否允许将spark-submit参数和app参数混合在一起
   this.allowsMixedArguments = false;
@@ -693,5 +693,5 @@ private[spark] class LocalSchedulerBackend(
 
   三种Local部署模式图：
 
-  ![屏幕快照 2018-10-11 下午10.32.06](/Users/harold/Desktop/屏幕快照 2018-10-11 下午10.32.06.png)
+  ![屏幕快照 2018-10-15 下午9.15.22.png](https://i.loli.net/2018/10/15/5bc492fc6820b.png)
 

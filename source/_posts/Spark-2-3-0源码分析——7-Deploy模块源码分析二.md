@@ -1,5 +1,5 @@
 ---
-title: Spark_2.3.0源码分析——7_Deploy模块源码分析二
+title: Spark_2.3.0源码分析——7_Deploy模块源码分析(二)
 date: 2018-10-11 21:09:22
 tags: [大数据, Spark]
 ---
@@ -12,11 +12,11 @@ tags: [大数据, Spark]
 
 ​	Standalone部署采用典型的Master/Slave架构，Master节点负责整个集群资源的管理与调度，Worker节点在Master节点的调度下启动Executor，负责执行具体工作。
 
+<!-- more-->
+
 #### 1.应用程序的部署
 
 SparkStandalone对应Spark原生的完全分布式集群，因此此种方式下不需要像伪分布集群那样构建虚拟的本地集群
-
-<!-- more-->
 
 ##### A. 以Client部署模式提交应用程序
 

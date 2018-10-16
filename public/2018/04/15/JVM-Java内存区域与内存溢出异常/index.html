@@ -9,19 +9,19 @@
   <title>JVM--Java内存区域与内存溢出异常 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="Java虚拟机在执行Java程序的过程中会把它管理的内存划分为若干不同的数据区域。">
-<meta name="keywords" content="Java,JVM">
+<meta name="keywords" content="JVM,Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JVM--Java内存区域与内存溢出异常">
 <meta property="og:url" content="//harold.me/2018/04/15/JVM-Java内存区域与内存溢出异常/index.html">
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="Java虚拟机在执行Java程序的过程中会把它管理的内存划分为若干不同的数据区域。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-4-15/8172747.jpg">
-<meta property="og:updated_time" content="2018-09-13T09:22:18.520Z">
+<meta property="og:image" content="https://i.loli.net/2018/10/12/5bbff4778db4b.png">
+<meta property="og:updated_time" content="2018-10-12T01:10:29.456Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM--Java内存区域与内存溢出异常">
 <meta name="twitter:description" content="Java虚拟机在执行Java程序的过程中会把它管理的内存划分为若干不同的数据区域。">
-<meta name="twitter:image" content="http://p5s7d12ls.bkt.clouddn.com/18-4-15/8172747.jpg">
+<meta name="twitter:image" content="https://i.loli.net/2018/10/12/5bbff4778db4b.png">
   
   
     <link rel="icon" href="/favicon.png">
@@ -209,7 +209,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Java虚拟机在执行Java程序的过程中会把它管理的内存划分为若干不同的数据区域。<br><img src="http://p5s7d12ls.bkt.clouddn.com/18-4-15/8172747.jpg" alt=""></p>
+        <p>Java虚拟机在执行Java程序的过程中会把它管理的内存划分为若干不同的数据区域。<br><img src="https://i.loli.net/2018/10/12/5bbff4778db4b.png" alt="屏幕快照 2018-10-12 上午12.15.58.png"></p>
 <a id="more"></a>
 <p>程序计数器*：是一块较小的内存空间，可看做当前线程执行的字节码的行号指示器，在虚拟机的概念模型里(仅是概念模型,各种虚拟机可能会通过一些更高效的方式去实现),字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令,分支、循环、跳转、异常处理、线程恢复等基础功能都需要依赖这个计数器来完成。</p>
 <blockquote>
@@ -249,11 +249,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">JVM</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">JVM</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
         		</li>
       		
 		</ul>
@@ -455,15 +455,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Hadoop</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
               </li>
              
               <li class="article-tag-list-item">
