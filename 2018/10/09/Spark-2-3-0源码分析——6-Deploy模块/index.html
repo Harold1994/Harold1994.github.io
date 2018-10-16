@@ -16,12 +16,12 @@
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="Spark的部署方式有以下几种：  Standalone Mesos YARN Local KUBERNETES">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="//harold.me/Users/harold/Desktop/屏幕快照%202018-10-11%20下午10.32.06.png">
-<meta property="og:updated_time" content="2018-10-11T16:26:16.432Z">
+<meta property="og:image" content="https://i.loli.net/2018/10/15/5bc492fc6820b.png">
+<meta property="og:updated_time" content="2018-10-15T13:16:14.262Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark_2.3.0源码分析——6_Deploy模块源码分析(一)">
 <meta name="twitter:description" content="Spark的部署方式有以下几种：  Standalone Mesos YARN Local KUBERNETES">
-<meta name="twitter:image" content="//harold.me/Users/harold/Desktop/屏幕快照%202018-10-11%20下午10.32.06.png">
+<meta name="twitter:image" content="https://i.loli.net/2018/10/15/5bc492fc6820b.png">
   
   
     <link rel="icon" href="/favicon.png">
@@ -243,7 +243,7 @@
 <li>spark-class：启动的类是除了SparkSubmit外的其他类，使用SparkClassCommandBuilder.buildCommand方法构建启动命令</li>
 </ul>
 <p>以SparkSubmitCommandBuilder为例，它的构造函数如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">SparkSubmitCommandBuilder(List&lt;String&gt; args) &#123;</span><br><span class="line">  // 是否允许将spark-submit参数和app参数混合在一起</span><br><span class="line">  this.allowsMixedArguments = false;</span><br><span class="line">  this.sparkArgs = new ArrayList&lt;&gt;();</span><br><span class="line">  boolean isExample = false;</span><br><span class="line">  List&lt;String&gt; submitArgs = args;</span><br><span class="line">  // 根据第一个参数设置相应的资源</span><br><span class="line">  if (args.size() &gt; 0) &#123;</span><br><span class="line">    switch (args.get(0)) &#123;</span><br><span class="line">      case PYSPARK_SHELL:</span><br><span class="line">        this.allowsMixedArguments = true;</span><br><span class="line">        appResource = PYSPARK_SHELL;</span><br><span class="line">        submitArgs = args.subList(1, args.size());</span><br><span class="line">        break;</span><br><span class="line"></span><br><span class="line">      case SPARKR_SHELL:</span><br><span class="line">        this.allowsMixedArguments = true;</span><br><span class="line">        appResource = SPARKR_SHELL;</span><br><span class="line">        submitArgs = args.subList(1, args.size());</span><br><span class="line">        break;</span><br><span class="line"></span><br><span class="line">      case RUN_EXAMPLE:</span><br><span class="line">        isExample = true;</span><br><span class="line">        submitArgs = args.subList(1, args.size());</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">SparkSubmitCommandBuilder</span>(<span class="type">List</span>&lt;<span class="type">String</span>&gt; args) &#123;</span><br><span class="line">  <span class="comment">// 是否允许将spark-submit参数和app参数混合在一起</span></span><br><span class="line">  <span class="keyword">this</span>.allowsMixedArguments = <span class="literal">false</span>;</span><br><span class="line">  <span class="keyword">this</span>.sparkArgs = <span class="keyword">new</span> <span class="type">ArrayList</span>&lt;&gt;();</span><br><span class="line">  boolean isExample = <span class="literal">false</span>;</span><br><span class="line">  <span class="type">List</span>&lt;<span class="type">String</span>&gt; submitArgs = args;</span><br><span class="line">  <span class="comment">// 根据第一个参数设置相应的资源</span></span><br><span class="line">  <span class="keyword">if</span> (args.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    switch (args.get(<span class="number">0</span>)) &#123;</span><br><span class="line">      <span class="keyword">case</span> <span class="type">PYSPARK_SHELL</span>:</span><br><span class="line">        <span class="keyword">this</span>.allowsMixedArguments = <span class="literal">true</span>;</span><br><span class="line">        appResource = <span class="type">PYSPARK_SHELL</span>;</span><br><span class="line">        submitArgs = args.subList(<span class="number">1</span>, args.size());</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">case</span> <span class="type">SPARKR_SHELL</span>:</span><br><span class="line">        <span class="keyword">this</span>.allowsMixedArguments = <span class="literal">true</span>;</span><br><span class="line">        appResource = <span class="type">SPARKR_SHELL</span>;</span><br><span class="line">        submitArgs = args.subList(<span class="number">1</span>, args.size());</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">case</span> <span class="type">RUN_EXAMPLE</span>:</span><br><span class="line">        isExample = <span class="literal">true</span>;</span><br><span class="line">        submitArgs = args.subList(<span class="number">1</span>, args.size());</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
 <h5 id="2-org-apache-spark-deploy-SparkSubmit-main"><a href="#2-org-apache-spark-deploy-SparkSubmit-main" class="headerlink" title="2.org.apache.spark.deploy.SparkSubmit#main"></a>2.org.apache.spark.deploy.SparkSubmit#main</h5><p>提交应用程序的行为类型有三种：</p>
 <ul>
 <li>SUBMIT:提交应用</li>
@@ -365,7 +365,7 @@
 <li><p>最终在LocalEndpoint实例处理ReviveOffers消息时启动Task，最终的Task启动代码如下：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">reviveOffers</span></span>() &#123;</span><br><span class="line">    <span class="keyword">val</span> offers = <span class="type">IndexedSeq</span>(<span class="keyword">new</span> <span class="type">WorkerOffer</span>(localExecutorId, localExecutorHostname, freeCores))</span><br><span class="line">    <span class="keyword">for</span> (task &lt;- scheduler.resourceOffers(offers).flatten) &#123;</span><br><span class="line">      <span class="comment">// 在Executor中会使用线程池方式调度任务，而对应的作业调度是通过</span></span><br><span class="line">      <span class="comment">// 判断当前可用cores数量是否符合每个任务所需的Cores个数</span></span><br><span class="line">      <span class="comment">// 符合条件时更新当前可用Cores数freeCores， 然后启动Task</span></span><br><span class="line">      freeCores -= scheduler.<span class="type">CPUS_PER_TASK</span></span><br><span class="line">      executor.launchTask(executorBackend, task)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 <p>三种Local部署模式图：</p>
-<p><img src="/Users/harold/Desktop/屏幕快照 2018-10-11 下午10.32.06.png" alt="屏幕快照 2018-10-11 下午10.32.06"></p>
+<p><img src="https://i.loli.net/2018/10/15/5bc492fc6820b.png" alt="屏幕快照 2018-10-15 下午9.15.22.png"></p>
 </li>
 </ul>
 
@@ -408,7 +408,7 @@
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Spark_2.3.0源码分析——7_Deploy模块源码分析二
+          Spark_2.3.0源码分析——7_Deploy模块源码分析(二)
         
       </div>
     </a>
@@ -599,19 +599,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">并发</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">算法</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">并发</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -728,6 +728,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Crunch</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">大数据，Spark</a>
               </li>
             
             <div class="clearfix"></div>
