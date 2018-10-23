@@ -1,7 +1,7 @@
 ---
 title: Spark_2.3.0源码分析——8_Executor模块
 date: 2018-10-14 10:15:41
-tags: [大数据，Spark]
+tags: [大数据 ,Spark]
 ---
 
 Executor是Spark中执行任务的进程，它可以被不同的调度模式所调度。Executor中有一个RPC远程过程调用接口，有两种实现，分别是netty和AKKA，默认是Netty框架。

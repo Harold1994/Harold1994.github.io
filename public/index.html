@@ -184,6 +184,82 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Spark-2-3-0源码分析——9-Spark的存储模块" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/17/Spark-2-3-0源码分析——9-Spark的存储模块/">Spark_2.3.0源码分析——9_/Spark的存储模块</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/17/Spark-2-3-0源码分析——9-Spark的存储模块/" class="archive-article-date">
+  	<time datetime="2018-10-17T11:10:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="一、Storage模块"><a href="#一、Storage模块" class="headerlink" title="一、Storage模块"></a>一、Storage模块</h3><h4 id="1-Storage概述"><a href="#1-Storage概述" class="headerlink" title="1.Storage概述"></a>1.Storage概述</h4><p>在Spark中存储模块被抽象成Storage，负责管理和实现数据块(Block)的存放。其中存取数据的最小单元是Block，数据由不同的Block组成，所有操作以Block为单位进行。本质上RDD中的Partition与Storage中的Block等价。Storage抽象模块的实现分为两个层次，如图所示：</p>
+        
+          <a class="article-more-a" href="/2018/10/17/Spark-2-3-0源码分析——9-Spark的存储模块/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">大数据，Spark</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/17/Spark-2-3-0源码分析——9-Spark的存储模块/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Spark-2-3-0源码分析——8-Executor模块" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -921,86 +997,9 @@
 
 
   
-    <article id="post-Scala查漏补缺——高级类型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/02/Scala查漏补缺——高级类型/">Scala查漏补缺——高级类型</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/02/Scala查漏补缺——高级类型/" class="archive-article-date">
-  	<time datetime="2018-10-02T03:58:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="一、元组和函数值类"><a href="#一、元组和函数值类" class="headerlink" title="一、元组和函数值类"></a>一、元组和函数值类</h4><p>​    有一组常规的类来支持元组和函数值的特殊语法，创建类似<code>（1，2，true)</code>的元组和<code>（n: String） =&gt; s&quot;hello, $n&quot;</code>的函数字面量这些实例的语法快捷方式很简短，而且很有表述性，但是它们的具体实现只是<strong>普通的类</strong>。也就是说元组和函数值这些高层构造是由安全的、类型参数化的类支持的。</p>
-<p>​    元组实现的是<code>TupleX[Y]</code>case类的实例，X是一个1-22的数，表示其元数（输入参数的个数），类型参数Y可以是单个类型参数，对应Tuple1，或者两个类型参数，对应Tuple2，直到22个类型参数。Tuple1[A]只有一个字段<code>_1</code>,Tuple2[A,B]有字段<code>_1</code>和<code>_2</code>,以此类推。用小括号创建元组时，会用这个值实例化一个参数个数相同的元组类。换句话说，元组的表述性语法实际上就是case类的快捷方式。</p>
-        
-          <a class="article-more-a" href="/2018/10/02/Scala查漏补缺——高级类型/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Scala</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/02/Scala查漏补缺——高级类型/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 
@@ -1128,6 +1127,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
@@ -1136,7 +1139,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">并发</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1145,14 +1152,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">并发</a>
               </li>
              
               <li class="article-tag-list-item">

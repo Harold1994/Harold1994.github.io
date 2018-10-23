@@ -5,4 +5,4 @@ echo $comment
 `sudo git add .`
 `sudo git commit -m $comment`
 `sudo git push origin`
-exho "上传结束"
+echo "上传结束"
