@@ -6,21 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//harold.me">
-  <title>Spark_2.3.0源码分析——9_/Spark的存储模块 | Harold的博客</title>
+  <title>Spark_2.3.0源码分析——9_Spark的存储模块 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="一、Storage模块1.Storage概述在Spark中存储模块被抽象成Storage，负责管理和实现数据块(Block)的存放。其中存取数据的最小单元是Block，数据由不同的Block组成，所有操作以Block为单位进行。本质上RDD中的Partition与Storage中的Block等价。Storage抽象模块的实现分为两个层次，如图所示：">
-<meta name="keywords" content="大数据，Spark">
+<meta name="keywords" content="大数据,Spark">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Spark_2.3.0源码分析——9_&#x2F;Spark的存储模块">
+<meta property="og:title" content="Spark_2.3.0源码分析——9_Spark的存储模块">
 <meta property="og:url" content="//harold.me/2018/10/17/Spark-2-3-0源码分析——9-Spark的存储模块/index.html">
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="一、Storage模块1.Storage概述在Spark中存储模块被抽象成Storage，负责管理和实现数据块(Block)的存放。其中存取数据的最小单元是Block，数据由不同的Block组成，所有操作以Block为单位进行。本质上RDD中的Partition与Storage中的Block等价。Storage抽象模块的实现分为两个层次，如图所示：">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://i.loli.net/2018/10/17/5bc74752b9c18.png">
 <meta property="og:image" content="https://i.loli.net/2018/10/17/5bc730e246458.png">
-<meta property="og:updated_time" content="2018-10-21T06:18:14.699Z">
+<meta property="og:updated_time" content="2018-10-23T03:20:08.177Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Spark_2.3.0源码分析——9_&#x2F;Spark的存储模块">
+<meta name="twitter:title" content="Spark_2.3.0源码分析——9_Spark的存储模块">
 <meta name="twitter:description" content="一、Storage模块1.Storage概述在Spark中存储模块被抽象成Storage，负责管理和实现数据块(Block)的存放。其中存取数据的最小单元是Block，数据由不同的Block组成，所有操作以Block为单位进行。本质上RDD中的Partition与Storage中的Block等价。Storage抽象模块的实现分为两个层次，如图所示：">
 <meta name="twitter:image" content="https://i.loli.net/2018/10/17/5bc74752b9c18.png">
   
@@ -197,7 +197,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Spark_2.3.0源码分析——9_/Spark的存储模块
+      Spark_2.3.0源码分析——9_Spark的存储模块
     </h1>
   
 
@@ -414,7 +414,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">大数据，Spark</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
         		</li>
       		
 		</ul>
@@ -432,6 +436,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2018/10/21/Spark-2-3-0源码分析——10-Spark的Shuffle机制/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Spark_2.3.0源码分析——10_Spark的Shuffle机制
+        
+      </div>
+    </a>
   
   
     <a href="/2018/10/14/Spark-2-3-0源码分析——8-Executor模块/" id="article-nav-older" class="article-nav-link-wrap">
@@ -748,10 +761,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Crunch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">大数据，Spark</a>
               </li>
             
             <div class="clearfix"></div>
