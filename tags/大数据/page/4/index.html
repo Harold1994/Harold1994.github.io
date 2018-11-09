@@ -6,11 +6,11 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//harold.me">
-  <title>Harold的博客</title>
+  <title>Tag: 大数据 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta property="og:type" content="website">
 <meta property="og:title" content="Harold的博客">
-<meta property="og:url" content="//harold.me/page/3/index.html">
+<meta property="og:url" content="//harold.me/tags/大数据/page/4/index.html">
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
@@ -184,124 +184,34 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-图算法二" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/18/图算法二/">图算法（二）：图的高级问题</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/18/图算法二/" class="archive-article-date">
-  	<time datetime="2018-09-18T14:24:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-18</time>
-</a>
-        
-      </header>
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>关于图的基本概念笔者在之前的<a href="https://harold1994.github.io/2018/07/03/图算法/" target="_blank" rel="noopener">博客</a>中已经介绍过，这篇博客介绍图算法比较高级的知识。包括最短路径问题，最小生成子图问题和拓扑排序等问题。</p>
-<h4 id="一、最短路径问题"><a href="#一、最短路径问题" class="headerlink" title="一、最短路径问题"></a>一、最短路径问题</h4><p>​    图的最短路径问题主要分为两类,单源最短路径问题和全对最短路径问题。单源最短路径问题指给点单个源点,求其到所有其它顶点之间的最短距离。而全对最短路径问题指所有顶点之间的最短路径问题。此外对于单对最短路径问题,从渐进意义上来看,目前还没有比最好的单元算法更快的算法来解决这一问题。</p>
-        
-          <a class="article-more-a" href="/2018/09/18/图算法二/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
+    
       
       
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/18/图算法二/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2018" class="archive-year">2018</a>
         </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Redis持久化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
+        <div class="archives">
     
-      <header class="article-header">
-        
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2018/03/17/关于HIVE/" class="archive-article-date">
+  	<time datetime="2018-03-17T03:43:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-17</time>
+</a>
+        </div>
+    	 
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/14/Redis持久化/">Redis持久化</a>
+      <a class="archive-article-title" href="/2018/03/17/关于HIVE/">关于Hive</a>
     </h1>
   
 
-        
-        <a href="/2018/09/14/Redis持久化/" class="archive-article-date">
-  	<time datetime="2018-09-14T14:06:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>redis持久化：</p>
-<ul>
-<li>快照：将存在于某一时刻的所有数据都写入硬盘，适用于即使丢失一部分数据也不会造成问题的程序</li>
-<li>只追加文件（AOF）：在执行写命令时，将被执行的写命令复制到硬盘</li>
-</ul>
-<p>数据存到硬盘的原因：</p>
-<ul>
-<li>为了在之后重用数据</li>
-<li>防止数据丢失，做备份</li>
-</ul>
-<p>快照持久化：Redis可以通过创建快照来获得存储在内存中的数据某个时间点上的副本，可迁移到其他服务器，也可以保留到本地.若系统、redis、硬件三者之一崩了，redis会丢失最新一次快照之后写入的所有数据</p>
-        
-          <a class="article-more-a" href="/2018/09/14/Redis持久化/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -311,704 +221,31 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">NoSQL</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Redis</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hive</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/14/Redis持久化/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
+        </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
-    <article id="post-LSTM正弦函数预测" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
+  
+    </div></section>
+  
+
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/12/LSTM正弦函数预测/">LSTM正弦函数预测</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/12/LSTM正弦函数预测/" class="archive-article-date">
-  	<time datetime="2018-09-12T00:47:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib <span class="keyword">as</span> mpl</span><br><span class="line">%matplotlib inline</span><br><span class="line">mpl.use(<span class="string">'Agg'</span>)</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">HIDDEN_SIZE=<span class="number">30</span><span class="comment">#LSTM中隐藏节点个数</span></span><br><span class="line">NUM_LAYERS=<span class="number">2</span> <span class="comment">#LSTM层数</span></span><br><span class="line"></span><br><span class="line">TIMESTEPS = <span class="number">10</span> <span class="comment">#rnn的训练序列长度</span></span><br><span class="line">TRAINING_STEPS = <span class="number">10000</span> <span class="comment">#训练轮数</span></span><br><span class="line">BATCH_SIZE = <span class="number">32</span> <span class="comment">#batch大小</span></span><br><span class="line"></span><br><span class="line">TRAINING_EXAMPLE = <span class="number">10000</span> <span class="comment">#训练数据个数</span></span><br><span class="line">TESTING_EXAMPLE = <span class="number">1000</span> <span class="comment">#测试数据个数</span></span><br><span class="line">SAMPLE_GAP = <span class="number">0.01</span> <span class="comment">#采样间隔</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_data</span><span class="params">(seq)</span>:</span></span><br><span class="line">    X = []</span><br><span class="line">    Y = []</span><br><span class="line">    <span class="comment">#用sin函数前TIMESTEPS个点的信息，预测第i+TIMESTEPS的值</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(seq)-TIMESTEPS):</span><br><span class="line">        X.append([seq[i:i+TIMESTEPS]])</span><br><span class="line">        Y.append([seq[i + TIMESTEPS]])</span><br><span class="line">    <span class="keyword">return</span> np.array(X, dtype=np.float32), np.array(Y, np.float32)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">lstm_model</span><span class="params">(X,y,istraining)</span>:</span></span><br><span class="line">    <span class="comment">#使用多层LSTM结构</span></span><br><span class="line">    cell = tf.nn.rnn_cell.MultiRNNCell([</span><br><span class="line">        tf.nn.rnn_cell.BasicLSTMCell(HIDDEN_SIZE)</span><br><span class="line">        <span class="keyword">for</span> _ <span class="keyword">in</span> range(NUM_LAYERS)])</span><br><span class="line">    <span class="comment">#outputs是最上层LSTM每一步输出的结果，维度是[batch_size, time, HODDEN_SIZE],这里只关心最后的结果</span></span><br><span class="line">    outputs,_ = tf.nn.dynamic_rnn(cell, X, dtype=tf.float32)</span><br><span class="line">    output = outputs[:,<span class="number">-1</span>,:]</span><br><span class="line">    <span class="comment">#全连接层计算结果</span></span><br><span class="line">    predictions = tf.contrib.layers.fully_connected(</span><br><span class="line">        output, <span class="number">1</span>, activation_fn=<span class="keyword">None</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> istraining:</span><br><span class="line">        <span class="keyword">return</span> predictions, <span class="keyword">None</span>, <span class="keyword">None</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">#计算损失函数</span></span><br><span class="line">    loss = tf.losses.mean_squared_error(labels=y, predictions=predictions)</span><br><span class="line">    </span><br><span class="line">    train_op = tf.contrib.layers.optimize_loss(</span><br><span class="line">        loss,tf.train.get_global_step(),</span><br><span class="line">        optimizer=<span class="string">'Adagrad'</span>,learning_rate=<span class="number">0.1</span>)</span><br><span class="line">    <span class="keyword">return</span> predictions, loss, train_op</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">train</span><span class="params">(sess, train_X, train_Y)</span>:</span></span><br><span class="line">    <span class="comment">#将训练数据以数据集的方式提供给计算图</span></span><br><span class="line">    ds = tf.data.Dataset.from_tensor_slices((train_X, train_Y))<span class="comment">#作用是切分传入Tensor的第一个维度，生成相应的dataset。</span></span><br><span class="line">    ds = ds.repeat().shuffle(<span class="number">1000</span>).batch(BATCH_SIZE)</span><br><span class="line">    <span class="comment">#实例化了一个Iterator，这个Iterator是一个“one shot iterator”，即只能从头到尾读取一次</span></span><br><span class="line">    X,y = ds.make_one_shot_iterator().get_next()</span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">"model"</span>):</span><br><span class="line">        predictions, loss, train_op = lstm_model(X,y,<span class="keyword">True</span>)</span><br><span class="line">    </span><br><span class="line">    sess.run(tf.global_variables_initializer())</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(TRAINING_STEPS):</span><br><span class="line">        _,l = sess.run([train_op,loss])</span><br><span class="line">    <span class="keyword">if</span> i % <span class="number">100</span> == <span class="number">0</span>:</span><br><span class="line">        print(<span class="string">"training step: "</span> + str(i) + <span class="string">", loss: "</span> + str(<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run_eval</span><span class="params">(sess, test_X, test_Y)</span>:</span></span><br><span class="line">    ds = tf.data.Dataset.from_tensor_slices((test_X, test_Y))</span><br><span class="line">    ds=ds.batch(<span class="number">1</span>)</span><br><span class="line">    X,y = ds.make_one_shot_iterator().get_next()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">"model"</span>, reuse=<span class="keyword">True</span>):</span><br><span class="line">        prediction, _,_ = lstm_model(X,[<span class="number">0.0</span>],<span class="keyword">False</span>)</span><br><span class="line">        predictions = []</span><br><span class="line">        labels=[]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(TESTING_EXAMPLE):</span><br><span class="line">            p,l = sess.run([prediction,y]) </span><br><span class="line">            predictions.append(p)</span><br><span class="line">            labels.append(l)</span><br><span class="line">        predictions=np.array(predictions).squeeze()</span><br><span class="line">        labels =  np.array(labels).squeeze()</span><br><span class="line">        rmse = np.sqrt(((predictions-labels)**<span class="number">2</span>).mean(axis=<span class="number">0</span>))</span><br><span class="line">        print(<span class="string">"MRSE is : %f"</span> % rmse)</span><br><span class="line"></span><br><span class="line">        plt.figure()</span><br><span class="line">        plt.plot(predictions, label=<span class="string">"predictions"</span>)</span><br><span class="line">        plt.plot(labels, label = <span class="string">"real_sin"</span>)</span><br><span class="line">        plt.legend()</span><br><span class="line">        plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment">#用正弦函数产生数据集</span></span><br><span class="line">tf.reset_default_graph()</span><br><span class="line">test_start =  (TRAINING_EXAMPLE + TIMESTEPS)*SAMPLE_GAP</span><br><span class="line">test_end = test_start+(TESTING_EXAMPLE+TIMESTEPS)*SAMPLE_GAP</span><br><span class="line">train_X , train_Y = generate_data(np.sin(np.linspace(</span><br><span class="line"><span class="number">0</span>,test_start,TRAINING_EXAMPLE+TIMESTEPS, dtype=np.float32)))</span><br><span class="line">test_X , test_Y = generate_data(np.sin(np.linspace(</span><br><span class="line">test_start,test_end,TESTING_EXAMPLE+TIMESTEPS, dtype=np.float32)))</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    train(sess, train_X, train_Y)</span><br><span class="line">    run_eval(sess, test_X, test_Y)</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">tensorflow</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/12/LSTM正弦函数预测/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Tensorflow——模型持久化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/16/Tensorflow——模型持久化/">Tensorflow——模型持久化</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/16/Tensorflow——模型持久化/" class="archive-article-date">
-  	<time datetime="2018-07-16T12:30:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>​    前一篇MNIST数字数字识别的代码在训练完成之后就直接退出了，并没有将训练得到的模型保存下来方便下次直接使用，为了让训练结果可复用，需要将训练得到的神经网络模型持久化。</p>
-<h4 id="一、持久化代码设计"><a href="#一、持久化代码设计" class="headerlink" title="一、持久化代码设计"></a>一、持久化代码设计</h4><p>ts提供了tf.train.Save类来还原一个神经网络,下面实现了持久化一个简单的tf模型，虽然只指定了一个文件路径，但是在文件目录下会出现三个文件，因为tf将计算图和图上参数取值分开保存。</p>
-        
-          <a class="article-more-a" href="/2018/07/16/Tensorflow——模型持久化/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">tensorflow</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/16/Tensorflow——模型持久化/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-tensorflow中optimizer如何实现神经网络的权重，偏移等系数的更新和梯度计算" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/16/tensorflow中optimizer如何实现神经网络的权重，偏移等系数的更新和梯度计算/">tensorflow中optimizer如何实现神经网络的权重，偏移等系数的更新和梯度计算</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/16/tensorflow中optimizer如何实现神经网络的权重，偏移等系数的更新和梯度计算/" class="archive-article-date">
-  	<time datetime="2018-07-15T16:38:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>文章转自：<a href="https://blog.csdn.net/shenxiaoming77/article/details/77197708" target="_blank" rel="noopener">https://blog.csdn.net/shenxiaoming77/article/details/77197708</a></p>
-<p><strong>1.案例代码：</strong></p>
-<p>建立抽象模型</p>
-        
-          <a class="article-more-a" href="/2018/07/16/tensorflow中optimizer如何实现神经网络的权重，偏移等系数的更新和梯度计算/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">tensorflow</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/16/tensorflow中optimizer如何实现神经网络的权重，偏移等系数的更新和梯度计算/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-tensorflow——MNIST数字识别问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/15/tensorflow——MNIST数字识别问题/">tensorflow——MNIST数字识别问题</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/15/tensorflow——MNIST数字识别问题/" class="archive-article-date">
-  	<time datetime="2018-07-15T13:40:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="一、-MNIST数据处理"><a href="#一、-MNIST数据处理" class="headerlink" title="一、 MNIST数据处理"></a>一、 MNIST数据处理</h4><p><strong>1. input_data.read_data_seTensorflow函数</strong></p>
-<p><strong>功能</strong>: 该函数生成的类能将MNIST数据集划分为train, validation和test三个数据集:</p>
-<ul>
-<li>train: 55000张图片</li>
-<li>validation: 5000张</li>
-<li>test: 10000张</li>
-</ul>
-<p>trian和validation组成了训练数据集. 每一张图片是一个长度为784(=28*28像素)的一维数组.</p>
-        
-          <a class="article-more-a" href="/2018/07/15/tensorflow——MNIST数字识别问题/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">tensorflow</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/15/tensorflow——MNIST数字识别问题/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-tenserflow——深层神经网络" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/14/tenserflow——深层神经网络/">tenserflow——深层神经网络</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/14/tenserflow——深层神经网络/" class="archive-article-date">
-  	<time datetime="2018-07-14T15:55:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="一、激活函数"><a href="#一、激活函数" class="headerlink" title="一、激活函数"></a>一、激活函数</h4><p>​    神经网络中激活函数的主要作用是提供网络的非线性建模能力，如不特别说明，激活函数一般而言是非线性函数。假设一个示例神经网络中仅包含线性卷积和全连接运算，那么该网络仅能够表达线性映射，即便增加网络的深度也依旧还是线性映射，难以有效建模实际环境中非线性分布的数据。加入（非线性）激活函数之后，深度神经网络才具备了分层的非线性映射学习能力。</p>
-        
-          <a class="article-more-a" href="/2018/07/14/tenserflow——深层神经网络/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">tensorflow</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/14/tenserflow——深层神经网络/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-leetcode——Mysql题目2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/14/leetcode——Mysql题目2/">leetcode——Mysql题目(二)</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/14/leetcode——Mysql题目2/" class="archive-article-date">
-  	<time datetime="2018-07-14T07:32:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="一、部门工资最高的员工"><a href="#一、部门工资最高的员工" class="headerlink" title="一、部门工资最高的员工"></a>一、部门工资最高的员工</h4><p><code>Employee</code> 表包含所有员工信息，每个员工有其对应的 Id, salary 和 department Id。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">+----+-------+--------+--------------+</span><br><span class="line">| Id | Name  | Salary | DepartmentId |</span><br><span class="line">+----+-------+--------+--------------+</span><br><span class="line">| 1  | Joe   | 70000  | 1            |</span><br><span class="line">| 2  | Henry | 80000  | 2            |</span><br><span class="line">| 3  | Sam   | 60000  | 2            |</span><br><span class="line">| 4  | Max   | 90000  | 1            |</span><br><span class="line">+----+-------+--------+--------------+</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2018/07/14/leetcode——Mysql题目2/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据库， Hive</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/14/leetcode——Mysql题目2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-leetcode所有shell题目" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/12/leetcode所有shell题目/">leetcode所有shell题目</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/12/leetcode所有shell题目/" class="archive-article-date">
-  	<time datetime="2018-07-12T13:39:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="一、第十行"><a href="#一、第十行" class="headerlink" title="一、第十行"></a>一、第十行</h4><p>给定一个文本文件 <code>file.txt</code>，请只打印这个文件中的第十行。</p>
-<p><strong>示例:</strong></p>
-<p>假设 <code>file.txt</code> 有如下内容：</p>
-        
-          <a class="article-more-a" href="/2018/07/12/leetcode所有shell题目/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/12/leetcode所有shell题目/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-linux常用命令6" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/12/linux常用命令6/">linux常用命令——find、join</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/12/linux常用命令6/" class="archive-article-date">
-  	<time datetime="2018-07-12T09:06:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>1.find</strong></p>
-<p>Linux find命令用来在指定目录下查找文件。任何位于参数之前的字符串都将被视为欲查找的目录名。如果使用该命令时，不设置任何参数，则find命令将在当前目录下查找子目录与文件。并且将查找到的子目录和文件全部进行显示。</p>
-<p>语法：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find   path   -option   [   -print ]   [ -exec   -ok   command ]   &#123;&#125; \;</span><br></pre></td></tr></table></figure>
-<p>参数说明：find 根据下列规则判断 path 和 expression，在命令列上第一个 - ( ) , ! 之前的部份为 path，之后的是 expression。如果 path 是空字串则使用目前路径，如果 expression 是空字串则使用 -print 为预设 expression。</p>
-        
-          <a class="article-more-a" href="/2018/07/12/linux常用命令6/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/12/linux常用命令6/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-  
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/tags/大数据/page/3/">&laquo; Prev</a><a class="page-number" href="/tags/大数据/">1</a><a class="page-number" href="/tags/大数据/page/2/">2</a><a class="page-number" href="/tags/大数据/page/3/">3</a><span class="page-number current">4</span>
     </nav>
   
 
@@ -1032,10 +269,10 @@
     <script>
 	var yiliaConfig = {
 		mathjax: true,
-		isHome: true,
+		isHome: false,
 		isPost: false,
 		isArchive: false,
-		isTag: false,
+		isTag: true,
 		isCategory: false,
 		open_in_new: true,
 		toc_hide_index: true,
