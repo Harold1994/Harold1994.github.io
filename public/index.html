@@ -184,6 +184,87 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Spark-2-3-0源码分析——10-Spark的Shuffle机制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/21/Spark-2-3-0源码分析——10-Spark的Shuffle机制/">Spark_2.3.0源码分析——10_Spark的Shuffle机制</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/21/Spark-2-3-0源码分析——10-Spark的Shuffle机制/" class="archive-article-date">
+  	<time datetime="2018-10-21T06:27:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="一、Hadoop-MapReduce框架中的shuffle框架"><a href="#一、Hadoop-MapReduce框架中的shuffle框架" class="headerlink" title="一、Hadoop MapReduce框架中的shuffle框架"></a>一、Hadoop MapReduce框架中的shuffle框架</h3><p><img src="https://i.loli.net/2018/10/21/5bcc287ec7a98.png" alt="屏幕快照 2018-10-21 下午3.19.15.png"></p>
+<p>Map阶段负责准备数据，Reduce阶段则读取Map阶段所准备的数据，然后做进一步处理。即Map阶段实现Shuffle过程中的数据持久化，而Reduce阶段实现Shuffle过程中的数据读取。</p>
+        
+          <a class="article-more-a" href="/2018/10/21/Spark-2-3-0源码分析——10-Spark的Shuffle机制/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/21/Spark-2-3-0源码分析——10-Spark的Shuffle机制/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Spark-2-3-0源码分析——9-Spark的存储模块" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -191,7 +272,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/17/Spark-2-3-0源码分析——9-Spark的存储模块/">Spark_2.3.0源码分析——9_/Spark的存储模块</a>
+      <a class="article-title" href="/2018/10/17/Spark-2-3-0源码分析——9-Spark的存储模块/">Spark_2.3.0源码分析——9_Spark的存储模块</a>
     </h1>
   
 
@@ -220,7 +301,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">大数据，Spark</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
         		</li>
       		
 		</ul>
@@ -298,7 +383,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">大数据，Spark</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
         		</li>
       		
 		</ul>
@@ -916,87 +1005,6 @@
 
 
   
-    <article id="post-Spark-2-3-0源码分析——1-Spark背景" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/02/Spark-2-3-0源码分析——1-Spark背景/">Spark_2.3.0源码分析——1_Spark背景</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/02/Spark-2-3-0源码分析——1-Spark背景/" class="archive-article-date">
-  	<time datetime="2018-10-02T13:50:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>从今天开始阅读Spark 2.3.0的源码，以加深对Spark的理解，之后会有Hadoop、kafka的源码分析，希望自己能坚持下来✊。</p>
-<p>我会参照着官方的技术文档和一本参考书《Saprk技术内幕》完成本次分析，书的版本较老，因此会将其作为一个支撑框架，具体的内容会以实际源码和技术文档为主。下载源码和编译的过程网上有许多教程，这里不赘述。</p>
-        
-          <a class="article-more-a" href="/2018/10/02/Spark-2-3-0源码分析——1-Spark背景/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/02/Spark-2-3-0源码分析——1-Spark背景/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1268,10 +1276,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Crunch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">大数据，Spark</a>
               </li>
             
             <div class="clearfix"></div>
