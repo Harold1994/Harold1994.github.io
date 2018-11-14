@@ -184,6 +184,177 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-图算法二" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/18/图算法二/">图算法（二）：图的高级问题</a>
+    </h1>
+  
+
+        
+        <a href="/2018/09/18/图算法二/" class="archive-article-date">
+  	<time datetime="2018-09-18T14:24:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>关于图的基本概念笔者在之前的<a href="https://harold1994.github.io/2018/07/03/图算法/" target="_blank" rel="noopener">博客</a>中已经介绍过，这篇博客介绍图算法比较高级的知识。包括最短路径问题，最小生成子图问题和拓扑排序等问题。</p>
+<h4 id="一、最短路径问题"><a href="#一、最短路径问题" class="headerlink" title="一、最短路径问题"></a>一、最短路径问题</h4><p>​    图的最短路径问题主要分为两类,单源最短路径问题和全对最短路径问题。单源最短路径问题指给点单个源点,求其到所有其它顶点之间的最短距离。而全对最短路径问题指所有顶点之间的最短路径问题。此外对于单对最短路径问题,从渐进意义上来看,目前还没有比最好的单元算法更快的算法来解决这一问题。</p>
+        
+          <a class="article-more-a" href="/2018/09/18/图算法二/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/09/18/图算法二/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Redis持久化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/14/Redis持久化/">Redis持久化</a>
+    </h1>
+  
+
+        
+        <a href="/2018/09/14/Redis持久化/" class="archive-article-date">
+  	<time datetime="2018-09-14T14:06:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>redis持久化：</p>
+<ul>
+<li>快照：将存在于某一时刻的所有数据都写入硬盘，适用于即使丢失一部分数据也不会造成问题的程序</li>
+<li>只追加文件（AOF）：在执行写命令时，将被执行的写命令复制到硬盘</li>
+</ul>
+<p>数据存到硬盘的原因：</p>
+<ul>
+<li>为了在之后重用数据</li>
+<li>防止数据丢失，做备份</li>
+</ul>
+<p>快照持久化：Redis可以通过创建快照来获得存储在内存中的数据某个时间点上的副本，可迁移到其他服务器，也可以保留到本地.若系统、redis、硬件三者之一崩了，redis会丢失最新一次快照之后写入的所有数据</p>
+        
+          <a class="article-more-a" href="/2018/09/14/Redis持久化/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">NoSQL</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Redis</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/09/14/Redis持久化/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-LSTM正弦函数预测" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -806,164 +977,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/07/12/linux常用命令6/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-shell程序设计二" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/09/shell程序设计二/">shell程序设计（二）</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/09/shell程序设计二/" class="archive-article-date">
-  	<time datetime="2018-07-09T12:27:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>1.条件</strong></p>
-<p>一个shell脚本能够对任何可以从命令行上调用的命令的退出码进行测试，包括自己写的脚本。</p>
-<p><strong>test或[命令</strong></p>
-<p><code>[</code>或<code></code>test<code>是布尔判断命令，在使用</code>[<code>时，使用符号</code>]`来结尾。</p>
-<p>以下示例检查文件是否存在，用于实现这一操作的命令是<code>test -f &lt;filename&gt;</code></p>
-        
-          <a class="article-more-a" href="/2018/07/09/shell程序设计二/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/09/shell程序设计二/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-shell程序设计" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/09/shell程序设计/">shell程序设计(一)</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/09/shell程序设计/" class="archive-article-date">
-  	<time datetime="2018-07-09T07:36:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>shell是一个作为用户与Linux系统间借口的程序，它允许用户向操作系统输入需要执行的命令。可以使用<code>&lt;</code>和<code>&gt;</code>对输入输出重定向，使用<code>|</code>在同时执行的程序之间实现数据的管道传递，使用<code>${...}</code>获取子进程的输出。</p>
-<h4 id="一、管道与重定向"><a href="#一、管道与重定向" class="headerlink" title="一、管道与重定向"></a>一、管道与重定向</h4><p><strong>1.重定向输出</strong></p>
-<p><code>ls -l &gt; test.txt</code>,这条命令将ls命令的输出保存到test.txt中，文件描述符0代表一个程序的标准输入、1代表标准输出、2代表标准错误输出。上面例子通过<code>&gt;</code>将标准输出重定向到一个文，默认情况下，如果该文件已经存在，他的文件将被覆盖。想改变默认行为，可以通过<code>set -o noclobber</code>命令设置noclobber选项，从而阻止重定向操作对一个已有文件的覆盖。通过<code>set -o noclobber</code>取消该选项。</p>
-        
-          <a class="article-more-a" href="/2018/07/09/shell程序设计/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/09/shell程序设计/">展开全文 >></a>
         </p>
       
 

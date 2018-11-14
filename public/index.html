@@ -184,6 +184,203 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-nohuph和-后台运行" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/09/nohuph和-后台运行/">nohuph和&amp;后台运行</a>
+    </h1>
+  
+
+        
+        <a href="/2018/11/09/nohuph和-后台运行/" class="archive-article-date">
+  	<time datetime="2018-11-09T11:58:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1.nohup</p>
+<p>用途：不挂断地运行命令。</p>
+<p>语法：nohup Command [ Arg … ][ &amp; ]</p>
+<p>　　无论是否将 nohup 命令的输出重定向到终端，输出都将附加到当前目录的 nohup.out 文件中。</p>
+<p>　　如果当前目录的 nohup.out 文件不可写，输出重定向到 $HOME/nohup.out 文件中。</p>
+<p>　　如果没有文件能创建或打开以用于追加，那么 Command 参数指定的命令不可调用。</p>
+<p>退出状态：该命令返回下列出口值： 　　</p>
+<p>　　126 可以查找但不能调用 Command 参数指定的命令。 　　</p>
+<p>　　127 nohup 命令发生错误或不能查找由 Command 参数指定的命令。 　　</p>
+<p>　　否则，nohup 命令的退出状态是 Command 参数指定命令的退出状态。</p>
+<p>2.&amp;</p>
+<p>用途：在后台运行</p>
+<p>一般两个一起用</p>
+<p>nohup command &amp;</p>
+<p>eg:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`nohup /usr/local/node/bin/node /www/im/chat.js &gt;&gt; /usr/local/node/output.log 2&gt;&amp;1 &amp;`</span><br></pre></td></tr></table></figure>
+<p>查看运行的后台进程</p>
+<p>（1）jobs -l</p>
+<p><code>[1]    2229 running    nohup sh storm dev-zookeeper</code></p>
+<p>jobs命令只看当前终端生效的，关闭终端后，在另一个终端jobs已经无法看到后台跑得程序了，此时利用ps（进程查看命令）</p>
+<p>注：</p>
+<p>　　用ps -def | grep查找进程很方便，最后一行总是会grep自己</p>
+<p>3.如果某个进程起不来，可能是某个端口被占用</p>
+<p>查看使用某端口的进程</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> lsof -i:8080</span><br><span class="line">COMMAND  PID   USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME</span><br><span class="line">java    2301 harold   36u  IPv6 0x912be89f2ea06925      0t0  TCP *:http-alt (LISTEN)</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/11/09/nohuph和-后台运行/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Spark-Streaming项目" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/27/Spark-Streaming项目/">Spark-Streaming项目</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/27/Spark-Streaming项目/" class="archive-article-date">
+  	<time datetime="2018-10-27T07:10:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>离线计算与实时计算对比：</p>
+<p>1）数据来源</p>
+<ul>
+<li>离线：HDFS 历史数据 数据量比较大</li>
+<li>实时：消息队列，实时新增/修改记录过来的某一笔数据</li>
+</ul>
+<p>2） 处理过程</p>
+<ul>
+<li>离线： map + reduce</li>
+<li>实时： Spark(Stream/SS)</li>
+</ul>
+<p>3) 处理速递</p>
+<ul>
+<li>离线： 慢</li>
+<li>实时：快速</li>
+</ul>
+<p>4）进程</p>
+<ul>
+<li>离线 ：启动、销毁</li>
+<li>实时：7*27h</li>
+</ul>
+<p><img src="https://i.loli.net/2018/10/27/5bd413ba56b67.png" alt="屏幕快照 2018-10-27 下午3.28.39.png"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/27/Spark-Streaming项目/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Spark-2-3-0源码分析——10-Spark的Shuffle机制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -810,172 +1007,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/10/04/Spark-2-3-0源码分析——4-任务调度实现/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Spark-2-3-0源码分析——3-Scheduler模块" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/04/Spark-2-3-0源码分析——3-Scheduler模块/">Spark-2-3-0源码分析——3-DAGScheduler模块</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/04/Spark-2-3-0源码分析——3-Scheduler模块/" class="archive-article-date">
-  	<time datetime="2018-10-04T07:36:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="一、模块概述"><a href="#一、模块概述" class="headerlink" title="一、模块概述"></a>一、模块概述</h4><h5 id="1-整体框架"><a href="#1-整体框架" class="headerlink" title="1. 整体框架"></a>1. 整体框架</h5><p>任务调度模块主要包括两大部分：</p>
-<ul>
-<li>DAGScheduler：分析用户提交的应用，建立DAG，划分Stage。</li>
-<li>TaskScheduler：通过Cluster Manager在集群的某个Worker的Executor上启动任务</li>
-</ul>
-<p>它们负责将用户提交的计算任务按DAG划分为不同的阶段，并将不同阶段的计算任务提交到集群进行最终的计算。</p>
-        
-          <a class="article-more-a" href="/2018/10/04/Spark-2-3-0源码分析——3-Scheduler模块/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/04/Spark-2-3-0源码分析——3-Scheduler模块/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Spark-2-3-0源码分析——2-RDD实现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/02/Spark-2-3-0源码分析——2-RDD实现/">Spark_2.3.0源码分析——2_RDD实现</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/02/Spark-2-3-0源码分析——2-RDD实现/" class="archive-article-date">
-  	<time datetime="2018-10-02T14:57:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>​    RDD是Spark最基本也是最根本的数据抽象，RDD提供了一种高度受限的共享内存，即RDD是只读的，并且只能通过其他RDD上的批量操作来创建，以此来实现容错。</p>
-<p>​    一般来说，分布式数据集的容错性有两种方式：数据检查点和记录数据的更新。对于大规模数据分析，数据检查点操作成本很高：需要通过数据中心的网络连接在机器之前复制庞大的数据集，而网络带宽往往比内存带宽低很多，同时还需要消耗更多的存储资源。所以Spark选择记录更新的方式，但是如果更新太多，记录更新成本也不低，因此RDD只支持<strong>粗粒度</strong>转换，即在大量记录上执行的单个操作。将创建RDD的一系列转换记录下来，以便恢复丢失的分区。</p>
-        
-          <a class="article-more-a" href="/2018/10/02/Spark-2-3-0源码分析——2-RDD实现/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/02/Spark-2-3-0源码分析——2-RDD实现/">展开全文 >></a>
         </p>
       
 

@@ -184,6 +184,172 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Spark-2-3-0源码分析——3-Scheduler模块" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/04/Spark-2-3-0源码分析——3-Scheduler模块/">Spark-2-3-0源码分析——3-DAGScheduler模块</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/04/Spark-2-3-0源码分析——3-Scheduler模块/" class="archive-article-date">
+  	<time datetime="2018-10-04T07:36:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="一、模块概述"><a href="#一、模块概述" class="headerlink" title="一、模块概述"></a>一、模块概述</h4><h5 id="1-整体框架"><a href="#1-整体框架" class="headerlink" title="1. 整体框架"></a>1. 整体框架</h5><p>任务调度模块主要包括两大部分：</p>
+<ul>
+<li>DAGScheduler：分析用户提交的应用，建立DAG，划分Stage。</li>
+<li>TaskScheduler：通过Cluster Manager在集群的某个Worker的Executor上启动任务</li>
+</ul>
+<p>它们负责将用户提交的计算任务按DAG划分为不同的阶段，并将不同阶段的计算任务提交到集群进行最终的计算。</p>
+        
+          <a class="article-more-a" href="/2018/10/04/Spark-2-3-0源码分析——3-Scheduler模块/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/04/Spark-2-3-0源码分析——3-Scheduler模块/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Spark-2-3-0源码分析——2-RDD实现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/02/Spark-2-3-0源码分析——2-RDD实现/">Spark_2.3.0源码分析——2_RDD实现</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/02/Spark-2-3-0源码分析——2-RDD实现/" class="archive-article-date">
+  	<time datetime="2018-10-02T14:57:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​    RDD是Spark最基本也是最根本的数据抽象，RDD提供了一种高度受限的共享内存，即RDD是只读的，并且只能通过其他RDD上的批量操作来创建，以此来实现容错。</p>
+<p>​    一般来说，分布式数据集的容错性有两种方式：数据检查点和记录数据的更新。对于大规模数据分析，数据检查点操作成本很高：需要通过数据中心的网络连接在机器之前复制庞大的数据集，而网络带宽往往比内存带宽低很多，同时还需要消耗更多的存储资源。所以Spark选择记录更新的方式，但是如果更新太多，记录更新成本也不低，因此RDD只支持<strong>粗粒度</strong>转换，即在大量记录上执行的单个操作。将创建RDD的一系列转换记录下来，以便恢复丢失的分区。</p>
+        
+          <a class="article-more-a" href="/2018/10/02/Spark-2-3-0源码分析——2-RDD实现/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/02/Spark-2-3-0源码分析——2-RDD实现/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Spark-2-3-0源码分析——1-Spark背景" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -811,177 +977,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/09/21/Redis中的锁和信号量/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-图算法二" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/18/图算法二/">图算法（二）：图的高级问题</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/18/图算法二/" class="archive-article-date">
-  	<time datetime="2018-09-18T14:24:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>关于图的基本概念笔者在之前的<a href="https://harold1994.github.io/2018/07/03/图算法/" target="_blank" rel="noopener">博客</a>中已经介绍过，这篇博客介绍图算法比较高级的知识。包括最短路径问题，最小生成子图问题和拓扑排序等问题。</p>
-<h4 id="一、最短路径问题"><a href="#一、最短路径问题" class="headerlink" title="一、最短路径问题"></a>一、最短路径问题</h4><p>​    图的最短路径问题主要分为两类,单源最短路径问题和全对最短路径问题。单源最短路径问题指给点单个源点,求其到所有其它顶点之间的最短距离。而全对最短路径问题指所有顶点之间的最短路径问题。此外对于单对最短路径问题,从渐进意义上来看,目前还没有比最好的单元算法更快的算法来解决这一问题。</p>
-        
-          <a class="article-more-a" href="/2018/09/18/图算法二/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/18/图算法二/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Redis持久化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/14/Redis持久化/">Redis持久化</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/14/Redis持久化/" class="archive-article-date">
-  	<time datetime="2018-09-14T14:06:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>redis持久化：</p>
-<ul>
-<li>快照：将存在于某一时刻的所有数据都写入硬盘，适用于即使丢失一部分数据也不会造成问题的程序</li>
-<li>只追加文件（AOF）：在执行写命令时，将被执行的写命令复制到硬盘</li>
-</ul>
-<p>数据存到硬盘的原因：</p>
-<ul>
-<li>为了在之后重用数据</li>
-<li>防止数据丢失，做备份</li>
-</ul>
-<p>快照持久化：Redis可以通过创建快照来获得存储在内存中的数据某个时间点上的副本，可迁移到其他服务器，也可以保留到本地.若系统、redis、硬件三者之一崩了，redis会丢失最新一次快照之后写入的所有数据</p>
-        
-          <a class="article-more-a" href="/2018/09/14/Redis持久化/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">NoSQL</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Redis</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/14/Redis持久化/">展开全文 >></a>
         </p>
       
 
