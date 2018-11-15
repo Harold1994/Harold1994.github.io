@@ -30,20 +30,16 @@ GFS 提供了快照和记录追加操作。快照以很低的成本创建一个�
 * GFS 存储的文件都被分割成固定大小的 Chunk。
 
 * Chunk 服务器把 Chunk 以 Linux 文件的形式保存在本地硬盘上，并且根据指定的 Chunk 标识和字节范围来读写块数据。出于可靠性的考虑，每个块都会复制到多个块服务器上。默认使用 3 个存储复制节点。
-* Master 节点管理所有的文件系统元数据。这些元数据包括名字空间、访问控制信息、文件和 Chunk 的映
-  射信息、以及当前 Chunk 的位置信息。
-* 客户端和 Master 节点的通信只获取元数据，所有的数据操作都是由客户端直接和 Chunk 服务器进行交互的。
+* Master 节点管理所有的文件系统元数据。这些元数据包括名字空间、访问控制信息、文件和 Chunk 的映射信息、以及当前 Chunk 的位置信息。
+* 客户端和 Master 节点的通信只获取元数据，所有的数据操作都是由客户端直接和 Chunk 服务器进行交的。
 
 * 无论是客户端还是 Chunk 服务器都不需要缓存文件数据：对于客户端大部分程序要么以流的方式读取一个巨大文件，要么工作集太大根本无法被缓存。对于Chunk 服务器，Chunk 以本地文件的方式保存，Linux 操作系统的文件系统缓存会把经常访问的数据缓存在内存中。
 
-* 客户端并不通过 Master 节点读写文件数据。反之，客户端向 Master 节点询问它应该联系的 Chunk 服务器。
-  客户端将这些元数据信息缓存一段时间，后续的操作将直接和 Chunk 服务器进行数据读写操作。
+* 客户端并不通过 Master 节点读写文件数据。反之，客户端向 Master 节点询问它应该联系的 Chunk 服务器。客户端将这些元数据信息缓存一段时间，后续的操作将直接和 Chunk 服务器进行数据读写操作。
 
 ##### Chunk 的大小
 
-对于 GFS 而言，Chunk 的大小是一个比较重要的参数，而 GFS 选择了使用 64MB 作为 Chunk 的大小。
-
-较大的 Chunk 主要带来了如下几个好处：
+对于 GFS 而言，Chunk 的大小是一个比较重要的参数，而 GFS 选择了使用 64MB 作为 Chunk 的大小。较大的 Chunk 主要带来了如下几个好处：
 
 1. 降低客户端与 Master 通信的频率
 2. 增大客户端进行操作时这些操作落到同一个 Chunk 上的概率
@@ -72,8 +68,7 @@ Master 服务器存储 3 种主要类型的元数据：
 
 ##### 一致性模型
 
-文件命名空间的修改（例如，文件创建）是原子性的。它们仅由 Master 节点的控制，命名空间锁提供了
-原子性和正确性的保障，Master 节点的操作日志定义了这些操作在全局的顺序。
+文件命名空间的修改（例如，文件创建）是原子性的。它们仅由 Master 节点的控制，命名空间锁提供了原子性和正确性的保障，Master 节点的操作日志定义了这些操作在全局的顺序。
 
 数据修改后文件 region的状态取决于操作的类型、成功与否、以及是否存在同步的修改。下表总结了各种操作
 的结果。
@@ -122,6 +117,22 @@ Chunk Lease 在初始时会有 60 秒的超时时间。在未超时前，Primary
 
 每台机器都尽量的在网络拓扑中选择一台还没有接收到数据的、离自己最近的机器作为目标推送数据。GFS利用基于 TCP 连接的、管道式数据推送方式来最小化延迟。Chunk 服务器接收到数据后，马上开始向前推送。
 
+##### 原子的追加记录
+
+GFS 提供了一种原子的数据追加操作–记录追加。Concurrent writes to the same region are not serializable: the region may end up **containing data fragments from multiple clients.**在用记录追加这种写入方式时，客户机只需要指定要写入的数据，而不像传统方式的写入操作，客户端需要指定数据写入的偏移量。GFS 保证至少有一次原子的写入操作成功执行，写入的数据追加到 GFS 指定的偏移位置上，之后 GFS 返回这个偏移量给客户机。
+
+记录追加也是一种更改方式，也遵循上面的Figure.2:
+
+1. The client pushes the data to all replicas of the **last chunk** of the file(注意追加是在文件的最后一个块上进行的)
+2. Then, the client sends its request to the primary.
+3. The primary checks to see if appending the record to the current chunk would cause the chunk to exceed the maximum size (64 MB)
+4. If so, it pads the chunk to the maximum size, tells secondaries to do the same, and replies to the client indicating that the operation should be retried on the next chunk.
+5. If the record fits within the maximum size, which is the common case, the primary appends the data to its replica, tells the secondaries to write the data at the exact offset where it has, and finally replies success to the client.
+
+当追加操作在部分 Replica 上执行失败时，Primary 会响应客户端，通知它此次操作已失败，客户端便会重试该操作。和写入操作的情形相同，此时已有部分 Replica 顺利写入这些数据，重新进行数据追加便会导致这一部分的 Replica 上出现重复数据，不过 GFS 的一致性模型也确实并未保证每个 Replica 都会是完全一致的。
+
+GFS does **not** guarantee that all replicas are **bytewise** identical. It only guarantees that the data is written at least once as an atomic unit. 
+
 ##### 文件快照
 
 GFS 还提供了文件快照操作，可为指定的文件或目录创建一个副本。
@@ -131,6 +142,8 @@ GFS 还提供了文件快照操作，可为指定的文件或目录创建一个�
 1. 在 Master 接收到快照请求后，它首先会撤回这些 Chunk 的 Lease，以让接下来其他客户端对这些 Chunk 进行写入时都会需要请求 Master 获知 Primary 的位置，Master 便可利用这个机会创建新的 Chunk
 2. 当 Chunk Lease 撤回或失效后，Master 会先写入日志，然后对自己管理的命名空间进行复制操作，复制产生的新记录指向原本的 Chunk
 3. 当有客户端尝试对这些 Chunk 进行写入时，Master 会注意到这个 Chunk 的引用计数大于 1。此时，Master 会为即将产生的新 Chunk 生成一个 Handle，然后通知所有持有这些 Chunk 的 Chunk Server 在本地复制出一个新的 Chunk，应用上新的 Handle，然后再返回给客户端
+
+
 
 #### 四、Master节点的操作
 
@@ -191,6 +204,6 @@ GFS使用**快速恢复和复制**保证整个系统的高可用性
 
 每个 Chunk 服务器都使用 Checksum 来检查保存的数据是否损坏。
 
-GFS 允许有歧义的副本存在：GFS 修改操作的语义，特别是早先讨论过的原子纪录追加的操作，副本不是 byte-wise 完全一致的。因此，**每个 Chunk 服务器必须独立维护 Checksum 来校验自己的副本的完整性。**
+GFS 允许有歧义的副本存在：GFS 修改操作的语义，特别是早先讨论过的原子记录追加的操作，副本不是 byte-wise 完全一致的。因此，**每个 Chunk 服务器必须独立维护 Checksum 来校验自己的副本的完整性。**
 
 对于读操作来说，在把数据返回给客户端或者其它的 Chunk 服务器之前，Chunk 服务器会校验读取操作涉及的范围内的块的 Checksum。因此 **Chunk 服务器不会把错误数据传递到其它的机器上**。如果发生某个块的Checksum 不正确，Chunk 服务器返回给请求者一个错误信息，并且通知 Master 服务器这个错误。作为回应，请求者应当从其它副本读取数据，Master 服务器也会从其它副本克隆数据进行恢复。当一个新的副本就绪后，Master 服务器通知副本错误的 Chunk 服务器删掉错误的副本。
