@@ -184,6 +184,90 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Hadoop源码阅读——HDFS" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/15/Hadoop源码阅读——HDFS/">Hadoop源码阅读——HDFS</a>
+    </h1>
+  
+
+        
+        <a href="/2018/11/15/Hadoop源码阅读——HDFS/" class="archive-article-date">
+  	<time datetime="2018-11-15T05:58:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h4><p>HDFS是一个主/从结构的分布式系统，拥有一个NameNode和一些DateNode，HDFS中NameNode是Master节点，负责管理文件系统的命名空间，以及数据块到DateNode的映射信息。DateNode一般一个节点一个，负责管理它所在节点上的存储。</p>
+        
+          <a class="article-more-a" href="/2018/11/15/Hadoop源码阅读——HDFS/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">HDFS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/11/15/Hadoop源码阅读——HDFS/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-System阅读笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -301,26 +385,9 @@
 <p>　　无论是否将 nohup 命令的输出重定向到终端，输出都将附加到当前目录的 nohup.out 文件中。</p>
 <p>　　如果当前目录的 nohup.out 文件不可写，输出重定向到 $HOME/nohup.out 文件中。</p>
 <p>　　如果没有文件能创建或打开以用于追加，那么 Command 参数指定的命令不可调用。</p>
-<p>退出状态：该命令返回下列出口值： 　　</p>
-<p>　　126 可以查找但不能调用 Command 参数指定的命令。 　　</p>
-<p>　　127 nohup 命令发生错误或不能查找由 Command 参数指定的命令。 　　</p>
-<p>　　否则，nohup 命令的退出状态是 Command 参数指定命令的退出状态。</p>
-<p>2.&amp;</p>
-<p>用途：在后台运行</p>
-<p>一般两个一起用</p>
-<p>nohup command &amp;</p>
-<p>eg:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`nohup /usr/local/node/bin/node /www/im/chat.js &gt;&gt; /usr/local/node/output.log 2&gt;&amp;1 &amp;`</span><br></pre></td></tr></table></figure>
-<p>查看运行的后台进程</p>
-<p>（1）jobs -l</p>
-<p><code>[1]    2229 running    nohup sh storm dev-zookeeper</code></p>
-<p>jobs命令只看当前终端生效的，关闭终端后，在另一个终端jobs已经无法看到后台跑得程序了，此时利用ps（进程查看命令）</p>
-<p>注：</p>
-<p>　　用ps -def | grep查找进程很方便，最后一行总是会grep自己</p>
-<p>3.如果某个进程起不来，可能是某个端口被占用</p>
-<p>查看使用某端口的进程</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> lsof -i:8080</span><br><span class="line">COMMAND  PID   USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME</span><br><span class="line">java    2301 harold   36u  IPv6 0x912be89f2ea06925      0t0  TCP *:http-alt (LISTEN)</span><br></pre></td></tr></table></figure>
-
+        
+          <a class="article-more-a" href="/2018/11/09/nohuph和-后台运行/#more">more >></a>
+        
       
 
       
@@ -965,87 +1032,6 @@
 
 
   
-    <article id="post-Spark-2-3-0源码分析——5-Task运算结果的处理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/06/Spark-2-3-0源码分析——5-Task运算结果的处理/">Spark-2-3-0源码分析——5-Task运算结果的处理</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/06/Spark-2-3-0源码分析——5-Task运算结果的处理/" class="archive-article-date">
-  	<time datetime="2018-10-06T09:12:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-06</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="一-Task运算结果的处理"><a href="#一-Task运算结果的处理" class="headerlink" title="一. Task运算结果的处理"></a>一. Task运算结果的处理</h4><p>TaskRunner将Task的执行状态汇报给Driver后，Driver会转给org.apache.spark.scheduler.TaskSchedulerImpl#statusUpdate。而在这里不同的状态有不同的处理：</p>
-<p>1)       如果类型是TaskState.FINISHED，那么调用org.apache.spark.scheduler.TaskResultGetter#enqueueSuccessfulTask进行处理。</p>
-        
-          <a class="article-more-a" href="/2018/10/06/Spark-2-3-0源码分析——5-Task运算结果的处理/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/06/Spark-2-3-0源码分析——5-Task运算结果的处理/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1172,11 +1158,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
+                <a href="javascript:void(0)" class="js-tag color2">Hadoop</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+                <a href="javascript:void(0)" class="js-tag color5">HDFS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1184,7 +1174,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Hadoop</a>
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1232,19 +1222,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Redis</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1256,7 +1242,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">分布式算法</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1265,10 +1259,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">计算机基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">分布式算法</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1309,10 +1299,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">ALS算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HDFS</a>
               </li>
              
               <li class="article-tag-list-item">
