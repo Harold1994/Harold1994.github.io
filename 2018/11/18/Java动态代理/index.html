@@ -6,15 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//harold.me">
-  <title>Tag: Spark | Harold的博客</title>
+  <title>Java动态代理 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Harold的博客">
-<meta property="og:url" content="//harold.me/tags/Spark/page/2/index.html">
+  <meta name="description" content="转自： 一、概述1. 什么是代理我们大家都知道微商代理，简单地说就是代替厂家卖商品，厂家“委托”代理为其销售商品。关于微商代理，首先我们从他们那里买东西时通常不知道背后的厂家究竟是谁，也就是说，“委托者”对我们来说是不可见的;其次，微商代理主要以朋友圈的人为目标客户，这就相当于为厂家做了一次对客户群体的“过滤”。我们把微商代理和厂家进一步抽象，前者可抽象为代理类，后者可抽象为委托类(被代理类)。通">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java动态代理">
+<meta property="og:url" content="//harold.me/2018/11/18/Java动态代理/index.html">
 <meta property="og:site_name" content="Harold的博客">
+<meta property="og:description" content="转自： 一、概述1. 什么是代理我们大家都知道微商代理，简单地说就是代替厂家卖商品，厂家“委托”代理为其销售商品。关于微商代理，首先我们从他们那里买东西时通常不知道背后的厂家究竟是谁，也就是说，“委托者”对我们来说是不可见的;其次，微商代理主要以朋友圈的人为目标客户，这就相当于为厂家做了一次对客户群体的“过滤”。我们把微商代理和厂家进一步抽象，前者可抽象为代理类，后者可抽象为委托类(被代理类)。通">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/4/16/162cbbd27e07f9a6?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/4/16/162cbbd27b4b8f88?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
+<meta property="og:updated_time" content="2018-11-18T15:00:13.129Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Harold的博客">
+<meta name="twitter:title" content="Java动态代理">
+<meta name="twitter:description" content="转自： 一、概述1. 什么是代理我们大家都知道微商代理，简单地说就是代替厂家卖商品，厂家“委托”代理为其销售商品。关于微商代理，首先我们从他们那里买东西时通常不知道背后的厂家究竟是谁，也就是说，“委托者”对我们来说是不可见的;其次，微商代理主要以朋友圈的人为目标客户，这就相当于为厂家做了一次对客户群体的“过滤”。我们把微商代理和厂家进一步抽象，前者可抽象为代理类，后者可抽象为委托类(被代理类)。通">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/4/16/162cbbd27e07f9a6?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
   
   
     <link rel="icon" href="/favicon.png">
@@ -182,401 +190,155 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Java动态代理" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java动态代理
+    </h1>
+  
+
+        
+        <a href="/2018/11/18/Java动态代理/" class="archive-article-date">
+  	<time datetime="2018-11-18T14:12:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-18</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>转自：</p>
+<h1 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a><strong>一、概述</strong></h1><h2 id="1-什么是代理"><a href="#1-什么是代理" class="headerlink" title="1. 什么是代理"></a>1. 什么是代理</h2><p>我们大家都知道微商代理，简单地说就是代替厂家卖商品，厂家“委托”代理为其销售商品。关于微商代理，首先我们从他们那里买东西时通常不知道背后的厂家究竟是谁，也就是说，“委托者”对我们来说是不可见的;其次，微商代理主要以朋友圈的人为目标客户，这就相当于为厂家做了一次对客户群体的“过滤”。我们把微商代理和厂家进一步抽象，前者可抽象为代理类，后者可抽象为委托类(被代理类)。通过使用代理，通常有两个优点，并且能够分别与我们提到的微商代理的两个特点对应起来：</p>
+<p>优点一：可以隐藏委托类的实现;</p>
+<p>优点二：可以实现客户与委托类间的解耦，在不修改委托类代码的情况下能够做一些额外的处理。</p>
+<a id="more"></a>
+<h2 id="2-静态代理"><a href="#2-静态代理" class="headerlink" title="2. 静态代理"></a>2. 静态代理</h2><p>若代理类在程序运行前就已经存在，那么这种代理方式被成为 静态代理 ，这种情况下的代理类通常都是我们在Java代码中定义的。 通常情况下， 静态代理中的代理类和委托类会实现同一接口或是派生自相同的父类。 下面我们用Vendor类代表生产厂家，BusinessAgent类代表微商代理，来介绍下静态代理的简单实现，委托类和代理类都实现了Sell接口，Sell接口的定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 委托类和代理类都实现了Sell接口</span><br><span class="line"> */</span><br><span class="line">public interface Sell &#123; </span><br><span class="line">    void sell(); </span><br><span class="line">    void ad(); </span><br><span class="line">&#125; </span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>Vendor类的定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 生产厂家</span><br><span class="line"> */</span><br><span class="line">public class Vendor implements Sell &#123; </span><br><span class="line">    public void sell() &#123; </span><br><span class="line">        System.out.println(&quot;In sell method&quot;); </span><br><span class="line">    &#125; </span><br><span class="line">    </span><br><span class="line">    public void ad() &#123; </span><br><span class="line">        System,out.println(&quot;ad method&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>代理类BusinessAgent的定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 代理类</span><br><span class="line"> */</span><br><span class="line">public class BusinessAgent()&#123; implements Sell &#123;</span><br><span class="line">    private Sell vendor;</span><br><span class="line">    </span><br><span class="line">    public BusinessAgent(Sell vendor)&#123;</span><br><span class="line">        this.vendor = vendor;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void sell() &#123; </span><br><span class="line">        vendor.sell();</span><br><span class="line">    &#125; </span><br><span class="line">    </span><br><span class="line">    public void ad() &#123;</span><br><span class="line">        vendor.ad();</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>从BusinessAgent类的定义我们可以了解到，静态代理可以通过聚合来实现，让代理类持有一个委托类的引用即可。</p>
+<p>下面我们考虑一下这个需求：给Vendor类增加一个过滤功能，只卖货给大学生。通过静态代理，我们无需修改Vendor类的代码就可以实现，只需在BusinessAgent类中的sell方法中添加一个判断即可如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 代理类</span><br><span class="line"> */</span><br><span class="line">public class BusinessAgent()&#123; implements Sell &#123;</span><br><span class="line">    private Sell vendor;</span><br><span class="line">    </span><br><span class="line">    public BusinessAgent(Sell vendor)&#123;</span><br><span class="line">        this.vendor = vendor;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void sell() &#123;</span><br><span class="line">        if (isCollegeStudent()) &#123;</span><br><span class="line">            vendor.sell();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; </span><br><span class="line">    </span><br><span class="line">    public void ad() &#123;</span><br><span class="line">        vendor.ad();</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>这对应着我们上面提到的使用代理的第二个优点：可以实现客户与委托类间的解耦，在不修改委托类代码的情况下能够做一些额外的处理。静态代理的局限在于运行前必须编写好代理类，下面我们重点来介绍下运行时生成代理类的动态代理方式。</p>
+<h1 id="二、动态代理"><a href="#二、动态代理" class="headerlink" title="二、动态代理"></a>二、动态代理</h1><h2 id="1-什么是动态代理"><a href="#1-什么是动态代理" class="headerlink" title="1. 什么是动态代理"></a>1. 什么是动态代理</h2><p>代理类在程序运行时创建的代理方式被成为 动态代理。 也就是说，这种情况下，代理类并不是在Java代码中定义的，而是在运行时根据我们在Java代码中的“指示”动态生成的。相比于静态代理， 动态代理的优势在于可以很方便的对代理类的函数进行统一的处理，而不用修改每个代理类的函数。 这么说比较抽象，下面我们结合一个实例来介绍一下动态代理的这个优势是怎么体现的。</p>
+<p>现在，假设我们要实现这样一个需求：在执行委托类中的方法之前输出“before”，在执行完毕后输出“after”。我们还是以上面例子中的Vendor类作为委托类，BusinessAgent类作为代理类来进行介绍。首先我们来使用静态代理来实现这一需求，相关代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public class BusinessAgent implements Sell &#123;</span><br><span class="line">    private Vendor mVendor; </span><br><span class="line"> </span><br><span class="line">    public BusinessAgent(Vendor vendor) &#123;</span><br><span class="line">        this.mVendor = vendor; </span><br><span class="line">    &#125; </span><br><span class="line"> </span><br><span class="line">    public void sell() &#123;</span><br><span class="line">        System.out.println(&quot;before&quot;); </span><br><span class="line">        mVendor.sell(); </span><br><span class="line">        System.out.println(&quot;after&quot;); </span><br><span class="line">    &#125; </span><br><span class="line"> </span><br><span class="line">    public void ad() &#123;</span><br><span class="line">        System.out.println(&quot;before&quot;); </span><br><span class="line">        mVendor.ad(); </span><br><span class="line">        System.out.println(&quot;after&quot;); </span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>从以上代码中我们可以了解到，通过静态代理实现我们的需求需要我们在每个方法中都添加相应的逻辑，这里只存在两个方法所以工作量还不算大，假如Sell接口中包含上百个方法呢?这时候使用静态代理就会编写许多冗余代码。通过使用动态代理，我们可以做一个“统一指示”，从而对所有代理类的方法进行统一处理，而不用逐一修改每个方法。下面我们来具体介绍下如何使用动态代理方式实现我们的需求。</p>
+<h2 id="2-使用动态代理"><a href="#2-使用动态代理" class="headerlink" title="2. 使用动态代理"></a>2. 使用动态代理</h2><h3 id="2-1-InvocationHandler接口"><a href="#2-1-InvocationHandler接口" class="headerlink" title="2.1 InvocationHandler接口"></a>2.1 InvocationHandler接口</h3><p>在使用动态代理时，我们需要定义一个位于代理类与委托类之间的中介类，这个中介类被要求实现InvocationHandler接口，这个接口的定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 调用处理程序</span><br><span class="line"> */</span><br><span class="line">public interface InvocationHandler &#123; </span><br><span class="line">    Object invoke(Object proxy, Method method, Object[] args); </span><br><span class="line">&#125; </span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>从InvocationHandler这个名称我们就可以知道，实现了这个接口的中介类用做“调用处理器”。当我们调用代理类对象的方法时，这个“调用”会转送到invoke方法中，代理类对象作为proxy参数传入，参数method标识了我们具体调用的是代理类的哪个方法，args为这个方法的参数。这样一来，我们对代理类中的所有方法的调用都会变为对invoke的调用，这样我们可以在invoke方法中添加统一的处理逻辑(也可以根据method参数对不同的代理类方法做不同的处理)。因此我们只需在中介类的invoke方法实现中输出“before”，然后调用委托类的invoke方法，再输出“after”。下面我们来一步一步具体实现它。</p>
+<h3 id="2-2-委托类的定义"><a href="#2-2-委托类的定义" class="headerlink" title="2.2 委托类的定义"></a>2.2 委托类的定义</h3><p>动态代理方式下，要求委托类必须实现某个接口，这里我们实现的是Sell接口。委托类Vendor类的定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class Vendor implements Sell &#123; </span><br><span class="line">    public void sell() &#123; </span><br><span class="line">        System.out.println(&quot;In sell method&quot;); </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void ad() &#123;</span><br><span class="line">        System,out.println(&quot;ad method&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<h3 id="2-3中介类"><a href="#2-3中介类" class="headerlink" title="2.3中介类"></a>2.3中介类</h3><p>上面我们提到过，中介类必须实现InvocationHandler接口，作为调用处理器”拦截“对代理类方法的调用。中介类的定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class DynamicProxy implements InvocationHandler &#123; </span><br><span class="line">    //obj为委托类对象; </span><br><span class="line">    private Object obj; </span><br><span class="line"> </span><br><span class="line">    public DynamicProxy(Object obj) &#123;</span><br><span class="line">        this.obj = obj;</span><br><span class="line">    &#125; </span><br><span class="line"> </span><br><span class="line">    @Override </span><br><span class="line">    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123; </span><br><span class="line">        System.out.println(&quot;before&quot;); </span><br><span class="line">        Object result = method.invoke(obj, args); </span><br><span class="line">        System.out.println(&quot;after&quot;); </span><br><span class="line">        return result; </span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>从以上代码中我们可以看到，中介类持有一个委托类对象引用，在invoke方法中调用了委托类对象的相应方法，看到这里是不是觉得似曾相识?通过聚合方式持有委托类对象引用，把外部对invoke的调用最终都转为对委托类对象的调用。这不就是我们上面介绍的静态代理的一种实现方式吗?实际上，中介类与委托类构成了静态代理关系，在这个关系中，中介类是代理类，委托类就是委托类; 代理类与中介类也构成一个静态代理关系，在这个关系中，中介类是委托类，代理类是代理类。也就是说，<strong>动态代理关系由两组静态代理关系组成，这就是动态代理的原理</strong>。下面我们来介绍一下如何”指示“以动态生成代理类。</p>
+<h3 id="2-4动态生成代理类"><a href="#2-4动态生成代理类" class="headerlink" title="2.4动态生成代理类"></a>2.4动态生成代理类</h3><p>动态生成代理类的相关代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class Main &#123; </span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        //创建中介类实例 </span><br><span class="line">        DynamicProxy inter = new DynamicProxy(new Vendor()); </span><br><span class="line">        //加上这句将会产生一个$Proxy0.class文件，这个文件即为动态生成的代理类文件</span><br><span class="line">        System.getProperties().put(&quot;sun.misc.ProxyGenerator.saveGeneratedFiles&quot;,&quot;true&quot;); </span><br><span class="line"></span><br><span class="line">        //获取代理类实例sell </span><br><span class="line">        Sell sell = (Sell)(Proxy.newProxyInstance(Sell.class.getClassLoader(), new Class[] &#123;Sell.class&#125;, inter)); </span><br><span class="line"> </span><br><span class="line">        //通过代理类对象调用代理类方法，实际上会转到invoke方法调用 </span><br><span class="line">        sell.sell(); </span><br><span class="line">        sell.ad(); </span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>在以上代码中，我们调用Proxy类的newProxyInstance方法来获取一个代理类实例。这个代理类实现了我们指定的接口并且会把方法调用分发到指定的调用处理器。这个方法的声明如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">public static Object newProxyInstance(ClassLoader loader, Class&lt;?&gt;[] interfaces, InvocationHandler h) throws IllegalArgumentException </span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>方法的三个参数含义分别如下：</p>
+<p>loader：定义了代理类的ClassLoder; interfaces：代理类实现的接口列表 h：调用处理器，也就是我们上面定义的实现了InvocationHandler接口的类实例</p>
+<p>我们运行一下，看看我们的动态代理是否能正常工作。我这里运行后的输出为</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/4/16/162cbbd27e07f9a6?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="image"></p>
+<p>说明我们的动态代理确实奏效了。</p>
+<p><strong>上面我们已经简单提到过动态代理的原理，这里再简单的总结下：首先通过newProxyInstance方法获取代理类实例，而后我们便可以通过这个代理类实例调用代理类的方法，对代理类的方法的调用实际上都会调用中介类(调用处理器)的invoke方法，在invoke方法中我们调用委托类的相应方法，并且可以添加自己的处理逻辑。</strong></p>
+<h1 id="三、代理模式"><a href="#三、代理模式" class="headerlink" title="三、代理模式"></a>三、代理模式</h1><p>这个应该是设计模式中最简单的一个了，类图</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/4/16/162cbbd27b4b8f88?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="image"></p>
+<p>代理模式最大的特点就是代理类和实际业务类实现同一个接口（或继承同一父类），代理对象持有一个实际对象的引用，外部调用时操作的是代理对象，而在代理对象的内部实现中又会去调用实际对象的操作</p>
+<p>Java动态代理其实内部也是通过Java反射机制来实现的，即已知的一个对象，然后在运行时动态调用其方法，这样在调用前后作一些相应的处理，这样说的比较笼统，举个简单的例子</p>
+<p>比如我们在应用中有这样一个需求，在对某个类的一个方法的调用前和调用后都要做一下日志操作，</p>
+<p>一个普通的接口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public interface AppService &#123;  </span><br><span class="line">    public boolean createApp(String name);  </span><br><span class="line">&#125;  </span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>该接口的默认实现类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class AppServiceImpl implements AppService &#123;  </span><br><span class="line">    public boolean createApp(String name) &#123;  </span><br><span class="line">        System.out.println(&quot;App[&quot;+name+&quot;] has been created.&quot;);  </span><br><span class="line">        return true;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>日志处理器（实质充当了中介类）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 注意需实现Handler接口  </span><br><span class="line"> */</span><br><span class="line">public class LoggerInterceptor implements InvocationHandler &#123;</span><br><span class="line">    private Object target;//目标对象的引用，这里设计成Object类型，更具通用性  </span><br><span class="line">    public LoggerInterceptor(Object target)&#123;  </span><br><span class="line">        this.target = target;  </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public Object invoke(Object proxy, Method method, Object[] arg)  throws Throwable &#123;  </span><br><span class="line">        System.out.println(&quot;Entered &quot;+target.getClass().getName()+&quot;-&quot;+method.getName()+&quot;,with arguments&#123;&quot;+arg[0]+&quot;&#125;&quot;);  </span><br><span class="line">        Object result = method.invoke(target, arg);//调用目标对象的方法  </span><br><span class="line">        System.out.println(&quot;Before return:&quot;+result);  </span><br><span class="line">        return result;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>外部调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class Main &#123;  </span><br><span class="line">    public static void main(String[] args) &#123;  </span><br><span class="line">        AppService target = new AppServiceImpl();//生成目标对象  </span><br><span class="line">        //接下来创建代理对象  </span><br><span class="line">        AppService proxy = (AppService) Proxy.newProxyInstance(  </span><br><span class="line">                target.getClass().getClassLoader(),  </span><br><span class="line">                target.getClass().getInterfaces(), new LoggerInterceptor(target));  </span><br><span class="line">        proxy.createApp(&quot;Kevin Test&quot;);  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/07/04/Hadpoop和Spark实现矩阵相乘/" class="archive-article-date">
-  	<time datetime="2018-07-04T11:31:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-04</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/07/04/Hadpoop和Spark实现矩阵相乘/">Hadpoop和Spark实现矩阵相乘</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/06/30/MLlib-模型选择和超参数调优/" class="archive-article-date">
-  	<time datetime="2018-06-30T07:55:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-30</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2018/11/18/AsynchronousFileChannel/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">NIO AsynchronousFileChannel</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/06/30/MLlib-模型选择和超参数调优/">MLlib-模型选择和超参数调优</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MLlib</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、概述"><span class="toc-number">1.</span> <span class="toc-text">一、概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-什么是代理"><span class="toc-number">1.1.</span> <span class="toc-text">1. 什么是代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-静态代理"><span class="toc-number">1.2.</span> <span class="toc-text">2. 静态代理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、动态代理"><span class="toc-number">2.</span> <span class="toc-text">二、动态代理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-什么是动态代理"><span class="toc-number">2.1.</span> <span class="toc-text">1. 什么是动态代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-使用动态代理"><span class="toc-number">2.2.</span> <span class="toc-text">2. 使用动态代理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-InvocationHandler接口"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.1 InvocationHandler接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-委托类的定义"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2 委托类的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3中介类"><span class="toc-number">2.2.3.</span> <span class="toc-text">2.3中介类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4动态生成代理类"><span class="toc-number">2.2.4.</span> <span class="toc-text">2.4动态生成代理类</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三、代理模式"><span class="toc-number">3.</span> <span class="toc-text">三、代理模式</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/06/30/MLlib-聚类/" class="archive-article-date">
-  	<time datetime="2018-06-30T06:33:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-30</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/06/30/MLlib-聚类/">MLlib-聚类</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MLlib</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/06/28/MLlib-分类和回归1/" class="archive-article-date">
-  	<time datetime="2018-06-28T07:59:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-28</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/06/28/MLlib-分类和回归1/">MLlib-分类回归</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MLlib</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/06/26/MLlib-特征的提取、转换与选择/" class="archive-article-date">
-  	<time datetime="2018-06-26T02:18:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-26</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/06/26/MLlib-特征的提取、转换与选择/">MLlib-特征的提取、转换与选择</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MLlib</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/06/25/MLlib-ML管道/" class="archive-article-date">
-  	<time datetime="2018-06-25T08:13:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-25</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/06/25/MLlib-ML管道/">MLlib---ML管道</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MLlib</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/06/08/数据算法——Top10列表/" class="archive-article-date">
-  	<time datetime="2018-06-08T10:06:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/06/08/数据算法——Top10列表/">数据算法——Top 10列表</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">分布式算法</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-posts">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/06/07/数据算法——Spark的二次排序解决方案/" class="archive-article-date">
-  	<time datetime="2018-06-07T07:41:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-07</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/06/07/数据算法——Spark的二次排序解决方案/">数据算法——Spark的二次排序解决方案</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">分布式算法</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/tags/Spark/">&laquo; Prev</a><a class="page-number" href="/tags/Spark/">1</a><span class="page-number current">2</span>
-    </nav>
   
 
 
@@ -600,9 +362,9 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: true,
 		toc_hide_index: true,
