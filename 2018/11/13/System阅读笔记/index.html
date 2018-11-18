@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://i.loli.net/2018/11/14/5bec1a8913e9a.png">
 <meta property="og:image" content="https://i.loli.net/2018/11/14/5bec231e44d06.png">
 <meta property="og:image" content="https://i.loli.net/2018/11/14/5bec26a9c429c.png">
-<meta property="og:updated_time" content="2018-11-14T14:47:48.919Z">
+<meta property="og:updated_time" content="2018-11-15T12:17:18.811Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Google File System阅读笔记">
 <meta name="twitter:description" content="Google File System 论文的发表催生了后来的 HDFS，后者直到今天依然是开源分布式文件系统解决方案的首选。Google MapReduce 加上 Google File System 这两篇论文可谓是大数据时代的开山之作，与 Google BigTable 并称 Google 的三架马车，由此看来这几篇经典论文还是很值得我们去学习一番的。本博客是我在阅读Google File S">
@@ -229,16 +229,15 @@
 </li>
 <li><p>Chunk 服务器把 Chunk 以 Linux 文件的形式保存在本地硬盘上，并且根据指定的 Chunk 标识和字节范围来读写块数据。出于可靠性的考虑，每个块都会复制到多个块服务器上。默认使用 3 个存储复制节点。</p>
 </li>
-<li>Master 节点管理所有的文件系统元数据。这些元数据包括名字空间、访问控制信息、文件和 Chunk 的映<br>射信息、以及当前 Chunk 的位置信息。</li>
-<li><p>客户端和 Master 节点的通信只获取元数据，所有的数据操作都是由客户端直接和 Chunk 服务器进行交互的。</p>
+<li>Master 节点管理所有的文件系统元数据。这些元数据包括名字空间、访问控制信息、文件和 Chunk 的映射信息、以及当前 Chunk 的位置信息。</li>
+<li><p>客户端和 Master 节点的通信只获取元数据，所有的数据操作都是由客户端直接和 Chunk 服务器进行交的。</p>
 </li>
 <li><p>无论是客户端还是 Chunk 服务器都不需要缓存文件数据：对于客户端大部分程序要么以流的方式读取一个巨大文件，要么工作集太大根本无法被缓存。对于Chunk 服务器，Chunk 以本地文件的方式保存，Linux 操作系统的文件系统缓存会把经常访问的数据缓存在内存中。</p>
 </li>
-<li><p>客户端并不通过 Master 节点读写文件数据。反之，客户端向 Master 节点询问它应该联系的 Chunk 服务器。<br>客户端将这些元数据信息缓存一段时间，后续的操作将直接和 Chunk 服务器进行数据读写操作。</p>
+<li><p>客户端并不通过 Master 节点读写文件数据。反之，客户端向 Master 节点询问它应该联系的 Chunk 服务器。客户端将这些元数据信息缓存一段时间，后续的操作将直接和 Chunk 服务器进行数据读写操作。</p>
 </li>
 </ul>
-<h5 id="Chunk-的大小"><a href="#Chunk-的大小" class="headerlink" title="Chunk 的大小"></a>Chunk 的大小</h5><p>对于 GFS 而言，Chunk 的大小是一个比较重要的参数，而 GFS 选择了使用 64MB 作为 Chunk 的大小。</p>
-<p>较大的 Chunk 主要带来了如下几个好处：</p>
+<h5 id="Chunk-的大小"><a href="#Chunk-的大小" class="headerlink" title="Chunk 的大小"></a>Chunk 的大小</h5><p>对于 GFS 而言，Chunk 的大小是一个比较重要的参数，而 GFS 选择了使用 64MB 作为 Chunk 的大小。较大的 Chunk 主要带来了如下几个好处：</p>
 <ol>
 <li>降低客户端与 Master 通信的频率</li>
 <li>增大客户端进行操作时这些操作落到同一个 Chunk 上的概率</li>
@@ -258,7 +257,7 @@
 <h5 id="操作日志"><a href="#操作日志" class="headerlink" title="操作日志"></a>操作日志</h5><p>​    操作日志包含了关键的元数据变更历史记录。<strong>操作日志是元数据唯一的持久化存储记录</strong>，它也作为判断同步操作顺序的逻辑时间基线。必须确保日志文件的完整，确保<strong>只有在元数据的变化被持久化后，日志才对客户端是可见的</strong>。否则，即使 Chunk 本身没有出现任何问题，我们仍有可能丢失整个文件系统，或者丢失客户端最近的操作。</p>
 <p>​    Master 服务器在灾难恢复时，通过<strong>重演操作日志把文件系统恢复到最近的状态</strong>。Master 服务器在日志增长到一定量时对系统状态做一次 Checkpoint，将所有的状态数据写入一个 Checkpoint 文件。在灾难恢复的时候，Master 服务器就通过从磁盘上读取这个Checkpoint 文件，以及重演 Checkpoint 之后的有限个日志文件就能够恢复系统。</p>
 <p>​    Master 服务器恢复只需要最新的 Checkpoint 文件和后续的日志文件。</p>
-<h5 id="一致性模型"><a href="#一致性模型" class="headerlink" title="一致性模型"></a>一致性模型</h5><p>文件命名空间的修改（例如，文件创建）是原子性的。它们仅由 Master 节点的控制，命名空间锁提供了<br>原子性和正确性的保障，Master 节点的操作日志定义了这些操作在全局的顺序。</p>
+<h5 id="一致性模型"><a href="#一致性模型" class="headerlink" title="一致性模型"></a>一致性模型</h5><p>文件命名空间的修改（例如，文件创建）是原子性的。它们仅由 Master 节点的控制，命名空间锁提供了原子性和正确性的保障，Master 节点的操作日志定义了这些操作在全局的顺序。</p>
 <p>数据修改后文件 region的状态取决于操作的类型、成功与否、以及是否存在同步的修改。下表总结了各种操作<br>的结果。</p>
 <p><img src="https://i.loli.net/2018/11/14/5bec231e44d06.png" alt="屏幕快照 2018-11-14 下午9.28.48.png"></p>
 <ul>
@@ -291,6 +290,17 @@
 <p>从上述步骤可见，控制流借由写请求从客户端流向 Primary，再流向其他 Secondary Replica。实际上，数据流以一条线性数据管道进行传递的：客户端会把数据上传到离自己最近的 Replica，该 Replica 在接收到数据后再转发给离自己最近的另一个 Replica，如此递归直到所有 Replica 都能接收到数据，如此一来便能够利用上每台机器的所有出口带宽。</p>
 <p>为了充分利用每台机器的带宽，<strong>数据沿着一个 Chunk 服务器链顺序的推送</strong>，而不是以其它拓扑形式分散推送（例如，树型拓扑结构）。线性推送模式下，每台机器所有的出口带宽都用于以最快的速度传输数据，而不是在多个接受者之间分配带宽。</p>
 <p>每台机器都尽量的在网络拓扑中选择一台还没有接收到数据的、离自己最近的机器作为目标推送数据。GFS利用基于 TCP 连接的、管道式数据推送方式来最小化延迟。Chunk 服务器接收到数据后，马上开始向前推送。</p>
+<h5 id="原子的追加记录"><a href="#原子的追加记录" class="headerlink" title="原子的追加记录"></a>原子的追加记录</h5><p>GFS 提供了一种原子的数据追加操作–记录追加。Concurrent writes to the same region are not serializable: the region may end up <strong>containing data fragments from multiple clients.</strong>在用记录追加这种写入方式时，客户机只需要指定要写入的数据，而不像传统方式的写入操作，客户端需要指定数据写入的偏移量。GFS 保证至少有一次原子的写入操作成功执行，写入的数据追加到 GFS 指定的偏移位置上，之后 GFS 返回这个偏移量给客户机。</p>
+<p>记录追加也是一种更改方式，也遵循上面的Figure.2:</p>
+<ol>
+<li>The client pushes the data to all replicas of the <strong>last chunk</strong> of the file(注意追加是在文件的最后一个块上进行的)</li>
+<li>Then, the client sends its request to the primary.</li>
+<li>The primary checks to see if appending the record to the current chunk would cause the chunk to exceed the maximum size (64 MB)</li>
+<li>If so, it pads the chunk to the maximum size, tells secondaries to do the same, and replies to the client indicating that the operation should be retried on the next chunk.</li>
+<li>If the record fits within the maximum size, which is the common case, the primary appends the data to its replica, tells the secondaries to write the data at the exact offset where it has, and finally replies success to the client.</li>
+</ol>
+<p>当追加操作在部分 Replica 上执行失败时，Primary 会响应客户端，通知它此次操作已失败，客户端便会重试该操作。和写入操作的情形相同，此时已有部分 Replica 顺利写入这些数据，重新进行数据追加便会导致这一部分的 Replica 上出现重复数据，不过 GFS 的一致性模型也确实并未保证每个 Replica 都会是完全一致的。</p>
+<p>GFS does <strong>not</strong> guarantee that all replicas are <strong>bytewise</strong> identical. It only guarantees that the data is written at least once as an atomic unit. </p>
 <h5 id="文件快照"><a href="#文件快照" class="headerlink" title="文件快照"></a>文件快照</h5><p>GFS 还提供了文件快照操作，可为指定的文件或目录创建一个副本。</p>
 <p>快照操作的实现采用了写时复制（Copy on Write）的思想：</p>
 <ol>
@@ -344,7 +354,7 @@
 </li>
 </ul>
 <h5 id="数据完整性"><a href="#数据完整性" class="headerlink" title="数据完整性"></a>数据完整性</h5><p>每个 Chunk 服务器都使用 Checksum 来检查保存的数据是否损坏。</p>
-<p>GFS 允许有歧义的副本存在：GFS 修改操作的语义，特别是早先讨论过的原子纪录追加的操作，副本不是 byte-wise 完全一致的。因此，<strong>每个 Chunk 服务器必须独立维护 Checksum 来校验自己的副本的完整性。</strong></p>
+<p>GFS 允许有歧义的副本存在：GFS 修改操作的语义，特别是早先讨论过的原子记录追加的操作，副本不是 byte-wise 完全一致的。因此，<strong>每个 Chunk 服务器必须独立维护 Checksum 来校验自己的副本的完整性。</strong></p>
 <p>对于读操作来说，在把数据返回给客户端或者其它的 Chunk 服务器之前，Chunk 服务器会校验读取操作涉及的范围内的块的 Checksum。因此 <strong>Chunk 服务器不会把错误数据传递到其它的机器上</strong>。如果发生某个块的Checksum 不正确，Chunk 服务器返回给请求者一个错误信息，并且通知 Master 服务器这个错误。作为回应，请求者应当从其它副本读取数据，Master 服务器也会从其它副本克隆数据进行恢复。当一个新的副本就绪后，Master 服务器通知副本错误的 Chunk 服务器删掉错误的副本。</p>
 
       
@@ -386,6 +396,15 @@
   
 <nav id="article-nav">
   
+    <a href="/2018/11/15/Hadoop源码阅读——HDFS/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Hadoop源码阅读——HDFS
+        
+      </div>
+    </a>
+  
   
     <a href="/2018/11/09/nohuph和-后台运行/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">nohuph和&amp;后台运行</div>
@@ -415,7 +434,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#一、概述"><span class="toc-number">1.</span> <span class="toc-text">一、概述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二、架构"><span class="toc-number">2.</span> <span class="toc-text">二、架构</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Chunk-的大小"><span class="toc-number">2.1.</span> <span class="toc-text">Chunk 的大小</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#元数据"><span class="toc-number">2.2.</span> <span class="toc-text">元数据</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#操作日志"><span class="toc-number">2.3.</span> <span class="toc-text">操作日志</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#一致性模型"><span class="toc-number">2.4.</span> <span class="toc-text">一致性模型</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#三、系统交互"><span class="toc-number">3.</span> <span class="toc-text">三、系统交互</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Leases和更改顺序"><span class="toc-number">3.1.</span> <span class="toc-text">Leases和更改顺序</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#文件快照"><span class="toc-number">3.2.</span> <span class="toc-text">文件快照</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#四、Master节点的操作"><span class="toc-number">4.</span> <span class="toc-text">四、Master节点的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#NameSpace管理和锁"><span class="toc-number">4.1.</span> <span class="toc-text">NameSpace管理和锁</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#副本的位置"><span class="toc-number">4.2.</span> <span class="toc-text">副本的位置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#垃圾回收"><span class="toc-number">4.3.</span> <span class="toc-text">垃圾回收</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#五、容错和诊断"><span class="toc-number">5.</span> <span class="toc-text">五、容错和诊断</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#高可用性"><span class="toc-number">5.1.</span> <span class="toc-text">高可用性</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#数据完整性"><span class="toc-number">5.2.</span> <span class="toc-text">数据完整性</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#一、概述"><span class="toc-number">1.</span> <span class="toc-text">一、概述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二、架构"><span class="toc-number">2.</span> <span class="toc-text">二、架构</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Chunk-的大小"><span class="toc-number">2.1.</span> <span class="toc-text">Chunk 的大小</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#元数据"><span class="toc-number">2.2.</span> <span class="toc-text">元数据</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#操作日志"><span class="toc-number">2.3.</span> <span class="toc-text">操作日志</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#一致性模型"><span class="toc-number">2.4.</span> <span class="toc-text">一致性模型</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#三、系统交互"><span class="toc-number">3.</span> <span class="toc-text">三、系统交互</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Leases和更改顺序"><span class="toc-number">3.1.</span> <span class="toc-text">Leases和更改顺序</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#原子的追加记录"><span class="toc-number">3.2.</span> <span class="toc-text">原子的追加记录</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#文件快照"><span class="toc-number">3.3.</span> <span class="toc-text">文件快照</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#四、Master节点的操作"><span class="toc-number">4.</span> <span class="toc-text">四、Master节点的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#NameSpace管理和锁"><span class="toc-number">4.1.</span> <span class="toc-text">NameSpace管理和锁</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#副本的位置"><span class="toc-number">4.2.</span> <span class="toc-text">副本的位置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#垃圾回收"><span class="toc-number">4.3.</span> <span class="toc-text">垃圾回收</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#五、容错和诊断"><span class="toc-number">5.</span> <span class="toc-text">五、容错和诊断</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#高可用性"><span class="toc-number">5.1.</span> <span class="toc-text">高可用性</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#数据完整性"><span class="toc-number">5.2.</span> <span class="toc-text">数据完整性</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -548,6 +567,14 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NIO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
              
@@ -560,15 +587,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Hadoop</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HDFS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -693,10 +720,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">ALS算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HDFS</a>
               </li>
              
               <li class="article-tag-list-item">

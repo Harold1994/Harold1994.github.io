@@ -184,6 +184,498 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-AsynchronousFileChannel" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/18/AsynchronousFileChannel/">NIO AsynchronousFileChannel</a>
+    </h1>
+  
+
+        
+        <a href="/2018/11/18/AsynchronousFileChannel/" class="archive-article-date">
+  	<time datetime="2018-11-18T12:37:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在Java7中AsynchronousFileChannel被加入到NIO中， The <code>AsynchronousFileChannel</code> makes it possible to read data from, and write data to files asynchronously. </p>
+<h5 id="创建一个AsynchronousFileChannel"><a href="#创建一个AsynchronousFileChannel" class="headerlink" title="创建一个AsynchronousFileChannel"></a>创建一个AsynchronousFileChannel</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Path path = Paths.get(<span class="string">"data/test.txt"</span>);</span><br><span class="line"><span class="comment">// 通过open()方法打开一个AsynchronousFileChannel</span></span><br><span class="line"><span class="comment">// The second parameter is one or more open options which tell the</span></span><br><span class="line"><span class="comment">// AsynchronousFileChannel what operations is to be performed on the underlying file.</span></span><br><span class="line">AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(path, StandardOpenOption.READ);</span><br></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2018/11/18/AsynchronousFileChannel/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">NIO</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/11/18/AsynchronousFileChannel/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-JavaNIO学习笔记三" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/17/JavaNIO学习笔记三/">JavaNIO 学习笔记三</a>
+    </h1>
+  
+
+        
+        <a href="/2018/11/17/JavaNIO学习笔记三/" class="archive-article-date">
+  	<time datetime="2018-11-17T12:47:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="九、ServerSocketChannel"><a href="#九、ServerSocketChannel" class="headerlink" title="九、ServerSocketChannel"></a>九、ServerSocketChannel</h4><p> NIO ServerSocketChannel 的作用等价于于ServerSocket，作为Socket的服务端等待客户端连接。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Opening a ServerSocketChannel</span></span><br><span class="line">ServerSocketChannel ssc = ServerSocketChannel.open();</span><br><span class="line">ssc.socket().bind(<span class="keyword">new</span> InetSocketAddress(<span class="number">8088</span>));</span><br><span class="line"><span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">    <span class="comment">// Listening for incoming connections</span></span><br><span class="line">    <span class="comment">// 在阻塞模式下accept()会一直阻塞到有一个客户端连接它，非阻塞模式下会立即返回一个null</span></span><br><span class="line">    SocketChannel channel = ssc.accept();</span><br><span class="line">    <span class="keyword">if</span> (channel.finishConnect()) &#123;</span><br><span class="line">        ByteBuffer buffer = ByteBuffer.allocate(<span class="number">48</span>);</span><br><span class="line">        channel.read(buffer);</span><br><span class="line">        buffer.flip();</span><br><span class="line">        <span class="keyword">while</span> (buffer.hasRemaining()) &#123;</span><br><span class="line">            System.out.println((<span class="keyword">char</span>) buffer.get());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Closing a ServerSocketChannel</span></span><br><span class="line">ssc.close()</span><br></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2018/11/17/JavaNIO学习笔记三/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">NIO</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/11/17/JavaNIO学习笔记三/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-JavaNIO学习笔记2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/17/JavaNIO学习笔记2/">JavaNIO 学习笔记二</a>
+    </h1>
+  
+
+        
+        <a href="/2018/11/17/JavaNIO学习笔记2/" class="archive-article-date">
+  	<time datetime="2018-11-17T02:24:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="五、Chanel到Channel的传输"><a href="#五、Chanel到Channel的传输" class="headerlink" title="五、Chanel到Channel的传输"></a>五、Chanel到Channel的传输</h4><p>在NIO中，可以直接从一个Channel传数据到另一个Channel，f one of the channels is a <code>FileChannel</code>. The <code>FileChannel</code> class has a <code>transferTo()</code> and a <code>transferFrom()</code> method which does this for you.</p>
+<h5 id="transferFrom"><a href="#transferFrom" class="headerlink" title="transferFrom()"></a>transferFrom()</h5><p>The <code>FileChannel.transferFrom()</code> method transfers data from a source channel into the<code>FileChannel</code>.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">RandomAccessFile inFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">"data/test.txt"</span>,<span class="string">"rw"</span>);</span><br><span class="line">FileChannel inChannel = inFile.getChannel();</span><br><span class="line"></span><br><span class="line">RandomAccessFile outFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">"data/out.txt"</span>,<span class="string">"rw"</span>);</span><br><span class="line">FileChannel outChannel = outFile.getChannel();</span><br><span class="line"><span class="keyword">long</span> position = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">long</span> count = inChannel.size();</span><br><span class="line">outChannel.transferFrom(inChannel, position, count);</span><br><span class="line">inFile.close();</span><br><span class="line">outFile.close();</span><br></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2018/11/17/JavaNIO学习笔记2/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">NIO</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/11/17/JavaNIO学习笔记2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-JavaNIO" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/16/JavaNIO/">JavaNIO 学习笔记一</a>
+    </h1>
+  
+
+        
+        <a href="/2018/11/16/JavaNIO/" class="archive-article-date">
+  	<time datetime="2018-11-16T11:23:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-16</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="一、NIO预览"><a href="#一、NIO预览" class="headerlink" title="一、NIO预览"></a>一、NIO预览</h4><p>Java NIO (New IO) is an alternative IO API for Java </p>
+<h5 id="NIO使用channels-and-buffers进行工作而不是之前的字节流或字符流"><a href="#NIO使用channels-and-buffers进行工作而不是之前的字节流或字符流" class="headerlink" title="NIO使用channels and buffers进行工作而不是之前的字节流或字符流"></a>NIO使用channels and buffers进行工作而不是之前的字节流或字符流</h5><p>In the standard IO API you work with byte streams and character streams. In NIO you work with <strong>channels and buffers</strong>. Data is always read from a channel into a buffer, or written from a buffer to a channel.</p>
+<h5 id="非阻塞IO"><a href="#非阻塞IO" class="headerlink" title="非阻塞IO"></a>非阻塞IO</h5><p>Java NIO enables you to do non-blocking IO. For instance, a thread can ask a channel to read data into a buffer. While the channel reads data into the buffer, the thread can do something else. Once data is read into the buffer, the thread can then continue processing it.</p>
+        
+          <a class="article-more-a" href="/2018/11/16/JavaNIO/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">NIO</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/11/16/JavaNIO/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Hadoop源码阅读——RPC" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/16/Hadoop源码阅读——RPC/">Hadoop源码阅读——Hadoop RPC</a>
+    </h1>
+  
+
+        
+        <a href="/2018/11/16/Hadoop源码阅读——RPC/" class="archive-article-date">
+  	<time datetime="2018-11-16T11:17:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-16</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>HadoopRPC框架基于IPC模型实现了一套轻量级RPC框架，底层采用了JavaNIO、Java动态代理以及protobuf等基础技术。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">HDFS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/11/16/Hadoop源码阅读——RPC/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Hadoop源码阅读——HDFS" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/15/Hadoop源码阅读——HDFS/">Hadoop源码阅读——HDFS</a>
+    </h1>
+  
+
+        
+        <a href="/2018/11/15/Hadoop源码阅读——HDFS/" class="archive-article-date">
+  	<time datetime="2018-11-15T05:58:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h4><p>HDFS是一个主/从结构的分布式系统，拥有一个NameNode和一些DateNode，HDFS中NameNode是Master节点，负责管理文件系统的命名空间，以及数据块到DateNode的映射信息。DateNode一般一个节点一个，负责管理它所在节点上的存储。</p>
+        
+          <a class="article-more-a" href="/2018/11/15/Hadoop源码阅读——HDFS/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">HDFS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/11/15/Hadoop源码阅读——HDFS/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-System阅读笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -301,26 +793,9 @@
 <p>　　无论是否将 nohup 命令的输出重定向到终端，输出都将附加到当前目录的 nohup.out 文件中。</p>
 <p>　　如果当前目录的 nohup.out 文件不可写，输出重定向到 $HOME/nohup.out 文件中。</p>
 <p>　　如果没有文件能创建或打开以用于追加，那么 Command 参数指定的命令不可调用。</p>
-<p>退出状态：该命令返回下列出口值： 　　</p>
-<p>　　126 可以查找但不能调用 Command 参数指定的命令。 　　</p>
-<p>　　127 nohup 命令发生错误或不能查找由 Command 参数指定的命令。 　　</p>
-<p>　　否则，nohup 命令的退出状态是 Command 参数指定命令的退出状态。</p>
-<p>2.&amp;</p>
-<p>用途：在后台运行</p>
-<p>一般两个一起用</p>
-<p>nohup command &amp;</p>
-<p>eg:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`nohup /usr/local/node/bin/node /www/im/chat.js &gt;&gt; /usr/local/node/output.log 2&gt;&amp;1 &amp;`</span><br></pre></td></tr></table></figure>
-<p>查看运行的后台进程</p>
-<p>（1）jobs -l</p>
-<p><code>[1]    2229 running    nohup sh storm dev-zookeeper</code></p>
-<p>jobs命令只看当前终端生效的，关闭终端后，在另一个终端jobs已经无法看到后台跑得程序了，此时利用ps（进程查看命令）</p>
-<p>注：</p>
-<p>　　用ps -def | grep查找进程很方便，最后一行总是会grep自己</p>
-<p>3.如果某个进程起不来，可能是某个端口被占用</p>
-<p>查看使用某端口的进程</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> lsof -i:8080</span><br><span class="line">COMMAND  PID   USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME</span><br><span class="line">java    2301 harold   36u  IPv6 0x912be89f2ea06925      0t0  TCP *:http-alt (LISTEN)</span><br></pre></td></tr></table></figure>
-
+        
+          <a class="article-more-a" href="/2018/11/09/nohuph和-后台运行/#more">more >></a>
+        
       
 
       
@@ -553,502 +1028,9 @@
 
 
   
-    <article id="post-Spark-2-3-0源码分析——9-Spark的存储模块" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/17/Spark-2-3-0源码分析——9-Spark的存储模块/">Spark_2.3.0源码分析——9_Spark的存储模块</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/17/Spark-2-3-0源码分析——9-Spark的存储模块/" class="archive-article-date">
-  	<time datetime="2018-10-17T11:10:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="一、Storage模块"><a href="#一、Storage模块" class="headerlink" title="一、Storage模块"></a>一、Storage模块</h3><h4 id="1-Storage概述"><a href="#1-Storage概述" class="headerlink" title="1.Storage概述"></a>1.Storage概述</h4><p>在Spark中存储模块被抽象成Storage，负责管理和实现数据块(Block)的存放。其中存取数据的最小单元是Block，数据由不同的Block组成，所有操作以Block为单位进行。本质上RDD中的Partition与Storage中的Block等价。Storage抽象模块的实现分为两个层次，如图所示：</p>
-        
-          <a class="article-more-a" href="/2018/10/17/Spark-2-3-0源码分析——9-Spark的存储模块/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/17/Spark-2-3-0源码分析——9-Spark的存储模块/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Spark-2-3-0源码分析——8-Executor模块" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/14/Spark-2-3-0源码分析——8-Executor模块/">Spark_2.3.0源码分析——8_Executor模块</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/14/Spark-2-3-0源码分析——8-Executor模块/" class="archive-article-date">
-  	<time datetime="2018-10-14T02:15:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Executor是Spark中执行任务的进程，它可以被不同的调度模式所调度。Executor中有一个RPC远程过程调用接口，有两种实现，分别是netty和AKKA，默认是Netty框架。</p>
-<p>Executor中有一个CachedThreadPool，任务被分发到Executor并以TaskRunner形式运行于线程池的线程中。</p>
-<h3 id="一、Executor中创建、分配、启动及异常处理"><a href="#一、Executor中创建、分配、启动及异常处理" class="headerlink" title="一、Executor中创建、分配、启动及异常处理"></a>一、Executor中创建、分配、启动及异常处理</h3><h4 id="1-Executor的创建"><a href="#1-Executor的创建" class="headerlink" title="1.Executor的创建"></a>1.Executor的创建</h4><p>以standAlone调度模式为例，SparkContext启动之后，StandaloneSchedulerBackend会构建一个作为应用程序客户端的AppClient实例，AppClient中有一个内部类ClientEndpoint，其通过RPC机制和Master通信。在EndPoint的onStart方法中，会通过registerWithMaster向Master发送RegisterApplication请求，Master收到请求后，会先通过registerApplication完成信息登记，之后调用schedule方法，在Worker上启动Executor。</p>
-        
-          <a class="article-more-a" href="/2018/10/14/Spark-2-3-0源码分析——8-Executor模块/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/14/Spark-2-3-0源码分析——8-Executor模块/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Spark-2-3-0源码分析——7-Deploy模块源码分析二" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/11/Spark-2-3-0源码分析——7-Deploy模块源码分析二/">Spark_2.3.0源码分析——7_Deploy模块源码分析(二)</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/11/Spark-2-3-0源码分析——7-Deploy模块源码分析二/" class="archive-article-date">
-  	<time datetime="2018-10-11T13:09:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>接着上一篇博客继续看Deploy模块。</p>
-<h3 id="一、Standalone部署"><a href="#一、Standalone部署" class="headerlink" title="一、Standalone部署"></a>一、Standalone部署</h3><p>​    Standalone时Spark的自带一种集群资源管理器，能够满足绝大部分纯粹的Spark计算环境中对集群资源管理的需求，基本上只有在集群中运行多套计算框架时才考虑YARN和Mesos。</p>
-<p>​    Standalone部署采用典型的Master/Slave架构，Master节点负责整个集群资源的管理与调度，Worker节点在Master节点的调度下启动Executor，负责执行具体工作。</p>
-        
-          <a class="article-more-a" href="/2018/10/11/Spark-2-3-0源码分析——7-Deploy模块源码分析二/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/11/Spark-2-3-0源码分析——7-Deploy模块源码分析二/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Spark-2-3-0源码分析——6-Deploy模块" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/09/Spark-2-3-0源码分析——6-Deploy模块/">Spark_2.3.0源码分析——6_Deploy模块源码分析(一)</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/09/Spark-2-3-0源码分析——6-Deploy模块/" class="archive-article-date">
-  	<time datetime="2018-10-09T08:21:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Spark的部署方式有以下几种：</p>
-<ul>
-<li>Standalone</li>
-<li>Mesos</li>
-<li>YARN</li>
-<li>Local</li>
-<li>KUBERNETES</li>
-</ul>
-        
-          <a class="article-more-a" href="/2018/10/09/Spark-2-3-0源码分析——6-Deploy模块/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/09/Spark-2-3-0源码分析——6-Deploy模块/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-滴滴实习总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/08/滴滴实习总结/">滴滴实习总结</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/08/滴滴实习总结/" class="archive-article-date">
-  	<time datetime="2018-10-08T08:28:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>How time flies，在滴滴的实习经历已然到了尾声，在公司呆了两个半月，收获了很多东西，除了是技术上，还有一起工作的组内的优秀的同事们。这篇帖子作为自己的这段时间在技术上和方法上的积累的总结，比较零散，想到哪写到哪吧。</p>
-<p>我做的工作是券核销模型的构建，在以后的定价策略和预算估计上会用到，估计是基础模型之一吧，这个模型大约有三分之二的时间用在了特征的构造上，构造特征主要用到的工具就是Hive和shell脚本，偶尔会用到python，就从它们总结起：</p>
-        
-          <a class="article-more-a" href="/2018/10/08/滴滴实习总结/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/08/滴滴实习总结/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Spark-2-3-0源码分析——5-Task运算结果的处理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/06/Spark-2-3-0源码分析——5-Task运算结果的处理/">Spark-2-3-0源码分析——5-Task运算结果的处理</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/06/Spark-2-3-0源码分析——5-Task运算结果的处理/" class="archive-article-date">
-  	<time datetime="2018-10-06T09:12:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-06</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="一-Task运算结果的处理"><a href="#一-Task运算结果的处理" class="headerlink" title="一. Task运算结果的处理"></a>一. Task运算结果的处理</h4><p>TaskRunner将Task的执行状态汇报给Driver后，Driver会转给org.apache.spark.scheduler.TaskSchedulerImpl#statusUpdate。而在这里不同的状态有不同的处理：</p>
-<p>1)       如果类型是TaskState.FINISHED，那么调用org.apache.spark.scheduler.TaskResultGetter#enqueueSuccessfulTask进行处理。</p>
-        
-          <a class="article-more-a" href="/2018/10/06/Spark-2-3-0源码分析——5-Task运算结果的处理/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/06/Spark-2-3-0源码分析——5-Task运算结果的处理/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 
@@ -1164,6 +1146,14 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NIO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
              
@@ -1176,15 +1166,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Hadoop</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HDFS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1309,10 +1299,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">ALS算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HDFS</a>
               </li>
              
               <li class="article-tag-list-item">

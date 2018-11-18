@@ -184,6 +184,531 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Java和Hadoop序列化机制浅讲" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/08/Java和Hadoop序列化机制浅讲/">Java和Hadoop序列化机制浅讲</a>
+    </h1>
+  
+
+        
+        <a href="/2018/06/08/Java和Hadoop序列化机制浅讲/" class="archive-article-date">
+  	<time datetime="2018-06-08T07:33:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>转自：<a href="https://blog.csdn.net/zq602316498/article/details/45190175" target="_blank" rel="noopener">https://blog.csdn.net/zq602316498/article/details/45190175</a></p>
+<h1 id="Java-和-Hadoop-序列化机制浅讲"><a href="#Java-和-Hadoop-序列化机制浅讲" class="headerlink" title="Java 和 Hadoop 序列化机制浅讲"></a>Java 和 Hadoop 序列化机制浅讲</h1><p>序列化  (Serialization)将对象的状态信息转换为可以存储或传输的形式的过程（<strong>字节流</strong>）。在序列化期间，对象将其当前状态写入到临时或持久性存储区。以后，可以通过从存储区中读取或反序列化对象的状态，重新创建该对象。</p>
+<p>通常来说有三个用途：</p>
+<ul>
+<li>持久化：对象可以被存储到磁盘上</li>
+<li>通信：对象可以通过网络进行传输</li>
+<li>拷贝、克隆：可以通过将某一对象序列化到内存的缓冲区，然后通过反序列化生成该对象的一个深拷贝（破解单例模式的一种方法）
+        
+          <a class="article-more-a" href="/2018/06/08/Java和Hadoop序列化机制浅讲/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/06/08/Java和Hadoop序列化机制浅讲/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-数据算法——二次排序：详细示例" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/08/数据算法——二次排序：详细示例/">数据算法——二次排序：详细示例</a>
+    </h1>
+  
+
+        
+        <a href="/2018/06/08/数据算法——二次排序：详细示例/" class="archive-article-date">
+  	<time datetime="2018-06-08T02:18:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="一、二次排序技术"><a href="#一、二次排序技术" class="headerlink" title="一、二次排序技术"></a>一、二次排序技术</h4><p>Mapreduce框架会按键对reducer的输入排序，不过reducer值的顺序是任意的。假设对应$key = K$有以下值：</p>
+<p>$(K,V_1),(K,V_2),…(K,V_n)$</p>
+<p>另外假设每个$V_i$是包含m个属性的一个元组，即$V_i = (a_{i1},a_{i2},…,a_{im})$<br>在这里，我们希望按$a_{i1}$对reducer值排序，我们将用r表示$(a_{i2},a_{i3},…,a_{im})$(其余属性)，因此可以将reducer值表示为：</p>
+<p>$(K,(a_1, r_1)),(K,(a_2, r_2)),…(K,(a_m, r_m))$</p>
+<p>要按$a_i$对reducer值排序，需要创建一个组合键：$（K，a_i）$，新的mapper将发出对应键值对：<br>
+        
+          <a class="article-more-a" href="/2018/06/08/数据算法——二次排序：详细示例/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">分布式算法</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/06/08/数据算法——二次排序：详细示例/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="posts-数据算法——Spark的二次排序解决方案" class="article article-type-posts  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/07/数据算法——Spark的二次排序解决方案/">数据算法——Spark的二次排序解决方案</a>
+    </h1>
+  
+
+        
+        <a href="/2018/06/07/数据算法——Spark的二次排序解决方案/" class="archive-article-date">
+  	<time datetime="2018-06-07T07:41:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-07</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在Saprk中解决二次排序问题，又以下两种解决方案：</p>
+<ul>
+<li><p>方案一：</p>
+<p>将一个给定的键的所有值读取并缓存到一个List数组，对数组中得值完成归约器排序，如果每个归约器键的值集很小，则本方案适用</p>
+</li>
+<li><p>方案二：</p>
+<p>使用Spark框架对归约器值排序，这种方法“会为自然键增加部分或者整个值来创建一个组合键以实现排序目标”，本方法可伸缩，不受内存限制。</p>
+        
+          <a class="article-more-a" href="/2018/06/07/数据算法——Spark的二次排序解决方案/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">分布式算法</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/06/07/数据算法——Spark的二次排序解决方案/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-lightGbm简要原理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/07/lightGbm简要原理/">lightGbm简要原理</a>
+    </h1>
+  
+
+        
+        <a href="/2018/06/07/lightGbm简要原理/" class="archive-article-date">
+  	<time datetime="2018-06-06T17:47:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-07</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文转自:<a href="https://blog.csdn.net/niaolianjiulin/article/details/76584785" target="_blank" rel="noopener">https://blog.csdn.net/niaolianjiulin/article/details/76584785</a></p>
+<p>和<a href="https://www.cnblogs.com/wanglei5205/p/8722237.html" target="_blank" rel="noopener">https://www.cnblogs.com/wanglei5205/p/8722237.html</a></p>
+<h1 id="1-lightGBM简介"><a href="#1-lightGBM简介" class="headerlink" title="1. lightGBM简介"></a>1. lightGBM简介</h1><p>xgboost的出现，让数据民工们告别了传统的机器学习算法们：RF、GBM、SVM、LASSO……..。现在微软推出了一个新的boosting框架，想要挑战xgboost的江湖地位。</p>
+<p>顾名思义，lightGBM包含两个关键点：light即轻量级，GBM 梯度提升机。</p>
+<p>LightGBM 是一个梯度 boosting 框架，使用基于学习算法的决策树。它可以说是分布式的，高效的，有以下优势：<br>
+        
+          <a class="article-more-a" href="/2018/06/07/lightGbm简要原理/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/06/07/lightGbm简要原理/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-数据算法-二次排序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/04/数据算法-二次排序/">数据算法——Hadoop的二次排序解决方案</a>
+    </h1>
+  
+
+        
+        <a href="/2018/06/04/数据算法-二次排序/" class="archive-article-date">
+  	<time datetime="2018-06-04T07:58:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="一-二次排序-secondary-sort-问题的引出"><a href="#一-二次排序-secondary-sort-问题的引出" class="headerlink" title="一. 二次排序(secondary sort)问题的引出"></a>一. 二次排序(secondary sort)问题的引出</h4><p><strong>1. 二次排序</strong>:</p>
+<p>在reduce阶段对与某个键关联的值排序,又称为键值转换;</p>
+<p><strong>2. MR中的排序:</strong></p>
+<p>MapReduce框架会自动对mapper生成的键排序,说明在启动reducer之前,mapper生成的所有中间键值对必然是<strong>按键有序</strong>的.但是传入reducer的值并不是有序的,他们可能有任意的顺序,要想对reducer中的值进行排序,可以用二次排序设计模式实现.</p>
+<p><strong>3. 通过MR的范式分析二次排序</strong>:</p>
+<p>map(key1,value1)—&gt;list(key2,value2)<br>reduce(list(key2,value2))—&gt;list(key3,value3)<br>list(key2,value2)作为reducer的输入,list(value2)=(V1,V2,V3…,Vn),其本身是无序的.<br>二次排序的目标就是让reducer收到的值有某种顺序.<br>
+        
+          <a class="article-more-a" href="/2018/06/04/数据算法-二次排序/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">分布式算法</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/06/04/数据算法-二次排序/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-ES分词器" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/04/ES分词器/">ES分词器</a>
+    </h1>
+  
+
+        
+        <a href="/2018/06/04/ES分词器/" class="archive-article-date">
+  	<time datetime="2018-06-03T16:15:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>ES逗号分词<br>1：新建分析器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">curl -XPOST &apos;http://172.18.0.4:9200/demo/?pretty&apos; -d &apos;</span><br><span class="line">&#123;</span><br><span class="line">　　&quot;settings&quot;:</span><br><span class="line">　　&#123;</span><br><span class="line">　　　　&quot;analysis&quot;:</span><br><span class="line">　　　　　　&#123;</span><br><span class="line">　　　　　　　　&quot;analyzer&quot;:</span><br><span class="line">　　　　　　　　　　&#123;</span><br><span class="line">　　　　　　　　　　　　&quot;douhao&quot;:</span><br><span class="line">　　　　　　　　　　　　　　&#123;</span><br><span class="line">　　　　　　　　　　　　　　　　&quot;type&quot;:&quot;pattern&quot;,</span><br><span class="line">　　　　　　　　　　　　　　　　&quot;pattern&quot;:&quot;,&quot;</span><br><span class="line">　　　　　　　　　　　　　　&#125;</span><br><span class="line">　　　　　　　　　&#125;</span><br><span class="line">　　　　　　&#125;</span><br><span class="line">　　&#125;</span><br><span class="line"></span><br><span class="line">&#125;&apos;</span><br></pre></td></tr></table></figure></p>
+        
+          <a class="article-more-a" href="/2018/06/04/ES分词器/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ElasticSearch</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/06/04/ES分词器/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-hexo系列问题之我们换了电脑怎么办" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -512,512 +1037,9 @@
 
 
   
-    <article id="post-Java并发编程——线程池的使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/04/Java并发编程——线程池的使用/">Java并发编程——线程池的使用</a>
-    </h1>
-  
-
-        
-        <a href="/2018/06/04/Java并发编程——线程池的使用/" class="archive-article-date">
-  	<time datetime="2018-06-03T16:07:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="一、在任务与执行策略之间的隐性耦合"><a href="#一、在任务与执行策略之间的隐性耦合" class="headerlink" title="一、在任务与执行策略之间的隐性耦合"></a>一、在任务与执行策略之间的隐性耦合</h4><p>Executor框架可以将任务的提交与任务的执行策略解耦开来，虽然Executor框架为制定和修改执行策略都提供了相当大的灵活性，但并非所有任务都适用于所有执行策略，有些类型的任务需要明确指定执行策略：</p>
-<ul>
-<li>依赖性任务： 在线程池中执行独立的任务时，可以随意的改变线程池的大小和配置，这只会影响其执行性能。但是若提交到线程池的任务依赖于其他的任务，那么就隐含的给执行策略带来了约束。
-        
-          <a class="article-more-a" href="/2018/06/04/Java并发编程——线程池的使用/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">多线程</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">并发</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/06/04/Java并发编程——线程池的使用/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Hive用户自定义聚合函数UDAF和表生成函数UDTF" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/30/Hive用户自定义聚合函数UDAF和表生成函数UDTF/">Hive用户自定义聚合函数(UDAF)和表生成函数(UDTF)</a>
-    </h1>
-  
-
-        
-        <a href="/2018/05/30/Hive用户自定义聚合函数UDAF和表生成函数UDTF/" class="archive-article-date">
-  	<time datetime="2018-05-30T13:45:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在之前关于Hive的<a href="https://harold1994.github.io/2018/03/17/%E5%85%B3%E4%BA%8EHIVE/" target="_blank" rel="noopener">博文</a>中写到了UDAF和UDTF,不过只是简单的带过,在UDAF部分继承是已经被废弃的的UDAF类,因此在这片博文中详细说明一下新的继承类的使用方法,算是还技术债吧.</p>
-<h4 id="一-用户自定义聚合函数"><a href="#一-用户自定义聚合函数" class="headerlink" title="一. 用户自定义聚合函数"></a>一. 用户自定义聚合函数</h4><p>聚合函数会分多个阶段进行处理,基于UDAF执行的转换不同,在不同的阶段返回值类型也可能不同.聚合过程是在map或者reduce任务中执行的,任务task是一个<a href="https://blog.csdn.net/androidlushangderen/article/details/50002015" target="_blank" rel="noopener">有内存限制</a>的Java进程,因此在聚合过程中存储大的数据结构会产生溢出错误.<br>
-        
-          <a class="article-more-a" href="/2018/05/30/Hive用户自定义聚合函数UDAF和表生成函数UDTF/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hive</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/05/30/Hive用户自定义聚合函数UDAF和表生成函数UDTF/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-BoostTrees简介" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/28/BoostTrees简介/">BoostTrees简介</a>
-    </h1>
-  
-
-        
-        <a href="/2018/05/28/BoostTrees简介/" class="archive-article-date">
-  	<time datetime="2018-05-27T16:11:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文翻译自陈天奇大神的英文ppt,喜欢看英文的同学可以<a href="https://homes.cs.washington.edu/~tqchen/pdf/BoostedTree.pdf" target="_blank" rel="noopener">直接跳转</a>,翻译当中也增加了一些个人的补充.</p>
-<h2 id="一、监督学习的关键概念"><a href="#一、监督学习的关键概念" class="headerlink" title="一、监督学习的关键概念"></a>一、监督学习的关键概念</h2><h4 id="监督学习中的元素"><a href="#监督学习中的元素" class="headerlink" title="监督学习中的元素"></a>监督学习中的元素</h4><p>$x_i \in R^D$ :训练集中第i条记录</p>
-<p><strong>模型</strong>： 根据$x_i$预测$\hat y_i$<br>
-        
-          <a class="article-more-a" href="/2018/05/28/BoostTrees简介/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/05/28/BoostTrees简介/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Java并发编程——并发基础构建模块" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/27/Java并发编程——并发基础构建模块/">Java并发编程——并发基础构建模块</a>
-    </h1>
-  
-
-        
-        <a href="/2018/05/27/Java并发编程——并发基础构建模块/" class="archive-article-date">
-  	<time datetime="2018-05-26T16:39:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="一、同步容器类"><a href="#一、同步容器类" class="headerlink" title="一、同步容器类"></a>一、同步容器类</h4><p>同步容器类包括Vector和HashTable，其封装器类由Collections.synchronizedXxx等工厂方法创建</p>
-<p>同步容器类实现线程安全的方式：将他们的状态封装起来，并对每个公有方法进行同步，使得每次只有一个线程能访问容器状态，即<strong>串行化容器的访问</strong>。</p>
-<p>同步容器类支持客户端加锁，因此可能会创建一些新的操作，同步容器类通过其自身的锁来保护他的每个方法。</p>
-        
-          <a class="article-more-a" href="/2018/05/27/Java并发编程——并发基础构建模块/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">多线程</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">并发</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/05/27/Java并发编程——并发基础构建模块/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Java并发编程——结构化并发应用程序2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/27/Java并发编程——结构化并发应用程序2/">Java并发编程——结构化并发应用程序(二)</a>
-    </h1>
-  
-
-        
-        <a href="/2018/05/27/Java并发编程——结构化并发应用程序2/" class="archive-article-date">
-  	<time datetime="2018-05-26T16:36:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="CompletionService：Executor和BlockingQueue"><a href="#CompletionService：Executor和BlockingQueue" class="headerlink" title="CompletionService：Executor和BlockingQueue"></a>CompletionService：Executor和BlockingQueue</h4><p>若向Executor提交了一组计算任务，并希望在计算技术之后获得结果，有一下两种方法：</p>
-<blockquote>
-<ul>
-<li>保留与任务关联的Future，反复使用get方法，同时将参数timeout指定为0，从而通过轮训判断任务是否完成</li>
-<li>使用完成服务（CompletionService）</li>
-</ul>
-</blockquote>
-<p><strong>CompletionService：</strong>                     CompletionService将Executor和BlockingQueue功能结合起来，可以将Callable任务提交给它来执行，然后使用类似队列操作的take和poll等方法获得已经完成的结果，这些结果会<strong>在完成时</strong>被封装为Future。<br>
-        
-          <a class="article-more-a" href="/2018/05/27/Java并发编程——结构化并发应用程序2/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">多线程</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">并发</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/05/27/Java并发编程——结构化并发应用程序2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Kafka中Consumer的多线程实现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/27/Kafka中Consumer的多线程实现/">Kafka中Consumer的多线程实现</a>
-    </h1>
-  
-
-        
-        <a href="/2018/05/27/Kafka中Consumer的多线程实现/" class="archive-article-date">
-  	<time datetime="2018-05-26T16:21:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>【转自：<a href="http://www.cnblogs.com/huxi2b/p/6124937.html】" target="_blank" rel="noopener">http://www.cnblogs.com/huxi2b/p/6124937.html】</a></p>
-<p>Kafka 0.9版本开始推出了Java版本的consumer，优化了coordinator的设计以及摆脱了对zookeeper的依赖。社区最近也在探讨正式用这套consumer API替换Scala版本的consumer的计划。鉴于目前这方面的资料并不是很多，本文将尝试给出一个利用KafkaConsumer编写的多线程消费者实例，希望对大家有所帮助。</p>
-        
-          <a class="article-more-a" href="/2018/05/27/Kafka中Consumer的多线程实现/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/05/27/Kafka中Consumer的多线程实现/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
     </nav>
   
 
@@ -1133,6 +1155,14 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NIO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
              
@@ -1145,15 +1175,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Hadoop</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HDFS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1278,10 +1308,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">ALS算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HDFS</a>
               </li>
              
               <li class="article-tag-list-item">
