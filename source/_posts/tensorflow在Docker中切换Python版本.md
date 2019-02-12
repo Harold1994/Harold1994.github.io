@@ -1,7 +1,7 @@
 ---
 title: tensorflow在Docker中切换Python版本
 date: 2018-07-06 22:45:47
-tags: [tensorflow, 深度学习]
+tags: [tensorflow, 深度学习, 机器学习]
 ---
 
 在 [TensorFlow 的 这个 Issue](https://link.jianshu.com?t=https%3A%2F%2Fgithub.com%2Ftensorflow%2Ftensorflow%2Fissues%2F10179) 可以看到，2017年5月已经支持[用 tag 提供不同的 image](https://link.jianshu.com?t=https%3A%2F%2Fhub.docker.com%2Fr%2Ftensorflow%2Ftensorflow%2Ftags%2F)。比如 `tensorflow/tensorflow:latest-py3` 就可以（安装并）打开 Python3 环境。

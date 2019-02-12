@@ -184,6 +184,89 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-protocolbuffers" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/19/protocolbuffers/">Protocol Buffers</a>
+    </h1>
+  
+
+        
+        <a href="/2018/11/19/protocolbuffers/" class="archive-article-date">
+  	<time datetime="2018-11-19T14:32:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在看Hadoop源码的时候涉及到了Protocol buffers，因此这里单开一篇博客写一下自己学习的笔记。主要内容来源于官网文档。</p>
+<hr>
+<p> Protocol buffers是一种语言中立，平台无关，可扩展的序列化数据的格式，可用于通信协议，数据存储等。</p>
+<p>Protocol buffers are a flexible, efficient, automated mechanism for serializing structured data – think XML, but smaller, faster, and simpler. You define how you want your data to be structured once, then you can use special generated source code to easily write and read your structured data to and from a variety of data streams and using a variety of languages. <strong>You can even update your data structure without breaking deployed programs that are compiled against the “old” format.</strong></p>
+        
+          <a class="article-more-a" href="/2018/11/19/protocolbuffers/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">分布式</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/11/19/protocolbuffers/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Java动态代理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -592,25 +675,14 @@
     <article id="post-Hadoop源码阅读——RPC" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/16/Hadoop源码阅读——RPC/">Hadoop源码阅读——Hadoop RPC</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/16/Hadoop源码阅读——RPC/" class="archive-article-date">
-  	<time datetime="2018-11-16T11:17:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-16</time>
-</a>
-        
-      </header>
-    
     <div class="article-entry" itemprop="articleBody">
       
         <p>HadoopRPC框架基于IPC模型实现了一套轻量级RPC框架，底层采用了JavaNIO、Java动态代理以及protobuf等基础技术。</p>
-
+<p>RPC(远程过程调用协议)是一种通过网络调用远程计算服务的协议。RPC采用客户端/服务端模式，请求程序就是一个客户端，而服务提供程序就是一个服务端。</p>
+<p><img src="https://i.loli.net/2018/11/20/5bf4109e86d6d.jpg" alt="nnpg4.jpg"></p>
+        
+          <a class="article-more-a" href="/2018/11/16/Hadoop源码阅读——RPC/#more">more >></a>
+        
       
 
       
@@ -927,87 +999,6 @@
 
 
   
-    <article id="post-Spark-2-3-0源码分析——10-Spark的Shuffle机制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/21/Spark-2-3-0源码分析——10-Spark的Shuffle机制/">Spark_2.3.0源码分析——10_Spark的Shuffle机制</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/21/Spark-2-3-0源码分析——10-Spark的Shuffle机制/" class="archive-article-date">
-  	<time datetime="2018-10-21T06:27:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="一、Hadoop-MapReduce框架中的shuffle框架"><a href="#一、Hadoop-MapReduce框架中的shuffle框架" class="headerlink" title="一、Hadoop MapReduce框架中的shuffle框架"></a>一、Hadoop MapReduce框架中的shuffle框架</h3><p><img src="https://i.loli.net/2018/10/21/5bcc287ec7a98.png" alt="屏幕快照 2018-10-21 下午3.19.15.png"></p>
-<p>Map阶段负责准备数据，Reduce阶段则读取Map阶段所准备的数据，然后做进一步处理。即Map阶段实现Shuffle过程中的数据持久化，而Reduce阶段实现Shuffle过程中的数据读取。</p>
-        
-          <a class="article-more-a" href="/2018/10/21/Spark-2-3-0源码分析——10-Spark的Shuffle机制/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/21/Spark-2-3-0源码分析——10-Spark的Shuffle机制/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1227,6 +1218,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">分布式</a>
               </li>
              
               <li class="article-tag-list-item">

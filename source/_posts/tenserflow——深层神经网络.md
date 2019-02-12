@@ -1,7 +1,7 @@
 ---
 title: tenserflow——深层神经网络
 date: 2018-07-14 23:55:12
-tags: [tensorflow, 深度学习]
+tags: [tensorflow, 深度学习, 机器学习]
 ---
 
 #### 一、激活函数
@@ -187,7 +187,7 @@ loss = tf.add_n(tf.get_collection('losses'))
 **3. 滑动平均模型**
 
 滑动平均模型可以使模型在测试数据上更鲁棒，在Tensorflow中提供了`tf.train.ExponentialMovingAverage`来实现滑动平均模型，在初始化ExponentialMovingAverage时，需要提供一个衰减率(decay).这个衰减率将用于控制模型的更新速度。ExponentialMovingAverage对每个变量维护一个影子变量，这个影子变量的初始值就是相应变量的初始值，每次运行变量更新时，影子变量的值会更新为：
-                             $shadow\_variable=decay * shadow\_variable + (1-decay)*variable$
+​                             $shadow\_variable=decay * shadow\_variable + (1-decay)*variable$
 
 其中shadow_variable为影子变量，variable为待更新的变量，decay为衰减率。decay决定了模型更新的速度，decay越大模型越趋于稳定。在实际应用中，decay一般设为非常接近1的数，为了使模型在训练前期可以更新的更快，ExponentialMovingAverage提供了num_updatyes参数来动态设置decay的大小，如果在ExponentialMovingAverage初始化时提供了num_updates参数，那么每次使用的衰减率将是：
 $min\lbrace decay, \frac {1+num_updates}{10+num_updates}\rbrace$

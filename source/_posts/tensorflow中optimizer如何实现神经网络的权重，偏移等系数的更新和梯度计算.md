@@ -1,7 +1,7 @@
 ---
 title: tensorflow中optimizer如何实现神经网络的权重，偏移等系数的更新和梯度计算
 date: 2018-07-16 00:38:07
-tags: [tensorflow, 深度学习]
+tags: [tensorflow, 深度学习, 机器学习]
 ---
 
 文章转自：https://blog.csdn.net/shenxiaoming77/article/details/77197708

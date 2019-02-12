@@ -1,7 +1,7 @@
 ---
 title: tensorflow入门
 date: 2018-07-08 20:22:33
-tags: [tensorflow, 深度学习]
+tags: [tensorflow, 深度学习, 机器学习]
 ---
 
 #### 一、Tensorflow计算模型——计算图

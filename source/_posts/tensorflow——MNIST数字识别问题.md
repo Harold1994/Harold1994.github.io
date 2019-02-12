@@ -1,7 +1,7 @@
 ---
 title: tensorflow——MNIST数字识别问题
 date: 2018-07-15 21:40:42
-tags: [tensorflow, 深度学习]
+tags: [tensorflow, 深度学习, 机器学习]
 ---
 
 #### 一、 MNIST数据处理
