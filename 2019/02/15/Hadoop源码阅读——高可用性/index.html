@@ -6,15 +6,24 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//harold.me">
-  <title>Harold的博客</title>
+  <title>Hadoop源码阅读——高可用性 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Harold的博客">
-<meta property="og:url" content="//harold.me/index.html">
+  <meta name="description" content="​    在HA HDFS集群中会同时运行两个NameNode，一个作为活动的Namenode，一个作为备份的Namenode，备份Namenode的命名空间与活动Namenode的命名空间是实时同步的。所以当活动Namenode发生故障而停止服务时，备份Namenode可以立即切换为活动状态。">
+<meta name="keywords" content="大数据,Hadoop,HDFS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop源码阅读——高可用性">
+<meta property="og:url" content="//harold.me/2019/02/15/Hadoop源码阅读——高可用性/index.html">
 <meta property="og:site_name" content="Harold的博客">
+<meta property="og:description" content="​    在HA HDFS集群中会同时运行两个NameNode，一个作为活动的Namenode，一个作为备份的Namenode，备份Namenode的命名空间与活动Namenode的命名空间是实时同步的。所以当活动Namenode发生故障而停止服务时，备份Namenode可以立即切换为活动状态。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.loli.net/2019/02/15/5c662304d82ab.png">
+<meta property="og:image" content="https://i.loli.net/2019/02/15/5c6630e955cb9.png">
+<meta property="og:image" content="https://i.loli.net/2019/02/15/5c66b5186824c.png">
+<meta property="og:updated_time" content="2019-02-15T13:49:45.328Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Harold的博客">
+<meta name="twitter:title" content="Hadoop源码阅读——高可用性">
+<meta name="twitter:description" content="​    在HA HDFS集群中会同时运行两个NameNode，一个作为活动的Namenode，一个作为备份的Namenode，备份Namenode的命名空间与活动Namenode的命名空间是实时同步的。所以当活动Namenode发生故障而停止服务时，备份Namenode可以立即切换为活动状态。">
+<meta name="twitter:image" content="https://i.loli.net/2019/02/15/5c662304d82ab.png">
   
   
     <link rel="icon" href="/favicon.png">
@@ -182,16 +191,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-Hadoop源码阅读——高可用性" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-Hadoop源码阅读——高可用性" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/15/Hadoop源码阅读——高可用性/">Hadoop源码阅读——高可用性</a>
+    <h1 class="article-title" itemprop="name">
+      Hadoop源码阅读——高可用性
     </h1>
   
 
@@ -205,272 +212,58 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>​    在HA HDFS集群中会同时运行两个NameNode，一个作为活动的Namenode，一个作为备份的Namenode，备份Namenode的命名空间与活动Namenode的命名空间是实时同步的。所以当活动Namenode发生故障而停止服务时，备份Namenode可以立即切换为活动状态。</p>
-<p><a href="https://i.loli.net/2019/02/15/5c662304d82ab.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2019/02/15/5c662304d82ab.png" alt="屏幕快照 2019-02-15 上午10.24.28.png"></a>
-        
-          <a class="article-more-a" href="/2019/02/15/Hadoop源码阅读——高可用性/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">HDFS</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/02/15/Hadoop源码阅读——高可用性/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Hadoop源码阅读NameNode一" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/12/Hadoop源码阅读NameNode一/">Hadoop源码阅读——文件系统目录树</a>
-    </h1>
-  
-
-        
-        <a href="/2019/02/12/Hadoop源码阅读NameNode一/" class="archive-article-date">
-  	<time datetime="2019-02-12T13:37:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>HDFS以Master/Slave模式运行，主要有NameNode和DataNode两类节点，NameNode是HDFS中的主节点。</p>
-<p>HDFS的文件和目录在内存中以树的形式存储，目录树由NameNode维护，目录树以”/“为根，通过FSDirectory类管理。在目录树中不管是文件还是目录都被看作一个INode节点，分别对应INodeFile和INodeDirectory。HDFS会将命名空间存储在NameNode本地文件系统上的fsimage文件中，由FSImage类管理，另外对HDFS的各种操作，NameNode都会将其记录在editlog文件中，由FSEditLog类管理，NameNode会周期性的合并editlog与fsimage产生新的fsimage。</p>
-        
-          <a class="article-more-a" href="/2019/02/12/Hadoop源码阅读NameNode一/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">HDFS</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/02/12/Hadoop源码阅读NameNode一/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Hadoop源码阅读HadoopRPC三" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/04/Hadoop源码阅读HadoopRPC三/">Hadoop源码阅读——Hadoop RPC(三)</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/04/Hadoop源码阅读HadoopRPC三/" class="archive-article-date">
-  	<time datetime="2018-12-04T14:08:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="三、Hadoop-RPC实现"><a href="#三、Hadoop-RPC实现" class="headerlink" title="三、Hadoop RPC实现"></a>三、Hadoop RPC实现</h4><p>上一篇文章分析了Hadoop RPC框架的RPC、Client类的实现，还有一个Server类用于实现服务器端的功能，本篇文章将详细分析Server类。</p>
-<h5 id="3-Server类实现"><a href="#3-Server类实现" class="headerlink" title="3. Server类实现"></a>3. Server类实现</h5><p>Server类采用了很多技术来提供并发能力，包括线程池、JavaNIO提供的Reactor模式等，其中Reactor模式贯穿了整个Server的设计。</p>
-<h6 id="a-Reactor模式"><a href="#a-Reactor模式" class="headerlink" title="a. Reactor模式"></a>a. Reactor模式</h6><p>reactor设计模式，是一种基于事件驱动的设计模式。处理流程是：应用业务向一个中间人注册一个回调（event handler），当IO就绪后，就这个中间人产生一个事件，并通知此handler进行处理。这里的中间人其实是一个不断等待和循环的线程，他接受所有应用程序的注册，并检查应用程序注册的IO事件是否就绪，如果就绪则通知应用程序进行处理。</p>
-        
-          <a class="article-more-a" href="/2018/12/04/Hadoop源码阅读HadoopRPC三/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">HDFS</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/04/Hadoop源码阅读HadoopRPC三/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Hadoop源码阅读HadoopRPC二" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/26/Hadoop源码阅读HadoopRPC二/">Hadoop源码阅读——Hadoop RPC(二)</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/26/Hadoop源码阅读HadoopRPC二/" class="archive-article-date">
-  	<time datetime="2018-11-26T11:08:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://harold1994.github.io/2018/11/16/Hadoop%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E2%80%94%E2%80%94RPC/" target="_blank" rel="noopener">书接上回</a>，继续Hadoop RPC源码分析，Hadoop RPC框架的抽象步骤：</p>
+<p><a href="https://i.loli.net/2019/02/15/5c662304d82ab.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2019/02/15/5c662304d82ab.png" alt="屏幕快照 2019-02-15 上午10.24.28.png"></a><a id="more"></a> </p>
+<p>如图所示，为了使备份节点与活动节点的状态同步一致，。两个节点都需要与一组堵路运行的节点（JournalNodes，JNS）通信，。当活动Namenode执行了修改命名空间的操作时，他会定期将执行的操作记录在editlog中，并写入JNS的多数节点中。而备份Namenode会一直监听JNS上editlog的变化，如果发现editlog有改动，备份Namenode会读取editlog并与当前命名空间合并，当发生错误切换时，备份节点会先保证从JNS上读取了多有editlog并与命名空间合并，然后才会从Standby状态切换为Active状态。</p>
+<p>为了使错误切换能够很快地执行完毕，Datenode会向阿两个Namenode发送心跳以及汇报信息。这样活动Namenode与备份Namenode的元数据就完全同步， 一旦发生故障，就可以马上切换，这就是<strong>热备</strong>。</p>
+<blockquote>
+<p>脑裂：两个Namenode同时修改命名空间</p>
+</blockquote>
+<p>为防止<strong>脑裂</strong>， HDFS提供了三个级别的隔离机制：</p>
 <ul>
-<li>定义RPC协议：只有定一个RPC协议，客户端才知道服务端对外提供了哪些服务</li>
-<li>实现RPC协议：服务端的服务程序需要实现RPC协议。当RPC调用通过网络到达服务器时，实现RPC协议的服务程序会响应这个调用。</li>
-<li>客户端获取代理对象：</li>
-<li>服务器构造并启动RPC Server</li>
+<li>共享存储隔离：同一时间只允许一个Namenode向JournalNodes写入editlog数据</li>
+<li>客户端隔离：同一时间只允许一个Namenode响应客户端请求</li>
+<li>Datenode隔离：同一时间只允许一个Namenode向Datenode的下发名字节点指令</li>
 </ul>
-<h5 id="4-服务器获取Server对象"><a href="#4-服务器获取Server对象" class="headerlink" title="4. 服务器获取Server对象"></a>4. 服务器获取Server对象</h5><p>RPC服务器需要构造一个Server对象，这个对象用于监听并响应来自RPc客户端的请求。Namenode会构造两个Server对象来分别响应来自HDFS客户端和Datanode的RPC请求。</p>
-        
-          <a class="article-more-a" href="/2018/11/26/Hadoop源码阅读HadoopRPC二/#more">more >></a>
-        
+<p>HDFS提供了两种HA状态切换方式：一种是管理员通过手动命令执行状态切换，另一种是自动状态切换机制触发状态切换。前者是由客户端调用HAAdmin类提供的方法实现，后者由ZKFailoverController控制切换流程，他们两个最终都调用了RPC接口HAServiceProtocol向Namenode发送HA请求，到达Namenode后，会由NameNodeRPCServer类响应。</p>
+<h5 id="（1）HAServiceProtocol"><a href="#（1）HAServiceProtocol" class="headerlink" title="（1）HAServiceProtocol"></a>（1）HAServiceProtocol</h5><p>HDFS的HA管理命令底层搜室友Client调用远程RPC接口HAServiceProtocol实现的</p>
+<p><a href="https://i.loli.net/2019/02/15/5c6630e955cb9.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2019/02/15/5c6630e955cb9.png" alt="屏幕快照 2019-02-15 上午11.23.52.png"></a></p>
+<ul>
+<li>org.apache.hadoop.hdfs.server.namenode.NameNodeRpcServer#transitionToActive</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span> <span class="comment">// HAServiceProtocol</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">transitionToActive</span><span class="params">(StateChangeRequestInfo req)</span> </span></span><br><span class="line"><span class="function">    <span class="keyword">throws</span> ServiceFailedException, AccessControlException, IOException </span>&#123;</span><br><span class="line">  checkNNStartup();<span class="comment">// 检查Namenode是否开启</span></span><br><span class="line">  nn.checkHaStateChange(req);<span class="comment">// 检查这次状态切换是否合法</span></span><br><span class="line">  nn.transitionToActive();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>org.apache.hadoop.hdfs.server.namenode.NameNode#transitionToActive</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">transitionToActive</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">    <span class="keyword">throws</span> ServiceFailedException, AccessControlException </span>&#123;</span><br><span class="line">  namesystem.checkSuperuserPrivilege();</span><br><span class="line">  <span class="keyword">if</span> (!haEnabled) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> ServiceFailedException(<span class="string">"HA for namenode is not enabled"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//修改HAState为active</span></span><br><span class="line">  state.setState(haContext, ACTIVE_STATE);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>setState()方法会调用setStateInternal(context, s)方法执行内部的状态转移流程。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Internal method to move from the existing state to a new state.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> context HA context</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> s new state</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> ServiceFailedException on failure to transition to new state.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">setStateInternal</span><span class="params">(<span class="keyword">final</span> HAContext context, <span class="keyword">final</span> HAState s)</span></span></span><br><span class="line"><span class="function">    <span class="keyword">throws</span> ServiceFailedException </span>&#123;</span><br><span class="line">  prepareToExitState(context); <span class="comment">// 取消Standby Namenode上进行的检查点操作</span></span><br><span class="line">  s.prepareToEnterState(context);</span><br><span class="line">  context.writeLock();</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    exitState(context);<span class="comment">// 停止当前活动节点或备份节点的服务</span></span><br><span class="line">    context.setState(s); <span class="comment">//将NameNodeHAContext中保存的Namenode状态设置为指定状态</span></span><br><span class="line">    s.enterState(context);<span class="comment">// 启动指定状态的所有服务</span></span><br><span class="line">    s.updateLastHATransitionTime(); <span class="comment">// 更新时间</span></span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    context.writeUnlock();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>exitState()会调用context.stopStandbyServices()停止当前Standby Namenode的所有服务。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** Stop services required in standby state */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">stopStandbyServices</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">  LOG.info(<span class="string">"Stopping services started for standby state"</span>);</span><br><span class="line">  <span class="keyword">if</span> (standbyCheckpointer != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="comment">//关闭进行检查点操作的standbyCheckpointer线程</span></span><br><span class="line">    standbyCheckpointer.stop();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 关闭监控editlog内容的editLogTailer线程</span></span><br><span class="line">  <span class="keyword">if</span> (editLogTailer != <span class="keyword">null</span>) &#123;</span><br><span class="line">    editLogTailer.stop();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 关闭当前editLog</span></span><br><span class="line">  <span class="keyword">if</span> (dir != <span class="keyword">null</span> &amp;&amp; getFSImage() != <span class="keyword">null</span> &amp;&amp; getFSImage().editLog != <span class="keyword">null</span>) &#123;</span><br><span class="line">    getFSImage().editLog.close();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>启动指定状态的所有服务的enterState最终由FSNamesystem#startActiveServices()方法实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Start services required in active state</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">startActiveServices</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">  startingActiveService = <span class="keyword">true</span>;</span><br><span class="line">  LOG.info(<span class="string">"Starting services required for active state"</span>);</span><br><span class="line">  writeLock();</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// 开启新的editlog输出流</span></span><br><span class="line">    FSEditLog editLog = getFSImage().getEditLog();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (!editLog.isOpenForWrite()) &#123;</span><br><span class="line">      <span class="comment">// During startup, we're already open for write during initialization.</span></span><br><span class="line">        <span class="comment">// 对editlog进行恢复操作，与之前的Active节点同步editlog内容</span></span><br><span class="line">      editLog.initJournalsForWrite();</span><br><span class="line">      <span class="comment">// May need to recover</span></span><br><span class="line">      editLog.recoverUnclosedStreams();</span><br><span class="line">      </span><br><span class="line">      LOG.info(<span class="string">"Catching up to latest edits from old active before "</span> +</span><br><span class="line">          <span class="string">"taking over writer role in edits logs"</span>);</span><br><span class="line">      editLogTailer.catchupDuringFailover();</span><br><span class="line">      <span class="comment">// 不再延迟处理数据块</span></span><br><span class="line">      blockManager.setPostponeBlocksFromFuture(<span class="keyword">false</span>);</span><br><span class="line">      <span class="comment">// 新启动的Active Namenode需要等待所有Datanode更新心跳后再出发删除与复制操作</span></span><br><span class="line">      blockManager.getDatanodeManager().markAllDatanodesStale();</span><br><span class="line">      <span class="comment">// 清除blockmanager中的所有队列</span></span><br><span class="line">      blockManager.clearQueues();</span><br><span class="line">      <span class="comment">// 处理之前由于Namenode信息不完整而延迟处理的数据块</span></span><br><span class="line">      blockManager.processAllPendingDNMessages();</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Only need to re-process the queue, If not in SafeMode.</span></span><br><span class="line">      <span class="keyword">if</span> (!isInSafeMode()) &#123;</span><br><span class="line">        LOG.info(<span class="string">"Reprocessing replication and invalidation queues"</span>);</span><br><span class="line">        blockManager.initializeReplQueues();</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (LOG.isDebugEnabled()) &#123;</span><br><span class="line">        LOG.debug(<span class="string">"NameNode metadata after re-processing "</span> +</span><br><span class="line">            <span class="string">"replication and invalidation queues during failover:\n"</span> +</span><br><span class="line">            metaSaveAsString());</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// 读取最新的txid，重置editlog的txid，之后打开editlog</span></span><br><span class="line">      <span class="keyword">long</span> nextTxId = getFSImage().getLastAppliedTxId() + <span class="number">1</span>;</span><br><span class="line">      LOG.info(<span class="string">"Will take over writing edit logs at txnid "</span> + </span><br><span class="line">          nextTxId);</span><br><span class="line">      editLog.setNextTxId(nextTxId);</span><br><span class="line"></span><br><span class="line">      getFSImage().editLog.openForWrite(getEffectiveLayoutVersion());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Initialize the quota.</span></span><br><span class="line">    dir.updateCountForQuota();</span><br><span class="line">    <span class="comment">// Enable quota checks.</span></span><br><span class="line">    dir.enableQuotaChecks();</span><br><span class="line">    <span class="keyword">if</span> (haEnabled) &#123;</span><br><span class="line">      <span class="comment">// Renew all of the leases before becoming active.</span></span><br><span class="line">      <span class="comment">// This is because, while we were in standby mode,</span></span><br><span class="line">      <span class="comment">// the leases weren't getting renewed on this NN.</span></span><br><span class="line">      <span class="comment">// Give them all a fresh start here.</span></span><br><span class="line">      leaseManager.renewAllLeases();</span><br><span class="line">    &#125;</span><br><span class="line">    leaseManager.startMonitor();</span><br><span class="line">    startSecretManagerIfNecessary();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//ResourceMonitor required only at ActiveNN. See HDFS-2914</span></span><br><span class="line">    <span class="keyword">this</span>.nnrmthread = <span class="keyword">new</span> Daemon(<span class="keyword">new</span> NameNodeResourceMonitor());</span><br><span class="line">    nnrmthread.start();</span><br><span class="line"></span><br><span class="line">    nnEditLogRoller = <span class="keyword">new</span> Daemon(<span class="keyword">new</span> NameNodeEditLogRoller(</span><br><span class="line">        editLogRollerThreshold, editLogRollerInterval));</span><br><span class="line">    nnEditLogRoller.start();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (lazyPersistFileScrubIntervalSec &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      lazyPersistFileScrubber = <span class="keyword">new</span> Daemon(<span class="keyword">new</span> LazyPersistFileScrubber(</span><br><span class="line">          lazyPersistFileScrubIntervalSec));</span><br><span class="line">      lazyPersistFileScrubber.start();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      LOG.warn(<span class="string">"Lazy persist file scrubber is disabled,"</span></span><br><span class="line">          + <span class="string">" configured scrub interval is zero."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="comment">//启动cacheManager监控线程</span></span><br><span class="line">    cacheManager.startMonitorThread();</span><br><span class="line">    blockManager.getDatanodeManager().setShouldSendCachingCommands(<span class="keyword">true</span>);</span><br><span class="line">    <span class="keyword">if</span> (provider != <span class="keyword">null</span>) &#123;</span><br><span class="line">      edekCacheLoader = Executors.newSingleThreadExecutor(</span><br><span class="line">          <span class="keyword">new</span> ThreadFactoryBuilder().setDaemon(<span class="keyword">true</span>)</span><br><span class="line">              .setNameFormat(<span class="string">"Warm Up EDEK Cache Thread #%d"</span>)</span><br><span class="line">              .build());</span><br><span class="line">      FSDirEncryptionZoneOp.warmUpEdekCache(edekCacheLoader, dir,</span><br><span class="line">          edekCacheLoaderDelay, edekCacheLoaderInterval);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    startingActiveService = <span class="keyword">false</span>;</span><br><span class="line">    checkSafeMode();</span><br><span class="line">    writeUnlock(<span class="string">"startActiveServices"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>getServiceStatus方法用于获取当前Namenode服务的状态</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">synchronized</span> HAServiceStatus <span class="title">getServiceStatus</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    <span class="keyword">throws</span> ServiceFailedException, AccessControlException </span>&#123;</span><br><span class="line">  namesystem.checkSuperuserPrivilege();</span><br><span class="line">  <span class="keyword">if</span> (!haEnabled) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> ServiceFailedException(<span class="string">"HA for namenode is not enabled"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (state == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> HAServiceStatus(HAServiceState.INITIALIZING);</span><br><span class="line">  &#125;</span><br><span class="line">  HAServiceState retState = state.getServiceState();</span><br><span class="line">  HAServiceStatus ret = <span class="keyword">new</span> HAServiceStatus(retState);</span><br><span class="line">  <span class="keyword">if</span> (retState == HAServiceState.STANDBY) &#123;</span><br><span class="line">    String safemodeTip = namesystem.getSafeModeTip();</span><br><span class="line">    <span class="comment">// Styandby状态，但是处于safemode，则不可以切换为Active状态</span></span><br><span class="line">    <span class="keyword">if</span> (!safemodeTip.isEmpty()) &#123;</span><br><span class="line">      ret.setNotReadyToBecomeActive(</span><br><span class="line">          <span class="string">"The NameNode is in safemode. "</span> +</span><br><span class="line">          safemodeTip);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 否则可以随时切换为Active状态</span></span><br><span class="line">      ret.setReadyToBecomeActive();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (retState == HAServiceState.ACTIVE) &#123;</span><br><span class="line">    ret.setReadyToBecomeActive();</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    ret.setNotReadyToBecomeActive(<span class="string">"State is "</span> + state);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="2-HAAdmin"><a href="#2-HAAdmin" class="headerlink" title="(2) HAAdmin"></a>(2) HAAdmin</h5><p>HA管理命令的执行是由HAAdmin类负责的。HAAdmin的runCmd()方法会对管理命令进行判断，如果是’-failover    ‘,也就是进行故障转移和切换Namenode状态的方法，HAAdmin会调用failover()方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">failover</span><span class="params">(CommandLine cmd)</span></span></span><br><span class="line"><span class="function">    <span class="keyword">throws</span> IOException, ServiceFailedException </span>&#123;</span><br><span class="line">  <span class="comment">// 解析命令行是否开启了forcefence和forceactive</span></span><br><span class="line">  <span class="keyword">boolean</span> forceFence = cmd.hasOption(FORCEFENCE);</span><br><span class="line">  <span class="keyword">boolean</span> forceActive = cmd.hasOption(FORCEACTIVE);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">int</span> numOpts = cmd.getOptions() == <span class="keyword">null</span> ? <span class="number">0</span> : cmd.getOptions().length;</span><br><span class="line">  <span class="keyword">final</span> String[] args = cmd.getArgs();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (numOpts &gt; <span class="number">3</span> || args.length != <span class="number">2</span>) &#123;</span><br><span class="line">    errOut.println(<span class="string">"failover: incorrect arguments"</span>);</span><br><span class="line">    printUsage(errOut, <span class="string">"-failover"</span>);</span><br><span class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="comment">// 解析源节点和目标节点</span></span><br><span class="line">  HAServiceTarget fromNode = resolveTarget(args[<span class="number">0</span>]);</span><br><span class="line">  HAServiceTarget toNode = resolveTarget(args[<span class="number">1</span>]);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// Check that auto-failover is consistently configured for both nodes.</span></span><br><span class="line">  Preconditions.checkState(</span><br><span class="line">      fromNode.isAutoFailoverEnabled() ==</span><br><span class="line">        toNode.isAutoFailoverEnabled(),</span><br><span class="line">        <span class="string">"Inconsistent auto-failover configs between %s and %s!"</span>,</span><br><span class="line">        fromNode, toNode);</span><br><span class="line">  <span class="comment">// 如果是自动切换模式，则不可以设置forceFence以及forceActive</span></span><br><span class="line">  <span class="keyword">if</span> (fromNode.isAutoFailoverEnabled()) &#123;</span><br><span class="line">    <span class="keyword">if</span> (forceFence || forceActive) &#123;</span><br><span class="line">      <span class="comment">// -forceActive doesn't make sense with auto-HA, since, if the node</span></span><br><span class="line">      <span class="comment">// is not healthy, then its ZKFC will immediately quit the election</span></span><br><span class="line">      <span class="comment">// again the next time a health check runs.</span></span><br><span class="line">      <span class="comment">//</span></span><br><span class="line">      <span class="comment">// -forceFence doesn't seem to have any real use cases with auto-HA</span></span><br><span class="line">      <span class="comment">// so it isn't implemented.</span></span><br><span class="line">      errOut.println(FORCEFENCE + <span class="string">" and "</span> + FORCEACTIVE + <span class="string">" flags not "</span> +</span><br><span class="line">          <span class="string">"supported with auto-failover enabled."</span>);</span><br><span class="line">      <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> gracefulFailoverThroughZKFCs(toNode);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (UnsupportedOperationException e)&#123;</span><br><span class="line">      errOut.println(<span class="string">"Failover command is not supported with "</span> +</span><br><span class="line">          <span class="string">"auto-failover enabled: "</span> + e.getLocalizedMessage());</span><br><span class="line">      <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 构造FailoverController对象，并调用failover()方法执行切换操作</span></span><br><span class="line">  FailoverController fc = <span class="keyword">new</span> FailoverController(getConf(),</span><br><span class="line">      requestSource);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    fc.failover(fromNode, toNode, forceFence, forceActive); </span><br><span class="line">    out.println(<span class="string">"Failover from "</span>+args[<span class="number">0</span>]+<span class="string">" to "</span>+args[<span class="number">1</span>]+<span class="string">" successful"</span>);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (FailoverFailedException ffe) &#123;</span><br><span class="line">    errOut.println(<span class="string">"Failover failed: "</span> + ffe.getLocalizedMessage());</span><br><span class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>FailoverController.failover()方法将执行切换操作，会调用上面提到的HAServiceProtocol的transitionToActive()和transitionToStandby()方法，同时在将目标节点切换至Active状态前执行fencing操作，如果切换失败，则执行会滚操作。</p>
+<blockquote>
+<p>fencing:在故障转移期间，在启动备份节点前，我们首先要确保活动节点处于等待状态，或者进程被中止，为了达到这个目的，您至少要配置一个强行中止的方法，或者回车分隔的列表，这是为了一个一个的尝试中止，直到其中一个返回成功，表明活动节点已停止。hadoop提供了两个方法：shell和sshfence.</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Failover from service 1 to service 2. If the failover fails</span></span><br><span class="line"><span class="comment">   * then try to failback.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> fromSvc currently active service</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> toSvc service to make active</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> forceFence to fence fromSvc even if not strictly necessary</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> forceActive try to make toSvc active even if it is not ready</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@throws</span> FailoverFailedException if the failover fails</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">failover</span><span class="params">(HAServiceTarget fromSvc,</span></span></span><br><span class="line"><span class="function"><span class="params">                       HAServiceTarget toSvc,</span></span></span><br><span class="line"><span class="function"><span class="params">                       <span class="keyword">boolean</span> forceFence,</span></span></span><br><span class="line"><span class="function"><span class="params">                       <span class="keyword">boolean</span> forceActive)</span></span></span><br><span class="line"><span class="function">      <span class="keyword">throws</span> FailoverFailedException </span>&#123;</span><br><span class="line"></span><br><span class="line">    Preconditions.checkArgument(fromSvc.getFencer() != <span class="keyword">null</span>,</span><br><span class="line">        <span class="string">"failover requires a fencer"</span>);</span><br><span class="line">    <span class="comment">// 调用preFailoverChecks进行检查，如源节点和目标节点是否是同一个节点，目标节点是否已经是Active状态、目标节点是否有足够磁盘空间切换为Active状态</span></span><br><span class="line">    preFailoverChecks(fromSvc, toSvc, forceActive);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Try to make fromSvc standby</span></span><br><span class="line">    <span class="keyword">boolean</span> tryFence = <span class="keyword">true</span>;</span><br><span class="line">    <span class="comment">// tryGracefulFence调用HAServiceProtocol.transitionToStandby()将源节点切换为Standby状态</span></span><br><span class="line">    <span class="keyword">if</span> (tryGracefulFence(fromSvc)) &#123;</span><br><span class="line">      tryFence = forceFence;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Fence fromSvc if it's required or forced by the user</span></span><br><span class="line">    <span class="keyword">if</span> (tryFence) &#123;</span><br><span class="line">      <span class="keyword">if</span> (!fromSvc.getFencer().fence(fromSvc)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> FailoverFailedException(<span class="string">"Unable to fence "</span> +</span><br><span class="line">            fromSvc + <span class="string">". Fencing failed."</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Try to make toSvc active</span></span><br><span class="line">    <span class="keyword">boolean</span> failed = <span class="keyword">false</span>;</span><br><span class="line">    Throwable cause = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// 切换目标节点到Active状态</span></span><br><span class="line">      HAServiceProtocolHelper.transitionToActive(</span><br><span class="line">          toSvc.getProxy(conf, rpcTimeoutToNewActive),</span><br><span class="line">          createReqInfo());</span><br><span class="line">    &#125; <span class="keyword">catch</span> (ServiceFailedException sfe) &#123;</span><br><span class="line">      LOG.error(<span class="string">"Unable to make "</span> + toSvc + <span class="string">" active ("</span> +</span><br><span class="line">          sfe.getMessage() + <span class="string">"). Failing back."</span>);</span><br><span class="line">      failed = <span class="keyword">true</span>;</span><br><span class="line">      cause = sfe;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException ioe) &#123;</span><br><span class="line">      LOG.error(<span class="string">"Unable to make "</span> + toSvc +</span><br><span class="line">          <span class="string">" active (unable to connect). Failing back."</span>, ioe);</span><br><span class="line">      failed = <span class="keyword">true</span>;</span><br><span class="line">      cause = ioe;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// We failed to make toSvc active 回滚</span></span><br><span class="line">    <span class="keyword">if</span> (failed) &#123;</span><br><span class="line">      String msg = <span class="string">"Unable to failover to "</span> + toSvc;</span><br><span class="line">      <span class="comment">// Only try to failback if we didn't fence fromSvc</span></span><br><span class="line">      <span class="comment">// 如果没有fencing源节点，则回滚到原来的状态</span></span><br><span class="line">      <span class="comment">// 如果源节点已经fencing，则抛出异常</span></span><br><span class="line">      <span class="keyword">if</span> (!tryFence) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="comment">// Unconditionally fence toSvc in case it is still trying to</span></span><br><span class="line">          <span class="comment">// become active, eg we timed out waiting for its response.</span></span><br><span class="line">          <span class="comment">// Unconditionally force fromSvc to become active since it</span></span><br><span class="line">          <span class="comment">// was previously active when we initiated failover.</span></span><br><span class="line">          failover(toSvc, fromSvc, <span class="keyword">true</span>, <span class="keyword">true</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (FailoverFailedException ffe) &#123;</span><br><span class="line">          msg += <span class="string">". Failback to "</span> + fromSvc +</span><br><span class="line">            <span class="string">" failed ("</span> + ffe.getMessage() + <span class="string">")"</span>;</span><br><span class="line">          LOG.fatal(msg);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">     </span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> FailoverFailedException(msg, cause);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="3-Quorum-Journal"><a href="#3-Quorum-Journal" class="headerlink" title="(3) Quorum Journal"></a>(3) Quorum Journal</h5><p>在典型的HA集群中，两台独立的机器被配置为NameNode。在任何时候，只有一个NameNodes处于Active状态，另一个处于Standby状态。活动NameNode负责群集中的所有客户端操作，而Standby仅充当从属服务器，并保持足够的状态以在必要时提供快速故障转移。</p>
+<p>为了让备用节点保持其与活跃节点的状态同步，两个节点都与一组称为“日志节点”（Journal Node）的独立守护进程进行通信。当活动节点执行任何名称空间修改时，它会将修改记录持久记录到大多数这些JN中。备用节点能够读取来自JN的编辑，并不断监视它们以更改编辑日志。当待机节点看到编辑时，它将它们应用到它自己的名称空间。如果发生故障转移，备用服务器将确保在将自己提升为活动状态之前，已经从JounalNodes中读取所有编辑。这确保了在故障转移发生之前命名空间状态已完全同步。</p>
+<p>为了提供快速故障切换，备用节点还需要有关于集群中块的位置的最新信息。为了实现这一点，DataNode配置了两个NameNode的位置，并将块位置信息和心跳发送到两者。</p>
+<p>HA群集的正确操作对于一次只有一个NameNode处于活动状态至关重要。否则，命名空间状态将很快在两者之间发生分歧，从而可能导致数据丢失或其他不正确的结果。为了确保这个属性并防止所谓的“裂脑场景”，JournalNodes一次只允许一个NameNode成为活跃节点。在故障转移期间，要成为活动状态的NameNode将简单地接管写入JournalNodes的角色，这将有效地防止其他NameNode继续处于活动状态，从而允许新的活动安全地进行故障转移。</p>
+<p>Quorum Journal方案是一种预防脑裂情况的机制，具体结构如下：</p>
+<p><a href="https://i.loli.net/2019/02/15/5c66b5186824c.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2019/02/15/5c66b5186824c.png" alt="屏幕快照 2019-02-15 下午8.47.37.png"></a></p>
+<ul>
+<li><strong>JournalNode(JN)</strong>:运行在N台独立的机器上，将editlog保存在JournalNode本地磁盘上，同时提供RPC接口以执行远程读editlog文件的功能</li>
+<li><strong>QuorumJournalManager(QJM)</strong>:运行在Namenode上，通过PRC接口向JournalNode发送写入、互斥、同步editlog</li>
+</ul>
+
       
 
       
@@ -500,16 +293,24 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/26/Hadoop源码阅读HadoopRPC二/">展开全文 >></a>
-        </p>
-      
 
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2019/02/12/Hadoop源码阅读NameNode一/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Hadoop源码阅读——文件系统目录树</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -524,505 +325,32 @@
         </div>
         
         
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-protocolbuffers" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/19/protocolbuffers/">Protocol Buffers</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/19/protocolbuffers/" class="archive-article-date">
-  	<time datetime="2018-11-19T14:32:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在看Hadoop源码的时候涉及到了Protocol buffers，因此这里单开一篇博客写一下自己学习的笔记。主要内容来源于官网文档。</p>
-<hr>
-<p> Protocol buffers是一种语言中立，平台无关，可扩展的序列化数据的格式，可用于通信协议，数据存储等。</p>
-<p>Protocol buffers are a flexible, efficient, automated mechanism for serializing structured data – think XML, but smaller, faster, and simpler. You define how you want your data to be structured once, then you can use special generated source code to easily write and read your structured data to and from a variety of data streams and using a variety of languages. <strong>You can even update your data structure without breaking deployed programs that are compiled against the “old” format.</strong></p>
-        
-          <a class="article-more-a" href="/2018/11/19/protocolbuffers/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">分布式</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/19/protocolbuffers/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#（1）HAServiceProtocol"><span class="toc-number">1.</span> <span class="toc-text">（1）HAServiceProtocol</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-HAAdmin"><span class="toc-number">2.</span> <span class="toc-text">(2) HAAdmin</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-Quorum-Journal"><span class="toc-number">3.</span> <span class="toc-text">(3) Quorum Journal</span></a></li></ol>
+                    </div>
+                </span>
             </div>
         </div>
         
-        
     </div>
 </aside>
 
 
 
-
-  
-    <article id="post-Java动态代理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/18/Java动态代理/">Java动态代理</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/18/Java动态代理/" class="archive-article-date">
-  	<time datetime="2018-11-18T14:12:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>转自：</p>
-<h1 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a><strong>一、概述</strong></h1><h2 id="1-什么是代理"><a href="#1-什么是代理" class="headerlink" title="1. 什么是代理"></a>1. 什么是代理</h2><p>我们大家都知道微商代理，简单地说就是代替厂家卖商品，厂家“委托”代理为其销售商品。关于微商代理，首先我们从他们那里买东西时通常不知道背后的厂家究竟是谁，也就是说，“委托者”对我们来说是不可见的;其次，微商代理主要以朋友圈的人为目标客户，这就相当于为厂家做了一次对客户群体的“过滤”。我们把微商代理和厂家进一步抽象，前者可抽象为代理类，后者可抽象为委托类(被代理类)。通过使用代理，通常有两个优点，并且能够分别与我们提到的微商代理的两个特点对应起来：</p>
-<p>优点一：可以隐藏委托类的实现;</p>
-<p>优点二：可以实现客户与委托类间的解耦，在不修改委托类代码的情况下能够做一些额外的处理。</p>
-        
-          <a class="article-more-a" href="/2018/11/18/Java动态代理/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/18/Java动态代理/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-AsynchronousFileChannel" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/18/AsynchronousFileChannel/">NIO AsynchronousFileChannel</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/18/AsynchronousFileChannel/" class="archive-article-date">
-  	<time datetime="2018-11-18T12:37:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在Java7中AsynchronousFileChannel被加入到NIO中， The <code>AsynchronousFileChannel</code> makes it possible to read data from, and write data to files asynchronously. </p>
-<h5 id="创建一个AsynchronousFileChannel"><a href="#创建一个AsynchronousFileChannel" class="headerlink" title="创建一个AsynchronousFileChannel"></a>创建一个AsynchronousFileChannel</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Path path = Paths.get(<span class="string">"data/test.txt"</span>);</span><br><span class="line"><span class="comment">// 通过open()方法打开一个AsynchronousFileChannel</span></span><br><span class="line"><span class="comment">// The second parameter is one or more open options which tell the</span></span><br><span class="line"><span class="comment">// AsynchronousFileChannel what operations is to be performed on the underlying file.</span></span><br><span class="line">AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(path, StandardOpenOption.READ);</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2018/11/18/AsynchronousFileChannel/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">NIO</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/18/AsynchronousFileChannel/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JavaNIO学习笔记三" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/17/JavaNIO学习笔记三/">JavaNIO 学习笔记三</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/17/JavaNIO学习笔记三/" class="archive-article-date">
-  	<time datetime="2018-11-17T12:47:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="九、ServerSocketChannel"><a href="#九、ServerSocketChannel" class="headerlink" title="九、ServerSocketChannel"></a>九、ServerSocketChannel</h4><p> NIO ServerSocketChannel 的作用等价于于ServerSocket，作为Socket的服务端等待客户端连接。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Opening a ServerSocketChannel</span></span><br><span class="line">ServerSocketChannel ssc = ServerSocketChannel.open();</span><br><span class="line">ssc.socket().bind(<span class="keyword">new</span> InetSocketAddress(<span class="number">8088</span>));</span><br><span class="line"><span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">    <span class="comment">// Listening for incoming connections</span></span><br><span class="line">    <span class="comment">// 在阻塞模式下accept()会一直阻塞到有一个客户端连接它，非阻塞模式下会立即返回一个null</span></span><br><span class="line">    SocketChannel channel = ssc.accept();</span><br><span class="line">    <span class="keyword">if</span> (channel.finishConnect()) &#123;</span><br><span class="line">        ByteBuffer buffer = ByteBuffer.allocate(<span class="number">48</span>);</span><br><span class="line">        channel.read(buffer);</span><br><span class="line">        buffer.flip();</span><br><span class="line">        <span class="keyword">while</span> (buffer.hasRemaining()) &#123;</span><br><span class="line">            System.out.println((<span class="keyword">char</span>) buffer.get());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Closing a ServerSocketChannel</span></span><br><span class="line">ssc.close()</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2018/11/17/JavaNIO学习笔记三/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">NIO</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/17/JavaNIO学习笔记三/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JavaNIO学习笔记2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/17/JavaNIO学习笔记2/">JavaNIO 学习笔记二</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/17/JavaNIO学习笔记2/" class="archive-article-date">
-  	<time datetime="2018-11-17T02:24:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="五、Chanel到Channel的传输"><a href="#五、Chanel到Channel的传输" class="headerlink" title="五、Chanel到Channel的传输"></a>五、Chanel到Channel的传输</h4><p>在NIO中，可以直接从一个Channel传数据到另一个Channel，f one of the channels is a <code>FileChannel</code>. The <code>FileChannel</code> class has a <code>transferTo()</code> and a <code>transferFrom()</code> method which does this for you.</p>
-<h5 id="transferFrom"><a href="#transferFrom" class="headerlink" title="transferFrom()"></a>transferFrom()</h5><p>The <code>FileChannel.transferFrom()</code> method transfers data from a source channel into the<code>FileChannel</code>.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">RandomAccessFile inFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">"data/test.txt"</span>,<span class="string">"rw"</span>);</span><br><span class="line">FileChannel inChannel = inFile.getChannel();</span><br><span class="line"></span><br><span class="line">RandomAccessFile outFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">"data/out.txt"</span>,<span class="string">"rw"</span>);</span><br><span class="line">FileChannel outChannel = outFile.getChannel();</span><br><span class="line"><span class="keyword">long</span> position = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">long</span> count = inChannel.size();</span><br><span class="line">outChannel.transferFrom(inChannel, position, count);</span><br><span class="line">inFile.close();</span><br><span class="line">outFile.close();</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2018/11/17/JavaNIO学习笔记2/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">NIO</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/17/JavaNIO学习笔记2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JavaNIO" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/16/JavaNIO/">JavaNIO 学习笔记一</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/16/JavaNIO/" class="archive-article-date">
-  	<time datetime="2018-11-16T11:23:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="一、NIO预览"><a href="#一、NIO预览" class="headerlink" title="一、NIO预览"></a>一、NIO预览</h4><p>Java NIO (New IO) is an alternative IO API for Java </p>
-<h5 id="NIO使用channels-and-buffers进行工作而不是之前的字节流或字符流"><a href="#NIO使用channels-and-buffers进行工作而不是之前的字节流或字符流" class="headerlink" title="NIO使用channels and buffers进行工作而不是之前的字节流或字符流"></a>NIO使用channels and buffers进行工作而不是之前的字节流或字符流</h5><p>In the standard IO API you work with byte streams and character streams. In NIO you work with <strong>channels and buffers</strong>. Data is always read from a channel into a buffer, or written from a buffer to a channel.</p>
-<h5 id="非阻塞IO"><a href="#非阻塞IO" class="headerlink" title="非阻塞IO"></a>非阻塞IO</h5><p>Java NIO enables you to do non-blocking IO. For instance, a thread can ask a channel to read data into a buffer. While the channel reads data into the buffer, the thread can do something else. Once data is read into the buffer, the thread can then continue processing it.</p>
-        
-          <a class="article-more-a" href="/2018/11/16/JavaNIO/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">NIO</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/16/JavaNIO/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
   
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-    </nav>
+  
+
+  
+
+  
+
   
 
 
@@ -1045,8 +373,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,

@@ -6,15 +6,24 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//harold.me">
-  <title>Harold的博客</title>
+  <title>Hadoop源码阅读——文件系统目录树 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Harold的博客">
-<meta property="og:url" content="//harold.me/index.html">
+  <meta name="description" content="HDFS以Master/Slave模式运行，主要有NameNode和DataNode两类节点，NameNode是HDFS中的主节点。 HDFS的文件和目录在内存中以树的形式存储，目录树由NameNode维护，目录树以”/“为根，通过FSDirectory类管理。在目录树中不管是文件还是目录都被看作一个INode节点，分别对应INodeFile和INodeDirectory。HDFS会将命名空间存储">
+<meta name="keywords" content="大数据,Hadoop,HDFS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop源码阅读——文件系统目录树">
+<meta property="og:url" content="//harold.me/2019/02/12/Hadoop源码阅读NameNode一/index.html">
 <meta property="og:site_name" content="Harold的博客">
+<meta property="og:description" content="HDFS以Master/Slave模式运行，主要有NameNode和DataNode两类节点，NameNode是HDFS中的主节点。 HDFS的文件和目录在内存中以树的形式存储，目录树由NameNode维护，目录树以”/“为根，通过FSDirectory类管理。在目录树中不管是文件还是目录都被看作一个INode节点，分别对应INodeFile和INodeDirectory。HDFS会将命名空间存储">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.loli.net/2019/02/12/5c62d1abccedd.png">
+<meta property="og:image" content="https://i.loli.net/2019/02/13/5c638eddcccfb.png">
+<meta property="og:image" content="https://i.loli.net/2019/02/13/5c63b88639e08.png">
+<meta property="og:updated_time" content="2019-02-15T02:11:09.787Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Harold的博客">
+<meta name="twitter:title" content="Hadoop源码阅读——文件系统目录树">
+<meta name="twitter:description" content="HDFS以Master/Slave模式运行，主要有NameNode和DataNode两类节点，NameNode是HDFS中的主节点。 HDFS的文件和目录在内存中以树的形式存储，目录树由NameNode维护，目录树以”/“为根，通过FSDirectory类管理。在目录树中不管是文件还是目录都被看作一个INode节点，分别对应INodeFile和INodeDirectory。HDFS会将命名空间存储">
+<meta name="twitter:image" content="https://i.loli.net/2019/02/12/5c62d1abccedd.png">
   
   
     <link rel="icon" href="/favicon.png">
@@ -182,101 +191,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-Hadoop源码阅读——高可用性" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-Hadoop源码阅读NameNode一" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/15/Hadoop源码阅读——高可用性/">Hadoop源码阅读——高可用性</a>
-    </h1>
-  
-
-        
-        <a href="/2019/02/15/Hadoop源码阅读——高可用性/" class="archive-article-date">
-  	<time datetime="2019-02-15T02:13:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>​    在HA HDFS集群中会同时运行两个NameNode，一个作为活动的Namenode，一个作为备份的Namenode，备份Namenode的命名空间与活动Namenode的命名空间是实时同步的。所以当活动Namenode发生故障而停止服务时，备份Namenode可以立即切换为活动状态。</p>
-<p><a href="https://i.loli.net/2019/02/15/5c662304d82ab.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2019/02/15/5c662304d82ab.png" alt="屏幕快照 2019-02-15 上午10.24.28.png"></a>
-        
-          <a class="article-more-a" href="/2019/02/15/Hadoop源码阅读——高可用性/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">HDFS</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/02/15/Hadoop源码阅读——高可用性/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Hadoop源码阅读NameNode一" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/12/Hadoop源码阅读NameNode一/">Hadoop源码阅读——文件系统目录树</a>
+    <h1 class="article-title" itemprop="name">
+      Hadoop源码阅读——文件系统目录树
     </h1>
   
 
@@ -291,186 +213,88 @@
       
         <p>HDFS以Master/Slave模式运行，主要有NameNode和DataNode两类节点，NameNode是HDFS中的主节点。</p>
 <p>HDFS的文件和目录在内存中以树的形式存储，目录树由NameNode维护，目录树以”/“为根，通过FSDirectory类管理。在目录树中不管是文件还是目录都被看作一个INode节点，分别对应INodeFile和INodeDirectory。HDFS会将命名空间存储在NameNode本地文件系统上的fsimage文件中，由FSImage类管理，另外对HDFS的各种操作，NameNode都会将其记录在editlog文件中，由FSEditLog类管理，NameNode会周期性的合并editlog与fsimage产生新的fsimage。</p>
-        
-          <a class="article-more-a" href="/2019/02/12/Hadoop源码阅读NameNode一/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">HDFS</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/02/12/Hadoop源码阅读NameNode一/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Hadoop源码阅读HadoopRPC三" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/04/Hadoop源码阅读HadoopRPC三/">Hadoop源码阅读——Hadoop RPC(三)</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/04/Hadoop源码阅读HadoopRPC三/" class="archive-article-date">
-  	<time datetime="2018-12-04T14:08:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="三、Hadoop-RPC实现"><a href="#三、Hadoop-RPC实现" class="headerlink" title="三、Hadoop RPC实现"></a>三、Hadoop RPC实现</h4><p>上一篇文章分析了Hadoop RPC框架的RPC、Client类的实现，还有一个Server类用于实现服务器端的功能，本篇文章将详细分析Server类。</p>
-<h5 id="3-Server类实现"><a href="#3-Server类实现" class="headerlink" title="3. Server类实现"></a>3. Server类实现</h5><p>Server类采用了很多技术来提供并发能力，包括线程池、JavaNIO提供的Reactor模式等，其中Reactor模式贯穿了整个Server的设计。</p>
-<h6 id="a-Reactor模式"><a href="#a-Reactor模式" class="headerlink" title="a. Reactor模式"></a>a. Reactor模式</h6><p>reactor设计模式，是一种基于事件驱动的设计模式。处理流程是：应用业务向一个中间人注册一个回调（event handler），当IO就绪后，就这个中间人产生一个事件，并通知此handler进行处理。这里的中间人其实是一个不断等待和循环的线程，他接受所有应用程序的注册，并检查应用程序注册的IO事件是否就绪，如果就绪则通知应用程序进行处理。</p>
-        
-          <a class="article-more-a" href="/2018/12/04/Hadoop源码阅读HadoopRPC三/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">HDFS</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/04/Hadoop源码阅读HadoopRPC三/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Hadoop源码阅读HadoopRPC二" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/26/Hadoop源码阅读HadoopRPC二/">Hadoop源码阅读——Hadoop RPC(二)</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/26/Hadoop源码阅读HadoopRPC二/" class="archive-article-date">
-  	<time datetime="2018-11-26T11:08:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://harold1994.github.io/2018/11/16/Hadoop%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E2%80%94%E2%80%94RPC/" target="_blank" rel="noopener">书接上回</a>，继续Hadoop RPC源码分析，Hadoop RPC框架的抽象步骤：</p>
+<a id="more"></a> 
+<h4 id="一、INode相关类"><a href="#一、INode相关类" class="headerlink" title="一、INode相关类"></a>一、INode相关类</h4><p>如下图所示，INode是一个抽象类，INodeFile和INodeDirectory是它的子类</p>
+<p><a href="https://i.loli.net/2019/02/12/5c62d1abccedd.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2019/02/12/5c62d1abccedd.png" alt="屏幕快照 2019-02-12 下午10.00.47.png"></a></p>
+<h5 id="1-INode抽象类"><a href="#1-INode抽象类" class="headerlink" title="1.INode抽象类"></a>1.INode抽象类</h5><p>INode实现了INodeAttributes接口，接口包括userName、groupName、accessTime等七个字断的get方法，INode由定义了元信息（包括id、name、fullPathName、parent）的get和set接口方法，同时提供了几个基本判断方法：isFile()、isDirectory()、isSynlink()、isRoot()、isReference()</p>
+<p>INode类的设计采用了模版模式，将userName等字断的定义留给了子类实现。如setUser()方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** Set user */</span></span><br><span class="line"><span class="comment">// 抽象方法，由子类实现</span></span><br><span class="line"><span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">setUser</span><span class="params">(String user)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Set user */</span></span><br><span class="line"><span class="comment">// 模版方法，不可继承，供接口调用</span></span><br><span class="line"><span class="function"><span class="keyword">final</span> INode <span class="title">setUser</span><span class="params">(String user, <span class="keyword">int</span> latestSnapshotId)</span> </span>&#123;</span><br><span class="line">  recordModification(latestSnapshotId);</span><br><span class="line">  setUser(user);</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在模板模式（Template Pattern）中，一个抽象类公开定义了执行它的方法的方式/模板。它的子类可以按需要重写方法实现，但调用将以抽象类中定义的方式进行。这种类型的设计模式属于行为型模式。</p>
+</blockquote>
+<p>INode中只有一个parent字断，表明当前INode的父目录，父目录只能是INodeDirectory或INodeReference之一。</p>
+<h5 id="2-INodeWithAdditionalFields抽象类"><a href="#2-INodeWithAdditionalFields抽象类" class="headerlink" title="2.INodeWithAdditionalFields抽象类"></a>2.INodeWithAdditionalFields抽象类</h5><p>INodeWithAdditionalFields定义了INode中没有定义的id、name、permission、modificationTime、accessTime等字段，并覆盖了INode中的抽象方法。</p>
+<p>（1） permission字段</p>
+<p>​    permission字断包括三个部分信息：用户信息、用户组信息、权限信息</p>
+<p>​    PermissionStatusFormat是用来解析及处理permission字段的工具类。SerialNumberManager类中存放了用户名和用户标识、用户组名和用户组标识的对应关系，因此不必在INode中保存字符串形式的名字。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">enum</span> PermissionStatusFormat &#123;</span><br><span class="line">  MODE(<span class="keyword">null</span>, <span class="number">16</span>),<span class="comment">// 16个比特存放文件模式表示</span></span><br><span class="line">  GROUP(MODE.BITS, <span class="number">24</span>), <span class="comment">//24个比特存放用户组标识</span></span><br><span class="line">  USER(GROUP.BITS, <span class="number">24</span>);<span class="comment">// 24个比特存放用户名标识</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">final</span> LongBitFormat BITS;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="title">PermissionStatusFormat</span><span class="params">(LongBitFormat previous, <span class="keyword">int</span> length)</span> </span>&#123;</span><br><span class="line">    BITS = <span class="keyword">new</span> LongBitFormat(name(), previous, length, <span class="number">0</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 提取最后24个比特的信息，并通过SerialNumberManager获取用户名</span></span><br><span class="line">  <span class="function"><span class="keyword">static</span> String <span class="title">getUser</span><span class="params">(<span class="keyword">long</span> permission)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> n = (<span class="keyword">int</span>)USER.BITS.retrieve(permission);</span><br><span class="line">    <span class="keyword">return</span> SerialNumberManager.INSTANCE.getUser(n);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 提取中间24个比特的信息，并通过SerialNumberManager获取用户组名</span></span><br><span class="line">  <span class="function"><span class="keyword">static</span> String <span class="title">getGroup</span><span class="params">(<span class="keyword">long</span> permission)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> n = (<span class="keyword">int</span>)GROUP.BITS.retrieve(permission);</span><br><span class="line">    <span class="keyword">return</span> SerialNumberManager.INSTANCE.getGroup(n);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">static</span> <span class="keyword">short</span> <span class="title">getMode</span><span class="params">(<span class="keyword">long</span> permission)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">short</span>)MODE.BITS.retrieve(permission);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Encode the &#123;<span class="doctag">@link</span> PermissionStatus&#125; to a long. */</span></span><br><span class="line">  <span class="function"><span class="keyword">static</span> <span class="keyword">long</span> <span class="title">toLong</span><span class="params">(PermissionStatus ps)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> permission = <span class="number">0L</span>;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> user = SerialNumberManager.INSTANCE.getUserSerialNumber(</span><br><span class="line">        ps.getUserName());</span><br><span class="line">    permission = USER.BITS.combine(user, permission);</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> group = SerialNumberManager.INSTANCE.getGroupSerialNumber(</span><br><span class="line">        ps.getGroupName());</span><br><span class="line">    permission = GROUP.BITS.combine(group, permission);</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> mode = ps.getPermission().toShort();</span><br><span class="line">    permission = MODE.BITS.combine(mode, permission);</span><br><span class="line">    <span class="keyword">return</span> permission;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>(2) features字段</p>
+<p>INodeWithAdditionalFields.features字断保存当前INode拥有哪些特性，它是一个Feature类型的数组</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Feature[] EMPTY_FEATURE = <span class="keyword">new</span> Feature[<span class="number">0</span>];</span><br><span class="line"><span class="keyword">protected</span> Feature[] features = EMPTY_FEATURE;</span><br></pre></td></tr></table></figure>
+<p>INodeWithAdditionalFields提供了向INode增删查特性的方法，底层是对features的操作。</p>
+<h5 id="3-INodeDirectory类"><a href="#3-INodeDirectory类" class="headerlink" title="3.INodeDirectory类"></a>3.INodeDirectory类</h5><p>INodeDirectory中添加了成员变量children来保存目录中所有子目录项的INode对象。</p>
+<p>（1）子目录项相关方法</p>
+<p>INodeDirectory作为目录容器，主要功能是维护目录中保存的文件及子目录，即维护children字段。HDFS2.6引入了快照特性，当在当前INodeDirectory创建快照之后，所有对于子目录项的操作都需要在快照内进行记录。</p>
+<p>（2）特性相关方法</p>
+<p>对于INodeDirectory，可以对目录添加磁盘配额特性（DirectoryWithQuotaFeature）和快照特性（SnapshotFeature）</p>
+<h5 id="4-INodeFile类"><a href="#4-INodeFile类" class="headerlink" title="4.INodeFile类"></a>4.INodeFile类</h5><p>INodeFile类保存了文件头header字段和文件对应的数据块blocks字段，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 文件头，保存当前文件有多少副本、文件数据块大小 [4-bit storagePolicyID][12-bit replication][48-bit preferredBlockSize]</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">long</span> header = <span class="number">0L</span>;</span><br><span class="line"><span class="comment">// 保存当前文件所有数据块信息</span></span><br><span class="line"><span class="keyword">private</span> BlockInfo[] blocks;</span><br></pre></td></tr></table></figure>
+<p>内部类INodeFile.HeaderFormat用户处理header字段，BlockInfo类报讯了数据块与文件、数据块与DataNode的对应关系。</p>
+<h5 id="5-INodeReference类"><a href="#5-INodeReference类" class="headerlink" title="5.INodeReference类"></a>5.INodeReference类</h5><p>当HDFS文件/目录出于某个快照中，并且这个文件或目录被重命名或者移动到其他路径时，该文件或目录就会存在多条访问路径，INodeReference就是为了解决这个问而生的。</p>
+<blockquote>
+<p> 例如：</p>
+<p>/a是hdfs中的一个普通目录，s0为/a的一个快照，在/a目录下有一个文件test。根据快照的定义，我们可以通过/a/test以及/a/snapshot/s0/test访问test文件。但是当用户将/a/test文件重命名成/x/test1时，通过快照路径/a/snapshot/s0/test将无法访问test文件，这种情况是不符合快照规范的。</p>
+</blockquote>
+<p><a href="https://i.loli.net/2019/02/13/5c638eddcccfb.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2019/02/13/5c638eddcccfb.png" alt="屏幕快照 2019-02-13 上午11.28.10.png"></a></p>
+<p>上图给出了INodeReference的继承关系图。这里的WithName,WithCount,DstReference都是INodeReference的子类，同时也是INodeReference的内部类。WithName对象用于替代重命名操作前源路径中的INode对象，DstReference对象则用于替代重命名操作后目标路径中的INode对象，WithName和DstReference共同指向了一个WithCount对象，WithCount对象则指向了文件系统目录树中真正的INode对象。</p>
+<p>INodeReference是一个抽象类，但是它继承自INode，所以他的子类可以替代文件系统目录中的INodeFile节点，INodeReference定义了referred字段，用以报讯当前INodeReference类指向的INode节点。</p>
 <ul>
-<li>定义RPC协议：只有定一个RPC协议，客户端才知道服务端对外提供了哪些服务</li>
-<li>实现RPC协议：服务端的服务程序需要实现RPC协议。当RPC调用通过网络到达服务器时，实现RPC协议的服务程序会响应这个调用。</li>
-<li>客户端获取代理对象：</li>
-<li>服务器构造并启动RPC Server</li>
+<li>org.apache.hadoop.hdfs.server.namenode.INodeReference.WithCount#WithCount</li>
 </ul>
-<h5 id="4-服务器获取Server对象"><a href="#4-服务器获取Server对象" class="headerlink" title="4. 服务器获取Server对象"></a>4. 服务器获取Server对象</h5><p>RPC服务器需要构造一个Server对象，这个对象用于监听并响应来自RPc客户端的请求。Namenode会构造两个Server对象来分别响应来自HDFS客户端和Datanode的RPC请求。</p>
-        
-          <a class="article-more-a" href="/2018/11/26/Hadoop源码阅读HadoopRPC二/#more">more >></a>
-        
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** An anonymous reference with reference count. */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">WithCount</span> <span class="keyword">extends</span> <span class="title">INodeReference</span> </span>&#123;</span><br><span class="line"><span class="comment">// 保存所有指向这个WithCount对象的WithName对象的集合</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> List&lt;WithName&gt; withNameList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">  ...</span><br><span class="line">   <span class="comment">/** Increment and then return the reference count. */</span></span><br><span class="line">    <span class="comment">// 任何指向WithCount的withName对象和DstReference对象都需要调用这个方法来添加指向关系</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addReference</span><span class="params">(INodeReference ref)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (ref <span class="keyword">instanceof</span> WithName) &#123;<span class="comment">// 如果是WithName对象，添加到withNameList</span></span><br><span class="line">        WithName refWithName = (WithName) ref;</span><br><span class="line">        <span class="keyword">int</span> i = Collections.binarySearch(withNameList, refWithName,</span><br><span class="line">            WITHNAME_COMPARATOR);</span><br><span class="line">        Preconditions.checkState(i &lt; <span class="number">0</span>);</span><br><span class="line">        withNameList.add(-i - <span class="number">1</span>, refWithName);</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (ref <span class="keyword">instanceof</span> DstReference) &#123;</span><br><span class="line">        setParentReference(ref);<span class="comment">// 如果是DstReference指向这个对象，将它设置为自己的父节点</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>org.apache.hadoop.hdfs.server.namenode.INodeReference.WithName</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** A reference with a fixed name. */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">WithName</span> <span class="keyword">extends</span> <span class="title">INodeReference</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 保存重命名前文件的名字</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">byte</span>[] name;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * The id of the last snapshot in the src tree when this WithName node was </span></span><br><span class="line"><span class="comment">   * generated. When calculating the quota usage of the referred node, only </span></span><br><span class="line"><span class="comment">   * the files/dirs existing when this snapshot was taken will be counted for </span></span><br><span class="line"><span class="comment">   * this WithName node and propagated along its ancestor path.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> lastSnapshotId;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">WithName</span><span class="params">(INodeDirectory parent, WithCount referred, <span class="keyword">byte</span>[] name,</span></span></span><br><span class="line"><span class="function"><span class="params">      <span class="keyword">int</span> lastSnapshotId)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(parent, referred);<span class="comment">// 调用父类的构造方法，指向WithCount节点</span></span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">    <span class="keyword">this</span>.lastSnapshotId = lastSnapshotId;</span><br><span class="line">    referred.addReference(<span class="keyword">this</span>);<span class="comment">// *</span></span><br><span class="line">  &#125;</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>建立INodeReference的入口是FSDirRenameOp.RenameOperation，只有在进行rename操作时才有可能创建INodeReference</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">RenameOperation(FSDirectory fsd, INodesInPath srcIIP, INodesInPath dstIIP)</span><br><span class="line">    <span class="keyword">throws</span> QuotaExceededException &#123;</span><br><span class="line">  <span class="keyword">this</span>.fsd = fsd;</span><br><span class="line">  <span class="keyword">this</span>.srcIIP = srcIIP;</span><br><span class="line">  <span class="keyword">this</span>.dstIIP = dstIIP;</span><br><span class="line">  <span class="keyword">this</span>.srcParentIIP = srcIIP.getParentINodesInPath();</span><br><span class="line">  <span class="keyword">this</span>.dstParentIIP = dstIIP.getParentINodesInPath();</span><br><span class="line"></span><br><span class="line">  BlockStoragePolicySuite bsps = fsd.getBlockStoragePolicySuite();</span><br><span class="line">  srcChild = <span class="keyword">this</span>.srcIIP.getLastINode();</span><br><span class="line">  srcChildName = srcChild.getLocalNameBytes();</span><br><span class="line">  <span class="keyword">final</span> <span class="keyword">int</span> srcLatestSnapshotId = srcIIP.getLatestSnapshotId();</span><br><span class="line">  isSrcInSnapshot = srcChild.isInLatestSnapshot(srcLatestSnapshotId);</span><br><span class="line">  srcChildIsReference = srcChild.isReference();</span><br><span class="line">  srcParent = <span class="keyword">this</span>.srcIIP.getINode(-<span class="number">2</span>).asDirectory();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Record the snapshot on srcChild. After the rename, before any new</span></span><br><span class="line">  <span class="comment">// snapshot is taken on the dst tree, changes will be recorded in the</span></span><br><span class="line">  <span class="comment">// latest snapshot of the src tree.</span></span><br><span class="line">  <span class="keyword">if</span> (isSrcInSnapshot) &#123;</span><br><span class="line">    srcChild.recordModification(srcLatestSnapshotId);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// check srcChild for reference</span></span><br><span class="line">  srcRefDstSnapshot = srcChildIsReference ?</span><br><span class="line">      srcChild.asReference().getDstSnapshotId() : Snapshot.CURRENT_STATE_ID;</span><br><span class="line">  oldSrcCounts = <span class="keyword">new</span> QuotaCounts.Builder().build();</span><br><span class="line">  <span class="keyword">if</span> (isSrcInSnapshot) &#123;<span class="comment">// 如果源节点在快照中，调用replaceChild4ReferenceWithName构造INodeReference.WithName对象</span></span><br><span class="line">    <span class="keyword">final</span> INodeReference.WithName withName = srcParent</span><br><span class="line">        .replaceChild4ReferenceWithName(srcChild, srcLatestSnapshotId);</span><br><span class="line">    withCount = (INodeReference.WithCount) withName.getReferredINode();</span><br><span class="line">    srcChild = withName;</span><br><span class="line">    <span class="keyword">this</span>.srcIIP = INodesInPath.replace(srcIIP, srcIIP.length() - <span class="number">1</span>,</span><br><span class="line">        srcChild);</span><br><span class="line">    <span class="comment">// get the counts before rename</span></span><br><span class="line">    oldSrcCounts.add(withCount.getReferredINode().computeQuotaUsage(bsps));</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (srcChildIsReference) &#123;</span><br><span class="line">    <span class="comment">// srcChild is reference but srcChild is not in latest snapshot</span></span><br><span class="line">    withCount = (INodeReference.WithCount) srcChild.asReference()</span><br><span class="line">        .getReferredINode();</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    withCount = <span class="keyword">null</span>;<span class="comment">// 否则将withCount设置为null，作为普通重命名操作</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将源节点或者dst节点添加到目标路径</span></span><br><span class="line"><span class="function">INodesInPath <span class="title">addSourceToDestination</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> INode dstParent = dstParentIIP.getLastINode();</span><br><span class="line">  <span class="keyword">final</span> <span class="keyword">byte</span>[] dstChildName = dstIIP.getLastLocalName();</span><br><span class="line">  <span class="keyword">final</span> INode toDst;</span><br><span class="line">  <span class="keyword">if</span> (withCount == <span class="keyword">null</span>) &#123;<span class="comment">// 普通rename操作，不需要INodeReference机制</span></span><br><span class="line">    srcChild.setLocalName(dstChildName);</span><br><span class="line">    toDst = srcChild;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    withCount.getReferredINode().setLocalName(dstChildName);</span><br><span class="line">    toDst = <span class="keyword">new</span> INodeReference.DstReference(dstParent.asDirectory(),</span><br><span class="line">        withCount, dstIIP.getLatestSnapshotId());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 将toDst添加到目标路径</span></span><br><span class="line">  <span class="keyword">return</span> fsd.addLastINodeNoQuotaCheck(dstParentIIP, toDst);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="二、Feature相关类"><a href="#二、Feature相关类" class="headerlink" title="二、Feature相关类"></a>二、Feature相关类</h4><p><a href="https://i.loli.net/2019/02/13/5c63b88639e08.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2019/02/13/5c63b88639e08.png" alt="屏幕快照 2019-02-13 下午2.26.02.png"></a></p>
+<h5 id="1-SnapshotFeature"><a href="#1-SnapshotFeature" class="headerlink" title="1.SnapshotFeature"></a>1.SnapshotFeature</h5><p>快照是一个文件系统或者文件系统中某个目录在某一时刻的镜像。目标目录的快照创建之后，不论目标目录发生什么变化，或者目标目录子目录发生任何变化，都可以通过快照找回快照建立时目标目录的所有文件以及目录结构。</p>
+<p>同一个目录可以创建多个快照，它们通过名字来区分。</p>
+<p>（1）快照相关类</p>
+<p>HDFS中定义了DirectorySnapshottableFeature和DirectoryWithSnapshotFeature两个类来描述目录的快照特性。</p>
+<p>DirectorySnapshottableFeature描述了目录开启快照功能的特性，DirectoryWithSnapshotFeature描述了目录拥有的快照的特性。DirectoryDiff类记录了两个快照版本之间进行的所有操作，DirectoryDiff使用ChildrenDiff类记录HDFS目录的子目录项集合children的变化情况。ChildrenDiff中有两个List created和deleted分别保存快照创建之后新创建的子目录项和删除的子目录项。</p>
+<h4 id="三、FSEditLog类"><a href="#三、FSEditLog类" class="headerlink" title="三、FSEditLog类"></a>三、FSEditLog类</h4><p>在NameNode中，命名空间是全部被缓存在内存中的，一旦NameNode重启或者宕机，内存中的数据将会全部丢失。因此，NameNode将命名空间信息记录在fsimage文件中，用于在重启时重构命名空间，但是fsimage文件存储在磁盘上，不能实时和内存中的数据结构保持同步，而且fsimage一般很大，所以namenode隔一段时间才更新一次fsimage，HDFS将操作记录在editlog文件中， 定期与fsimage文件合并，FSEditLog类用来管理editlog文件，editlog随着namenode实时更新，所有FSEditLog的实现依赖于底层的输入输出流。</p>
+<h5 id="1-TransactionId机制"><a href="#1-TransactionId机制" class="headerlink" title="1.TransactionId机制"></a>1.TransactionId机制</h5><p>TransactionId与客户端每次发起的RPC请求有关，当客户端发起一次RPC请求对NameNode的命名空间进行修改后，NameNode就会在editlog中发起一个新的transaction用于记录这次操作，每个transaction会用一个唯一的transactionId标识。</p>
+<h5 id="2-FSEditLog状态机"><a href="#2-FSEditLog状态机" class="headerlink" title="2.FSEditLog状态机"></a>2.FSEditLog状态机</h5><p>FSEditLog被设计成一个状态机：</p>
+<blockquote>
+<p>UNINITIALIZED: editlog的初始状态<br>BETWEEN_LOG_SEGMENTS:editlog的前一个segment已经关闭，另一个还没开始<br>IN_SEGMENT:editlog处于可写阶段<br>OPEN_FOR_READING:可读阶段<br>CLOSED:关闭状态</p>
+</blockquote>
+<p>In a non-HA setup:</p>
+<p>The log starts in UNINITIALIZED state upon construction. Once it’s initialized, it is usually in IN_SEGMENT state, indicating that edits may be written. In the middle of a roll, or while saving the namespace, it briefly enters the BETWEEN_LOG_SEGMENTS state, indicating that the previous segment has been closed, but the new one has not yet been opened.</p>
+<p>In an HA setup: </p>
+<p>The log starts in UNINITIALIZED state upon construction. Once it’s initialized, it sits in the OPEN_FOR_READING state the entire time that the NN is in standby. Upon the NN transition to active, the log will be CLOSED, and then move to being BETWEEN_LOG_SEGMENTS, much as if the NN had just started up, and then will move to IN_SEGMENT so it can begin writing to the log. The log states will then revert to behaving as they do in a non-HA setup.</p>
+<ul>
+<li>initJournalsForWrite将UNINITIALIZED状态转换为BETWEEN_LOG_SEGMENTS，其间调用了initJournals方法</li>
+</ul>
+<p>JournalManager类是负责在特定存储目录上持久化editlog文件的类。他有多个子类，普通文件系统由FileJournalManager管理，NFS、BookKeeper等文件系统有对应的JournalManager子类管理。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">initJournals</span><span class="params">(List&lt;URI&gt; dirs)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> minimumRedundantJournals = conf.getInt(</span><br><span class="line">      DFSConfigKeys.DFS_NAMENODE_EDITS_DIR_MINIMUM_KEY,</span><br><span class="line">      DFSConfigKeys.DFS_NAMENODE_EDITS_DIR_MINIMUM_DEFAULT);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">synchronized</span>(journalSetLock) &#123;</span><br><span class="line">    <span class="comment">// 初始化journalSet， 存放存储路径对应的所有JournalManager对象</span></span><br><span class="line">    journalSet = <span class="keyword">new</span> JournalSet(minimumRedundantJournals);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (URI u : dirs) &#123;</span><br><span class="line">      <span class="keyword">boolean</span> required = FSNamesystem.getRequiredNamespaceEditsDirs(conf)</span><br><span class="line">          .contains(u);</span><br><span class="line">      <span class="comment">// 如果是本地URl，则使用FileJournalManager</span></span><br><span class="line">      <span class="keyword">if</span> (u.getScheme().equals(NNStorage.LOCAL_URI_SCHEME)) &#123;</span><br><span class="line">        StorageDirectory sd = storage.getStorageDirectory(u);</span><br><span class="line">        <span class="keyword">if</span> (sd != <span class="keyword">null</span>) &#123;</span><br><span class="line">          journalSet.add(<span class="keyword">new</span> FileJournalManager(conf, sd, storage),</span><br><span class="line">              required, sharedEditsDirs.contains(u));</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="comment">// 否则根据URL创建对应的JournalManager</span></span><br><span class="line">        journalSet.add(createJournal(u), required,</span><br><span class="line">            sharedEditsDirs.contains(u));</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (journalSet.isEmpty()) &#123;</span><br><span class="line">    LOG.error(<span class="string">"No edits directories configured!"</span>);</span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>initSharedJournalsForRead</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 用在HA情况下，将editlog由UNINITIALIZED转到OPEN_FOR_READING</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">initSharedJournalsForRead</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (state == State.OPEN_FOR_READING) &#123;</span><br><span class="line">    LOG.warn(<span class="string">"Initializing shared journals for READ, already open for READ"</span>,</span><br><span class="line">        <span class="keyword">new</span> Exception());</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  Preconditions.checkState(state == State.UNINITIALIZED ||</span><br><span class="line">      state == State.CLOSED);</span><br><span class="line">  <span class="comment">// 对于HA的情况，editlog的日志存储目录为共享的目录sharedEditsDirs，由Active Namenode与 StandBy NameNode共享</span></span><br><span class="line">  initJournals(<span class="keyword">this</span>.sharedEditsDirs);</span><br><span class="line">  state = State.OPEN_FOR_READING;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>openForWrite()</p>
+</li>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Initialize the output stream for logging, opening the first</span></span><br><span class="line"><span class="comment"> * log segment.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">openForWrite</span><span class="params">(<span class="keyword">int</span> layoutVersion)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">  Preconditions.checkState(state == State.BETWEEN_LOG_SEGMENTS,</span><br><span class="line">      <span class="string">"Bad state: %s"</span>, state);</span><br><span class="line">  <span class="comment">// 返回最后一个写入log的TxId+1，作为本次的TxId</span></span><br><span class="line">  <span class="keyword">long</span> segmentTxId = getLastWrittenTxId() + <span class="number">1</span>;</span><br><span class="line">  <span class="comment">// Safety check: we should never start a segment if there are</span></span><br><span class="line">  <span class="comment">// newer txids readable.</span></span><br><span class="line">  List&lt;EditLogInputStream&gt; streams = <span class="keyword">new</span> ArrayList&lt;EditLogInputStream&gt;();</span><br><span class="line">  <span class="comment">// 判断，有没有包含这个新的segmentTxId的editlog的问文件，有则抛出异常</span></span><br><span class="line">  journalSet.selectInputStreams(streams, segmentTxId, <span class="keyword">true</span>);</span><br><span class="line">  <span class="keyword">if</span> (!streams.isEmpty()) &#123;</span><br><span class="line">    String error = String.format(<span class="string">"Cannot start writing at txid %s "</span> +</span><br><span class="line">      <span class="string">"when there is a stream available for read: %s"</span>,</span><br><span class="line">      segmentTxId, streams.get(<span class="number">0</span>));</span><br><span class="line">    IOUtils.cleanup(LOG, streams.toArray(<span class="keyword">new</span> EditLogInputStream[<span class="number">0</span>]));</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(error);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//开始记录新的段落，创建edits_inprogress_* 文件</span></span><br><span class="line">  startLogSegment(segmentTxId, <span class="keyword">true</span>, layoutVersion);</span><br><span class="line">  <span class="keyword">assert</span> state == State.IN_SEGMENT : <span class="string">"Bad state: "</span> + state;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>startLogSegment()</p>
+</li>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Start writing to the log segment with the given txid.</span></span><br><span class="line"><span class="comment"> * Transitions from BETWEEN_LOG_SEGMENTS state to IN_LOG_SEGMENT state. </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">startLogSegment</span><span class="params">(<span class="keyword">final</span> <span class="keyword">long</span> segmentTxId,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">boolean</span> writeHeaderTxn, <span class="keyword">int</span> layoutVersion)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">  ...</span><br><span class="line">  numTransactions = <span class="number">0</span>;</span><br><span class="line">  totalTimeTransactions = <span class="number">0</span>;</span><br><span class="line">  numTransactionsBatchedInSync.set(<span class="number">0L</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// TODO no need to link this back to storage anymore!</span></span><br><span class="line">  <span class="comment">// See HDFS-2174.</span></span><br><span class="line">    <span class="comment">// 检查是否有可以重新服务的storage</span></span><br><span class="line">  storage.attemptRestoreRemovedStorage();</span><br><span class="line">  <span class="comment">// 初始化editLogStream</span></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">   <span class="comment">//journalSet.startLogSegment在所有editlog文件的存储路径上构造输出流，并将这些输出流保存在FSEditLog的journalSet。journals中</span></span><br><span class="line">    editLogStream = journalSet.startLogSegment(segmentTxId, layoutVersion);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (IOException ex) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IOException(<span class="string">"Unable to start log segment "</span> +</span><br><span class="line">        segmentTxId + <span class="string">": too few journals successfully started."</span>, ex);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 将当前正在写入TxId设置为segmentTxId</span></span><br><span class="line">  curSegmentTxId = segmentTxId;</span><br><span class="line">  state = State.IN_SEGMENT;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (writeHeaderTxn) &#123;</span><br><span class="line">    logEdit(LogSegmentOp.getInstance(cache.get(),</span><br><span class="line">        FSEditLogOpCodes.OP_START_LOG_SEGMENT));</span><br><span class="line">    logSync();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+
       
 
       
@@ -500,16 +324,33 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/26/Hadoop源码阅读HadoopRPC二/">展开全文 >></a>
-        </p>
-      
 
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2019/02/15/Hadoop源码阅读——高可用性/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Hadoop源码阅读——高可用性
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/12/04/Hadoop源码阅读HadoopRPC三/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Hadoop源码阅读——Hadoop RPC(三)</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -524,505 +365,32 @@
         </div>
         
         
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-protocolbuffers" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/19/protocolbuffers/">Protocol Buffers</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/19/protocolbuffers/" class="archive-article-date">
-  	<time datetime="2018-11-19T14:32:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在看Hadoop源码的时候涉及到了Protocol buffers，因此这里单开一篇博客写一下自己学习的笔记。主要内容来源于官网文档。</p>
-<hr>
-<p> Protocol buffers是一种语言中立，平台无关，可扩展的序列化数据的格式，可用于通信协议，数据存储等。</p>
-<p>Protocol buffers are a flexible, efficient, automated mechanism for serializing structured data – think XML, but smaller, faster, and simpler. You define how you want your data to be structured once, then you can use special generated source code to easily write and read your structured data to and from a variety of data streams and using a variety of languages. <strong>You can even update your data structure without breaking deployed programs that are compiled against the “old” format.</strong></p>
-        
-          <a class="article-more-a" href="/2018/11/19/protocolbuffers/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">分布式</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/19/protocolbuffers/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#一、INode相关类"><span class="toc-number">1.</span> <span class="toc-text">一、INode相关类</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-INode抽象类"><span class="toc-number">1.1.</span> <span class="toc-text">1.INode抽象类</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-INodeWithAdditionalFields抽象类"><span class="toc-number">1.2.</span> <span class="toc-text">2.INodeWithAdditionalFields抽象类</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-INodeDirectory类"><span class="toc-number">1.3.</span> <span class="toc-text">3.INodeDirectory类</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-INodeFile类"><span class="toc-number">1.4.</span> <span class="toc-text">4.INodeFile类</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5-INodeReference类"><span class="toc-number">1.5.</span> <span class="toc-text">5.INodeReference类</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二、Feature相关类"><span class="toc-number">2.</span> <span class="toc-text">二、Feature相关类</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-SnapshotFeature"><span class="toc-number">2.1.</span> <span class="toc-text">1.SnapshotFeature</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#三、FSEditLog类"><span class="toc-number">3.</span> <span class="toc-text">三、FSEditLog类</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-TransactionId机制"><span class="toc-number">3.1.</span> <span class="toc-text">1.TransactionId机制</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-FSEditLog状态机"><span class="toc-number">3.2.</span> <span class="toc-text">2.FSEditLog状态机</span></a></li></ol></li></ol>
+                    </div>
+                </span>
             </div>
         </div>
         
-        
     </div>
 </aside>
 
 
 
-
-  
-    <article id="post-Java动态代理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/18/Java动态代理/">Java动态代理</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/18/Java动态代理/" class="archive-article-date">
-  	<time datetime="2018-11-18T14:12:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>转自：</p>
-<h1 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a><strong>一、概述</strong></h1><h2 id="1-什么是代理"><a href="#1-什么是代理" class="headerlink" title="1. 什么是代理"></a>1. 什么是代理</h2><p>我们大家都知道微商代理，简单地说就是代替厂家卖商品，厂家“委托”代理为其销售商品。关于微商代理，首先我们从他们那里买东西时通常不知道背后的厂家究竟是谁，也就是说，“委托者”对我们来说是不可见的;其次，微商代理主要以朋友圈的人为目标客户，这就相当于为厂家做了一次对客户群体的“过滤”。我们把微商代理和厂家进一步抽象，前者可抽象为代理类，后者可抽象为委托类(被代理类)。通过使用代理，通常有两个优点，并且能够分别与我们提到的微商代理的两个特点对应起来：</p>
-<p>优点一：可以隐藏委托类的实现;</p>
-<p>优点二：可以实现客户与委托类间的解耦，在不修改委托类代码的情况下能够做一些额外的处理。</p>
-        
-          <a class="article-more-a" href="/2018/11/18/Java动态代理/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/18/Java动态代理/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-AsynchronousFileChannel" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/18/AsynchronousFileChannel/">NIO AsynchronousFileChannel</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/18/AsynchronousFileChannel/" class="archive-article-date">
-  	<time datetime="2018-11-18T12:37:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在Java7中AsynchronousFileChannel被加入到NIO中， The <code>AsynchronousFileChannel</code> makes it possible to read data from, and write data to files asynchronously. </p>
-<h5 id="创建一个AsynchronousFileChannel"><a href="#创建一个AsynchronousFileChannel" class="headerlink" title="创建一个AsynchronousFileChannel"></a>创建一个AsynchronousFileChannel</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Path path = Paths.get(<span class="string">"data/test.txt"</span>);</span><br><span class="line"><span class="comment">// 通过open()方法打开一个AsynchronousFileChannel</span></span><br><span class="line"><span class="comment">// The second parameter is one or more open options which tell the</span></span><br><span class="line"><span class="comment">// AsynchronousFileChannel what operations is to be performed on the underlying file.</span></span><br><span class="line">AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(path, StandardOpenOption.READ);</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2018/11/18/AsynchronousFileChannel/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">NIO</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/18/AsynchronousFileChannel/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JavaNIO学习笔记三" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/17/JavaNIO学习笔记三/">JavaNIO 学习笔记三</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/17/JavaNIO学习笔记三/" class="archive-article-date">
-  	<time datetime="2018-11-17T12:47:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="九、ServerSocketChannel"><a href="#九、ServerSocketChannel" class="headerlink" title="九、ServerSocketChannel"></a>九、ServerSocketChannel</h4><p> NIO ServerSocketChannel 的作用等价于于ServerSocket，作为Socket的服务端等待客户端连接。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Opening a ServerSocketChannel</span></span><br><span class="line">ServerSocketChannel ssc = ServerSocketChannel.open();</span><br><span class="line">ssc.socket().bind(<span class="keyword">new</span> InetSocketAddress(<span class="number">8088</span>));</span><br><span class="line"><span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">    <span class="comment">// Listening for incoming connections</span></span><br><span class="line">    <span class="comment">// 在阻塞模式下accept()会一直阻塞到有一个客户端连接它，非阻塞模式下会立即返回一个null</span></span><br><span class="line">    SocketChannel channel = ssc.accept();</span><br><span class="line">    <span class="keyword">if</span> (channel.finishConnect()) &#123;</span><br><span class="line">        ByteBuffer buffer = ByteBuffer.allocate(<span class="number">48</span>);</span><br><span class="line">        channel.read(buffer);</span><br><span class="line">        buffer.flip();</span><br><span class="line">        <span class="keyword">while</span> (buffer.hasRemaining()) &#123;</span><br><span class="line">            System.out.println((<span class="keyword">char</span>) buffer.get());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Closing a ServerSocketChannel</span></span><br><span class="line">ssc.close()</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2018/11/17/JavaNIO学习笔记三/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">NIO</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/17/JavaNIO学习笔记三/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JavaNIO学习笔记2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/17/JavaNIO学习笔记2/">JavaNIO 学习笔记二</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/17/JavaNIO学习笔记2/" class="archive-article-date">
-  	<time datetime="2018-11-17T02:24:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="五、Chanel到Channel的传输"><a href="#五、Chanel到Channel的传输" class="headerlink" title="五、Chanel到Channel的传输"></a>五、Chanel到Channel的传输</h4><p>在NIO中，可以直接从一个Channel传数据到另一个Channel，f one of the channels is a <code>FileChannel</code>. The <code>FileChannel</code> class has a <code>transferTo()</code> and a <code>transferFrom()</code> method which does this for you.</p>
-<h5 id="transferFrom"><a href="#transferFrom" class="headerlink" title="transferFrom()"></a>transferFrom()</h5><p>The <code>FileChannel.transferFrom()</code> method transfers data from a source channel into the<code>FileChannel</code>.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">RandomAccessFile inFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">"data/test.txt"</span>,<span class="string">"rw"</span>);</span><br><span class="line">FileChannel inChannel = inFile.getChannel();</span><br><span class="line"></span><br><span class="line">RandomAccessFile outFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">"data/out.txt"</span>,<span class="string">"rw"</span>);</span><br><span class="line">FileChannel outChannel = outFile.getChannel();</span><br><span class="line"><span class="keyword">long</span> position = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">long</span> count = inChannel.size();</span><br><span class="line">outChannel.transferFrom(inChannel, position, count);</span><br><span class="line">inFile.close();</span><br><span class="line">outFile.close();</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2018/11/17/JavaNIO学习笔记2/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">NIO</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/17/JavaNIO学习笔记2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JavaNIO" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/16/JavaNIO/">JavaNIO 学习笔记一</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/16/JavaNIO/" class="archive-article-date">
-  	<time datetime="2018-11-16T11:23:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="一、NIO预览"><a href="#一、NIO预览" class="headerlink" title="一、NIO预览"></a>一、NIO预览</h4><p>Java NIO (New IO) is an alternative IO API for Java </p>
-<h5 id="NIO使用channels-and-buffers进行工作而不是之前的字节流或字符流"><a href="#NIO使用channels-and-buffers进行工作而不是之前的字节流或字符流" class="headerlink" title="NIO使用channels and buffers进行工作而不是之前的字节流或字符流"></a>NIO使用channels and buffers进行工作而不是之前的字节流或字符流</h5><p>In the standard IO API you work with byte streams and character streams. In NIO you work with <strong>channels and buffers</strong>. Data is always read from a channel into a buffer, or written from a buffer to a channel.</p>
-<h5 id="非阻塞IO"><a href="#非阻塞IO" class="headerlink" title="非阻塞IO"></a>非阻塞IO</h5><p>Java NIO enables you to do non-blocking IO. For instance, a thread can ask a channel to read data into a buffer. While the channel reads data into the buffer, the thread can do something else. Once data is read into the buffer, the thread can then continue processing it.</p>
-        
-          <a class="article-more-a" href="/2018/11/16/JavaNIO/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">NIO</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/16/JavaNIO/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
   
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-    </nav>
+  
+
+  
+
+  
+
   
 
 
@@ -1045,8 +413,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
