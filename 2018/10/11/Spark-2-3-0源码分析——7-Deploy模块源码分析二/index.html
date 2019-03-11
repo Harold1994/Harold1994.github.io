@@ -8,23 +8,22 @@
   <link rel="dns-prefetch" href="//harold.me">
   <title>Spark_2.3.0源码分析——7_Deploy模块源码分析(二) | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="接着上一篇博客继续看Deploy模块。 一、Standalone部署​    Standalone时Spark的自带一种集群资源管理器，能够满足绝大部分纯粹的Spark计算环境中对集群资源管理的需求，基本上只有在集群中运行多套计算框架时才考虑YARN和Mesos。 ​    Standalone部署采用典型的Master/Slave架构，Master节点负责整个集群资源的管理与调度，Worker节">
+  <meta name="description" content="接着上一篇博客继续看Deploy模块。 一、Standalone部署​    Standalone是Spark的自带一种集群资源管理器，能够满足绝大部分纯粹的Spark计算环境中对集群资源管理的需求，基本上只有在集群中运行多套计算框架时才考虑YARN和Mesos。 ​    Standalone部署采用典型的Master/Slave架构，Master节点负责整个集群资源的管理与调度，Worker节">
 <meta name="keywords" content="大数据,Spark">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spark_2.3.0源码分析——7_Deploy模块源码分析(二)">
 <meta property="og:url" content="//harold.me/2018/10/11/Spark-2-3-0源码分析——7-Deploy模块源码分析二/index.html">
 <meta property="og:site_name" content="Harold的博客">
-<meta property="og:description" content="接着上一篇博客继续看Deploy模块。 一、Standalone部署​    Standalone时Spark的自带一种集群资源管理器，能够满足绝大部分纯粹的Spark计算环境中对集群资源管理的需求，基本上只有在集群中运行多套计算框架时才考虑YARN和Mesos。 ​    Standalone部署采用典型的Master/Slave架构，Master节点负责整个集群资源的管理与调度，Worker节">
+<meta property="og:description" content="接着上一篇博客继续看Deploy模块。 一、Standalone部署​    Standalone是Spark的自带一种集群资源管理器，能够满足绝大部分纯粹的Spark计算环境中对集群资源管理的需求，基本上只有在集群中运行多套计算框架时才考虑YARN和Mesos。 ​    Standalone部署采用典型的Master/Slave架构，Master节点负责整个集群资源的管理与调度，Worker节">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-10-11/47339461.jpg">
 <meta property="og:image" content="https://i.loli.net/2018/10/12/5bc0aaa85a54e.png">
 <meta property="og:image" content="https://i.loli.net/2018/10/13/5bc152c1151f8.png">
 <meta property="og:image" content="https://i.loli.net/2018/10/13/5bc1b55eeb594.png">
-<meta property="og:updated_time" content="2018-10-13T14:46:29.318Z">
+<meta property="og:updated_time" content="2019-03-10T07:28:59.739Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark_2.3.0源码分析——7_Deploy模块源码分析(二)">
-<meta name="twitter:description" content="接着上一篇博客继续看Deploy模块。 一、Standalone部署​    Standalone时Spark的自带一种集群资源管理器，能够满足绝大部分纯粹的Spark计算环境中对集群资源管理的需求，基本上只有在集群中运行多套计算框架时才考虑YARN和Mesos。 ​    Standalone部署采用典型的Master/Slave架构，Master节点负责整个集群资源的管理与调度，Worker节">
-<meta name="twitter:image" content="http://p5s7d12ls.bkt.clouddn.com/18-10-11/47339461.jpg">
+<meta name="twitter:description" content="接着上一篇博客继续看Deploy模块。 一、Standalone部署​    Standalone是Spark的自带一种集群资源管理器，能够满足绝大部分纯粹的Spark计算环境中对集群资源管理的需求，基本上只有在集群中运行多套计算框架时才考虑YARN和Mesos。 ​    Standalone部署采用典型的Master/Slave架构，Master节点负责整个集群资源的管理与调度，Worker节">
+<meta name="twitter:image" content="https://i.loli.net/2018/10/12/5bc0aaa85a54e.png">
   
   
     <link rel="icon" href="/favicon.png">
@@ -213,12 +212,11 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>接着上一篇博客继续看Deploy模块。</p>
-<h3 id="一、Standalone部署"><a href="#一、Standalone部署" class="headerlink" title="一、Standalone部署"></a>一、Standalone部署</h3><p>​    Standalone时Spark的自带一种集群资源管理器，能够满足绝大部分纯粹的Spark计算环境中对集群资源管理的需求，基本上只有在集群中运行多套计算框架时才考虑YARN和Mesos。</p>
+<h3 id="一、Standalone部署"><a href="#一、Standalone部署" class="headerlink" title="一、Standalone部署"></a>一、Standalone部署</h3><p>​    Standalone是Spark的自带一种集群资源管理器，能够满足绝大部分纯粹的Spark计算环境中对集群资源管理的需求，基本上只有在集群中运行多套计算框架时才考虑YARN和Mesos。</p>
 <p>​    Standalone部署采用典型的Master/Slave架构，Master节点负责整个集群资源的管理与调度，Worker节点在Master节点的调度下启动Executor，负责执行具体工作。</p>
 <a id="more"></a>
 <h4 id="1-应用程序的部署"><a href="#1-应用程序的部署" class="headerlink" title="1.应用程序的部署"></a>1.应用程序的部署</h4><p>SparkStandalone对应Spark原生的完全分布式集群，因此此种方式下不需要像伪分布集群那样构建虚拟的本地集群</p>
-<h5 id="A-以Client部署模式提交应用程序"><a href="#A-以Client部署模式提交应用程序" class="headerlink" title="A. 以Client部署模式提交应用程序"></a>A. 以Client部署模式提交应用程序</h5><p>在Client部署模式提交时，直接在提交点运行应用程序，也就是驱动程序在当前节点启动，对应的部署与执行框架图如下：</p>
-<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-10-11/47339461.jpg" alt=""></p>
+<h5 id="A-以Client部署模式提交应用程序"><a href="#A-以Client部署模式提交应用程序" class="headerlink" title="A. 以Client部署模式提交应用程序"></a>A. 以Client部署模式提交应用程序</h5><p>在Client部署模式提交时，直接在提交点运行应用程序，也就是驱动程序在当前节点启动，</p>
 <p>SparkContext创建StandaloneSchedulerBackend的代码如下</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> <span class="type">SPARK_REGEX</span>(sparkUrl) =&gt;</span><br><span class="line">  <span class="keyword">val</span> scheduler = <span class="keyword">new</span> <span class="type">TaskSchedulerImpl</span>(sc)</span><br><span class="line">  <span class="keyword">val</span> masterUrls = sparkUrl.split(<span class="string">","</span>).map(<span class="string">"spark://"</span> + _)</span><br><span class="line">  <span class="keyword">val</span> backend = <span class="keyword">new</span> <span class="type">StandaloneSchedulerBackend</span>(scheduler, sc, masterUrls)</span><br><span class="line">  scheduler.initialize(backend)</span><br><span class="line">  (backend, scheduler)</span><br></pre></td></tr></table></figure>
 <p>以Client部署模式提交应用程序具体部署与交互过程如下：</p>

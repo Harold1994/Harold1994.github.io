@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://i.loli.net/2018/11/14/5bec1a8913e9a.png">
 <meta property="og:image" content="https://i.loli.net/2018/11/14/5bec231e44d06.png">
 <meta property="og:image" content="https://i.loli.net/2018/11/14/5bec26a9c429c.png">
-<meta property="og:updated_time" content="2018-11-15T12:17:18.811Z">
+<meta property="og:updated_time" content="2019-03-10T13:33:19.640Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Google File System阅读笔记">
 <meta name="twitter:description" content="Google File System 论文的发表催生了后来的 HDFS，后者直到今天依然是开源分布式文件系统解决方案的首选。Google MapReduce 加上 Google File System 这两篇论文可谓是大数据时代的开山之作，与 Google BigTable 并称 Google 的三架马车，由此看来这几篇经典论文还是很值得我们去学习一番的。本博客是我在阅读Google File S">
@@ -217,7 +217,7 @@
 <li><strong>组件失效被认为是常态事件，而不是意外事件</strong> (应用程序 bug、操作系统的 bug、人为失误，甚至还有硬盘、内存、连接器、网络以及电源失效等造成的问题)：GFS需要集成持续的监控、错误侦测、灾难冗余以及自动恢复等机制。</li>
 <li><strong>以通常的标准衡量，GFS要存储的文件非常巨大</strong>：设计的假设条件和参数，比如 I/O 操作和 Block 的尺寸都需要重新考虑。</li>
 <li><strong>绝大部分文件的修改是采用在文件尾部追加数据，而不是覆盖原有数据的方式</strong>：对于这种针对海量文件的访问模式，客户端对数据块缓存是没有意义的，数据的追加操作是性能优化和原子性保证的主要考量因素。</li>
-<li><strong>应用程序和文件系统 API 的协同设计提高了整个系统的灵活性</strong>：放松了对 GFS 一致性模型的要求，这样就减轻了文件系统对应用程序的苛刻要求，们引入了原子性的记录追加操作，从而保证多个客户端能够同时进行追加操作，不需要额外的同步操作来保证数据的一致性</li>
+<li><strong>应用程序和文件系统 API 的协同设计提高了整个系统的灵活性</strong>：放松了对 GFS 一致性模型的要求，这样就减轻了文件系统对应用程序的苛刻要求，引入了原子性的记录追加操作，从而保证多个客户端能够同时进行追加操作，不需要额外的同步操作来保证数据的一致性</li>
 </ul>
 <a id="more"></a>
 <p>系统的工作负载主要来自两种读操作：<strong>大规模的流式读取和小规模的随机读取</strong>，还包括许多大规模的、顺序的、数据追加方式的写操作。</p>
@@ -232,12 +232,12 @@
 <li>Master 节点管理所有的文件系统元数据。这些元数据包括名字空间、访问控制信息、文件和 Chunk 的映射信息、以及当前 Chunk 的位置信息。</li>
 <li><p>客户端和 Master 节点的通信只获取元数据，所有的数据操作都是由客户端直接和 Chunk 服务器进行交的。</p>
 </li>
-<li><p>无论是客户端还是 Chunk 服务器都不需要缓存文件数据：对于客户端大部分程序要么以流的方式读取一个巨大文件，要么工作集太大根本无法被缓存。对于Chunk 服务器，Chunk 以本地文件的方式保存，Linux 操作系统的文件系统缓存会把经常访问的数据缓存在内存中。</p>
+<li><p>无论是客户端还是 Chunk 服务器都不需要缓存文件数据：对于客户端大部分程序要么以流的方式读取一个巨大文件，要么工作集太大根本无法被缓存。对于Chunk 服务器，Chunk 以<strong>本地文件</strong>的方式保存，Linux 操作系统的文件系统缓存会把经常访问的数据缓存在内存中。</p>
 </li>
 <li><p>客户端并不通过 Master 节点读写文件数据。反之，客户端向 Master 节点询问它应该联系的 Chunk 服务器。客户端将这些元数据信息缓存一段时间，后续的操作将直接和 Chunk 服务器进行数据读写操作。</p>
 </li>
 </ul>
-<h5 id="Chunk-的大小"><a href="#Chunk-的大小" class="headerlink" title="Chunk 的大小"></a>Chunk 的大小</h5><p>对于 GFS 而言，Chunk 的大小是一个比较重要的参数，而 GFS 选择了使用 64MB 作为 Chunk 的大小。较大的 Chunk 主要带来了如下几个好处：</p>
+<h5 id="Chunk-的大小"><a href="#Chunk-的大小" class="headerlink" title="Chunk 的大小"></a>Chunk 的大小</h5><p>对于 GFS 而言，Chunk 的大小是一个比较重要的参数，<strong>而 GFS 选择了使用 64MB 作为 Chunk 的大小</strong>。较大的 Chunk 主要带来了如下几个好处：</p>
 <ol>
 <li>降低客户端与 Master 通信的频率</li>
 <li>增大客户端进行操作时这些操作落到同一个 Chunk 上的概率</li>

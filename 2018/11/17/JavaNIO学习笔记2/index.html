@@ -17,7 +17,7 @@
 <meta property="og:description" content="五、Chanel到Channel的传输在NIO中，可以直接从一个Channel传数据到另一个Channel，f one of the channels is a FileChannel. The FileChannel class has a transferTo() and a transferFrom() method which does this for you. transferFrom">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://i.loli.net/2018/11/17/5bef89c8b40f9.png">
-<meta property="og:updated_time" content="2018-11-17T12:46:45.214Z">
+<meta property="og:updated_time" content="2019-03-10T16:09:17.376Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JavaNIO 学习笔记二">
 <meta name="twitter:description" content="五、Chanel到Channel的传输在NIO中，可以直接从一个Channel传数据到另一个Channel，f one of the channels is a FileChannel. The FileChannel class has a transferTo() and a transferFrom() method which does this for you. transferFrom">
@@ -220,7 +220,7 @@
 <h5 id="使用Selector的原因"><a href="#使用Selector的原因" class="headerlink" title="使用Selector的原因"></a>使用Selector的原因</h5><p><img src="https://i.loli.net/2018/11/17/5bef89c8b40f9.png" alt="屏幕快照 2018-11-17 上午11.20.47.png"></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// create a Selector by calling the Selector.open() method</span></span><br><span class="line">Selector selector = Selector.open();</span><br></pre></td></tr></table></figure>
 <h5 id="向Selector注册Channel"><a href="#向Selector注册Channel" class="headerlink" title="向Selector注册Channel"></a>向Selector注册Channel</h5><p>In order to use a <code>Channel</code> with a <code>Selector</code> you must register the <code>Channel</code> with the <code>Selector</code>. This is done using the <code>SelectableChannel.register()</code> method, like this:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">channel.configureBlocking(<span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line">SelectionKey key = channel.register(selector, SelectionKey.OP_READ);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">channel.configureBlocking(<span class="keyword">false</span>);</span><br><span class="line">SelectionKey key = channel.register(selector, SelectionKey.OP_READ);</span><br></pre></td></tr></table></figure>
 <p>与Selector一起使用时，Channel必须处于非阻塞模式下。这意味着不能将FileChannel与Selector一起使用，因为FileChannel不能切换到非阻塞模式。而套接字通道都可以。</p>
 <p>Notice the second parameter of the <code>register()</code> method. This is an “interest set”, meaning <strong>what events you are interested in listening for in the Channel</strong> via the<code>Selector</code>. There are four different events you can listen for:</p>
 <ol>
