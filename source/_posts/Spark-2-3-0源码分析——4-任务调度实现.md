@@ -465,7 +465,7 @@ override def getSortedTaskSetQueue: ArrayBuffer[TaskSetManager] = {
   // 根据调度算法对调度实体进行排序
   val sortedSchedulableQueue =
     schedulableQueue.asScala.toSeq.sortWith(taskSetSchedulingAlgorithm.comparator)
-x  for (schedulable <- sortedSchedulableQueue) {
+  for (schedulable <- sortedSchedulableQueue) {
     // 从调度实体中取得TaskSetManager数组
     sortedTaskSetQueue ++= schedulable.getSortedTaskSetQueue
   }
@@ -608,9 +608,7 @@ private def buildFairSchedulerPool(is: InputStream, fileName: String) {
     val xml = XML.load(is)
     // 遍历
     for (poolNode <- (xml \\ POOLS_PROPERTY)) {
-
       val poolName = (poolNode \ POOL_NAME_PROPERTY).text
-
       val schedulingMode = getSchedulingModeValue(poolNode, poolName,
         DEFAULT_SCHEDULING_MODE, fileName)
       val minShare = getIntValue(poolNode, poolName, MINIMUM_SHARES_PROPERTY,
@@ -620,7 +618,6 @@ private def buildFairSchedulerPool(is: InputStream, fileName: String) {
 
       // 向rootPool添加Pool
       rootPool.addSchedulable(new Pool(poolName, schedulingMode, minShare, weight))
-
       logInfo("Created pool: %s, schedulingMode: %s, minShare: %d, weight: %d".format(
         poolName, schedulingMode, minShare, weight))
     }
@@ -631,17 +628,13 @@ private def buildFairSchedulerPool(is: InputStream, fileName: String) {
 
 所以，在FAIR调度策略中包含了两层调度。第一层的rootPool内的多个Pool，第二层是Pool内的多个TaskSetManager。fairscheduler.xml文件中， weight（任务权重）和minShare（最小任务数）是来设置第一层调度的，该调度使用的是FAIR算法。而第二层调度由schedulingMode设置。
 
-其调度逻辑如图所示：
-
-![屏幕快照 2018-10-11 下午10.32.58](/Users/harold/Desktop/屏幕快照 2018-10-11 下午10.32.58.png)
-
 ###### B. org.apache.spark.scheduler.FairSchedulableBuilder#addTaskSetManager
 
 在FAIR调度下，将TaskSetManager加入Pool的代码比FIFO复杂
 
 ```scala
 override def addTaskSetManager(manager: Schedulable, properties: Properties) {
-  // 根据Properties 确定pool
+  // 根据Properties确定pool
   val poolName = if (properties != null) {
       properties.getProperty(FAIR_SCHEDULER_PROPERTIES, DEFAULT_POOL_NAME)
     } else {

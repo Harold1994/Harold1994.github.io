@@ -24,15 +24,13 @@ Apache Spark 是一个快速的, 多用途的集群计算系统。 它提供了 
 
 #### 二、Spark架构综述
 
-如图所示：
-
 ![屏幕快照 2018-10-11 下午10.34.04.png](https://i.loli.net/2018/10/12/5bbff58e516bd.png)
 
 * Driver是用户编写的的数据处理逻辑，这个逻辑中包含用户创建的SparkContext
 * SparkContext是用户逻辑与Spark集群的主要交互接口，它会和Cluster Manager交互，包括向它申请资源等。
 * Cluster Manager负责集群的资源管理和调度。
 * Worker Node是集群中可以执行计算的节点
-* Executor是在一个Worker Node上为某应用启动的一个进程，该进程负责运行任务，并负责将数据存在内存或磁盘上。每个应用都有各自独立的Executor，计算最终在计算节点的Executer上执行。
+* Executor是在一个Worker Node上为某应用启动的一个**进程**，该进程负责运行任务，并负责将数据存在内存或磁盘上。每个应用都有各自独立的Executor，计算最终在计算节点的Executer上执行。
 * Task是被送到某个Executer上的计算单元
 
 --------------

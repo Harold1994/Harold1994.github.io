@@ -6,15 +6,15 @@ tags: [大数据, Spark]
 
 ​	RDD是Spark最基本也是最根本的数据抽象，RDD提供了一种高度受限的共享内存，即RDD是只读的，并且只能通过其他RDD上的批量操作来创建，以此来实现容错。
 
-​	一般来说，分布式数据集的容错性有两种方式：数据检查点和记录数据的更新。对于大规模数据分析，数据检查点操作成本很高：需要通过数据中心的网络连接在机器之前复制庞大的数据集，而网络带宽往往比内存带宽低很多，同时还需要消耗更多的存储资源。所以Spark选择记录更新的方式，但是如果更新太多，记录更新成本也不低，因此RDD只支持**粗粒度**转换，即在大量记录上执行的单个操作。将创建RDD的一系列转换记录下来，以便恢复丢失的分区。
+​	一般来说，分布式数据集的容错性有两种方式：数据检查点和记录数据的更新。对于大规模数据分析，数据检查点操作成本很高：需要通过数据中心的网络连接在机器之前复制庞大的数据集，而网络带宽往往比内存带宽低很多，同时还需要消耗更多的存储资源。**所以Spark选择记录更新的方式**，但是如果更新太多，记录更新成本也不低，因此RDD只支持**粗粒度**转换，即在大量记录上执行的单个操作。将创建RDD的一系列转换记录下来，以便恢复丢失的分区。
 
 <!-- more-->
 
 #### 一、RDD的概念
 
-一个 RDD 是一个只读, 被分区的数据集.我们可以通过两种对稳定的存储系统和其他的 RDDs 进行操作而创建一个新的 RDDs.为了区别开 RDDs 的其他操作, 我们称这些操作为 transformations, 比如 map, filter 以及 join 等都是 transformations 操作.
+一个 RDD 是一个只读, 被分区的数据集.我们可以通过两种对稳定的存储系统和其他的 RDDs 进行操作而创建一个新的 RDD.为了区别开 RDD 的其他操作, 我们称这些操作为 transformations, 比如 map, filter 以及 join 等都是 transformations 操作.
 
-RDDs 并不要始终被物化, 一个 RDD 有足够的信息知道自己是从哪个数据集计算而来的（就是所谓的依赖血统）, 这是一个非常强大的属性：其实, 一个程序你能引用一个不能从失败中重新构建的 RDD.同时具有数据流模型的特点：自动容错、位置感知调度、可伸缩性
+RDDs 并不要始终被物化, 一个 RDD 有足够的信息知道自己是从哪个数据集计算而来的（就是所谓的依赖血统）, 这是一个非常强大的属性：其实, 一个程序你只能引用一个不能从失败中重新构建的 RDD.同时具有数据流模型的特点：自动容错、位置感知调度、可伸缩性
 
 每个RDD有5个主要的属性：
 
@@ -45,9 +45,7 @@ RDD支持两种操作：
 
 ​	RDD中所有转换都是惰性的，它们只记住应用到基础数据集上的转换动作，只有当发生一个要求返回结果给Driver 的动作时，这些转换才会运行。默认情况下，每一个转换过的RDD都会在它执行一个动作时被重新计算，不过可以使用persist方法，在内存中持久化RDD。
 
-​	下表列举了 Spark 中 RDD 常用的 transformations 和 actions 操作, 且描述了每一个方法的签名以及类型.我们需要记住 transformations 是用来定义一个新的 RDD 的 lazy 操作, 而**actions 是真正触发一个能返回结果或者将结果写到文件系统中的计算**.
-
-![](http://p5s7d12ls.bkt.clouddn.com/18-10-3/54766668.jpg)
+​	我们需要记住 transformations 是用来定义一个新的 RDD 的 lazy 操作, 而**actions 是真正触发一个能返回结果或者将结果写到文件系统中的计算**.
 
 ##### 3.RDD的缓存
 
@@ -92,7 +90,7 @@ Scala和Java中，默认情况下persist()会把数据以序列化的形式缓�
 
 ​	一般来说, checkpointing 对具有很长的血缘关系链且包含了宽依赖的 RDDs 是非常有用的, 这些场景下, 集群中的某个节点的失败会导致每一个父亲 RDD 的一些数据的丢失, 进而需要重新所有的计算. 与此相反的, 对于存储在稳定存储系统中且是窄依赖的 RDDs , checkpointing 可能一点用都没有. 如果一个节点失败了, 我们可以在其他的节点中并行的重新计算出丢失了数据的分区, 这个成本只是备份整个 RDD 的成本的一点点而已.
 
-​	spark 目前提供了一个 checkpointing 的 api （ persist 中的标识为 REPLICATE , 还有 checkpoint()）, 但是需要将哪些数据需要 checkpointing 的决定权留给了用户. 
+​	Spark 目前提供了一个 checkpointing 的 api （ persist 中的标识为 REPLICATE , 还有 checkpoint()）, 但是需要将哪些数据需要 checkpointing 的决定权留给了用户. 
 
 #### 二、RDD的转换和DAG的生成
 
@@ -146,6 +144,14 @@ abstract class NarrowDependency[T](_rdd: RDD[T]) extends Dependency[T] {
 * 范围的依赖
 
   ```scala
+  /**
+   * :: DeveloperApi ::
+   * Represents a one-to-one dependency between ranges of partitions in the parent and child RDDs.
+   * @param rdd the parent RDD
+   * @param inStart the start of the range in the parent RDD
+   * @param outStart the start of the range in the child RDD
+   * @param length the length of the range
+   */
   class RangeDependency[T](rdd: RDD[T], inStart: Int, outStart: Int, length: Int)
     extends NarrowDependency[T](rdd) {
   
@@ -185,7 +191,31 @@ abstract class NarrowDependency[T](_rdd: RDD[T]) extends Dependency[T] {
 宽依赖的实现只有一种：ShuffleDependency。子RDD依赖于parent RDD的所有Partition。
 
 ```scala
-override def rdd: RDD[Product2[K, V]] = _rdd.asInstanceOf[RDD[Product2[K, V]]]
+/**
+ * :: DeveloperApi ::
+ * Represents a dependency on the output of a shuffle stage. Note that in the case of shuffle,
+ * the RDD is transient since we don't need it on the executor side.
+ *
+ * @param _rdd the parent RDD
+ * @param partitioner partitioner used to partition the shuffle output
+ * @param serializer [[org.apache.spark.serializer.Serializer Serializer]] to use. If not set
+ *                   explicitly then the default serializer, as specified by `spark.serializer`
+ *                   config option, will be used.
+ * @param keyOrdering key ordering for RDD's shuffles
+ * @param aggregator map/reduce-side aggregator for RDD's shuffle
+ * @param mapSideCombine whether to perform partial aggregation (also known as map-side combine)
+ */
+@DeveloperApi
+class ShuffleDependency[K: ClassTag, V: ClassTag, C: ClassTag](
+    @transient private val _rdd: RDD[_ <: Product2[K, V]],
+    val partitioner: Partitioner,
+    val serializer: Serializer = SparkEnv.get.serializer,
+    val keyOrdering: Option[Ordering[K]] = None,
+    val aggregator: Option[Aggregator[K, V, C]] = None,
+    val mapSideCombine: Boolean = false)
+  extends Dependency[Product2[K, V]] {
+
+  override def rdd: RDD[Product2[K, V]] = _rdd.asInstanceOf[RDD[Product2[K, V]]]
 
   private[spark] val keyClassName: String = reflect.classTag[K].runtimeClass.getName
   private[spark] val valueClassName: String = reflect.classTag[V].runtimeClass.getName
@@ -193,12 +223,13 @@ override def rdd: RDD[Product2[K, V]] = _rdd.asInstanceOf[RDD[Product2[K, V]]]
   // methods in PairRDDFunctions are used instead of combineByKeyWithClassTag.
   private[spark] val combinerClassName: Option[String] =
     Option(reflect.classTag[C]).map(_.runtimeClass.getName)
+  // 针对特定rdd，每个shuffleId都是唯一的
   // 获取新的shuffleId
   val shuffleId: Int = _rdd.context.newShuffleId()
-// 向shuffleManager注册Shuffle信息
+  // 向shuffleManager注册Shuffle信息，获取ShuffleHandle
   val shuffleHandle: ShuffleHandle = _rdd.context.env.shuffleManager.registerShuffle(
     shuffleId, _rdd.partitions.length, this)
-
+  // Shuffle数据其清理器的设置
   _rdd.sparkContext.cleaner.foreach(_.registerShuffleForCleanup(this))
 }
 ```
@@ -221,12 +252,12 @@ override def rdd: RDD[Product2[K, V]] = _rdd.asInstanceOf[RDD[Product2[K, V]]]
 
 Spark中有两种Task：
 
-* RerultTask：DAG最后一个阶段会为每个结果的Partition生成一个RerultTask
+* ResultTask：DAG最后一个阶段会为每个结果的Partition生成一个ResultTask
 * ShuffleMapTask：其余阶段生成ShuffleMapTask
 
 ##### 2.Task的执行起点
 
-org.apache.spark.scheduler.Task#run会调用ShuffleMapTask或RerultTask的runTask；runTask会调用RDD的org.apache.spark.rdd.RDD#iterator，计算由此开始。
+org.apache.spark.scheduler.Task#run会调用ShuffleMapTask或ResultTask的runTask；runTask会调用RDD的org.apache.spark.rdd.RDD#iterator，计算由此开始。
 
 ```scala
  /**

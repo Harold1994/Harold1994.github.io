@@ -23,7 +23,7 @@ public interface Serializable {
 }
 ```
 
-如果想对某个对象进行序列化的操作，只需要在OutputStream对象上创建一个输入流 ObjectOutputStream 对象，然后调用 writeObject（）。
+如果想对某个对象进行序列化的操作，只需要在OutputStream对象上创建一个输出流 ObjectOutputStream 对象，然后调用 writeObject（）。
 
 在序列化过程中，对象的类、类签名、雷瑟所有非暂态和非静态成员变量的值，以及它所有的父类都会被写入。
 
@@ -36,7 +36,7 @@ objOut.writeObject(d);
 
 如果想对某个基本类型进行序列化，ObjectOutputStream 还提供了多种 writeBoolean、writeByte等方法
 
-![img](https://img-blog.csdn.net/20150422091844504?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvenE2MDIzMTY0OTg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)
+![20150422091844504.png](https://i.loli.net/2019/03/10/5c851c78cb315.png)
 
 反序列过程类似，只需要调用 ObjectInputStream 的 readObject() ，并向下转型，就可以得到正确结果。
 
@@ -53,12 +53,7 @@ objOut.writeObject(d);
 
 为了支持以上特性，引用了Writable接口。和说明性Serializable接口不一样，它要求实现两个方法。
 
-1. public interface Writable {  
-2.   void write(DataOutput out) throws IOException;  
-3.   void readFields(DataInput in) throws IOException;  
-4. }  
-
-```
+```java
 public interface Writable {
   void write(DataOutput out) throws IOException;
   void readFields(DataInput in) throws IOException;
@@ -90,7 +85,6 @@ public class StartEndDate implements Writable{
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-
 }
 ```
 
@@ -102,13 +96,9 @@ public class StartEndDate implements Writable{
 
 ```java
 public interface RawComparator<T> extends Comparator<T> {
-
   public int compare(byte[] b1, int s1, int l1, byte[] b2, int s2, int l2);
-
 }
 ```
-
-
 
 **WritableComparator:** 是 RawComparator 的一个通用实现，提供两个功能：提供了一个 RawComparator的comparea()的默认实现，该默认实现只是反序列化了键然后再比较，没有什么性能优势。其次、充当了  RawComaprator 实例的一个工厂方法。
 

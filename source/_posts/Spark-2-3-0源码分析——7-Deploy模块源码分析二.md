@@ -8,7 +8,7 @@ tags: [大数据, Spark]
 
 ### 一、Standalone部署
 
-​	Standalone时Spark的自带一种集群资源管理器，能够满足绝大部分纯粹的Spark计算环境中对集群资源管理的需求，基本上只有在集群中运行多套计算框架时才考虑YARN和Mesos。
+​	Standalone是Spark的自带一种集群资源管理器，能够满足绝大部分纯粹的Spark计算环境中对集群资源管理的需求，基本上只有在集群中运行多套计算框架时才考虑YARN和Mesos。
 
 ​	Standalone部署采用典型的Master/Slave架构，Master节点负责整个集群资源的管理与调度，Worker节点在Master节点的调度下启动Executor，负责执行具体工作。
 
@@ -20,9 +20,7 @@ SparkStandalone对应Spark原生的完全分布式集群，因此此种方式下
 
 ##### A. 以Client部署模式提交应用程序
 
-在Client部署模式提交时，直接在提交点运行应用程序，也就是驱动程序在当前节点启动，对应的部署与执行框架图如下：
-
-![](http://p5s7d12ls.bkt.clouddn.com/18-10-11/47339461.jpg)
+在Client部署模式提交时，直接在提交点运行应用程序，也就是驱动程序在当前节点启动，
 
 SparkContext创建StandaloneSchedulerBackend的代码如下
 

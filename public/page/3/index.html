@@ -184,6 +184,249 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-滴滴实习总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/08/滴滴实习总结/">滴滴实习总结</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/08/滴滴实习总结/" class="archive-article-date">
+  	<time datetime="2018-10-08T08:28:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>How time flies，在滴滴的实习经历已然到了尾声，在公司呆了两个半月，收获了很多东西，除了是技术上，还有一起工作的组内的优秀的同事们。这篇帖子作为自己的这段时间在技术上和方法上的积累的总结，比较零散，想到哪写到哪吧。</p>
+<p>我做的工作是券核销模型的构建，在以后的定价策略和预算估计上会用到，估计是基础模型之一吧，这个模型大约有三分之二的时间用在了特征的构造上，构造特征主要用到的工具就是Hive和shell脚本，偶尔会用到python，就从它们总结起：</p>
+        
+          <a class="article-more-a" href="/2018/10/08/滴滴实习总结/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/08/滴滴实习总结/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Spark-2-3-0源码分析——5-Task运算结果的处理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/06/Spark-2-3-0源码分析——5-Task运算结果的处理/">Spark-2-3-0源码分析——5-Task运算结果的处理</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/06/Spark-2-3-0源码分析——5-Task运算结果的处理/" class="archive-article-date">
+  	<time datetime="2018-10-06T09:12:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="一-Task运算结果的处理"><a href="#一-Task运算结果的处理" class="headerlink" title="一. Task运算结果的处理"></a>一. Task运算结果的处理</h4><p>TaskRunner将Task的执行状态汇报给Driver后，Driver会转给org.apache.spark.scheduler.TaskSchedulerImpl#statusUpdate。而在这里不同的状态有不同的处理：</p>
+<p>1)       如果类型是TaskState.FINISHED，那么调用org.apache.spark.scheduler.TaskResultGetter#enqueueSuccessfulTask进行处理。</p>
+        
+          <a class="article-more-a" href="/2018/10/06/Spark-2-3-0源码分析——5-Task运算结果的处理/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/06/Spark-2-3-0源码分析——5-Task运算结果的处理/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Spark-2-3-0源码分析——4-任务调度实现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/04/Spark-2-3-0源码分析——4-任务调度实现/">Spark-2-3-0源码分析——4-任务调度实现</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/04/Spark-2-3-0源码分析——4-任务调度实现/" class="archive-article-date">
+  	<time datetime="2018-10-04T13:55:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​    本文是Scheduler模块源码分析的第二篇，第一篇主要分析了DAGScheduler，本篇将结合Spark2.3.0的源码继续分析TaskScheduler和SchedulerBackend。</p>
+<h4 id="三、任务调度实现"><a href="#三、任务调度实现" class="headerlink" title="三、任务调度实现"></a>三、任务调度实现</h4><p>​    每个TaskScheduler都对应一个SchedulerBackend，其中TaskScheduler负责Application的不同Job之间的调度，在Task失败时重试的机制，并且为执行速度慢的Task启动备份的任务。而SchedulerBackend负责与Cluster Master交互，取得该Application分配得到的资源，并将这些资源传给TaskScheduler，由TaskScheduler为Task最终分配计算资源。</p>
+        
+          <a class="article-more-a" href="/2018/10/04/Spark-2-3-0源码分析——4-任务调度实现/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/04/Spark-2-3-0源码分析——4-任务调度实现/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Spark-2-3-0源码分析——3-Scheduler模块" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -749,263 +992,6 @@
 
 
   
-    <article id="post-Redis高级特性" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/27/Redis高级特性/">Redis高级特性</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/27/Redis高级特性/" class="archive-article-date">
-  	<time datetime="2018-09-27T01:41:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="一、降低内存占用"><a href="#一、降低内存占用" class="headerlink" title="一、降低内存占用"></a>一、降低内存占用</h4><p>降低Redis内存占用有助于减少创建快照和加载快照所需的时间，提升载入AOF文件时的效率，缩短从服务器进行同步所需的时间，并且能让Redis存储更多的数据而无需添加额外的硬件。</p>
-<p>主要有三种技术：</p>
-<ul>
-<li>短结构</li>
-<li>分片</li>
-<li>打包存储二进制位和字节</li>
-</ul>
-        
-          <a class="article-more-a" href="/2018/09/27/Redis高级特性/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">NoSQL</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Redis</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/27/Redis高级特性/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-操作系统基础" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/21/操作系统基础/">操作系统基础</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/21/操作系统基础/" class="archive-article-date">
-  	<time datetime="2018-09-21T10:53:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="一、计算机系统概述"><a href="#一、计算机系统概述" class="headerlink" title="一、计算机系统概述"></a>一、计算机系统概述</h3><h4 id="1-信息-位-上下文"><a href="#1-信息-位-上下文" class="headerlink" title="1.信息 = 位 + 上下文"></a>1.信息 = 位 + 上下文</h4><p>源程序实际上是由0和1组成的位（又叫比特）序列，8个位被组织成一组，称为字节，每个字节表示程序中的某些文本字符。ASCII码其实就是用一个唯一的单字节大小的整数值来表示每个字符。程序以字节序列方式存储在文件中，每个字节都有一个整数值，对应于某些字符。</p>
-<p>只由ASCII字符构成的文件称为文本文件，其他文件都叫二进制文件。</p>
-<p>数字的机器表示方式与实际的证书和实数不同，他们是对真值的<em>有限近似</em></p>
-        
-          <a class="article-more-a" href="/2018/09/21/操作系统基础/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">计算机基础</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/21/操作系统基础/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Redis中的锁和信号量" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/21/Redis中的锁和信号量/">Redis中的锁和信号量</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/21/Redis中的锁和信号量/" class="archive-article-date">
-  	<time datetime="2018-09-21T02:01:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h3><p>Redis使用WATCH命令代替对数据行加锁，WATCH是一种<strong>乐观锁</strong>，因为它只会在数据被其他客户端抢先修改的情况下通知执行了这个命令的客户端，而不会阻止其他客户端对数据进行修改。</p>
-<p>WATCH,MULTI,EXEC组成的事务不具有可扩展性，因为程序在尝试完成一个事务的时候，可能因为事务执行失败而反复重试。</p>
-        
-          <a class="article-more-a" href="/2018/09/21/Redis中的锁和信号量/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">NoSQL</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Redis</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/21/Redis中的锁和信号量/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1200,6 +1186,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
@@ -1208,19 +1198,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据库， Hive</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">

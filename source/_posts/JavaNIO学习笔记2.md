@@ -65,7 +65,6 @@ In order to use a `Channel` with a `Selector` you must register the `Channel` wi
 
 ```java
 channel.configureBlocking(false);
-
 SelectionKey key = channel.register(selector, SelectionKey.OP_READ);
 ```
 

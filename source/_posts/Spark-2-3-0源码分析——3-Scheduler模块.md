@@ -99,7 +99,7 @@ private[spark] val metricsSource: DAGSchedulerSource = new DAGSchedulerSource(th
   // 并使用它来忽略杂散的ShuffleMapTask结果。
   // TODO：当我们知道没有更多的杂散消息需要检测时，垃圾收集有关失败时期的信息。
   private val failedEpoch = new HashMap[String, Long]
-  // outputCommitCoordinator决定任务是否可以将输出提交到HDFS的权限。 使用“第一个提交者获胜策略。
+  // outputCommitCoordinator决定任务是否可以将输出提交到HDFS的权限。 使用"第一个提交者获胜策略"。
   private [scheduler] val outputCommitCoordinator = env.outputCommitCoordinator
 
   // A closure serializer that we reuse.
@@ -503,7 +503,7 @@ private def getOrCreateShuffleMapStage(
 
 `val job = new ActiveJob(jobId, finalStage, callSite, listener, properties)`
 
-在`DAGScheduler.handleJobSubmitted`方法的最后，调用了`DAGScheduler.submitStage`方法，在提交finalSate的前面，会通过listenerBus的post方法，把Job开始的事件提交到Listener中。
+在`DAGScheduler.handleJobSubmitted`方法的最后，调用了`DAGScheduler.submitStage`方法，在提交finalState的前面，会通过listenerBus的post方法，把Job开始的事件提交到Listener中。
 
 提交Job的提交，是从最后那个Stage开始的。如果当前stage已经被提交过，处于waiting或者waiting状态，或者当前stage已经处于failed状态则不作任何处理，否则继续提交该stage。 
  　　在提交时，需要当前Stage需要满足依赖关系，其前置的Parent Stage都运行完成后才能轮得到当前Stage运行。如果还有Parent Stage未运行完成，则优先提交Parent Stage。通过调用方法`DAGScheduler.getMissingParentStages`方法获取未执行的Parent Stage。 
@@ -536,6 +536,6 @@ private def getOrCreateShuffleMapStage(
   }
 ```
 
-**getMissingParentStage**方法用于获取stage未执行的Parent Stage。在上面方法中，获取到Parent Stage后，递归调用上面那个方法按照StageId小的先提交的原则，这个方法的逻辑和[DAGScheduler#getParentStages方法类似，这里不再分析了。总之就是根据当前Stage，递归调用其中的visit方法，依次对每一个Stage追溯其未运行的Parent Stage。 
+**getMissingParentStage**方法用于获取stage未执行的Parent Stage。在上面方法中，获取到Parent Stage后，递归调用上面那个方法按照StageId小的先提交的原则，这个方法的逻辑和DAGScheduler#getParentStages方法类似，这里不再分析了。总之就是根据当前Stage，递归调用其中的visit方法，依次对每一个Stage追溯其未运行的Parent Stage。 
 
 当Stage的Parent Stage都运行完毕，才能调用submitMissingTasks方法真正的提交当前Stage中包含的Task。这个方法涉及到了Task，会在下一篇文章中进一步分析。

@@ -182,7 +182,7 @@ class ShuffleDependency[K: ClassTag, V: ClassTag, C: ClassTag](
   // 向shuffleManager注册Shuffle信息，获取ShuffleHandle
   val shuffleHandle: ShuffleHandle = _rdd.context.env.shuffleManager.registerShuffle(
     shuffleId, _rdd.partitions.length, this)
-  // Shuffle数据其清理器的设置
+  // Shuffle数据清理器的设置
   _rdd.sparkContext.cleaner.foreach(_.registerShuffleForCleanup(this))
 }
 ```
@@ -368,7 +368,7 @@ private[this] def initialize(): Unit = {
 }
 ```
 
-和Hadoop一样，Spark计算框架也是基于数据本地性，即激动计算而不是移动数据的原则，因此在获取数据时，会尽量从本地读取已有数据块，然后再远程读取。数据块的本地性是通过ShuffleBlockFetcherIterator实例构建时所传入的位置信息来判断的，`blocksByAddress: Seq[(BlockManagerId, Seq[(BlockId, Long)])]`由mapOutputTracker.getMapSizesByExecutorId获得，BlockManagerId是BlockManager的唯一标识信息，BlockId是数据块的唯一信息。
+和Hadoop一样，Spark计算框架也是基于数据本地性，即移动计算而不是移动数据的原则，因此在获取数据时，会尽量从本地读取已有数据块，然后再远程读取。数据块的本地性是通过ShuffleBlockFetcherIterator实例构建时所传入的位置信息来判断的，`blocksByAddress: Seq[(BlockManagerId, Seq[(BlockId, Long)])]`由mapOutputTracker.getMapSizesByExecutorId获得，BlockManagerId是BlockManager的唯一标识信息，BlockId是数据块的唯一信息。
 
 ### 五、 基于Sort的Shuffle
 
@@ -376,7 +376,7 @@ private[this] def initialize(): Unit = {
 
 #### 1. 基于Sort的Shuffle内核
 
-​	在基于Sort的Shuffle过程中，sort体现在输出的数据会根据目标的分区Id(即带Shuffle过程的目标RDD中各个分区的Id值)进行排序，然后写入一个单独的Map端输出文件中。相应的，各个分区内部数据并不会再根据Key进行排序。除非调用带排序目的方法，在方法中指定Key值的Ordering实例才会在分区内根据该Ordering实例对数据进行排序。当Map端输出数据超出内训容纳大小时，会将各个排序结果溢出到磁盘上，最后再将这些Spill文件合并到一个最终的文件中。
+​	在基于Sort的Shuffle过程中，sort体现在输出的数据会根据目标的分区Id(即带Shuffle过程的目标RDD中各个分区的Id值)进行排序，然后写入一个单独的Map端输出文件中。相应的，各个分区内部数据并不会再根据Key进行排序。除非调用带排序目的方法，在方法中指定Key值的Ordering实例才会在分区内根据该Ordering实例对数据进行排序。当Map端输出数据超出内存容纳大小时，会将各个排序结果溢出到磁盘上，最后再将这些Spill文件合并到一个最终的文件中。
 
 ​	在本博客第二部分Spark Shuffle框架的shuffleManager实例化代码中可以发现,sort与tungsten-sort对应的具体实现子类都是org.apache.spark.shuffle.sort.SortShuffleManager，也就是基于Sort的shuffle实现机制与使用tungsten项目的Shuffle实现机制都是通过SortShuffleManager类来提供接口，两种实现机制的区别在于该类中使用了不同的Shuffle数据写入器。
 
@@ -399,7 +399,7 @@ override def registerShuffle[K, V, C](
     shuffleId: Int,
     numMaps: Int,
     dependency: ShuffleDependency[K, V, C]): ShuffleHandle = {
-  //
+  
   if (SortShuffleWriter.shouldBypassMergeSort(conf, dependency)) {
     // If there are fewer than spark.shuffle.sort.bypassMergeThreshold partitions and we don't
     // need map-side aggregation, then write numPartitions files directly and just concatenate

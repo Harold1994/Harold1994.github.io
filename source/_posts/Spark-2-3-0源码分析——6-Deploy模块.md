@@ -529,7 +529,7 @@ private object SparkMasterRegex {
 }
 ```
 
-SparkContext的主要哦流程归纳如下：
+SparkContext的主要流程归纳如下：
 
 1. createSparkEnv：创建Spark执行环境（缓存，映射输出跟踪器等）
 
@@ -556,7 +556,7 @@ SparkContext的主要哦流程归纳如下：
    _dagScheduler = new DAGScheduler(this)
    ```
 
-#### 二、Local与Local-Cluster部署
+#### 三、Local与Local-Cluster部署
 
 在使用Local与Local-Cluster两种Local方式时，不支持以Cluster部署模式提交应用程序：
 
