@@ -462,7 +462,7 @@
 <li><strong>组件失效被认为是常态事件，而不是意外事件</strong> (应用程序 bug、操作系统的 bug、人为失误，甚至还有硬盘、内存、连接器、网络以及电源失效等造成的问题)：GFS需要集成持续的监控、错误侦测、灾难冗余以及自动恢复等机制。</li>
 <li><strong>以通常的标准衡量，GFS要存储的文件非常巨大</strong>：设计的假设条件和参数，比如 I/O 操作和 Block 的尺寸都需要重新考虑。</li>
 <li><strong>绝大部分文件的修改是采用在文件尾部追加数据，而不是覆盖原有数据的方式</strong>：对于这种针对海量文件的访问模式，客户端对数据块缓存是没有意义的，数据的追加操作是性能优化和原子性保证的主要考量因素。</li>
-<li><strong>应用程序和文件系统 API 的协同设计提高了整个系统的灵活性</strong>：放松了对 GFS 一致性模型的要求，这样就减轻了文件系统对应用程序的苛刻要求，们引入了原子性的记录追加操作，从而保证多个客户端能够同时进行追加操作，不需要额外的同步操作来保证数据的一致性</li>
+<li><strong>应用程序和文件系统 API 的协同设计提高了整个系统的灵活性</strong>：放松了对 GFS 一致性模型的要求，这样就减轻了文件系统对应用程序的苛刻要求，引入了原子性的记录追加操作，从而保证多个客户端能够同时进行追加操作，不需要额外的同步操作来保证数据的一致性</li>
 </ul>
         
           <a class="article-more-a" href="/2018/11/13/System阅读笔记/#more">more >></a>
@@ -872,7 +872,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>接着上一篇博客继续看Deploy模块。</p>
-<h3 id="一、Standalone部署"><a href="#一、Standalone部署" class="headerlink" title="一、Standalone部署"></a>一、Standalone部署</h3><p>​    Standalone时Spark的自带一种集群资源管理器，能够满足绝大部分纯粹的Spark计算环境中对集群资源管理的需求，基本上只有在集群中运行多套计算框架时才考虑YARN和Mesos。</p>
+<h3 id="一、Standalone部署"><a href="#一、Standalone部署" class="headerlink" title="一、Standalone部署"></a>一、Standalone部署</h3><p>​    Standalone是Spark的自带一种集群资源管理器，能够满足绝大部分纯粹的Spark计算环境中对集群资源管理的需求，基本上只有在集群中运行多套计算框架时才考虑YARN和Mesos。</p>
 <p>​    Standalone部署采用典型的Master/Slave架构，Master节点负责整个集群资源的管理与调度，Worker节点在Master节点的调度下启动Executor，负责执行具体工作。</p>
         
           <a class="article-more-a" href="/2018/10/11/Spark-2-3-0源码分析——7-Deploy模块源码分析二/#more">more >></a>

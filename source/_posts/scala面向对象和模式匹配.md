@@ -168,8 +168,6 @@ object Dog {
 }
 ```
 
-
-
 **5.apply和unapply方法**
 
 * 一般被声明在伴生对象中
@@ -213,8 +211,6 @@ object Test2 {
 }
 ```
 
-
-
 **6.private关键字**
 
 * 变量前加private，该变量为私有字段
@@ -252,8 +248,6 @@ object Test3 {
   }
 }
 ```
-
-
 
 **7.特质、重写、抽象类和重写**
 
@@ -318,13 +312,10 @@ class Human extends Animal with Flyable {
 }
 ```
 
-
-
 **8.模式匹配**
 
 * 类似java中的switch...case,但是功能更强大
 * case_的作用队标java中的default
-*  
 
 ```scala
 /**
@@ -340,7 +331,7 @@ object MatchStr {
       case "scala" => print("scala")
       case "python" => print("python")
       case "c++" => print("c++")
-      case "_" => print("nothing match")
+      case _ => print("nothing match")
     }
   }
 }
@@ -388,7 +379,6 @@ case object CheckTimeOutTask
 ```
 
 ```scala
-
 /**
 * 偏函数模式匹配
 **/

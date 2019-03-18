@@ -111,9 +111,9 @@ name1=value1&name2=value2
   }
 ```
 
-  **POST请求**
+**POST请求**
 
-  POST请求：POST请求大体和GET一致，只是设置相关参数的时候要注意设置允许输入、输出，还有POST方法不能缓存，要手动设置为false.
+POST请求：POST请求大体和GET一致，只是设置相关参数的时候要注意设置允许输入、输出，还有POST方法不能缓存，要手动设置为false.
 
 ```java
   //创建URL对象,xxx是服务器API
@@ -219,7 +219,7 @@ name1=value1&name2=value2
       }
   ```
 
-  ​
+  
 
  在一般情况下，如果只是需要向Web站点的某个简单页面提交请求并获取服务器响应，HttpURLConnection完全可以胜任。但在绝大部分情况下，Web站点的网页可能没这么简单，这些页面并不是通过一个简单的URL就可访问的，可能需要用户登录而且具有相应的权限才可访问该页面。在这种情况下，就需要涉及Session、Cookie的处理了，如果打算使用HttpURLConnection来处理这些细节，当然也是可能实现的，只是处理起来难度就大了。
 

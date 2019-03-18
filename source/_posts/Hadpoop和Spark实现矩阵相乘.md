@@ -276,10 +276,10 @@ object MatrixMulSpark {
 
     val dword = wordM.join(wordN)
     dword.collect.foreach(println)
-    val map = dword.values.map( x => {
+    val map = dword.valuers.map( x => {
       (x._1(1) + " " + x._2(2),x._1(3).toDouble * x._2(3).toDouble)
     })
-    val reduce = map.reduceByKey((x,y) => {
+    val reduceS = map.reduceByKey((x,y) => {
       x + y
     })
     reduce.foreach(x => println(x._1+" " + x._2))

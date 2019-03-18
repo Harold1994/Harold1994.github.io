@@ -20,7 +20,7 @@ HDFS的文件和目录在内存中以树的形式存储，目录树由NameNode�
 
 INode实现了INodeAttributes接口，接口包括userName、groupName、accessTime等七个字断的get方法，INode由定义了元信息（包括id、name、fullPathName、parent）的get和set接口方法，同时提供了几个基本判断方法：isFile()、isDirectory()、isSynlink()、isRoot()、isReference()
 
-INode类的设计采用了模版模式，将userName等字断的定义留给了子类实现。如setUser()方法：
+INode类的设计采用了模版模式，将userName等字段的定义留给了子类实现。如setUser()方法：
 
 ```java
 /** Set user */
@@ -38,7 +38,7 @@ final INode setUser(String user, int latestSnapshotId) {
 
 > 在模板模式（Template Pattern）中，一个抽象类公开定义了执行它的方法的方式/模板。它的子类可以按需要重写方法实现，但调用将以抽象类中定义的方式进行。这种类型的设计模式属于行为型模式。
 
-INode中只有一个parent字断，表明当前INode的父目录，父目录只能是INodeDirectory或INodeReference之一。
+INode中只有一个parent字段，表明当前INode的父目录，父目录只能是INodeDirectory或INodeReference之一。
 
 ##### 2.INodeWithAdditionalFields抽象类
 
@@ -94,7 +94,7 @@ static enum PermissionStatusFormat {
 
 (2) features字段
 
-INodeWithAdditionalFields.features字断保存当前INode拥有哪些特性，它是一个Feature类型的数组
+INodeWithAdditionalFields.features字段保存当前INode拥有哪些特性，它是一个Feature类型的数组
 
 ```java
 private static final Feature[] EMPTY_FEATURE = new Feature[0];
@@ -130,7 +130,7 @@ private BlockInfo[] blocks;
 
 ##### 5.INodeReference类
 
-当HDFS文件/目录出于某个快照中，并且这个文件或目录被重命名或者移动到其他路径时，该文件或目录就会存在多条访问路径，INodeReference就是为了解决这个问而生的。
+当HDFS文件/目录处于某个快照中，并且这个文件或目录被重命名或者移动到其他路径时，该文件或目录就会存在多条访问路径，INodeReference就是为了解决这个问而生的。
 
 >  例如：
 >
@@ -142,7 +142,7 @@ private BlockInfo[] blocks;
 
 上图给出了INodeReference的继承关系图。这里的WithName,WithCount,DstReference都是INodeReference的子类，同时也是INodeReference的内部类。WithName对象用于替代重命名操作前源路径中的INode对象，DstReference对象则用于替代重命名操作后目标路径中的INode对象，WithName和DstReference共同指向了一个WithCount对象，WithCount对象则指向了文件系统目录树中真正的INode对象。
 
-INodeReference是一个抽象类，但是它继承自INode，所以他的子类可以替代文件系统目录中的INodeFile节点，INodeReference定义了referred字段，用以报讯当前INodeReference类指向的INode节点。
+INodeReference是一个抽象类，但是它继承自INode，所以他的子类可以替代文件系统目录中的INodeFile节点，INodeReference定义了referred字段，用以保存当前INodeReference类指向的INode节点。
 
 * org.apache.hadoop.hdfs.server.namenode.INodeReference.WithCount#WithCount
 

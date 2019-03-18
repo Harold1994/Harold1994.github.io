@@ -66,9 +66,8 @@ runoob
 
 测试代码：
 
-```
-#!/bin/bash
-  
+```shell
+#!/bin/bash 
 count=1    # 赋值语句，不加空格
 cat test.txt | while read line      # cat 命令的输出作为read命令的输入,read读到>的值放在line中
 do

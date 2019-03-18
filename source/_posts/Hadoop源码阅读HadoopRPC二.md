@@ -13,7 +13,7 @@ tags: [Hadoop,HDFS,大数据]
 
 ##### 4. 服务器获取Server对象
 
-RPC服务器需要构造一个Server对象，这个对象用于监听并响应来自RPc客户端的请求。Namenode会构造两个Server对象来分别响应来自HDFS客户端和Datanode的RPC请求。
+RPC服务器需要构造一个Server对象，这个对象用于监听并响应来自RPC客户端的请求。Namenode会构造两个Server对象来分别响应来自HDFS客户端和Datanode的RPC请求。
 
 <!-- more--> 
 
@@ -133,7 +133,7 @@ Hadoop RPC框架主要由三个类组成：RPC、Client和Server类。
 
 * 服务器端：
 
-  服务器端，服务程序会调用Builder.build()方法撞见一个RPC.Server类，之后调用RPC.Server.start()方法启动Server对象监听并响应RPC请求。
+  服务器端，服务程序会调用Builder.build()方法创建一个RPC.Server类，之后调用RPC.Server.start()方法启动Server对象监听并响应RPC请求。
 
 ##### 2. Client类实现
 

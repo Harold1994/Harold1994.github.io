@@ -108,8 +108,6 @@ object SecondarySort_InMemory {
 }
 ```
 
-
-
 #### 二、方案二：使用Spark框架实现二次排序
 
 按照(name, time)排序，写一个分区器。

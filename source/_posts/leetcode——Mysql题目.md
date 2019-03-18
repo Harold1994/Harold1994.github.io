@@ -35,7 +35,7 @@ END
 
 需要回忆一下mysql的执行顺序：MySQL的语句一共分为11步，如下图所标注的那样，最先执行的总是FROM操作，最后执行的是LIMIT操作。其中每一个操作都会产生一张虚拟的表，这个虚拟的表作为一个处理的输入，只是这些虚拟的表对用户来说是透明的，但是只有最后一个虚拟的表才会被作为结果返回。如果没有在语句中指定某一个子句，那么将会跳过相应的步骤。
 
-![](http://p5s7d12ls.bkt.clouddn.com/18-7-6/82375438.jpg)
+![082230505368061.png](https://i.loli.net/2019/03/11/5c866e947b5be.png)
 
 1. **FORM**: 对FROM的左边的表和右边的表计算笛卡尔积。产生虚表VT1
 2. **ON**: 对虚表VT1进行ON筛选，只有那些符合<join-condition>的行才会被记录在虚表VT2中。
@@ -163,10 +163,10 @@ mysql> SELECT @t1, @t2, @t3, @t4 := @t1+@t2+@t3;
 
 用户变量的类型仅限于：整形、浮点型、二进制与非二进制串和NULL。在赋值浮点数时，系统不会保留精度。其他类型的值将会被转成相应的上述类型。比如：一个包含时间或者空间数据类型（temporal or spatial data type）的值将会转换成一个二进制串。
 
-*** 方法四：**在Mysql中没有`ROW_NUMBER() over (PARTITION BY xx ORDER BY ** DESC)`这样的函数，但是在Hive或者Oracle中是存在的简单的说row_number()从1开始，为每一条分组记录返回一个数字，这里的ROW_NUMBER() OVER (ORDER BY xlh DESC) 是先把xlh列降序，再为降序以后的没条xlh记录返回一个序号。 
+**方法四：**在Mysql中没有`ROW_NUMBER() over (PARTITION BY xx ORDER BY ** DESC)`这样的函数，但是在Hive或者Oracle中是存在的简单的说row_number()从1开始，为每一条分组记录返回一个数字，这里的ROW_NUMBER() OVER (ORDER BY xlh DESC) 是先把xlh列降序，再为降序以后的每条xlh记录返回一个序号。 
 
-row_number() 是没有重复值的排序(即使两天记录相等也是不重复的)，可以利用它来实现分页 
+row_number() 是没有重复值的排序(即使两条记录相等也是不重复的)，可以利用它来实现分页 
 dense_rank() 是连续排序，两个第二名仍然跟着第三名 
-rank() 是跳跃拍学，两个第二名下来就是第四名
+rank() 是跳跃排序，两个第二名下来就是第四名
 
 使用方法 fun() over( partition by field,field… order by flag.. asc/desc)

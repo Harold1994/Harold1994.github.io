@@ -65,10 +65,10 @@ Hadoop Server类是一个典型的多Reactor加多线程的网络服务结构，
 Server类处理RPC请求的流程：
 
 * Linstener线程的selector在ServerSocketChannel上注册OP_ACCEPT事件，并且创建readers数组。每个reader的readSelector此时并不难监听任何Channel
-* Client发送Socket连接请求，出发Listener的selector唤醒Lintener线程
+* Client发送Socket连接请求，出发Listener的selector唤醒Listener线程
 * Listener调用ServerSocketChannel.accept()获得一个新的SocketChannel
 * Listener从readers数组中挑选一个线程，并在Reader的readSelector上注册OP_READ事件
-* Client发送RPC请求数据包，出发Reader的selector唤醒Reader线程
+* Client发送RPC请求数据包，触发Reader的selector唤醒Reader线程
 * Reader从SocketChannel中读取数据，封装成Call对象，然后放入共享队列callQueue中
 * 起初，handlers数组中的线程都在callQueue上阻塞，当有Call对象被放入时，其中一个Handler被唤醒，然后根据Call对象的信息调用BlockingService对象的callBlockingMethod()方法，随后Handler尝试将响应写入SocketChannel。
 * 如果Handler发现无法将响应完全写入SocketChannel，将在Responder的writeSelector上注册OP_WRITE事件。如果一个Call长时间都未被写入，则会被Responder移除。

@@ -35,8 +35,6 @@ Kafka 0.9版本开始推出了Java版本的consumer，优化了coordinator的设
 
 **ConsumerRunnable类**
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
-
 ```
  1 import org.apache.kafka.clients.consumer.ConsumerRecord;
  2 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -215,7 +213,7 @@ Kafka 0.9版本开始推出了Java版本的consumer，优化了coordinator的设
 
 **Main类**
 
-```
+```java
  1 public class Main {
  2 
  3     public static void main(String[] args) {

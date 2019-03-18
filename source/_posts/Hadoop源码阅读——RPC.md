@@ -42,7 +42,7 @@ public Writable call(RPC.RpcKind rpcKind, Writable rpcRequest,
 
 HadoopRPC允许客户端配置使用不同的序列化框架序列化RPC请求，rpcKind用于描述RPC请求的序列化工具类。rpcRequest记录序列化后的RPC请求。
 
-Server接收到一个RPC请求后，会调用call()方法相应这个请求：
+Server接收到一个RPC请求后，会调用call()方法响应这个请求：
 
 ```java
 public abstract Writable call(RPC.RpcKind rpcKind, String protocol,
@@ -58,7 +58,7 @@ Hadoop2.X默认使用protobuf作为序列化工具，Hadoop RPC也支持其他�
 ![屏幕快照 2018-11-20 下午10.43.16.png](https://i.loli.net/2018/11/20/5bf41d978869c.png)
 
 * getProxy:客户端调用这个方法获取一个本地接口的代理对象，然后在这个代理对象上调用本地接口的方法。
-* getServer：用于产生一个RPC Server对象，，服务器会启用这个Server对象监听来自客户端的请求。
+* getServer：用于产生一个RPC Server对象，服务器会启用这个Server对象监听来自客户端的请求。
 
 ##### 3. 服务器端Stub
 
@@ -103,7 +103,7 @@ public Writable call(RPC.RpcKind rpcKind, String protocol,
 
 ##### 1.RPC 使用概述
 
-关于RPC的使用用下面ClientProtocol.rename()调用为例子，直接贴图，方便日后回味。
+关于RPC的使用下面ClientProtocol.rename()调用为例子，直接贴图，方便日后回味。
 
 ![WechatIMG8.jpeg](https://i.loli.net/2018/11/21/5bf571dabf06c.jpeg)
 
@@ -400,7 +400,7 @@ public <T> ProtocolProxy<T> getProxy(Class<T> protocol, long clientVersion,
 }
 ```
 
-Java动态代理特性决定了再代理对象上所有的调用都会由InvocationHandler对象的invoke()方法代理,所以所有ClientNamenodeProtocolPB代理对象上的调用都会由ProtobufRpcEngine.Invoker对象的invoker()方法代理。
+Java动态代理特性决定了在代理对象上所有的调用都会由InvocationHandler对象的invoke()方法代理,所以所有ClientNamenodeProtocolPB代理对象上的调用都会由ProtobufRpcEngine.Invoker对象的invoker()方法代理。
 
 org.apache.hadoop.ipc.ProtobufRpcEngine.Invoker#invoke方法主要做了三件事：
 

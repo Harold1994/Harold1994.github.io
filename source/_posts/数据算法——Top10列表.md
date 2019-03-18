@@ -18,7 +18,7 @@ top10列表问题是一种过滤模式的问题，即需要过滤数据，找出
 
 其中$(A_j,B_j) \in L $,则Top N的定义为：
 
-​				$topN(L) =\lbrace (A_j,B_j),1\leq j\leq N,B_1\geq B_2\geq …\geq B_N \geq …\geq B_s \rbrace$			
+​				$topN(L) =\lbrace (A_j,B_j),1\leq j\leq N,B_1\geq B_2\geq …\geq B_N \geq …\geq B_s \rbrace​$			
 <!-- more-->
 为实现Top N，需要一个散列表数据结构，从而可以得到键的全序，在Java中可以使用SortedMap<K,V>(作为接口)和TreeMap<K,V>(作为SortedMap的一个实现类).
 
@@ -196,7 +196,7 @@ object TopN {
 |            | （F，2)    | （E，2）   |
 |            |            | （F，1)    |
 
-如果先得到每个服务器的本地top N，在规约得到的数据并不正确，原因是所有服务器上的URL并不惟一。要得到正确的结果，必须为所有输入创建一组唯一的URL，然后再分区计算。
+如果先得到每个服务器的本地top N，再规约得到的数据并不正确，原因是所有服务器上的URL并不惟一。要得到正确的结果，必须为所有输入创建一组唯一的URL，然后再分区计算。
 
 ```scala
 class TopNNonUnique {

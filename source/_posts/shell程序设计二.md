@@ -28,7 +28,7 @@ fi
 或：
 
 ```shell
-if [ if fred.c ]
+if [ -f fred.c ]
 then
 ...
 fi
@@ -165,7 +165,6 @@ file /bin/bash exists
 
   ```shell
   #!/bin/sh
-  
   for foo in bar fud 43
   do
       echo $foo
@@ -296,7 +295,6 @@ file /bin/bash exists
 
   ```shell
   #! /bin/bash
-  
   echo "Is it morning?"
   read timeofday
   
@@ -312,7 +310,6 @@ file /bin/bash exists
   
       * )                   echo "sorry"
   esac
-  
   exit 0
   ```
 
@@ -391,11 +388,9 @@ function_name() {
 
 ```shell
 #!/bin/bash
-
 foo () {
 	echo "Function foo is executing"
 }
-
 echo "script starting"
 foo
 echo "script ends"
@@ -506,10 +501,6 @@ exit 0
 * eval命令
 
   eval命令允许对参数求值。它是shell的内置命令，通常不会以单独命令的形式存在。
-
-  ![](http://p5s7d12ls.bkt.clouddn.com/18-7-12/65806701.jpg)
-
-  如上面的实验所示，eval命令有点像一个额外的`$`,它给出一个变量的值。
 
 * exit n
 

@@ -261,8 +261,6 @@ test 2006 30
 比如：-o 1.1 1.2 2.2 表示输出第一个文件的第一个字段、第二个字段，第二个文件的第二个字段。
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
-
 ```shell
 使用示例
 示例一 内连接（忽略不匹配的行）
