@@ -651,7 +651,7 @@
 <p>其中$K_i$类型为T，$V_i$为Integer类型（为$K_i$的频度）。令sort(L)返回已排序的L值，这里使用频度作为键，如下所示：</p>
 <p>​                                $\lbrace (A_j,B_j),1\leq j\leq S,B_1\geq B_2\geq …\geq B_S \rbrace$</p>
 <p>其中$(A_j,B_j) \in L $,则Top N的定义为：</p>
-<p>​                $topN(L) =\lbrace (A_j,B_j),1\leq j\leq N,B_1\geq B_2\geq …\geq B_N \geq …\geq B_s \rbrace$<br>
+<p>​                $topN(L) =\lbrace (A_j,B_j),1\leq j\leq N,B_1\geq B_2\geq …\geq B_N \geq …\geq B_s \rbrace​$<br>
         
           <a class="article-more-a" href="/2018/06/08/数据算法——Top10列表/#more">more >></a>
         
@@ -830,8 +830,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h4 id="一、二次排序技术"><a href="#一、二次排序技术" class="headerlink" title="一、二次排序技术"></a>一、二次排序技术</h4><p>Mapreduce框架会按键对reducer的输入排序，不过reducer值的顺序是任意的。假设对应$key = K$有以下值：</p>
-<p>$(K,V_1),(K,V_2),…(K,V_n)$</p>
-<p>另外假设每个$V_i$是包含m个属性的一个元组，即$V_i = (a_{i1},a_{i2},…,a_{im})$<br>在这里，我们希望按$a_{i1}$对reducer值排序，我们将用r表示$(a_{i2},a_{i3},…,a_{im})$(其余属性)，因此可以将reducer值表示为：</p>
+<p>$(K,V_1),(K,V_2),…(K,V_n)​$</p>
+<p>另外假设每个$V_i$是包含m个属性的一个元组，即$V_i = (a_{i1},a_{i2},…,a_{im})$<br>在这里，我们希望按$a_{i1}$对reducer值排序，我们将用r表示$(a_{i2},a_{i3},…,a_{im})​$(其余属性)，因此可以将reducer值表示为：</p>
 <p>$(K,(a_1, r_1)),(K,(a_2, r_2)),…(K,(a_m, r_m))$</p>
 <p>要按$a_i$对reducer值排序，需要创建一个组合键：$（K，a_i）$，新的mapper将发出对应键值对：<br>
         

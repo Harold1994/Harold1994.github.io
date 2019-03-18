@@ -16,12 +16,10 @@
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="一、部门工资最高的员工Employee 表包含所有员工信息，每个员工有其对应的 Id, salary 和 department Id。 12345678+----+-------+--------+--------------+| Id | Name  | Salary | DepartmentId |+----+-------+--------+--------------+| 1  | Joe">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-7-14/81554601.jpg">
-<meta property="og:updated_time" content="2018-09-13T09:22:18.526Z">
+<meta property="og:updated_time" content="2019-03-11T14:42:40.819Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="leetcode——Mysql题目(二)">
 <meta name="twitter:description" content="一、部门工资最高的员工Employee 表包含所有员工信息，每个员工有其对应的 Id, salary 和 department Id。 12345678+----+-------+--------+--------------+| Id | Name  | Salary | DepartmentId |+----+-------+--------+--------------+| 1  | Joe">
-<meta name="twitter:image" content="http://p5s7d12ls.bkt.clouddn.com/18-7-14/81554601.jpg">
   
   
     <link rel="icon" href="/favicon.png">
@@ -219,7 +217,7 @@
 <ul>
 <li><p>解法一：自己写的，15个测试用例通过13个，结合max和groupby</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">SELECT B.Name as Department,A.name as Employee,A.Salary FROM</span><br><span class="line">    Department B LEFT JOIN (</span><br><span class="line">    SELECT C.* from </span><br><span class="line">    (SELECT DepartmentId,MAX(Salary) AS maxs from </span><br><span class="line">    Employee Group By(DepartmentId)</span><br><span class="line">    ) D LEFT JOIN Employee C</span><br><span class="line">    ON C.Salary=D.maxs AND C.DepartmentId=D.DepartmentId</span><br><span class="line">    ) A</span><br><span class="line">    ON A.DepartmentId=B.Id</span><br><span class="line">    ORDER BY B.Id desc;</span><br></pre></td></tr></table></figure>
-<p>看了一下错误的详细信息，原因在于null值的处理上，题目的意思是当工资表为空但是部门表不为空时，依然要显示每个部门的信息，将除部门名外的其他字段设为null.<img src="http://p5s7d12ls.bkt.clouddn.com/18-7-14/81554601.jpg" alt=""></p>
+<p>看了一下错误的详细信息，原因在于null值的处理上，题目的意思是当工资表为空但是部门表不为空时，依然要显示每个部门的信息，将除部门名外的其他字段设为null.</p>
 <p>要解决这个问题并不困难，只需要将第二行的left join改成join即可</p>
 </li>
 <li><p>解法二：用join和in</p>

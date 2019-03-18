@@ -16,12 +16,10 @@
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="How time flies，在滴滴的实习经历已然到了尾声，在公司呆了两个半月，收获了很多东西，除了是技术上，还有一起工作的组内的优秀的同事们。这篇帖子作为自己的这段时间在技术上和方法上的积累的总结，比较零散，想到哪写到哪吧。 我做的工作是券核销模型的构建，在以后的定价策略和预算估计上会用到，估计是基础模型之一吧，这个模型大约有三分之二的时间用在了特征的构造上，构造特征主要用到的工具就是Hive和">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-10-9/29227753.jpg">
-<meta property="og:updated_time" content="2018-10-09T01:44:02.218Z">
+<meta property="og:updated_time" content="2019-03-12T08:08:59.232Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="滴滴实习总结">
 <meta name="twitter:description" content="How time flies，在滴滴的实习经历已然到了尾声，在公司呆了两个半月，收获了很多东西，除了是技术上，还有一起工作的组内的优秀的同事们。这篇帖子作为自己的这段时间在技术上和方法上的积累的总结，比较零散，想到哪写到哪吧。 我做的工作是券核销模型的构建，在以后的定价策略和预算估计上会用到，估计是基础模型之一吧，这个模型大约有三分之二的时间用在了特征的构造上，构造特征主要用到的工具就是Hive和">
-<meta name="twitter:image" content="http://p5s7d12ls.bkt.clouddn.com/18-10-9/29227753.jpg">
   
   
     <link rel="icon" href="/favicon.png">
@@ -279,8 +277,8 @@
 <p>如果hive表中的数据没有压缩或者采用不同的序列化机制，这样是可行的，不然的话下载下来的是乱码</p>
 </li>
 <li><p>在Hive中随机取样</p>
-<p> Hive支持桶表抽样和块抽样，所谓桶表指的是在创建表时使用CLUSTERED BY子句创建了桶的表。桶表抽样的语法如下：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--数据块取样（Block Sampling）</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> lxw1 TABLESAMPLE (<span class="number">50</span> <span class="keyword">PERCENT</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">--将会从表lxw1中取样30M的数据：</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> lxw1 TABLESAMPLE (<span class="number">30</span>M);</span><br><span class="line"></span><br><span class="line"><span class="comment">--这种方式可以根据行数来取样，但要特别注意：</span></span><br><span class="line">这里指定的行数，是在每个InputSplit中取样的行数，也就是，每个Map中都取样n ROWS。</span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">COUNT</span>(<span class="number">1</span>) <span class="keyword">FROM</span> (<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> lxw1 TABLESAMPLE (<span class="number">200</span> <span class="keyword">ROWS</span>)) x;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">--分桶表取样（Sampling Bucketized Table）</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">COUNT</span>(<span class="number">1</span>)</span><br><span class="line"><span class="keyword">FROM</span> lxw1 TABLESAMPLE (BUCKET <span class="number">1</span> <span class="keyword">OUT</span> <span class="keyword">OF</span> <span class="number">10</span> <span class="keyword">ON</span> <span class="keyword">rand</span>());</span><br></pre></td></tr></table></figure>
+<p>Hive支持桶表抽样和块抽样，所谓桶表指的是在创建表时使用CLUSTERED BY子句创建了桶的表。桶表抽样的语法如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--数据块取样（Block Sampling）</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> lxw1 TABLESAMPLE (<span class="number">50</span> <span class="keyword">PERCENT</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">--将会从表lxw1中取样30M的数据：</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> lxw1 TABLESAMPLE (<span class="number">30</span>M);</span><br><span class="line"></span><br><span class="line"><span class="comment">--这种方式可以根据行数来取样，但要特别注意：</span></span><br><span class="line"><span class="comment">--这里指定的行数，是在每个InputSplit中取样的行数，也就是，每个Map中都取样n ROWS。</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">COUNT</span>(<span class="number">1</span>) <span class="keyword">FROM</span> (<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> lxw1 TABLESAMPLE (<span class="number">200</span> <span class="keyword">ROWS</span>)) x;</span><br><span class="line"></span><br><span class="line"><span class="comment">--分桶表取样（Sampling Bucketized Table）</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">COUNT</span>(<span class="number">1</span>)</span><br><span class="line"><span class="keyword">FROM</span> lxw1 TABLESAMPLE (BUCKET <span class="number">1</span> <span class="keyword">OUT</span> <span class="keyword">OF</span> <span class="number">10</span> <span class="keyword">ON</span> <span class="keyword">rand</span>());</span><br></pre></td></tr></table></figure>
 <p><strong>Random sampling</strong></p>
 </li>
 </ul>
@@ -321,11 +319,9 @@
 <li><p>shell中的date操作</p>
 <p>在linux 中date 有很多用法，在这里我简单介绍一下 -d这个参数的使用方法以及使用例子</p>
 <p>date -d //显示字符串所指的日期与时间。字符串前后必须加上双引号</p>
+<p>指定显示的日期格式：</p>
+<p>date &lt;+时间日期格式&gt; 例如： date +”%Y-%m-%d” // 注意 ：+ 和格式之间没有空格 2016-11-30</p>
 </li>
-</ul>
-<p>  指定显示的日期格式：</p>
-<p>  date &lt;+时间日期格式&gt; 例如： date +”%Y-%m-%d” // 注意 ：+ 和格式之间没有空格 2016-11-30</p>
-<ul>
 <li><p>linux里source、sh、bash、./有什么区别：</p>
 <p>在linux里，source、sh、bash、./都可以执行shell script文件，</p>
 <p><strong>1、source</strong></p>
@@ -343,7 +339,7 @@
 <p>可以用chmod +x添加执行权限</p>
 </li>
 <li><p>获取数组的长度</p>
-<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-10-9/29227753.jpg" alt=""></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 取得数组元素的个数</span><br><span class="line">length=$&#123;#array_name[@]&#125;</span><br><span class="line"><span class="meta">#</span> 或者</span><br><span class="line">length=$&#123;#array_name[*]&#125;</span><br><span class="line"><span class="meta">#</span> 取得数组单个元素的长度</span><br><span class="line">lengthn=$&#123;#array_name[n]&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h4 id="三、模型上的问题"><a href="#三、模型上的问题" class="headerlink" title="三、模型上的问题"></a>三、模型上的问题</h4><p>算法方面遇到的问题基本被现场解决了，包括正负样本不均衡，过拟合，xgboost参数设置等问题，这里不赘述了</p>

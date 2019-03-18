@@ -16,12 +16,12 @@
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="1.寻找第n大 Write a SQL query to get the nth highest salary from the Employee table. 1234567+----+--------+| Id | Salary |+----+--------+| 1  | 100    || 2  | 200    || 3  | 300    |+----+--------+ 123456">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-7-6/82375438.jpg">
-<meta property="og:updated_time" content="2018-09-13T09:22:18.526Z">
+<meta property="og:image" content="https://i.loli.net/2019/03/11/5c866e947b5be.png">
+<meta property="og:updated_time" content="2019-03-11T14:33:41.280Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="leetcode——Mysql题目（一）">
 <meta name="twitter:description" content="1.寻找第n大 Write a SQL query to get the nth highest salary from the Employee table. 1234567+----+--------+| Id | Salary |+----+--------+| 1  | 100    || 2  | 200    || 3  | 300    |+----+--------+ 123456">
-<meta name="twitter:image" content="http://p5s7d12ls.bkt.clouddn.com/18-7-6/82375438.jpg">
+<meta name="twitter:image" content="https://i.loli.net/2019/03/11/5c866e947b5be.png">
   
   
     <link rel="icon" href="/favicon.png">
@@ -215,7 +215,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//方法一：171ms</span><br><span class="line">CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT</span><br><span class="line">BEGIN</span><br><span class="line">DECLARE M INT;</span><br><span class="line">SET M=N-1;</span><br><span class="line">  RETURN (</span><br><span class="line">      # 这里的distinct是关键</span><br><span class="line">      select distinct Salary from Employee Order by(Salary) desc limit M,1</span><br><span class="line">  );</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
 <a id="more"></a>     
 <p>需要回忆一下mysql的执行顺序：MySQL的语句一共分为11步，如下图所标注的那样，最先执行的总是FROM操作，最后执行的是LIMIT操作。其中每一个操作都会产生一张虚拟的表，这个虚拟的表作为一个处理的输入，只是这些虚拟的表对用户来说是透明的，但是只有最后一个虚拟的表才会被作为结果返回。如果没有在语句中指定某一个子句，那么将会跳过相应的步骤。</p>
-<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-7-6/82375438.jpg" alt=""></p>
+<p><img src="https://i.loli.net/2019/03/11/5c866e947b5be.png" alt="082230505368061.png"></p>
 <ol>
 <li><strong>FORM</strong>: 对FROM的左边的表和右边的表计算笛卡尔积。产生虚表VT1</li>
 <li><strong>ON</strong>: 对虚表VT1进行ON筛选，只有那些符合<join-condition>的行才会被记录在虚表VT2中。</join-condition></li>
@@ -251,8 +251,8 @@
 <p>当然，除了SET语句还有其他赋值的方式。比如下面这个例子，但是赋值操作符只能使用“:=”。因为“=”操作符将会被认为是比较操作符。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SET @t1=1, @t2=2, @t3:=4;</span><br><span class="line">mysql&gt; SELECT @t1, @t2, @t3, @t4 := @t1+@t2+@t3;</span><br><span class="line">+------+------+------+--------------------+</span><br><span class="line">| @t1  | @t2  | @t3  | @t4 := @t1+@t2+@t3 |</span><br><span class="line">+------+------+------+--------------------+</span><br><span class="line">|    1 |    2 |    4 |                  7 |</span><br><span class="line">+------+------+------+--------------------+</span><br></pre></td></tr></table></figure>
 <p>用户变量的类型仅限于：整形、浮点型、二进制与非二进制串和NULL。在赋值浮点数时，系统不会保留精度。其他类型的值将会被转成相应的上述类型。比如：一个包含时间或者空间数据类型（temporal or spatial data type）的值将会转换成一个二进制串。</p>
-<p><strong>* 方法四：</strong>在Mysql中没有<code>ROW_NUMBER() over (PARTITION BY xx ORDER BY ** DESC)</code>这样的函数，但是在Hive或者Oracle中是存在的简单的说row_number()从1开始，为每一条分组记录返回一个数字，这里的ROW_NUMBER() OVER (ORDER BY xlh DESC) 是先把xlh列降序，再为降序以后的没条xlh记录返回一个序号。 </p>
-<p>row_number() 是没有重复值的排序(即使两天记录相等也是不重复的)，可以利用它来实现分页<br>dense_rank() 是连续排序，两个第二名仍然跟着第三名<br>rank() 是跳跃拍学，两个第二名下来就是第四名</p>
+<p><strong>方法四：</strong>在Mysql中没有<code>ROW_NUMBER() over (PARTITION BY xx ORDER BY ** DESC)</code>这样的函数，但是在Hive或者Oracle中是存在的简单的说row_number()从1开始，为每一条分组记录返回一个数字，这里的ROW_NUMBER() OVER (ORDER BY xlh DESC) 是先把xlh列降序，再为降序以后的每条xlh记录返回一个序号。 </p>
+<p>row_number() 是没有重复值的排序(即使两条记录相等也是不重复的)，可以利用它来实现分页<br>dense_rank() 是连续排序，两个第二名仍然跟着第三名<br>rank() 是跳跃排序，两个第二名下来就是第四名</p>
 <p>使用方法 fun() over( partition by field,field… order by flag.. asc/desc)</p>
 
       

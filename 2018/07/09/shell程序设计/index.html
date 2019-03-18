@@ -8,20 +8,18 @@
   <link rel="dns-prefetch" href="//harold.me">
   <title>shell程序设计(一) | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="shell是一个作为用户与Linux系统间借口的程序，它允许用户向操作系统输入需要执行的命令。可以使用&amp;lt;和&amp;gt;对输入输出重定向，使用|在同时执行的程序之间实现数据的管道传递，使用${...}获取子进程的输出。 一、管道与重定向1.重定向输出 ls -l &amp;gt; test.txt,这条命令将ls命令的输出保存到test.txt中，文件描述符0代表一个程序的标准输入、1代表标准输出、2代表">
+  <meta name="description" content="shell是一个作为用户与Linux系统间接口的程序，它允许用户向操作系统输入需要执行的命令。可以使用&amp;lt;和&amp;gt;对输入输出重定向，使用|在同时执行的程序之间实现数据的管道传递，使用${...}获取子进程的输出。 一、管道与重定向1.重定向输出 ls -l &amp;gt; test.txt,这条命令将ls命令的输出保存到test.txt中，文件描述符0代表一个程序的标准输入、1代表标准输出、2代表">
 <meta name="keywords" content="Linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="shell程序设计(一)">
 <meta property="og:url" content="//harold.me/2018/07/09/shell程序设计/index.html">
 <meta property="og:site_name" content="Harold的博客">
-<meta property="og:description" content="shell是一个作为用户与Linux系统间借口的程序，它允许用户向操作系统输入需要执行的命令。可以使用&amp;lt;和&amp;gt;对输入输出重定向，使用|在同时执行的程序之间实现数据的管道传递，使用${...}获取子进程的输出。 一、管道与重定向1.重定向输出 ls -l &amp;gt; test.txt,这条命令将ls命令的输出保存到test.txt中，文件描述符0代表一个程序的标准输入、1代表标准输出、2代表">
+<meta property="og:description" content="shell是一个作为用户与Linux系统间接口的程序，它允许用户向操作系统输入需要执行的命令。可以使用&amp;lt;和&amp;gt;对输入输出重定向，使用|在同时执行的程序之间实现数据的管道传递，使用${...}获取子进程的输出。 一、管道与重定向1.重定向输出 ls -l &amp;gt; test.txt,这条命令将ls命令的输出保存到test.txt中，文件描述符0代表一个程序的标准输入、1代表标准输出、2代表">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-7-9/46189301.jpg">
-<meta property="og:updated_time" content="2018-09-13T09:22:18.530Z">
+<meta property="og:updated_time" content="2019-03-11T13:55:28.874Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="shell程序设计(一)">
-<meta name="twitter:description" content="shell是一个作为用户与Linux系统间借口的程序，它允许用户向操作系统输入需要执行的命令。可以使用&amp;lt;和&amp;gt;对输入输出重定向，使用|在同时执行的程序之间实现数据的管道传递，使用${...}获取子进程的输出。 一、管道与重定向1.重定向输出 ls -l &amp;gt; test.txt,这条命令将ls命令的输出保存到test.txt中，文件描述符0代表一个程序的标准输入、1代表标准输出、2代表">
-<meta name="twitter:image" content="http://p5s7d12ls.bkt.clouddn.com/18-7-9/46189301.jpg">
+<meta name="twitter:description" content="shell是一个作为用户与Linux系统间接口的程序，它允许用户向操作系统输入需要执行的命令。可以使用&amp;lt;和&amp;gt;对输入输出重定向，使用|在同时执行的程序之间实现数据的管道传递，使用${...}获取子进程的输出。 一、管道与重定向1.重定向输出 ls -l &amp;gt; test.txt,这条命令将ls命令的输出保存到test.txt中，文件描述符0代表一个程序的标准输入、1代表标准输出、2代表">
   
   
     <link rel="icon" href="/favicon.png">
@@ -209,11 +207,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>shell是一个作为用户与Linux系统间借口的程序，它允许用户向操作系统输入需要执行的命令。可以使用<code>&lt;</code>和<code>&gt;</code>对输入输出重定向，使用<code>|</code>在同时执行的程序之间实现数据的管道传递，使用<code>${...}</code>获取子进程的输出。</p>
+        <p>shell是一个作为用户与Linux系统间接口的程序，它允许用户向操作系统输入需要执行的命令。可以使用<code>&lt;</code>和<code>&gt;</code>对输入输出重定向，使用<code>|</code>在同时执行的程序之间实现数据的管道传递，使用<code>${...}</code>获取子进程的输出。</p>
 <h4 id="一、管道与重定向"><a href="#一、管道与重定向" class="headerlink" title="一、管道与重定向"></a>一、管道与重定向</h4><p><strong>1.重定向输出</strong></p>
-<p><code>ls -l &gt; test.txt</code>,这条命令将ls命令的输出保存到test.txt中，文件描述符0代表一个程序的标准输入、1代表标准输出、2代表标准错误输出。上面例子通过<code>&gt;</code>将标准输出重定向到一个文，默认情况下，如果该文件已经存在，他的文件将被覆盖。想改变默认行为，可以通过<code>set -o noclobber</code>命令设置noclobber选项，从而阻止重定向操作对一个已有文件的覆盖。通过<code>set -o noclobber</code>取消该选项。</p>
+<p><code>ls -l &gt; test.txt</code>,这条命令将ls命令的输出保存到test.txt中，文件描述符0代表一个程序的标准输入、1代表标准输出、2代表标准错误输出。上面例子通过<code>&gt;</code>将标准输出重定向到一个文件，默认情况下，如果该文件已经存在，他的文件将被覆盖。想改变默认行为，可以通过<code>set -o noclobber</code>命令设置noclobber选项，从而阻止重定向操作对一个已有文件的覆盖。通过<code>set -o noclobber</code>取消该选项。</p>
 <a id="more"></a> 
-<p>可以使用    &gt;&gt; 操作符将输出文件附加到一个文件中，如<code>ps &gt;&gt; test.txt</code></p>
+<p>可以使用&gt;&gt; 操作符将输出文件附加到一个文件中，如<code>ps &gt;&gt; test.txt</code></p>
 <p>想对标准输出重定向，需要把想重定向的文件描述符编号加在&gt;操作符前面，例如使用<code>2&gt; err.log</code> 将标准错误流重定向到errl.log。下面的命令将标准输出和标准错误输出分别重定向到不同文件：<br><code>kill -HUP 1234 &gt; killout.txt 2&gt;killerr.txt</code></p>
 <p>可以用<code>&gt;&amp;</code>结合两个流重定向到一个文件：</p>
 <p><code>kill -l 1234 &gt; killouterr.txt 2&gt;&amp;1</code>，这条命令将标准输出和标准错误输出都重定向到一个文件，这里的<strong>操作符顺序</strong>很重要，含义是“将标准输出流重定向到killouterr.txt ，然后将标准错误流输出重定向到与标准输出相同的地方”。</p>
@@ -233,7 +231,7 @@
 <blockquote>
 <p>如果有一系列命令需要执行，先用的输出文件是在这一组命令被创建的同时立刻被创建或者写入烦人，所以绝不要在命令流中使用相同的文件名。</p>
 </blockquote>
-<h4 id="二、-作为程序设计语言的shell"><a href="#二、-作为程序设计语言的shell" class="headerlink" title="二、 作为程序设计语言的shell"></a>二、 作为程序设计语言的shell</h4><p>shell运行的方式有两种，可以通过输入一系列命令让shelljiaohu执行，也可以将命令保存到一个文件中，然后将该文件作为一个程序来调用。</p>
+<h4 id="二、-作为程序设计语言的shell"><a href="#二、-作为程序设计语言的shell" class="headerlink" title="二、 作为程序设计语言的shell"></a>二、 作为程序设计语言的shell</h4><p>shell运行的方式有两种，可以通过输入一系列命令让shell交互执行，也可以将命令保存到一个文件中，然后将该文件作为一个程序来调用。</p>
 <p><strong>1.交互式程序</strong></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>列出包含“机器“二字的文件</span><br><span class="line"><span class="meta">$</span> for file in * </span><br><span class="line"><span class="meta">&gt;</span> do </span><br><span class="line"><span class="meta">&gt;</span> if grep -l 机器 $file</span><br><span class="line"><span class="meta">&gt;</span> then </span><br><span class="line"><span class="meta">&gt;</span> more $file</span><br><span class="line"><span class="meta">&gt;</span> fi</span><br><span class="line"><span class="meta">&gt;</span> done</span><br></pre></td></tr></table></figure>
 <p>有更有效的方法执行上面简单的操作：</p>
@@ -247,7 +245,6 @@
 <h4 id="三、shell的语法"><a href="#三、shell的语法" class="headerlink" title="三、shell的语法"></a>三、shell的语法</h4><p><strong>1.变量</strong></p>
 <p>在shell中，使用变量之前通常不需要事先声明，默认情况下，所有变量都被看作字符串并以字符串来存储，即使被赋值为数字也是如此，Linux是大小写敏感的，shell认为Foo与foo是不同的。</p>
 <p>在shell中，可以通过在变量名前加一个<code>$</code>符号来访问它的内容，要为变量赋值时，只需要使用变量名，该变量会根据需要自动创建。一种检查方式是在变量名前加一个 <code>$</code>符号，再用echo命令将它的内容输出到终端。</p>
-<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-7-9/46189301.jpg" alt=""></p>
 <blockquote>
 <p>注意：如果字符串中包含空格，就必须用引号将他们括起来，此外，<strong>等号两边不能有空格</strong></p>
 </blockquote>
@@ -307,8 +304,8 @@
 </table>
 <ul>
 <li><p>参数变量</p>
-<p>如果脚本程序在调用时带有参数，一些额外变量就会被创建。及时==即使没有任何参数，环境变量$#也任然存在，只不过是0.</p>
-<p>| 参数变量       | 说    明                                                     |<br>| ————– | ———————————————————— |<br>| <code>$1</code>, <code>$2</code>,… | 脚本程序的参数                                               |<br>| $<em>             | 列出所有参数，各个参数用环境变量IFS中第一个字符分隔开。      |<br>| $@             | $</em>的一个变体，不使用IFS环境变量，所以及时IFS为空，参数也不会挤在一起 |</p>
+<p>如果脚本程序在调用时带有参数，一些额外变量就会被创建。即使没有任何参数，环境变量$#也任然存在，只不过是0.</p>
+<p>| 参数变量       | 说    明                                                     |<br>| ————– | ———————————————————— |<br>| <code>$1</code>, <code>$2</code>,… | 脚本程序的参数                                               |<br>| $<em>             | 列出所有参数，各个参数用环境变量IFS中第一个字符分隔开。      |<br>| $@             | $</em>的一个变体，不使用IFS环境变量，所以即使IFS为空，参数也不会挤在一起 |</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">harold@harold-Lenovo-G510:~$ IFS=''</span><br><span class="line">harold@harold-Lenovo-G510:~$ set foo bar bam</span><br><span class="line">harold@harold-Lenovo-G510:~$ echo "$@"</span><br><span class="line">foo bar bam</span><br><span class="line">harold@harold-Lenovo-G510:~$ echo "$*"</span><br><span class="line">foobarbam</span><br><span class="line">harold@harold-Lenovo-G510:~$ unset IFS</span><br><span class="line">harold@harold-Lenovo-G510:~$ echo "$*"</span><br><span class="line">foo bar bam</span><br></pre></td></tr></table></figure>
 <p>一般使用$@是个明智的选择。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>! /bin/sh</span><br><span class="line">salutation="Hello"</span><br><span class="line">echo $salutation</span><br><span class="line">echo "the program $0 is now running"</span><br><span class="line">echo "the second parameter is $2"</span><br><span class="line">echo "the 1st  parameter is $1"</span><br><span class="line">echo "the parameter list is $*"</span><br><span class="line">echo "the user's home dir is $HOME"</span><br><span class="line"></span><br><span class="line">echo "Please enter a new greeting"</span><br><span class="line">read salutation</span><br><span class="line"></span><br><span class="line">echo $salutation</span><br><span class="line">echo the script is now completed</span><br><span class="line">exit 0</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">./try_var.sh foo bar baz</span><br><span class="line">Hello</span><br><span class="line">the program ./try_var.sh is now running</span><br><span class="line">the second parameter is bar</span><br><span class="line">the 1st  parameter is foo</span><br><span class="line">the parameter list is foo bar baz</span><br><span class="line">the user's home dir is /home/harold</span><br><span class="line">Please enter a new greeting</span><br><span class="line">gello</span><br><span class="line">gello</span><br><span class="line">the script is now completed</span><br></pre></td></tr></table></figure>

@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="1.read Linux read命令用于从标准输入读取数值。 read 内部命令被用来从标准输入读取单行数据。这个命令可以用来读取键盘输入，当使用重定向的时候，可以读取文件中的一行数据。 1read [-ers] [-a aname] [-d delim] [-i text] [-n nchars] [-N nchars] [-p prompt] [-t timeout] [-u fd] [na">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-13T09:22:18.528Z">
+<meta property="og:updated_time" content="2019-03-11T13:00:17.057Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux常用命令————read、col、cat、tail、查看日志命令">
 <meta name="twitter:description" content="1.read Linux read命令用于从标准输入读取数值。 read 内部命令被用来从标准输入读取单行数据。这个命令可以用来读取键盘输入，当使用重定向的时候，可以读取文件中的一行数据。 1read [-ers] [-a aname] [-d delim] [-i text] [-n nchars] [-N nchars] [-p prompt] [-t timeout] [-u fd] [na">
@@ -234,7 +234,7 @@
 <p>测试文件 test.txt 内容如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">123</span><br><span class="line">456</span><br><span class="line">runoob</span><br></pre></td></tr></table></figure>
 <p>测试代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">  </span><br><span class="line">count=1    # 赋值语句，不加空格</span><br><span class="line">cat test.txt | while read line      # cat 命令的输出作为read命令的输入,read读到&gt;的值放在line中</span><br><span class="line">do</span><br><span class="line">   echo &quot;Line $count:$line&quot;</span><br><span class="line">   count=$[ $count + 1 ]          # 注意中括号中的空格。</span><br><span class="line">done</span><br><span class="line">echo &quot;finish&quot;</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash </span><br><span class="line">count=1    # 赋值语句，不加空格</span><br><span class="line">cat test.txt | while read line      # cat 命令的输出作为read命令的输入,read读到&gt;的值放在line中</span><br><span class="line">do</span><br><span class="line">   echo "Line $count:$line"</span><br><span class="line">   count=$[ $count + 1 ]          # 注意中括号中的空格。</span><br><span class="line">done</span><br><span class="line">echo "finish"</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
 <p><strong>2.col</strong></p>
 <p>Linux col命令用于过滤控制字符。</p>
 <p>在许多UNIX说明文件里，都有RLF控制字符。当我们运用shell特殊字符”&gt;”和”&gt;&gt;”，把说明文件的内容输出成纯文本文件时，控制字符会变成乱码，col指令则能有效滤除这些控制字符。</p>

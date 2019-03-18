@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="1、&amp;amp; 在Linux终端运行命令的时候，在命令末尾加上 &amp;amp; 符号，就可以让程序在后台运行 1./tcpserv01 &amp;amp; 2、 Ctrl+z 和 bg  如果程序正在前台运行，可以使用 Ctrl+z 选项把程序暂停，然后用 bg %[number] 命令把这个程序放到后台运行.通过bg %num 即可将挂起的job的状态由stopped改为running，仍在后台执行；当需要">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-13T09:22:18.528Z">
+<meta property="og:updated_time" content="2019-03-11T12:58:22.507Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux常用命令————前后台进程管理">
 <meta name="twitter:description" content="1、&amp;amp; 在Linux终端运行命令的时候，在命令末尾加上 &amp;amp; 符号，就可以让程序在后台运行 1./tcpserv01 &amp;amp; 2、 Ctrl+z 和 bg  如果程序正在前台运行，可以使用 Ctrl+z 选项把程序暂停，然后用 bg %[number] 命令把这个程序放到后台运行.通过bg %num 即可将挂起的job的状态由stopped改为running，仍在后台执行；当需要">
@@ -236,7 +236,7 @@
 <p><strong>==== 前台进程的挂起</strong>： ctrl+Z;<br><strong>==== 进程的终止:　　  —-  后台进程的终止：</strong></p>
 <p>　　 方法一：通过jobs命令查看job号（假设为num），然后执行kill %num   <strong>$ kill %1</strong><br>　　 方法二：通过ps命令查看job的进程号（PID，假设为pid），然后执行kill pid  <strong>$ kill 5270</strong></p>
 <p>—–  ctrl+c,ctrl+d,ctrl+z在linux中意义：</p>
-<p>​        ctrl-c 发送 SIGINT 信号给前台进程组中的所有进程。常用于终止正在运行的程序。<br>        ctrl-z 发送 SIGTSTP 信号给前台进程组中的所有进程，常用于挂起一个进程。<br>        ctrl-d 不是发送信号，而是表示一个特殊的二进制值，表示 EOF。<br>        ctrl-\ 发送 SIGQUIT 信号给前台进程组中的所有进程，终止前台进程并生成 core 文件。</p>
+<p>​        ctrl-c 发送 SIGINT 信号给前台进程组中的所有进程。常用于终止正在运行的程序。<br>​        ctrl-z 发送 SIGTSTP 信号给前台进程组中的所有进程，常用于挂起一个进程。<br>​        ctrl-d 不是发送信号，而是表示一个特殊的二进制值，表示 EOF。<br>​        ctrl-\ 发送 SIGQUIT 信号给前台进程组中的所有进程，终止前台进程并生成 core 文件。</p>
 
       
 

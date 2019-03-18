@@ -523,9 +523,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>shell是一个作为用户与Linux系统间借口的程序，它允许用户向操作系统输入需要执行的命令。可以使用<code>&lt;</code>和<code>&gt;</code>对输入输出重定向，使用<code>|</code>在同时执行的程序之间实现数据的管道传递，使用<code>${...}</code>获取子进程的输出。</p>
+        <p>shell是一个作为用户与Linux系统间接口的程序，它允许用户向操作系统输入需要执行的命令。可以使用<code>&lt;</code>和<code>&gt;</code>对输入输出重定向，使用<code>|</code>在同时执行的程序之间实现数据的管道传递，使用<code>${...}</code>获取子进程的输出。</p>
 <h4 id="一、管道与重定向"><a href="#一、管道与重定向" class="headerlink" title="一、管道与重定向"></a>一、管道与重定向</h4><p><strong>1.重定向输出</strong></p>
-<p><code>ls -l &gt; test.txt</code>,这条命令将ls命令的输出保存到test.txt中，文件描述符0代表一个程序的标准输入、1代表标准输出、2代表标准错误输出。上面例子通过<code>&gt;</code>将标准输出重定向到一个文，默认情况下，如果该文件已经存在，他的文件将被覆盖。想改变默认行为，可以通过<code>set -o noclobber</code>命令设置noclobber选项，从而阻止重定向操作对一个已有文件的覆盖。通过<code>set -o noclobber</code>取消该选项。</p>
+<p><code>ls -l &gt; test.txt</code>,这条命令将ls命令的输出保存到test.txt中，文件描述符0代表一个程序的标准输入、1代表标准输出、2代表标准错误输出。上面例子通过<code>&gt;</code>将标准输出重定向到一个文件，默认情况下，如果该文件已经存在，他的文件将被覆盖。想改变默认行为，可以通过<code>set -o noclobber</code>命令设置noclobber选项，从而阻止重定向操作对一个已有文件的覆盖。通过<code>set -o noclobber</code>取消该选项。</p>
         
           <a class="article-more-a" href="/2018/07/09/shell程序设计/#more">more >></a>
         

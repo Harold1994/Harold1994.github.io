@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://i.loli.net/2018/11/26/5bfbf5f75cd3e.png">
 <meta property="og:image" content="https://i.loli.net/2018/11/27/5bfca1130abce.jpeg">
 <meta property="og:image" content="https://i.loli.net/2018/12/02/5c03ef9383072.png">
-<meta property="og:updated_time" content="2018-12-04T14:14:44.114Z">
+<meta property="og:updated_time" content="2019-03-11T02:50:41.162Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hadoop源码阅读——Hadoop RPC(二)">
 <meta name="twitter:description" content="书接上回，继续Hadoop RPC源码分析，Hadoop RPC框架的抽象步骤：  定义RPC协议：只有定一个RPC协议，客户端才知道服务端对外提供了哪些服务 实现RPC协议：服务端的服务程序需要实现RPC协议。当RPC调用通过网络到达服务器时，实现RPC协议的服务程序会响应这个调用。 客户端获取代理对象： 服务器构造并启动RPC Server  4. 服务器获取Server对象RPC服务器需要构">
@@ -218,7 +218,7 @@
 <li>客户端获取代理对象：</li>
 <li>服务器构造并启动RPC Server</li>
 </ul>
-<h5 id="4-服务器获取Server对象"><a href="#4-服务器获取Server对象" class="headerlink" title="4. 服务器获取Server对象"></a>4. 服务器获取Server对象</h5><p>RPC服务器需要构造一个Server对象，这个对象用于监听并响应来自RPc客户端的请求。Namenode会构造两个Server对象来分别响应来自HDFS客户端和Datanode的RPC请求。</p>
+<h5 id="4-服务器获取Server对象"><a href="#4-服务器获取Server对象" class="headerlink" title="4. 服务器获取Server对象"></a>4. 服务器获取Server对象</h5><p>RPC服务器需要构造一个Server对象，这个对象用于监听并响应来自RPC客户端的请求。Namenode会构造两个Server对象来分别响应来自HDFS客户端和Datanode的RPC请求。</p>
 <a id="more"></a> 
 <h6 id="a-构造NameNodeRPCServer"><a href="#a-构造NameNodeRPCServer" class="headerlink" title="a. 构造NameNodeRPCServer"></a>a. 构造NameNodeRPCServer</h6><p>NameNodeRPCServer实现了NamenodeProtocols接口，NamenodeProtocols继承以下几个类：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">NamenodeProtocols</span></span></span><br><span class="line"><span class="class">  <span class="keyword">extends</span> <span class="title">ClientProtocol</span>,</span></span><br><span class="line"><span class="class">          <span class="title">DatanodeProtocol</span>,</span></span><br><span class="line"><span class="class">          <span class="title">DatanodeLifelineProtocol</span>,</span></span><br><span class="line"><span class="class">          <span class="title">NamenodeProtocol</span>,</span></span><br><span class="line"><span class="class">          <span class="title">RefreshAuthorizationPolicyProtocol</span>,</span></span><br><span class="line"><span class="class">          <span class="title">RefreshUserMappingsProtocol</span>,</span></span><br><span class="line"><span class="class">          <span class="title">RefreshCallQueueProtocol</span>,</span></span><br><span class="line"><span class="class">          <span class="title">GenericRefreshProtocol</span>,</span></span><br><span class="line"><span class="class">          <span class="title">GetUserMappingsProtocol</span>,</span></span><br><span class="line"><span class="class">          <span class="title">HAServiceProtocol</span>,</span></span><br><span class="line"><span class="class">          <span class="title">TraceAdminProtocol</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -236,7 +236,7 @@
 <p>客户端程序可以调用waitForProxy()和getProxy()方法获取指定RPC协议的代理对象，之后就可以调用代理对象方法发送请求到Server端</p>
 </li>
 <li><p>服务器端：</p>
-<p>服务器端，服务程序会调用Builder.build()方法撞见一个RPC.Server类，之后调用RPC.Server.start()方法启动Server对象监听并响应RPC请求。</p>
+<p>服务器端，服务程序会调用Builder.build()方法创建一个RPC.Server类，之后调用RPC.Server.start()方法启动Server对象监听并响应RPC请求。</p>
 </li>
 </ul>
 <h5 id="2-Client类实现"><a href="#2-Client类实现" class="headerlink" title="2. Client类实现"></a>2. Client类实现</h5><p>DFSClient会获取一个ClientProtocolPB协议的代理对象，并在这个对象上调用RPC方法，代理对象会调用org.apache.hadoop.ipc.Client.call()方法将序列化之后的请求发送到Server。</p>

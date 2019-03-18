@@ -16,12 +16,10 @@
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="1.条件 一个shell脚本能够对任何可以从命令行上调用的命令的退出码进行测试，包括自己写的脚本。 test或[命令 [或test是布尔判断命令，在使用[时，使用符号]`来结尾。 以下示例检查文件是否存在，用于实现这一操作的命令是test -f &amp;lt;filename&amp;gt;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://p5s7d12ls.bkt.clouddn.com/18-7-12/65806701.jpg">
-<meta property="og:updated_time" content="2018-09-13T09:22:18.530Z">
+<meta property="og:updated_time" content="2019-03-11T14:10:40.840Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="shell程序设计（二）">
 <meta name="twitter:description" content="1.条件 一个shell脚本能够对任何可以从命令行上调用的命令的退出码进行测试，包括自己写的脚本。 test或[命令 [或test是布尔判断命令，在使用[时，使用符号]`来结尾。 以下示例检查文件是否存在，用于实现这一操作的命令是test -f &amp;lt;filename&amp;gt;">
-<meta name="twitter:image" content="http://p5s7d12ls.bkt.clouddn.com/18-7-12/65806701.jpg">
   
   
     <link rel="icon" href="/favicon.png">
@@ -218,7 +216,7 @@
 <p>可以使用如下所示代码：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if test -f fred.c</span><br><span class="line">then </span><br><span class="line">...</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
 <p>或：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if [ if fred.c ]</span><br><span class="line">then</span><br><span class="line">...</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if [ -f fred.c ]</span><br><span class="line">then</span><br><span class="line">...</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
 <p>test命令的退出码(表明条件是否被满足)决定是否需要执行后面的代码。</p>
 <blockquote>
 <p>注意，必须在<code>[</code>符合和被检查的条件之间留出空格</p>
@@ -360,7 +358,7 @@
 <p>语法：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for variable in values</span><br><span class="line">do</span><br><span class="line">	statements</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <p>实验：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/sh</span><br><span class="line"></span><br><span class="line">for foo in bar fud 43</span><br><span class="line">do</span><br><span class="line">    echo $foo</span><br><span class="line">done</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/sh</span><br><span class="line">for foo in bar fud 43</span><br><span class="line">do</span><br><span class="line">    echo $foo</span><br><span class="line">done</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
 <p>实验：通过通配符扩展的for循环</p>
 <p>在字符串的值中使用一个通配符，并由shell在程序执行时填写所有的值</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/sh</span><br><span class="line">for file in $(ls f*.sh); do</span><br><span class="line"><span class="meta">#</span> 打印文件</span><br><span class="line">    lpr $file</span><br><span class="line">done</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
@@ -393,7 +391,7 @@
 <p>通配符*在引号中不起作用</p>
 </blockquote>
 <p>实验三：执行多条语句</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>! /bin/bash</span><br><span class="line"></span><br><span class="line">echo "Is it morning?"</span><br><span class="line">read timeofday</span><br><span class="line"></span><br><span class="line">case "$timeofday" in</span><br><span class="line">    yes | y | Yes | YES )</span><br><span class="line">        echo "good morning"</span><br><span class="line">        echo "up bright and early this morning"</span><br><span class="line">        ;;</span><br><span class="line">    [nN]* )</span><br><span class="line">        echo "good afternoon"</span><br><span class="line">        echo "have a good rest"</span><br><span class="line">        ;;</span><br><span class="line"></span><br><span class="line">    * )                   echo "sorry"</span><br><span class="line">esac</span><br><span class="line"></span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>! /bin/bash</span><br><span class="line">echo "Is it morning?"</span><br><span class="line">read timeofday</span><br><span class="line"></span><br><span class="line">case "$timeofday" in</span><br><span class="line">    yes | y | Yes | YES )</span><br><span class="line">        echo "good morning"</span><br><span class="line">        echo "up bright and early this morning"</span><br><span class="line">        ;;</span><br><span class="line">    [nN]* )</span><br><span class="line">        echo "good afternoon"</span><br><span class="line">        echo "have a good rest"</span><br><span class="line">        ;;</span><br><span class="line"></span><br><span class="line">    * )                   echo "sorry"</span><br><span class="line">esac</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>需要把最精确的匹配放到最开始，而把一般匹配放到最后，因为case执行他找到的第一个匹配而不是最佳匹配。esac前的双分号是可选的，</p>
 </blockquote>
@@ -424,7 +422,7 @@
 <p>shell中定义函数，只需写出名字、然后一对空括号，再把函数中的语句放到一对花括号之中：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function_name() &#123;</span><br><span class="line">    statements</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>实验：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line"></span><br><span class="line">foo () &#123;</span><br><span class="line">	echo "Function foo is executing"</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">echo "script starting"</span><br><span class="line">foo</span><br><span class="line">echo "script ends"</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">foo () &#123;</span><br><span class="line">	echo "Function foo is executing"</span><br><span class="line">&#125;</span><br><span class="line">echo "script starting"</span><br><span class="line">foo</span><br><span class="line">echo "script ends"</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p> 必须在调用一个函数之前先对它进行定义，因为所有脚本程序都是从顶部开始执行，所以只要把所有函数定义都放在任何一个函数调用之前，就可以保证函数被调用之前就被定义了。</p>
 <p>当一个函数被调用时，脚本程序的位置参数（<code>$*</code>,<code>$@</code>,<code>$1</code>等）会被替换为函数的参数，当函数执行完毕后，参数会恢复为他们先前的值。</p>
@@ -450,8 +448,6 @@
 </li>
 <li><p>eval命令</p>
 <p>eval命令允许对参数求值。它是shell的内置命令，通常不会以单独命令的形式存在。</p>
-<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-7-12/65806701.jpg" alt=""></p>
-<p>如上面的实验所示，eval命令有点像一个额外的<code>$</code>,它给出一个变量的值。</p>
 </li>
 <li><p>exit n</p>
 <p>exit命令使脚本程序以退出码n结束运行，如果在任何一个交互式shell的命令提示符中使用这个命令，将会退出系统。如果允许自己的脚本程序存在退出时不指定一个退出状态，那么脚本中最后一条执行命令的状态将被用作返回值。在shell中，退出码0表示成功，退出码1-125是可以使用的错误码，其余数字有保留含义：</p>
