@@ -10,25 +10,32 @@ tags: [数据库, MySQL]
 CREATE [OR REPLACE] [ALGORITHM = {UNDEFINED | MERGE | TEMPTABLE}]
 		VIEW view_name [(column_list)]
     	AS SELECT_statement
-    	[WITH [CASCADED | LOCAL] CHECK OPTION]```
+    	[WITH [CASCADED | LOCAL] CHECK OPTION]
+```
 <!-- more-->
 REPLACE表示替换已有视图，WITH [CASCADED | LOCAL] CHECK OPTION表示视图在更新时保证在视图的权限范围之内。CASCADE（级联的）为默认值，表示视图更新时要满足所有相关视图和表的条件;LOCAL表示更新时满足该视图本身定义的条件即可。
 视图选择的算法有三种，UNDEFINED表示MySQL将自动选择算法;MERGE表示将使用的视图语句与视图定义合并起来，使得视图定义的某一部分取代语句对应的部分;TEMPTABLE表示将视图结果存入临时表，然后用临时表执行语句。
+
 * 默认情况下，将在当前数据库创建新视图。要在给定数据库创建视图，创建时应将名称指定为：db_name.view_name
 * 查看视图：`DESCRIBE 视图名`，`SHOW TABLE STATUS LIKE '视图名'`，`SHOW CREATE VIEW 视图名`
 * `SELECT * FROM information_schema.views`,MySQL中，information_schema数据库中的views表中存储了所有视图的定义，可以查看视图的详细信息。
 * 修改视图：
-> ```SQL
+```sql
 CREATE [OR REPLACE] [ALGORITHM = {UNDEFINED | MERGE | TEMPTABLE}]
-		VIEW view_name [(column_list)]
+	VIEW view_name [(column_list)]
     	AS SELECT_statement
-    	[WITH [CASCADED | LOCAL] CHECK OPTION]```
-> ```SQL
+    	[WITH [CASCADED | LOCAL] CHECK OPTION]
+```
+
+```sql
 ALTER [ALGORITHM = {UNDEFINED | MERGE | TEMPTABLE}]
-		VIEW view_name [(column_list)]
+	VIEW view_name [(column_list)]
     	AS SELECT_statement
-    	[WITH [CASCADED | LOCAL] CHECK OPTION]```
+    	[WITH [CASCADED | LOCAL] CHECK OPTION]
+```
+
 * 更新视图：`UPDATE 视图名 SET col_name = val `,`DELETE FROM 视图名 WHERE condition_expr`
+
 * 当视图中包含如下内容时，视图的更新不能被执行：
 > 1. 视图中不包含基表中被定义为非空的列
 > 2. 在定义视图的SELECT语句后的字段列表中使用了数学表达式
@@ -38,14 +45,18 @@ ALTER [ALGORITHM = {UNDEFINED | MERGE | TEMPTABLE}]
 ```SQL
 DROP VIEW [IF EXISTS]
 	view_name [,view_name] ...
-    [RESTRICT | CASCADE]```
+    [RESTRICT | CASCADE]
+```
+
 * 触发器是个特殊的存储过程，不需要CALL语句来调用，只要当一个预定义的事件发生时，就会被自动调用，可以查询其他表。
 * 创建触发器：
 ```SQL
 CREATE TRIGGER trigger_name trigger_time trigger_event
 ON tb1_name FOR EACH ROW trigger_stmt
 ```
+
 trigger_time标识触发时机，可指定为before或after;trigger_event标识触发事件，包括INSERT，UPDATE，DELETE;tb1_name指明在哪张表上建立触发器;trigger_stmt是触发器程序体。可以为单条语句，也可以使用BEGIN和END作为开始和结束执行多条语句。
+
 * 实例：
 
 ```SQL
@@ -92,10 +103,11 @@ mysql> select @SUM;
     GRANT privileges ON db.table
     TO user@host [IDENTIFIED BY 'password'] [, user [IDENTIFIED BY 'password']]
     [WITH GRANT OPTION];
-    ```
+  ```
 * 直接操作MySQL用户表创建用户：
-	```SQL
-    INSERT INTO mysql.user(Host,User,Password,[privilegelist])
-    VALUES ('host','username',PASSWORD('password'),privilegevaluelist)```
+  ```SQL
+  INSERT INTO mysql.user(Host,User,Password,[privilegelist])
+  VALUES ('host','username',PASSWORD('password'),privilegevaluelist)
+  ```
 * 删除用户：`DROP USER user` ，DROP USER不能自动关闭任何打开的用户对话，如果用户有打开的回话，此时取消用户，命令不会生效，直到对话关闭后生效。
 * 删除用户2： `DELETE FROM MySQL user WHERE host='hostname' and user = 'username'`

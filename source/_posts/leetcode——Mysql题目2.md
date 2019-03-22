@@ -1,7 +1,7 @@
 ---
 title: leetcode——Mysql题目(二)
 date: 2018-07-14 15:32:14
-tags: [Mysql, 数据库， Hive]
+tags: [Mysql, 数据库, Hive]
 ---
 
 #### 一、部门工资最高的员工
@@ -137,7 +137,7 @@ tags: [Mysql, 数据库， Hive]
 
   rank()是跳跃排序，有两个第二名时接下来就是第四名（同样是在各个分组内）．   　　
 
-  dense_rank()l是连续排序，有两个第二名时仍然跟着第三名。相比之下row_number是没有重复值的 ．  
+  dense_rank()是连续排序，有两个第二名时仍然跟着第三名。相比之下row_number是没有重复值的 ．  
 
 * 解法二
 

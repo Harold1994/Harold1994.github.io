@@ -18,6 +18,7 @@ Executor框架可以将任务的提交与任务的执行策略解耦开来，虽
 
 在线程池中，如果任务依赖于其他任务，那么可能产生死锁。
 线程饥饿死锁（Thread Starvation Deadlock）: 只要线程池中的任务需要无限期的等待一些必须由池中其他任务才能提供的资源或条件，那么除非线程池足够大，否则将发生线程饥饿死锁。
+
 > 如果线程池不够大，那么当多个任务通过栅栏机制彼此协调时，将导致线程饥饿死锁
 
 饥饿死锁示例：
@@ -128,7 +129,7 @@ public static ExecutorService newCachedThreadPool() {
 ThreadPoolExecutor允许提供一个BlockingQueue来保存等待执行的任务，基本任务队列有三种：
 * 无界队列：newFixedThreadPool和newSingleThreadExecutor默认使用LinkedBlockingQueue，如果所有工作者线程都忙碌，那么任务将在队列中等候，缺点是队列可能无限制增加，造成资源耗尽。
 * 有界队列：如ArrayBlockingQueue、有界的LinkedBlockingQueue、PriorityBlockingQueue。有界队列有助于避免资源耗尽，但是如果队列满了，新来的任务的处理成为了问题，**饱和策略**可以解决此类问题。
-* 同步移交（SynchronousQueue）:直接将任务从公生产者移交给工作者线程，SynchronousQueue是一种线程之间的移交机制，要将一个元素放入SynchronousQueue，必须有另外一个线程正在等待接受这个元素。如果没有线程正在等待并且线程池当前大小小于最大值，SynchronousQueue将创建一个新线程，否则根据饱和策略，这个任务将被拒绝。newCachedThreadPool工厂方法中使用了SynchronousQueue。
+* 同步移交（SynchronousQueue）:直接将任务从生产者移交给工作者线程，SynchronousQueue是一种线程之间的移交机制，要将一个元素放入SynchronousQueue，必须有另外一个线程正在等待接受这个元素。如果没有线程正在等待并且线程池当前大小小于最大值，SynchronousQueue将创建一个新线程，否则根据饱和策略，这个任务将被拒绝。newCachedThreadPool工厂方法中使用了SynchronousQueue。
 
 > 只有当任务相互独立时，为线程池工作队列设置界限才是合理的。若任务之间存在依赖关系，那么有界队列可能导致“饥饿”死锁问题，此时应该使用无界线程池，如newCachedThreadPool.
 

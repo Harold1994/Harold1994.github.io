@@ -8,15 +8,15 @@ top10列表问题是一种过滤模式的问题，即需要过滤数据，找出
 
 #### 一、Top N设计模式的形式化描述
 
-令N是一个整数，而且N>0。令L是一个$List<Tuple2<T,Integer>>$,其中T可以是任意类型；$L.size() = S,S > N$,L的元素为：
+令N是一个整数，而且N>0。令L是一个$List<Tuple2<T,Integer>>​$,其中T可以是任意类型；$L.size() = S,S > N​$,L的元素为：
 
 ​								$\lbrace (K_i,V_i),1\leq i\leq S\rbrace$
 
-其中$K_i$类型为T，$V_i$为Integer类型（为$K_i$的频度）。令sort(L)返回已排序的L值，这里使用频度作为键，如下所示：
+其中$K_i​$类型为T，$V_i​$为Integer类型（为$K_i​$的频度）。令sort(L)返回已排序的L值，这里使用频度作为键，如下所示：
 
-​			                	$\lbrace (A_j,B_j),1\leq j\leq S,B_1\geq B_2\geq …\geq B_S \rbrace$
+​			                	$\lbrace (A_j,B_j),1\leq j\leq S,B_1\geq B_2\geq …\geq B_S \rbrace​$
 
-其中$(A_j,B_j) \in L $,则Top N的定义为：
+其中$(A_j,B_j) \in L ​$,则Top N的定义为：
 
 ​				$topN(L) =\lbrace (A_j,B_j),1\leq j\leq N,B_1\geq B_2\geq …\geq B_N \geq …\geq B_s \rbrace​$			
 <!-- more-->
@@ -40,7 +40,7 @@ public SortedMap<Integer, T> topN(List<Tuple2<T, Integer>> L, int N) {
 
 #### 二、MapReduce/Hadoop实现：唯一键
 
-首先将输入分区为小块，每个小块发送到一个mapper，每个mapper产生一个top N列表，然后将列表发送到reduce如，发出mapper输出时，使用同一个reducer键，这样所有mapper输出都将由一个reducer处理。
+首先将输入分区为小块，每个小块发送到一个mapper，每个mapper产生一个top N列表，然后将列表发送到reduce，发出mapper输出时，使用同一个reducer键，这样所有mapper输出都将由一个reducer处理。
 
 ![屏幕快照 2018-10-11 下午11.57.16.png](https://i.loli.net/2018/10/12/5bbff08986c39.png)
 
@@ -87,7 +87,7 @@ public class TopNMapper extends Mapper<Text, IntWritable, NullWritable, Text> {
 /**
  * @author lihe
  * @Title: TopNReducer
- * @Description: 唯一键做reduc，所有数据都到单个reducer
+ * @Description: 唯一键做reduce，所有数据都到单个reducer
  * @date 2018/6/11下午2:33
  */
 public class TopNReducer extends Reducer<NullWritable, Text, IntWritable, Text> {

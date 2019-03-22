@@ -4,9 +4,22 @@ date: 2018-04-03 14:36:40
 tags: [数据库, MySQL]
 ---
 本篇博客记录本人在复习MySQL基本操作过程中碰到的之前忽略或者忘记的知识点
-* 命令`HOW DATABASES`后出现的mysql数据库是必需的，它描述用户访问权限
+* 命令`SHOW DATABASES`后出现的mysql数据库是必需的，它描述用户访问权限
+
 * 创建数据库是在系统磁盘上划分一块区域用于数据的存储和管理
-* `show engines`查看系统支持的引擎
+
+* `show engines`查看系统支持的引擎:
+
+  |    引擎    | 说明                                                         | 事务 |  XA  | SavePoint |
+  | :--------: | ------------------------------------------------------------ | :--: | :--: | :-------: |
+  |  ARCHIVE   | 基本上用于数据归档,压缩比非常的高,适合用来存储历史数据       |  N   |  N   |     N     |
+  | BLACKHOLE  | 任何写入到此引擎的数据均会被丢弃掉, 不做实际存储,Select语句的内容永远是空,用于记录binlog做复制的中继存储 |  N   |  N   |     N     |
+  | MRG_MYISAM |                                                              |  N   |  N   |     N     |
+  |   MyISAM   |                                                              |  N   |  N   |     N     |
+  |   InnoDB   | Supports transactions, row-level locking, and foreign keys   |  Y   |  Y   |     Y     |
+  |   MEMORY   | Hash based, stored in memory, useful for temporary tables    |  N   |  N   |     N     |
+  |    CSV     | CSV storage engine                                           |  N   |  N   |     N     |
+
 * InnoDB是事务型数据库的首选引擎，支持事务安全表（ACID），支持行锁定和外键
 > 特点：
 > - InnoDB给MySQL提供了具有提交、回滚、和崩溃恢复能力的事务安全存储引擎
@@ -35,17 +48,15 @@ tags: [数据库, MySQL]
 * 删除字段： `alter table 表名 drop 字段名 `
 * 修改表名的排列顺序：`alter table 表名 modify 字段名 数据类型 FIRST | AFTER 已存在字段`
 * 修改引擎： `alter table 表名 engin=引擎名`
-* 删除外键约束：`alter table 表名 drop foreign kei 外键名`
+* 删除外键约束：`alter table 表名 drop foreign key 外键名`
 * 数据表之间存在关联关系时，删除父表会报错
 * 并不是每个表都需要主键
 * 表示小数：浮点数：float double 定点数：decimal,都可以用（M，N）表示，M为精度，表示总共位数，N为标度，表示小数位数
 * decimal以串存放，其可能的最大取直与double一样
 * CHAR(M)定长字符串，检索到CHAR值时，尾部空格将删除
-* VARCHAR(M)长度可变字符串，M表示最大列长度，0-65535，实际占用空间为字符串实际长度加一，在值保存和检索时尾部的空格任保留
-* ENUM是字符串对象，值为表在创建时在列规定中枚举的一列直，语法`字段名 enum （'val1'，'val2',...'valn'）`
+* VARCHAR(M)长度可变字符串，M表示最大列长度，0-65535，实际占用空间为字符串实际长度加一，在值保存和检索时尾部的空格仍保留
+* ENUM是字符串对象，值为表在创建时在列规定中枚举的一列值，语法`字段名 enum （'val1'，'val2',...'valn'）`
 * ENUM类型的字段在取值时只能在指定枚举列表中取且一次只能取一个，成员尾部空格将自动被删除，ENUM值在内部用整数表示，每个枚举值均有一个索引值，列表索引值从一开始编号，NULL的索引为NULL，字段值区分大小写
-![](/home/harold/Pictures/Selection_050.png)
-![](/home/harold/Pictures/Selection_051.png)
 
 * SET是一个字符串对象，可以有0-64个成员，SET类型的列可以从定义的列值中选择多个字符的联合，SET会删除重复的值
 * BIN()函数将数字转换为二进制
@@ -94,7 +105,7 @@ tags: [数据库, MySQL]
 * `IFNULL(v1,v2)`若v1不为NULL，则返回v1.否则返回v2
 * `CASE expr WHEN v1 THEN r1 [WHEN v2 THEN r2] [ELSE rn] END`如果expr的值等于某个vn，则返回对应rn
 * 查看系统信息`select version()` `select connection_ID()`
-* `SELECT USER(),CURRENT_USER(),SYSTEM_USER();`获取用户名函数
+* `SELECT USER(),CURRENT_USER(),SYSTEM_USER()`获取用户名函数
 * `LAST_INSERT_ID()`获取最后一格自动生成的ID值
 * `FORMAT(x,n)`将数字格式化，四舍五入保留小数点后n位。以字符串形式返回，若n=0,则返回函数不包含小数部分
 * `CONV(n,FROM_BASE,TO_BASE)`对N进制转换

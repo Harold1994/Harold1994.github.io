@@ -17,7 +17,7 @@
 <meta property="og:description" content="一. 二次排序(secondary sort)问题的引出1. 二次排序: 在reduce阶段对与某个键关联的值排序,又称为键值转换; 2. MR中的排序: MapReduce框架会自动对mapper生成的键排序,说明在启动reducer之前,mapper生成的所有中间键值对必然是按键有序的.但是传入reducer的值并不是有序的,他们可能有任意的顺序,要想对reducer中的值进行排序,可以用二次">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://i.loli.net/2018/10/12/5bbff04265a7d.png">
-<meta property="og:updated_time" content="2018-10-12T00:52:48.857Z">
+<meta property="og:updated_time" content="2019-03-14T00:55:59.058Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据算法——Hadoop的二次排序解决方案">
 <meta name="twitter:description" content="一. 二次排序(secondary sort)问题的引出1. 二次排序: 在reduce阶段对与某个键关联的值排序,又称为键值转换; 2. MR中的排序: MapReduce框架会自动对mapper生成的键排序,说明在启动reducer之前,mapper生成的所有中间键值对必然是按键有序的.但是传入reducer的值并不是有序的,他们可能有任意的顺序,要想对reducer中的值进行排序,可以用二次">
@@ -218,8 +218,8 @@
 <p>假如我们有一组温度数据,按照’年\月\日\温度’的格式存储, 我们希望输入每一个年月的温度,并且按照升序排序:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2012-01: 5, 10, 25, 30...</span><br><span class="line">2012-02: 18, 25, 30...</span><br><span class="line">2012-08: 13, 20, 35...</span><br></pre></td></tr></table></figure>
 <h4 id="二-二次排序问题的解决方案"><a href="#二-二次排序问题的解决方案" class="headerlink" title="二. 二次排序问题的解决方案"></a>二. 二次排序问题的解决方案</h4><ul>
-<li>1.让reducer读取和缓存给定键的所有值,然后对这些值完成in-reducer排序,数据量大时可能导致内存溢出</li>
-<li>2.使用MapReduce框架对reducer值排序(这样就不需要再对传入reducer的值进行reducer中的排序),这种方法”会为自然键增加部分或整个值来创建一个组合键以实现排序目标”,不会造成内存溢出<ul>
+<li>让reducer读取和缓存给定键的所有值,然后对这些值完成in-reducer排序,数据量大时可能导致内存溢出</li>
+<li>使用MapReduce框架对reducer值排序(这样就不需要再对传入reducer的值进行reducer中的排序),这种方法”会<strong>为自然键增加部分或整个值来创建一个组合键以实现排序目标</strong>“,不会造成内存溢出<ul>
 <li>使用键值转换设计模式:构造一组中间键(K, V1),其中V1是次键,K称为自然键,要在reducer键中注入一个值,只需要创建一个组合键.在本例中,V1就是温度数据</li>
 <li>让MapReduce执行框架完成排序(利用集群的力量)</li>
 <li>保留多个键值对状态来完成处理,可以适当利用mapper的partitioner来实现.</li>

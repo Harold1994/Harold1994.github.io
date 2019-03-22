@@ -1,7 +1,7 @@
 ---
 title: leetcode——Mysql题目（一）
 date: 2018-07-06 09:22:10
-tags: [Mysql, 数据库， Hive]
+tags: [Mysql, 数据库, Hive]
 ---
 
 **1.寻找第n大**
@@ -71,7 +71,7 @@ END
 
 Write a SQL query to rank scores. If there is a tie between two scores, both should have the same ranking. Note that after a tie, the next ranking number should be the next consecutive integer value. In other words, there should be no "holes" between ranks.
 
-```
+```sql
 +----+-------+
 | Id | Score |
 +----+-------+
@@ -86,7 +86,7 @@ Write a SQL query to rank scores. If there is a tie between two scores, both sho
 
 For example, given the above `Scores` table, your query should generate the following report (order by highest score):
 
-```
+```sql
 +-------+------+
 | Score | Rank |
 +-------+------+
@@ -143,8 +143,8 @@ Scores s left join (
 
 使用SET语句来声明用户自定义变量：
 
-```
-1 SET @var_name = expr[, @var_name = expr] ...
+```sql
+SET @var_name = expr[, @var_name = expr] ...
 ```
 
 在使用SET设置变量时，可以使用“=”或者“:=”操作符进行赋值。
