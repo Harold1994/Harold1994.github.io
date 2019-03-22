@@ -184,6 +184,61 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2019春招实习遇到的问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>title: 2019春招实习遇到的问题<br>date: 2019-03-22 14:58:50<br>tags: [java, 操作系统, 大数据]</p>
+<h4 id="一、操作系统"><a href="#一、操作系统" class="headerlink" title="一、操作系统"></a>一、操作系统</h4><ul>
+<li><p>操作系统中进程中的线程会共享栈吗？</p>
+<p>一个进程实际上是有多个线程的执行单元组成，每个线程都运行在进程的上下文中，并共享同样的代码和全局数据。</p>
+<p>先来看看栈是从哪里来的：</p>
+<p>虚拟存储器是一个抽象概念，它为每个进程提供了假象，即每个进程都在独占的使用主存。每个进程看到的是一致的存储器，称为虚拟地址空间。下图是 Linux 进程的虚拟地址空间（其他Unix 系统设计类似）：</p>
+        
+          <a class="article-more-a" href="/2019/03/22/2019春招实习遇到的问题/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/22/2019春招实习遇到的问题/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-常用设计模式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -934,88 +989,6 @@
 
 
   
-    <article id="post-JavaNIO学习笔记2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/17/JavaNIO学习笔记2/">JavaNIO 学习笔记二</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/17/JavaNIO学习笔记2/" class="archive-article-date">
-  	<time datetime="2018-11-17T02:24:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="五、Chanel到Channel的传输"><a href="#五、Chanel到Channel的传输" class="headerlink" title="五、Chanel到Channel的传输"></a>五、Chanel到Channel的传输</h4><p>在NIO中，可以直接从一个Channel传数据到另一个Channel，f one of the channels is a <code>FileChannel</code>. The <code>FileChannel</code> class has a <code>transferTo()</code> and a <code>transferFrom()</code> method which does this for you.</p>
-<h5 id="transferFrom"><a href="#transferFrom" class="headerlink" title="transferFrom()"></a>transferFrom()</h5><p>The <code>FileChannel.transferFrom()</code> method transfers data from a source channel into the<code>FileChannel</code>.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">RandomAccessFile inFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">"data/test.txt"</span>,<span class="string">"rw"</span>);</span><br><span class="line">FileChannel inChannel = inFile.getChannel();</span><br><span class="line"></span><br><span class="line">RandomAccessFile outFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">"data/out.txt"</span>,<span class="string">"rw"</span>);</span><br><span class="line">FileChannel outChannel = outFile.getChannel();</span><br><span class="line"><span class="keyword">long</span> position = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">long</span> count = inChannel.size();</span><br><span class="line">outChannel.transferFrom(inChannel, position, count);</span><br><span class="line">inFile.close();</span><br><span class="line">outFile.close();</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2018/11/17/JavaNIO学习笔记2/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">NIO</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/17/JavaNIO学习笔记2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1210,10 +1183,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
@@ -1222,15 +1191,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据库， Hive</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1263,10 +1236,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Mahout</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
               </li>
              
               <li class="article-tag-list-item">

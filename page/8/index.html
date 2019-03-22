@@ -184,6 +184,86 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-lightGbm简要原理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/07/lightGbm简要原理/">lightGbm简要原理</a>
+    </h1>
+  
+
+        
+        <a href="/2018/06/07/lightGbm简要原理/" class="archive-article-date">
+  	<time datetime="2018-06-06T17:47:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-07</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文转自:<a href="https://blog.csdn.net/niaolianjiulin/article/details/76584785" target="_blank" rel="noopener">https://blog.csdn.net/niaolianjiulin/article/details/76584785</a></p>
+<p>和<a href="https://www.cnblogs.com/wanglei5205/p/8722237.html" target="_blank" rel="noopener">https://www.cnblogs.com/wanglei5205/p/8722237.html</a></p>
+<h1 id="1-lightGBM简介"><a href="#1-lightGBM简介" class="headerlink" title="1. lightGBM简介"></a>1. lightGBM简介</h1><p>xgboost的出现，让数据民工们告别了传统的机器学习算法们：RF、GBM、SVM、LASSO……..。现在微软推出了一个新的boosting框架，想要挑战xgboost的江湖地位。</p>
+<p>顾名思义，lightGBM包含两个关键点：light即轻量级，GBM 梯度提升机。</p>
+<p>LightGBM 是一个梯度 boosting 框架，使用基于学习算法的决策树。它可以说是分布式的，高效的，有以下优势：<br>
+        
+          <a class="article-more-a" href="/2018/06/07/lightGbm简要原理/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/06/07/lightGbm简要原理/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-数据算法-二次排序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -454,10 +534,13 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p> a) 事实表   </p>
-<p> i.              事实表是维度模型的基本表，存放有大量的业务性能度量值。</p>
-<p> ii.              事实表的一行对应一个度量值，一个度量值就是事实表的一行，事实表的所有度量值必须具有相同的粒度</p>
-<p> iii.              事实表中最有用的事实是数字类型和可加形型事实<br>
+        <ul>
+<li>事实表   </li>
+</ul>
+<p>事实表是维度模型的基本表，存放有大量的业务性能度量值。</p>
+<p>事实表的一行对应一个度量值，一个度量值就是事实表的一行，事实表的所有度量值必须具有相同的粒度</p>
+<p>事实表中最有用的事实是数字类型和可加形型事实</p>
+<p>在维度模型中，事实表表示维度间多对多的关系</p>
         
           <a class="article-more-a" href="/2018/06/04/数据库中：维度表和事实表/#more">more >></a>
         
@@ -934,92 +1017,6 @@
 
 
   
-    <article id="post-Java并发编程——并发基础构建模块" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/27/Java并发编程——并发基础构建模块/">Java并发编程——并发基础构建模块</a>
-    </h1>
-  
-
-        
-        <a href="/2018/05/27/Java并发编程——并发基础构建模块/" class="archive-article-date">
-  	<time datetime="2018-05-26T16:39:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="一、同步容器类"><a href="#一、同步容器类" class="headerlink" title="一、同步容器类"></a>一、同步容器类</h4><p>同步容器类包括Vector和HashTable，其封装器类由Collections.synchronizedXxx等工厂方法创建</p>
-<p>同步容器类实现线程安全的方式：将他们的状态封装起来，并对每个公有方法进行同步，使得每次只有一个线程能访问容器状态，即<strong>串行化容器的访问</strong>。</p>
-<p>同步容器类支持客户端加锁，因此可能会创建一些新的操作，同步容器类通过其自身的锁来保护他的每个方法。</p>
-        
-          <a class="article-more-a" href="/2018/05/27/Java并发编程——并发基础构建模块/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">多线程</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">并发</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/05/27/Java并发编程——并发基础构建模块/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/7/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/9/">Next &raquo;</a>
@@ -1214,10 +1211,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
@@ -1226,15 +1219,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据库， Hive</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1267,10 +1264,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Mahout</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
               </li>
              
               <li class="article-tag-list-item">
