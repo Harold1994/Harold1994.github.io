@@ -8,21 +8,18 @@
   <link rel="dns-prefetch" href="//harold.me">
   <title>MySQL查漏补缺（一） | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="本篇博客记录本人在复习MySQL基本操作过程中碰到的之前忽略或者忘记的知识点  命令HOW DATABASES后出现的mysql数据库是必需的，它描述用户访问权限 创建数据库是在系统磁盘上划分一块区域用于数据的存储和管理 show engines查看系统支持的引擎 InnoDB是事务型数据库的首选引擎，支持事务安全表（ACID），支持行锁定和外键 特点：  InnoDB给MySQL提供了具有提交、">
+  <meta name="description" content="本篇博客记录本人在复习MySQL基本操作过程中碰到的之前忽略或者忘记的知识点  命令SHOW DATABASES后出现的mysql数据库是必需的，它描述用户访问权限  创建数据库是在系统磁盘上划分一块区域用于数据的存储和管理  show engines查看系统支持的引擎: |    引擎    | 说明">
 <meta name="keywords" content="数据库,MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL查漏补缺（一）">
 <meta property="og:url" content="//harold.me/2018/04/03/MySQL查漏补缺（一）/index.html">
 <meta property="og:site_name" content="Harold的博客">
-<meta property="og:description" content="本篇博客记录本人在复习MySQL基本操作过程中碰到的之前忽略或者忘记的知识点  命令HOW DATABASES后出现的mysql数据库是必需的，它描述用户访问权限 创建数据库是在系统磁盘上划分一块区域用于数据的存储和管理 show engines查看系统支持的引擎 InnoDB是事务型数据库的首选引擎，支持事务安全表（ACID），支持行锁定和外键 特点：  InnoDB给MySQL提供了具有提交、">
+<meta property="og:description" content="本篇博客记录本人在复习MySQL基本操作过程中碰到的之前忽略或者忘记的知识点  命令SHOW DATABASES后出现的mysql数据库是必需的，它描述用户访问权限  创建数据库是在系统磁盘上划分一块区域用于数据的存储和管理  show engines查看系统支持的引擎: |    引擎    | 说明">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="//harold.me/home/harold/Pictures/Selection_050.png">
-<meta property="og:image" content="//harold.me/home/harold/Pictures/Selection_051.png">
-<meta property="og:updated_time" content="2018-09-13T09:22:18.524Z">
+<meta property="og:updated_time" content="2019-03-22T13:27:16.702Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL查漏补缺（一）">
-<meta name="twitter:description" content="本篇博客记录本人在复习MySQL基本操作过程中碰到的之前忽略或者忘记的知识点  命令HOW DATABASES后出现的mysql数据库是必需的，它描述用户访问权限 创建数据库是在系统磁盘上划分一块区域用于数据的存储和管理 show engines查看系统支持的引擎 InnoDB是事务型数据库的首选引擎，支持事务安全表（ACID），支持行锁定和外键 特点：  InnoDB给MySQL提供了具有提交、">
-<meta name="twitter:image" content="//harold.me/home/harold/Pictures/Selection_050.png">
+<meta name="twitter:description" content="本篇博客记录本人在复习MySQL基本操作过程中碰到的之前忽略或者忘记的知识点  命令SHOW DATABASES后出现的mysql数据库是必需的，它描述用户访问权限  创建数据库是在系统磁盘上划分一块区域用于数据的存储和管理  show engines查看系统支持的引擎: |    引擎    | 说明">
   
   
     <link rel="icon" href="/favicon.png">
@@ -212,10 +209,15 @@
       
         <p>本篇博客记录本人在复习MySQL基本操作过程中碰到的之前忽略或者忘记的知识点</p>
 <ul>
-<li>命令<code>HOW DATABASES</code>后出现的mysql数据库是必需的，它描述用户访问权限</li>
-<li>创建数据库是在系统磁盘上划分一块区域用于数据的存储和管理</li>
-<li><code>show engines</code>查看系统支持的引擎</li>
-<li>InnoDB是事务型数据库的首选引擎，支持事务安全表（ACID），支持行锁定和外键<blockquote>
+<li><p>命令<code>SHOW DATABASES</code>后出现的mysql数据库是必需的，它描述用户访问权限</p>
+</li>
+<li><p>创建数据库是在系统磁盘上划分一块区域用于数据的存储和管理</p>
+</li>
+<li><p><code>show engines</code>查看系统支持的引擎:</p>
+<p>|    引擎    | 说明                                                         | 事务 |  XA  | SavePoint |<br>| :——–: | ———————————————————— | :–: | :–: | :——-: |<br>|  ARCHIVE   | 基本上用于数据归档,压缩比非常的高,适合用来存储历史数据       |  N   |  N   |     N     |<br>| BLACKHOLE  | 任何写入到此引擎的数据均会被丢弃掉, 不做实际存储,Select语句的内容永远是空,用于记录binlog做复制的中继存储 |  N   |  N   |     N     |<br>| MRG_MYISAM |                                                              |  N   |  N   |     N     |<br>|   MyISAM   |                                                              |  N   |  N   |     N     |<br>|   InnoDB   | Supports transactions, row-level locking, and foreign keys   |  Y   |  Y   |     Y     |<br>|   MEMORY   | Hash based, stored in memory, useful for temporary tables    |  N   |  N   |     N     |<br>|    CSV     | CSV storage engine                                           |  N   |  N   |     N     |</p>
+</li>
+<li><p>InnoDB是事务型数据库的首选引擎，支持事务安全表（ACID），支持行锁定和外键</p>
+<blockquote>
 <p>特点：</p>
 <ul>
 <li>InnoDB给MySQL提供了具有提交、回滚、和崩溃恢复能力的事务安全存储引擎</li>
@@ -247,15 +249,15 @@
 <li>删除字段： <code>alter table 表名 drop 字段名</code></li>
 <li>修改表名的排列顺序：<code>alter table 表名 modify 字段名 数据类型 FIRST | AFTER 已存在字段</code></li>
 <li>修改引擎： <code>alter table 表名 engin=引擎名</code></li>
-<li>删除外键约束：<code>alter table 表名 drop foreign kei 外键名</code></li>
+<li>删除外键约束：<code>alter table 表名 drop foreign key 外键名</code></li>
 <li>数据表之间存在关联关系时，删除父表会报错</li>
 <li>并不是每个表都需要主键</li>
 <li>表示小数：浮点数：float double 定点数：decimal,都可以用（M，N）表示，M为精度，表示总共位数，N为标度，表示小数位数</li>
 <li>decimal以串存放，其可能的最大取直与double一样</li>
 <li>CHAR(M)定长字符串，检索到CHAR值时，尾部空格将删除</li>
-<li>VARCHAR(M)长度可变字符串，M表示最大列长度，0-65535，实际占用空间为字符串实际长度加一，在值保存和检索时尾部的空格任保留</li>
-<li>ENUM是字符串对象，值为表在创建时在列规定中枚举的一列直，语法<code>字段名 enum （&#39;val1&#39;，&#39;val2&#39;,...&#39;valn&#39;）</code></li>
-<li><p>ENUM类型的字段在取值时只能在指定枚举列表中取且一次只能取一个，成员尾部空格将自动被删除，ENUM值在内部用整数表示，每个枚举值均有一个索引值，列表索引值从一开始编号，NULL的索引为NULL，字段值区分大小写<br><img src="/home/harold/Pictures/Selection_050.png" alt=""><br><img src="/home/harold/Pictures/Selection_051.png" alt=""></p>
+<li>VARCHAR(M)长度可变字符串，M表示最大列长度，0-65535，实际占用空间为字符串实际长度加一，在值保存和检索时尾部的空格仍保留</li>
+<li>ENUM是字符串对象，值为表在创建时在列规定中枚举的一列值，语法<code>字段名 enum （&#39;val1&#39;，&#39;val2&#39;,...&#39;valn&#39;）</code></li>
+<li><p>ENUM类型的字段在取值时只能在指定枚举列表中取且一次只能取一个，成员尾部空格将自动被删除，ENUM值在内部用整数表示，每个枚举值均有一个索引值，列表索引值从一开始编号，NULL的索引为NULL，字段值区分大小写</p>
 </li>
 <li><p>SET是一个字符串对象，可以有0-64个成员，SET类型的列可以从定义的列值中选择多个字符的联合，SET会删除重复的值</p>
 </li>
@@ -309,7 +311,7 @@
 <li><code>IFNULL(v1,v2)</code>若v1不为NULL，则返回v1.否则返回v2</li>
 <li><code>CASE expr WHEN v1 THEN r1 [WHEN v2 THEN r2] [ELSE rn] END</code>如果expr的值等于某个vn，则返回对应rn</li>
 <li>查看系统信息<code>select version()</code> <code>select connection_ID()</code></li>
-<li><code>SELECT USER(),CURRENT_USER(),SYSTEM_USER();</code>获取用户名函数</li>
+<li><code>SELECT USER(),CURRENT_USER(),SYSTEM_USER()</code>获取用户名函数</li>
 <li><code>LAST_INSERT_ID()</code>获取最后一格自动生成的ID值</li>
 <li><code>FORMAT(x,n)</code>将数字格式化，四舍五入保留小数点后n位。以字符串形式返回，若n=0,则返回函数不包含小数部分</li>
 <li><code>CONV(n,FROM_BASE,TO_BASE)</code>对N进制转换</li>
@@ -603,10 +605,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
@@ -615,15 +613,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据库， Hive</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -656,10 +658,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Mahout</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
               </li>
              
               <li class="article-tag-list-item">

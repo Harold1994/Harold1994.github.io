@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="//harold.me">
   <title>数据库中：维度表和事实表 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="a) 事实表     i.              事实表是维度模型的基本表，存放有大量的业务性能度量值。  ii.              事实表的一行对应一个度量值，一个度量值就是事实表的一行，事实表的所有度量值必须具有相同的粒度  iii.              事实表中最有用的事实是数字类型和可加形型事实">
+  <meta name="description" content="事实表     事实表是维度模型的基本表，存放有大量的业务性能度量值。 事实表的一行对应一个度量值，一个度量值就是事实表的一行，事实表的所有度量值必须具有相同的粒度 事实表中最有用的事实是数字类型和可加形型事实 在维度模型中，事实表表示维度间多对多的关系">
 <meta name="keywords" content="数据库">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据库中：维度表和事实表">
 <meta property="og:url" content="//harold.me/2018/06/04/数据库中：维度表和事实表/index.html">
 <meta property="og:site_name" content="Harold的博客">
-<meta property="og:description" content="a) 事实表     i.              事实表是维度模型的基本表，存放有大量的业务性能度量值。  ii.              事实表的一行对应一个度量值，一个度量值就是事实表的一行，事实表的所有度量值必须具有相同的粒度  iii.              事实表中最有用的事实是数字类型和可加形型事实">
+<meta property="og:description" content="事实表     事实表是维度模型的基本表，存放有大量的业务性能度量值。 事实表的一行对应一个度量值，一个度量值就是事实表的一行，事实表的所有度量值必须具有相同的粒度 事实表中最有用的事实是数字类型和可加形型事实 在维度模型中，事实表表示维度间多对多的关系">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-14T00:45:19.094Z">
+<meta property="og:updated_time" content="2019-03-22T14:16:50.538Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库中：维度表和事实表">
-<meta name="twitter:description" content="a) 事实表     i.              事实表是维度模型的基本表，存放有大量的业务性能度量值。  ii.              事实表的一行对应一个度量值，一个度量值就是事实表的一行，事实表的所有度量值必须具有相同的粒度  iii.              事实表中最有用的事实是数字类型和可加形型事实">
+<meta name="twitter:description" content="事实表     事实表是维度模型的基本表，存放有大量的业务性能度量值。 事实表的一行对应一个度量值，一个度量值就是事实表的一行，事实表的所有度量值必须具有相同的粒度 事实表中最有用的事实是数字类型和可加形型事实 在维度模型中，事实表表示维度间多对多的关系">
   
   
     <link rel="icon" href="/favicon.png">
@@ -207,17 +207,25 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p> a) 事实表   </p>
-<p> i.              事实表是维度模型的基本表，存放有大量的业务性能度量值。</p>
-<p> ii.              事实表的一行对应一个度量值，一个度量值就是事实表的一行，事实表的所有度量值必须具有相同的粒度</p>
-<p> iii.              事实表中最有用的事实是数字类型和可加形型事实<br><a id="more"></a><br> iv.              在维度模型中，事实表表示维度间多对多的关系</p>
-<p>b)        维度表</p>
-<p>i.              维度表包含业务的文字描述，维度表倾向于将列数做相当少。</p>
-<p>ii.              维度表是进入事实表的入口，丰富的维度属性给出了丰富的分析切割能力，维度给用户提供了使用数据仓库的借口</p>
-<p>c)         事实与维度的融合</p>
-<p>i.              由数字类型度量值组成的事实表连接到一组填满描述属性的维度表上，这个星型结构特征通常叫做星星连接方案</p>
-<p>ii.              维度模型的简明性也带来了性能上的好处，数据库优化器可以更加高效的处理这些连接关系较少的简单方案。数据库引擎可采取非常强劲的做法是：首先集中对建立了充足的索引的维度进行约束处理，然后用满足条件的维度表关节子的笛卡尔乘积一次性处理全部的事实表。</p>
-<p>iii.              维度模型的可预订框架能够经受住无法预见的用户行为带来的考验</p>
+        <ul>
+<li>事实表   </li>
+</ul>
+<p>事实表是维度模型的基本表，存放有大量的业务性能度量值。</p>
+<p>事实表的一行对应一个度量值，一个度量值就是事实表的一行，事实表的所有度量值必须具有相同的粒度</p>
+<p>事实表中最有用的事实是数字类型和可加形型事实</p>
+<p>在维度模型中，事实表表示维度间多对多的关系</p>
+<a id="more"></a> 
+<ul>
+<li>维度表</li>
+</ul>
+<p>维度表包含业务的文字描述，维度表倾向于将列数做相当少。</p>
+<p>维度表是进入事实表的入口，丰富的维度属性给出了丰富的分析切割能力，维度给用户提供了使用数据仓库的借口</p>
+<ul>
+<li>事实与维度的融合</li>
+</ul>
+<p>i.由数字类型度量值组成的事实表连接到一组填满描述属性的维度表上，这个星型结构特征通常叫做星星连接方案</p>
+<p>ii.维度模型的简明性也带来了性能上的好处，数据库优化器可以更加高效的处理这些连接关系较少的简单方案。数据库引擎可采取非常强劲的做法是：首先集中对建立了充足的索引的维度进行约束处理，然后用满足条件的维度表关节子的笛卡尔乘积一次性处理全部的事实表。</p>
+<p>iii.维度模型的可预订框架能够经受住无法预见的用户行为带来的考验</p>
 <p>一个典型的例子是，把逻辑业务比作一个立方体，产品维、时间维、地点维分别作为不同的坐标轴，而坐标轴的交点就是一个具体的事实。也就是说事实表是多个维度表的一个交点。而维度表是分析事实的一个窗口。 </p>
 <p>首先介绍下数据库结构中的星型结构，该结构在位于结构中心的单个事实数据表中维护数据，其它维度数据存储在维度表中。每个维度表与事实数据表直接相关，且通常通过一个键联接到事实数据表中。星型架构是数据仓库比较流向的一种架构。</p>
 <p>事实表是数据仓库结构中的中央表，它包含联系事实与维度表的数字度量值和键。事实数据表包含描述业务（例如产品销售）内特定事件的数据。</p>
@@ -514,10 +522,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
@@ -526,15 +530,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据库， Hive</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -567,10 +575,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Mahout</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
               </li>
              
               <li class="article-tag-list-item">

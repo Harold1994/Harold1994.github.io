@@ -184,6 +184,93 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Spark-2-3-0源码分析——6-Deploy模块" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/09/Spark-2-3-0源码分析——6-Deploy模块/">Spark_2.3.0源码分析——6_Deploy模块源码分析(一)</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/09/Spark-2-3-0源码分析——6-Deploy模块/" class="archive-article-date">
+  	<time datetime="2018-10-09T08:21:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Spark的部署方式有以下几种：</p>
+<ul>
+<li>Standalone</li>
+<li>Mesos</li>
+<li>YARN</li>
+<li>Local</li>
+<li>KUBERNETES</li>
+</ul>
+        
+          <a class="article-more-a" href="/2018/10/09/Spark-2-3-0源码分析——6-Deploy模块/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/09/Spark-2-3-0源码分析——6-Deploy模块/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-滴滴实习总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -906,92 +993,6 @@
 
 
   
-    <article id="post-Scala查漏补缺" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/29/Scala查漏补缺/">Scala查漏补缺——表达式、条件式和函数</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/29/Scala查漏补缺/" class="archive-article-date">
-  	<time datetime="2018-09-29T02:22:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="一、字面量、值、变量和类型"><a href="#一、字面量、值、变量和类型" class="headerlink" title="一、字面量、值、变量和类型"></a>一、字面量、值、变量和类型</h4><ul>
-<li><p>变量var可以重新赋值，但是不可以改变它指定的类型，所以不能将一个变量赋值为不兼容的类型</p>
-</li>
-<li><p>操作符命名不可包涵中括号和点号，但是可以是一个或多个除了反引号外的任意字符，所有这些字符包围在一对反引号中，用反引号包围的名字可以是Scala中的保留字，如true, while,=和var</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; <span class="keyword">val</span> a.b = <span class="number">25</span></span><br><span class="line">&lt;console&gt;:<span class="number">11</span>: error: not found: value a</span><br><span class="line">       <span class="keyword">val</span> a.b = <span class="number">25</span></span><br><span class="line">           ^</span><br><span class="line"></span><br><span class="line">scala&gt; <span class="keyword">val</span> `a.b` = <span class="number">25</span></span><br><span class="line">a.b: <span class="type">Int</span> = <span class="number">25</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Scala中没有基本类型的概念，它的核心数值类型类型是同名的核心JVM类型的包装器，包装JVM类型可以确保Scala和Java互操作，且Scala可以使用所有Java库</p>
-</li>
-<li><p>与Java不同，Scala中的相等操作符（==）会检查真正的相等性，而不是对象引用相等性。</p>
-</li>
-</ul>
-        
-          <a class="article-more-a" href="/2018/09/29/Scala查漏补缺/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">scala</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/29/Scala查漏补缺/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1186,10 +1187,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
@@ -1198,15 +1195,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据库， Hive</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1239,10 +1240,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Mahout</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="视图：虚拟表，从数据库中的一个或多个表中导出来的表，还可以在已定义视图的基础上定义。 视图中看到的数据只是存放在基本表中的数据，若基本表数据发生变化，则这种变化可以自动反映到视图中。 创建视图：1234CREATE [OR REPLACE] [ALGORITHM = &amp;#123;UNDEFINED | MERGE | TEMPTABLE&amp;#125;]		VIEW view_name [(colu">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-13T09:22:18.524Z">
+<meta property="og:updated_time" content="2019-03-22T14:11:39.196Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL查漏补缺（三）">
 <meta name="twitter:description" content="视图：虚拟表，从数据库中的一个或多个表中导出来的表，还可以在已定义视图的基础上定义。 视图中看到的数据只是存放在基本表中的数据，若基本表数据发生变化，则这种变化可以自动反映到视图中。 创建视图：1234CREATE [OR REPLACE] [ALGORITHM = &amp;#123;UNDEFINED | MERGE | TEMPTABLE&amp;#125;]		VIEW view_name [(colu">
@@ -219,17 +219,15 @@
 <li>默认情况下，将在当前数据库创建新视图。要在给定数据库创建视图，创建时应将名称指定为：db_name.view_name</li>
 <li>查看视图：<code>DESCRIBE 视图名</code>，<code>SHOW TABLE STATUS LIKE &#39;视图名&#39;</code>，<code>SHOW CREATE VIEW 视图名</code></li>
 <li><code>SELECT * FROM information_schema.views</code>,MySQL中，information_schema数据库中的views表中存储了所有视图的定义，可以查看视图的详细信息。</li>
-<li>修改视图：<blockquote>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> [<span class="keyword">OR</span> <span class="keyword">REPLACE</span>] [ALGORITHM = &#123;UNDEFINED | <span class="keyword">MERGE</span> | TEMPTABLE&#125;]</span><br><span class="line">		<span class="keyword">VIEW</span> view_name [(column_list)]</span><br><span class="line">    	<span class="keyword">AS</span> SELECT_statement</span><br><span class="line">    	[<span class="keyword">WITH</span> [<span class="keyword">CASCADED</span> | <span class="keyword">LOCAL</span>] <span class="keyword">CHECK</span> <span class="keyword">OPTION</span>]</span><br></pre></td></tr></table></figure>
-</blockquote>
+<li>修改视图：<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> [<span class="keyword">OR</span> <span class="keyword">REPLACE</span>] [ALGORITHM = &#123;UNDEFINED | <span class="keyword">MERGE</span> | TEMPTABLE&#125;]</span><br><span class="line">	<span class="keyword">VIEW</span> view_name [(column_list)]</span><br><span class="line">    	<span class="keyword">AS</span> SELECT_statement</span><br><span class="line">    	[<span class="keyword">WITH</span> [<span class="keyword">CASCADED</span> | <span class="keyword">LOCAL</span>] <span class="keyword">CHECK</span> <span class="keyword">OPTION</span>]</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<blockquote>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> [ALGORITHM = &#123;UNDEFINED | <span class="keyword">MERGE</span> | TEMPTABLE&#125;]</span><br><span class="line">		<span class="keyword">VIEW</span> view_name [(column_list)]</span><br><span class="line">    	<span class="keyword">AS</span> SELECT_statement</span><br><span class="line">    	[<span class="keyword">WITH</span> [<span class="keyword">CASCADED</span> | <span class="keyword">LOCAL</span>] <span class="keyword">CHECK</span> <span class="keyword">OPTION</span>]</span><br></pre></td></tr></table></figure>
-</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> [ALGORITHM = &#123;UNDEFINED | <span class="keyword">MERGE</span> | TEMPTABLE&#125;]</span><br><span class="line">	<span class="keyword">VIEW</span> view_name [(column_list)]</span><br><span class="line">    	<span class="keyword">AS</span> SELECT_statement</span><br><span class="line">    	[<span class="keyword">WITH</span> [<span class="keyword">CASCADED</span> | <span class="keyword">LOCAL</span>] <span class="keyword">CHECK</span> <span class="keyword">OPTION</span>]</span><br></pre></td></tr></table></figure>
 <ul>
-<li>更新视图：<code>UPDATE 视图名 SET col_name = val</code>,<code>DELETE FROM 视图名 WHERE condition_expr</code></li>
-<li>当视图中包含如下内容时，视图的更新不能被执行：<blockquote>
+<li><p>更新视图：<code>UPDATE 视图名 SET col_name = val</code>,<code>DELETE FROM 视图名 WHERE condition_expr</code></p>
+</li>
+<li><p>当视图中包含如下内容时，视图的更新不能被执行：</p>
+<blockquote>
 <ol>
 <li>视图中不包含基表中被定义为非空的列</li>
 <li>在定义视图的SELECT语句后的字段列表中使用了数学表达式</li>
@@ -266,7 +264,7 @@
   <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GRANT</span> <span class="keyword">privileges</span> <span class="keyword">ON</span> db.table</span><br><span class="line"><span class="keyword">TO</span> <span class="keyword">user</span>@host [<span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'password'</span>] [, <span class="keyword">user</span> [<span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'password'</span>]]</span><br><span class="line">[<span class="keyword">WITH</span> <span class="keyword">GRANT</span> <span class="keyword">OPTION</span>];</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>直接操作MySQL用户表创建用户：</p>
-  <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> mysql.user(Host,<span class="keyword">User</span>,<span class="keyword">Password</span>,[privilegelist])</span><br><span class="line"><span class="keyword">VALUES</span> (<span class="string">'host'</span>,<span class="string">'username'</span>,<span class="keyword">PASSWORD</span>(<span class="string">'password'</span>),privilegevaluelist)</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> mysql.user(Host,<span class="keyword">User</span>,<span class="keyword">Password</span>,[privilegelist])</span><br><span class="line"><span class="keyword">VALUES</span> (<span class="string">'host'</span>,<span class="string">'username'</span>,<span class="keyword">PASSWORD</span>(<span class="string">'password'</span>),privilegevaluelist)</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>删除用户：<code>DROP USER user</code> ，DROP USER不能自动关闭任何打开的用户对话，如果用户有打开的回话，此时取消用户，命令不会生效，直到对话关闭后生效。</p>
 </li>
@@ -555,10 +553,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
@@ -567,15 +561,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据库， Hive</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -608,10 +606,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Mahout</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
               </li>
              
               <li class="article-tag-list-item">

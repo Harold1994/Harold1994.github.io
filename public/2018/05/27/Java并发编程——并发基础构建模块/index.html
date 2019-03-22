@@ -17,7 +17,7 @@
 <meta property="og:description" content="一、同步容器类同步容器类包括Vector和HashTable，其封装器类由Collections.synchronizedXxx等工厂方法创建 同步容器类实现线程安全的方式：将他们的状态封装起来，并对每个公有方法进行同步，使得每次只有一个线程能访问容器状态，即串行化容器的访问。 同步容器类支持客户端加锁，因此可能会创建一些新的操作，同步容器类通过其自身的锁来保护他的每个方法。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://i.loli.net/2018/10/12/5bbff44c6571f.png">
-<meta property="og:updated_time" content="2018-10-12T01:09:44.065Z">
+<meta property="og:updated_time" content="2019-03-22T16:35:27.312Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java并发编程——并发基础构建模块">
 <meta name="twitter:description" content="一、同步容器类同步容器类包括Vector和HashTable，其封装器类由Collections.synchronizedXxx等工厂方法创建 同步容器类实现线程安全的方式：将他们的状态封装起来，并对每个公有方法进行同步，使得每次只有一个线程能访问容器状态，即串行化容器的访问。 同步容器类支持客户端加锁，因此可能会创建一些新的操作，同步容器类通过其自身的锁来保护他的每个方法。">
@@ -225,7 +225,7 @@
 <p>并发容器是针对多个线程并发访问设计的。</p>
 <ul>
 <li><p>ConcurrentHashMap</p>
-<p>ConcurrentHashMap类似HashMap，也是基于散列的Map，它使用一种更细粒度的加锁机制——<strong>分段锁</strong>（Lock Striping）来实现更大程度的共享。任意数量的读取线程可以并发的访问Map，一定数量的写入线程可以并发修改Map，读写线程可以并发的访问Map。</p>
+<p>ConcurrentHashMap类似HashMap，也是基于散列的Map，它使用一种更细粒度的加锁机制——<strong>分段锁</strong>(1.8之后改为CAS+Synchronized)（Lock Striping）来实现更大程度的共享。任意数量的读取线程可以并发的访问Map，一定数量的写入线程可以并发修改Map，读写线程可以并发的访问Map。</p>
 <blockquote>
 <p>ConcurrentHashMap不会抛出ConcurrentModificationException异常</p>
 </blockquote>
@@ -235,14 +235,14 @@
 </li>
 <li><p>CopyOnWriteArrayList</p>
 <p>CopyOnWriteArrayList用于替代同步List，CopyOnWriteArraySet替代同步Set，提供了更好的并发性且不需要在迭代期间对容器加锁。</p>
-<p>Copy-On-Write写入时复制：只要正确发布一个事实不可变的对象，那么访问该对象时就不需要再进一步的同步，每次修改时都会创建并重新发布一个新的容器副本，从而实现可变性。“写入时复制”容器的迭代器保留一个指向底层基础数组的引用，这个数组当前位于迭代器的起始位置，由于它不会被修改，因此在对其进行同步时只需确保数组内容的可见性。因此多个线程可以同时对这个容器进行迭代，而不会彼此干扰活与修改容器的线程相互干扰。</p>
+<p>Copy-On-Write写入时复制：只要正确发布一个事实不可变的对象，那么访问该对象时就不需要再进一步的同步，每次修改时都会创建并重新发布一个新的容器副本，从而实现可变性。“写入时复制”容器的迭代器保留一个指向底层基础数组的引用，这个数组当前位于迭代器的起始位置，由于它不会被修改，因此在对其进行同步时只需确保数组内容的可见性。因此多个线程可以同时对这个容器进行迭代，而不会彼此干扰或与修改容器的线程相互干扰。</p>
 <blockquote>
 <p>每次修改容器时都会复制底层数组，需要一定开销。当迭代操作远多于修改操作时，才应该使用“写入时复制”</p>
 </blockquote>
 </li>
 </ul>
-<h4 id="三、阻塞队列和生产者-消费者模式"><a href="#三、阻塞队列和生产者-消费者模式" class="headerlink" title="三、阻塞队列和生产者-消费者模式"></a>三、阻塞队列和生产者-消费者模式</h4><p>  BlockingQueue提供了可阻塞的put和take方法，支持定时的poll和offer方法，若对列已满，put方法将阻塞直到有空间可用；若对列为空，take方法将阻塞直到有元素可用。队列可有界也可以无界，无界对列的take方法永远不会阻塞。</p>
-<p>  阻塞队列简化了生产者-消费者设计模式，支持任意数量的生产者与消费者。</p>
+<h4 id="三、阻塞队列和生产者-消费者模式"><a href="#三、阻塞队列和生产者-消费者模式" class="headerlink" title="三、阻塞队列和生产者-消费者模式"></a>三、阻塞队列和生产者-消费者模式</h4><p>BlockingQueue提供了可阻塞的put和take方法，支持定时的poll和offer方法，若对列已满，put方法将阻塞直到有空间可用；若对列为空，take方法将阻塞直到有元素可用。队列可有界也可以无界，无界队列的take方法永远不会阻塞。</p>
+<p>阻塞队列简化了生产者-消费者设计模式，支持任意数量的生产者与消费者。</p>
 <p>  offer方法：如果数据不能被添加到队列，将返回一个失败状态。</p>
 <p>  BlockingQueue的实现：</p>
 <ul>
@@ -264,7 +264,7 @@
 <p>双端队列适用于工作密取模式（Work Stealing）：每个消费者都有自己的双端队列，如果一个消费者完成了自己双端队列中的全部工作，它可以从其他消费者的双端队列<strong>末尾</strong>秘密的获取工作。这样有更高的伸缩性，从其他消费者尾部获取工作降低了竞争程度，适用于即是消费者又是生产者问题</p>
 </li>
 </ul>
-<h4 id="四、阻塞方法与中断方法"><a href="#四、阻塞方法与中断方法" class="headerlink" title="四、阻塞方法与中断方法"></a>四、阻塞方法与中断方法</h4><p>导致线程阻塞或暂停的原因：<br>​    </p>
+<h4 id="四、阻塞方法与中断方法"><a href="#四、阻塞方法与中断方法" class="headerlink" title="四、阻塞方法与中断方法"></a>四、阻塞方法与中断方法</h4><p>导致线程阻塞或暂停的原因：</p>
 <ul>
 <li>等待I/O操作结束</li>
 <li>等待获得一个锁</li>
@@ -618,10 +618,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
@@ -630,15 +626,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据库， Hive</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -671,10 +671,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Mahout</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
               </li>
              
               <li class="article-tag-list-item">
