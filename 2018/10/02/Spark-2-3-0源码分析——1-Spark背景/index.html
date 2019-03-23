@@ -17,7 +17,7 @@
 <meta property="og:description" content="从今天开始阅读Spark 2.3.0的源码，以加深对Spark的理解，之后会有Hadoop、kafka的源码分析，希望自己能坚持下来✊。 我会参照着官方的技术文档和一本参考书《Saprk技术内幕》完成本次分析，书的版本较老，因此会将其作为一个支撑框架，具体的内容会以实际源码和技术文档为主。下载源码和编译的过程网上有许多教程，这里不赘述。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://i.loli.net/2018/10/12/5bbff58e516bd.png">
-<meta property="og:updated_time" content="2019-03-06T15:40:47.735Z">
+<meta property="og:updated_time" content="2019-03-23T03:09:51.992Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark_2.3.0源码分析——1_Spark背景">
 <meta name="twitter:description" content="从今天开始阅读Spark 2.3.0的源码，以加深对Spark的理解，之后会有Hadoop、kafka的源码分析，希望自己能坚持下来✊。 我会参照着官方的技术文档和一本参考书《Saprk技术内幕》完成本次分析，书的版本较老，因此会将其作为一个支撑框架，具体的内容会以实际源码和技术文档为主。下载源码和编译的过程网上有许多教程，这里不赘述。">
@@ -77,6 +77,8 @@
 				<li><a href="/tags/计算机基础">计算机基础</a></li>
 	        
 				<li><a href="/tags/算法">算法</a></li>
+	        
+				<li><a href="/tags/scala">scala</a></li>
 	        
 			</ul>
 		</nav>
@@ -144,6 +146,8 @@
 			
 				
 			
+				
+			
 			
 			
 			<nav class="header-nav">
@@ -158,23 +162,25 @@
 				<ul style="width: 70%">
 				
 				
-					<li style="width: 11.11111111111111%"><a href="/">主页</a></li>
+					<li style="width: 10%"><a href="/">主页</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/大数据/">大数据</a></li>
+					<li style="width: 10%"><a href="/tags/大数据/">大数据</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/机器学习">机器学习</a></li>
+					<li style="width: 10%"><a href="/tags/机器学习">机器学习</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/Java">Java</a></li>
+					<li style="width: 10%"><a href="/tags/Java">Java</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/Linux">Linux</a></li>
+					<li style="width: 10%"><a href="/tags/Linux">Linux</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/数据库">数据库</a></li>
+					<li style="width: 10%"><a href="/tags/数据库">数据库</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/NoSQL">NoSQL</a></li>
+					<li style="width: 10%"><a href="/tags/NoSQL">NoSQL</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/计算机基础">计算机基础</a></li>
+					<li style="width: 10%"><a href="/tags/计算机基础">计算机基础</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/算法">算法</a></li>
+					<li style="width: 10%"><a href="/tags/算法">算法</a></li>
+		        
+					<li style="width: 10%"><a href="/tags/scala">scala</a></li>
 		        
 				</ul>
 			</nav>
@@ -214,9 +220,12 @@
 <a id="more"></a>
 <h4 id="一、技术背景"><a href="#一、技术背景" class="headerlink" title="一、技术背景"></a>一、技术背景</h4><p>Apache Spark 是一个快速的, 多用途的集群计算系统。 它提供了 Java, Scala, Python 和 R 的高级 API，以及一个支持通用的执行图计算的优化过的引擎. 它还支持一组丰富的高级工具, 包括使用 SQL 处理结构化数据处理的 <a href="http://spark.apachecn.org/docs/cn/2.2.0/sql-programming-guide.html" target="_blank" rel="noopener">Spark SQL</a>, 用于机器学习的 <a href="http://spark.apachecn.org/docs/cn/2.2.0/ml-guide.html" target="_blank" rel="noopener">MLlib</a>, 用于图计算的 <a href="http://spark.apachecn.org/docs/cn/2.2.0/graphx-programming-guide.html" target="_blank" rel="noopener">GraphX</a>, 以及 <a href="http://spark.apachecn.org/docs/cn/2.2.0/streaming-programming-guide.html" target="_blank" rel="noopener">Spark Streaming</a>。</p>
 <p>​    像 MapReduce 和 Dryad 等分布式计算框架已经广泛应用于大数据集的分析. 这些系统可以让用户不用担心分布式工作以及容错, 而是使用一系列的高层次的操作 api 来达到并行计算的目的.</p>
-<p>​    虽然当前的框架提供了大量的对访问利用计算资源的抽象, 但是它们缺少了对利用分布式内存的抽象.样使的它们在处理需要在多个计算之间复用中间结果的应用的时候会非常的不高效. 数据的复用在迭代机器学习和图计算领域（比如 PageRank, K-means 以及线性回归等算法）是很常见的. 在交互式数据挖掘中, 一个用户会经常对一个相同的数据子集进行多次不同的特定查询, 所以数据复用在交互式数据挖掘也是很常见的. 然而, 目前的大部分的框架对计算之间的数据复用的处理方式就是将中间数据写到一个靠稳定的系统中（比如分布式文件系统）, 这样会由于数据的复制备份, 磁盘的 I/O 以及数据的序列化而致应用任务执行很费时间.</p>
-<p>​    大多数现有的集群计算系统都是基于非循环的数据流模型。即从稳定的物理存储(如分布式文件系统)中加载记录，记录被传入由一组确定性操作构成的DAG，然后写回稳定存储。DAG数据流能在运行时实现任务调度和故障恢复。基于数据流的框架并不明确支持工作集，所以需要将数据输出到磁盘，然后在每次查询时重新加载，这会带来较大的开销。针对以上问题，Spark实现了一种分布式内存抽象，称为弹性分布式数据集（Resilient distributed Dataset,RDD）。它支持基于工作集的应用，同时具有数据流的特点：<strong>自动容错、位置感知性调度和可伸缩性</strong>。RDD允许用户在执行多个查询时显式的将工作集换存在内存中，后续查询能够重用工作集，这提高了查询速度。</p>
-<p>​    RDD提供了一种高度受限的共享内存模型，即RDD是只读记录分区的集合，只能通过在其他RDD执行确定的转换操作而创建。RDD通过Lineage来重建丢失的分区：一个RDD中包含了如何从其他RDD衍生所必须的相关信息，从而不需要检查点操作就可以重建丢失的数据分区。</p>
+<p>​    虽然当前的框架提供了大量的对访问利用计算资源的抽象, 但是它们缺少了对利用<strong>分布式内存</strong>的抽象.样使的它们在处理需要在多个计算之间<strong>复用中间结果</strong>的应用的时候会非常的不高效. 数据的复用在迭代机器学习和图计算领域（比如 PageRank, K-means 以及线性回归等算法）是很常见的. 在交互式数据挖掘中, 一个用户会经常对一个相同的数据子集进行多次不同的特定查询, 所以数据复用在交互式数据挖掘也是很常见的. 然而, 目前的大部分的框架对计算之间的数据复用的处理方式就是将中间数据写到一个可靠稳定的系统中（比如分布式文件系统）, 这样会由于数据的复制备份, 磁盘的 I/O 以及数据的序列化而导致应用任务执行很费时间.</p>
+<p>​    大多数现有的集群计算系统都是基于非循环的数据流模型。即从稳定的物理存储(如分布式文件系统)中加载记录，记录被传入由一组确定性操作构成的DAG，然后写回稳定存储。DAG数据流能在运行时实现任务调度和故障恢复。基于数据流的框架并不明确支持工作集，所以需要将数据输出到磁盘，然后在每次查询时重新加载，这会带来较大的开销。针对以上问题<strong>，Spark实现了一种分布式内存抽象，称为弹性分布式数据集</strong>（Resilient distributed Dataset,RDD）。它支持基于工作集的应用，同时具有数据流的特点：<strong>自动容错、位置感知性调度和可伸缩性</strong>。RDD允许用户在执行多个查询时显式的将工作集换存在内存中，后续查询能够重用工作集，这提高了查询速度。</p>
+<p>RDD提供了一种高度受限的共享内存模型，即RDD是只读记录分区的集合，只能通过在其他RDD执行确定的转换操作而创建。RDD通过Lineage来重建丢失的分区：一个RDD中包含了如何从其他RDD衍生所必须的相关信息，从而不需要检查点操作就可以重建丢失的数据分区。RDD的Lineage记录的是粗颗粒度的特定数据转换（Transformation）操作（filter, map, join etc.)行为。当这个RDD的部分分区数据丢失时，它可以通过Lineage获取足够的信息来重新运算和恢复丢失的数据分区。这种粗颗粒的数据模型，限制了Spark的运用场合，但同时相比细颗粒度的数据模型，也带来了性能的提升。</p>
+<blockquote>
+<p>RDD在Lineage依赖方面分为两种<strong>Narrow Dependencies</strong>与<strong>Wide Dependencies</strong>用来解决数据容错时的高效性。</p>
+</blockquote>
 <h4 id="二、Spark架构综述"><a href="#二、Spark架构综述" class="headerlink" title="二、Spark架构综述"></a>二、Spark架构综述</h4><p><img src="https://i.loli.net/2018/10/12/5bbff58e516bd.png" alt="屏幕快照 2018-10-11 下午10.34.04.png"></p>
 <ul>
 <li>Driver是用户编写的的数据处理逻辑，这个逻辑中包含用户创建的SparkContext</li>
@@ -233,7 +242,7 @@
 <li>Driver会将用户程序划分为不同的阶段，每个执行阶段由一组完全相同的Task组成，这些Task分别作用于不同的分区。在阶段划分完成和Task创建后，Driver会向Executor发送Task。</li>
 <li>Executor接收到Task后，下载Task的运行时依赖，之后执行Task，并将Task的运行状态汇报给Driver</li>
 <li>Driver根据收到的Task运行状态来处理不同的状态更新。有两种Task，Shuffle Map Task实现数据的重新洗牌，洗牌结果保存在Executor所在节点的文件系统中；Result Task负责生成结果数据</li>
-<li>Driver不断的调用Task，将Task发送到Executor执行，知道所有Task都正确执行或者超过执行次数限制仍未成功。</li>
+<li>Driver不断的调用Task，将Task发送到Executor执行，直到所有Task都正确执行或者超过执行次数限制仍未成功。</li>
 </ol>
 
       
@@ -442,19 +451,19 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NIO</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NIO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -518,10 +527,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
@@ -530,15 +535,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据库， Hive</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -571,10 +580,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Mahout</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
               </li>
              
               <li class="article-tag-list-item">

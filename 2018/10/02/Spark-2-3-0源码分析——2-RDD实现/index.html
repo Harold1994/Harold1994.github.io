@@ -18,7 +18,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://i.loli.net/2018/10/12/5bbff5af9a77a.png">
 <meta property="og:image" content="https://i.loli.net/2018/10/12/5bbff5cf7abcb.png">
-<meta property="og:updated_time" content="2019-03-06T16:19:47.477Z">
+<meta property="og:updated_time" content="2019-03-23T03:11:14.424Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark_2.3.0源码分析——2_RDD实现">
 <meta name="twitter:description" content="​    RDD是Spark最基本也是最根本的数据抽象，RDD提供了一种高度受限的共享内存，即RDD是只读的，并且只能通过其他RDD上的批量操作来创建，以此来实现容错。 ​    一般来说，分布式数据集的容错性有两种方式：数据检查点和记录数据的更新。对于大规模数据分析，数据检查点操作成本很高：需要通过数据中心的网络连接在机器之前复制庞大的数据集，而网络带宽往往比内存带宽低很多，同时还需要消耗更多的">
@@ -78,6 +78,8 @@
 				<li><a href="/tags/计算机基础">计算机基础</a></li>
 	        
 				<li><a href="/tags/算法">算法</a></li>
+	        
+				<li><a href="/tags/scala">scala</a></li>
 	        
 			</ul>
 		</nav>
@@ -145,6 +147,8 @@
 			
 				
 			
+				
+			
 			
 			
 			<nav class="header-nav">
@@ -159,23 +163,25 @@
 				<ul style="width: 70%">
 				
 				
-					<li style="width: 11.11111111111111%"><a href="/">主页</a></li>
+					<li style="width: 10%"><a href="/">主页</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/大数据/">大数据</a></li>
+					<li style="width: 10%"><a href="/tags/大数据/">大数据</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/机器学习">机器学习</a></li>
+					<li style="width: 10%"><a href="/tags/机器学习">机器学习</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/Java">Java</a></li>
+					<li style="width: 10%"><a href="/tags/Java">Java</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/Linux">Linux</a></li>
+					<li style="width: 10%"><a href="/tags/Linux">Linux</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/数据库">数据库</a></li>
+					<li style="width: 10%"><a href="/tags/数据库">数据库</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/NoSQL">NoSQL</a></li>
+					<li style="width: 10%"><a href="/tags/NoSQL">NoSQL</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/计算机基础">计算机基础</a></li>
+					<li style="width: 10%"><a href="/tags/计算机基础">计算机基础</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/算法">算法</a></li>
+					<li style="width: 10%"><a href="/tags/算法">算法</a></li>
+		        
+					<li style="width: 10%"><a href="/tags/scala">scala</a></li>
 		        
 				</ul>
 			</nav>
@@ -210,7 +216,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>​    RDD是Spark最基本也是最根本的数据抽象，RDD提供了一种高度受限的共享内存，即RDD是只读的，并且只能通过其他RDD上的批量操作来创建，以此来实现容错。</p>
+        <p>​    RDD是Spark最基本也是最根本的数据抽象，RDD提供了一种高度受限的共享内存，即<strong>RDD是只读的</strong>，并且只能通过其他RDD上的批量操作来创建，以此来实现容错。</p>
 <p>​    一般来说，分布式数据集的容错性有两种方式：数据检查点和记录数据的更新。对于大规模数据分析，数据检查点操作成本很高：需要通过数据中心的网络连接在机器之前复制庞大的数据集，而网络带宽往往比内存带宽低很多，同时还需要消耗更多的存储资源。<strong>所以Spark选择记录更新的方式</strong>，但是如果更新太多，记录更新成本也不低，因此RDD只支持<strong>粗粒度</strong>转换，即在大量记录上执行的单个操作。将创建RDD的一系列转换记录下来，以便恢复丢失的分区。</p>
 <a id="more"></a>
 <h4 id="一、RDD的概念"><a href="#一、RDD的概念" class="headerlink" title="一、RDD的概念"></a>一、RDD的概念</h4><p>一个 RDD 是一个只读, 被分区的数据集.我们可以通过两种对稳定的存储系统和其他的 RDDs 进行操作而创建一个新的 RDD.为了区别开 RDD 的其他操作, 我们称这些操作为 transformations, 比如 map, filter 以及 join 等都是 transformations 操作.</p>
@@ -539,19 +545,19 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NIO</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NIO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -615,10 +621,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
@@ -627,15 +629,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据库， Hive</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -668,10 +674,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Mahout</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
               </li>
              
               <li class="article-tag-list-item">

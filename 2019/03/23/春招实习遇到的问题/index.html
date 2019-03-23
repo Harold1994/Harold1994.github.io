@@ -6,20 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//harold.me">
-  <title>linux常用命令————read、col、cat、tail、查看日志命令 | Harold的博客</title>
+  <title>春招实习遇到的问题 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1.read Linux read命令用于从标准输入读取数值。 read 内部命令被用来从标准输入读取单行数据。这个命令可以用来读取键盘输入，当使用重定向的时候，可以读取文件中的一行数据。 1read [-ers] [-a aname] [-d delim] [-i text] [-n nchars] [-N nchars] [-p prompt] [-t timeout] [-u fd] [na">
-<meta name="keywords" content="Linux">
+  <meta name="description" content="一、操作系统 操作系统中进程中的线程会共享栈吗？ 一个进程实际上是有多个线程的执行单元组成，每个线程都运行在进程的上下文中，并共享同样的代码和全局数据。 先来看看栈是从哪里来的： 虚拟存储器是一个抽象概念，它为每个进程提供了假象，即每个进程都在独占的使用主存。每个进程看到的是一致的存储器，称为虚拟地址空间。下图是 Linux 进程的虚拟地址空间（其他Unix 系统设计类似）：">
+<meta name="keywords" content="大数据,Java,操作系统">
 <meta property="og:type" content="article">
-<meta property="og:title" content="linux常用命令————read、col、cat、tail、查看日志命令">
-<meta property="og:url" content="//harold.me/2018/07/05/linux常用命令4/index.html">
+<meta property="og:title" content="春招实习遇到的问题">
+<meta property="og:url" content="//harold.me/2019/03/23/春招实习遇到的问题/index.html">
 <meta property="og:site_name" content="Harold的博客">
-<meta property="og:description" content="1.read Linux read命令用于从标准输入读取数值。 read 内部命令被用来从标准输入读取单行数据。这个命令可以用来读取键盘输入，当使用重定向的时候，可以读取文件中的一行数据。 1read [-ers] [-a aname] [-d delim] [-i text] [-n nchars] [-N nchars] [-p prompt] [-t timeout] [-u fd] [na">
+<meta property="og:description" content="一、操作系统 操作系统中进程中的线程会共享栈吗？ 一个进程实际上是有多个线程的执行单元组成，每个线程都运行在进程的上下文中，并共享同样的代码和全局数据。 先来看看栈是从哪里来的： 虚拟存储器是一个抽象概念，它为每个进程提供了假象，即每个进程都在独占的使用主存。每个进程看到的是一致的存储器，称为虚拟地址空间。下图是 Linux 进程的虚拟地址空间（其他Unix 系统设计类似）：">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-11T13:00:17.057Z">
+<meta property="og:image" content="https://i.loli.net/2019/03/22/5c948bd25a761.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/22/5c94a57c740d8.png">
+<meta property="og:updated_time" content="2019-03-23T03:26:01.002Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="linux常用命令————read、col、cat、tail、查看日志命令">
-<meta name="twitter:description" content="1.read Linux read命令用于从标准输入读取数值。 read 内部命令被用来从标准输入读取单行数据。这个命令可以用来读取键盘输入，当使用重定向的时候，可以读取文件中的一行数据。 1read [-ers] [-a aname] [-d delim] [-i text] [-n nchars] [-N nchars] [-p prompt] [-t timeout] [-u fd] [na">
+<meta name="twitter:title" content="春招实习遇到的问题">
+<meta name="twitter:description" content="一、操作系统 操作系统中进程中的线程会共享栈吗？ 一个进程实际上是有多个线程的执行单元组成，每个线程都运行在进程的上下文中，并共享同样的代码和全局数据。 先来看看栈是从哪里来的： 虚拟存储器是一个抽象概念，它为每个进程提供了假象，即每个进程都在独占的使用主存。每个进程看到的是一致的存储器，称为虚拟地址空间。下图是 Linux 进程的虚拟地址空间（其他Unix 系统设计类似）：">
+<meta name="twitter:image" content="https://i.loli.net/2019/03/22/5c948bd25a761.png">
   
   
     <link rel="icon" href="/favicon.png">
@@ -193,114 +196,137 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-linux常用命令4" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-春招实习遇到的问题" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      linux常用命令————read、col、cat、tail、查看日志命令
+      春招实习遇到的问题
     </h1>
   
 
         
-        <a href="/2018/07/05/linux常用命令4/" class="archive-article-date">
-  	<time datetime="2018-07-05T14:53:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-05</time>
+        <a href="/2019/03/23/春招实习遇到的问题/" class="archive-article-date">
+  	<time datetime="2019-03-23T03:24:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-23</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong>1.read</strong></p>
-<p>Linux read命令用于从标准输入读取数值。</p>
-<p>read 内部命令被用来从标准输入读取单行数据。这个命令可以用来读取键盘输入，当使用重定向的时候，可以读取文件中的一行数据。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">read [-ers] [-a aname] [-d delim] [-i text] [-n nchars] [-N nchars] [-p prompt] [-t timeout] [-u fd] [name ...]</span><br></pre></td></tr></table></figure>
-<a id="more"></a>     
-<p><strong>参数说明:</strong></p>
-<ul>
-<li>-a 后跟一个变量，该变量会被认为是个数组，然后给其赋值，默认是以空格为分割符。</li>
-<li>-d 后面跟一个标志符，其实只有其后的第一个字符有用，作为结束的标志。</li>
-<li>-p 后面跟提示信息，即在输入前打印提示信息。</li>
-<li>-e 在输入的时候可以时候命令补全功能。</li>
-<li>-n 后跟一个数字，定义输入文本的长度，很实用。</li>
-<li>-r 屏蔽\，如果没有该选项，则\作为一个转义字符，有的话 \就是个正常的字符了。</li>
-<li>-s 安静模式，在输入字符时不再屏幕上显示，例如login时输入密码。</li>
-<li>-t 后面跟秒数，定义输入字符的等待时间。</li>
-<li>-u 后面跟fd，从文件描述符中读入，该文件描述符可以是exec新开启的。</li>
-</ul>
-<p><strong>a、简单读取</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">#这里默认会换行  </span><br><span class="line">echo &quot;输入网站名: &quot;  </span><br><span class="line">#读取从键盘的输入  </span><br><span class="line">read website  </span><br><span class="line">echo &quot;你输入的网站名是 $website&quot;  </span><br><span class="line">exit 0  #退出</span><br></pre></td></tr></table></figure>
-<p><strong>b、-p 参数，允许在 read 命令行中直接指定一个提示</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">read -p &quot;输入网站名:&quot; website</span><br><span class="line">echo &quot;你输入的网站名是 $website&quot; </span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
-<p><strong>c.读取文件</strong></p>
-<p>每次调用 read 命令都会读取文件中的 “一行” 文本。当文件没有可读的行时，read 命令将以非零状态退出。</p>
-<p>通过什么样的方法将文件中的数据传给 read 呢？使用 cat 命令并通过管道将结果直接传送给包含 read 命令的 while 命令。</p>
-<p>测试文件 test.txt 内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">123</span><br><span class="line">456</span><br><span class="line">runoob</span><br></pre></td></tr></table></figure>
-<p>测试代码：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash </span><br><span class="line">count=1    # 赋值语句，不加空格</span><br><span class="line">cat test.txt | while read line      # cat 命令的输出作为read命令的输入,read读到&gt;的值放在line中</span><br><span class="line">do</span><br><span class="line">   echo "Line $count:$line"</span><br><span class="line">   count=$[ $count + 1 ]          # 注意中括号中的空格。</span><br><span class="line">done</span><br><span class="line">echo "finish"</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
-<p><strong>2.col</strong></p>
-<p>Linux col命令用于过滤控制字符。</p>
-<p>在许多UNIX说明文件里，都有RLF控制字符。当我们运用shell特殊字符”&gt;”和”&gt;&gt;”，把说明文件的内容输出成纯文本文件时，控制字符会变成乱码，col指令则能有效滤除这些控制字符。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">col [-bfx][-l&lt;缓冲区列数&gt;]</span><br></pre></td></tr></table></figure>
-<p><strong>参数</strong>：</p>
-<ul>
-<li>-b 过滤掉所有的控制字符，包括RLF和HRLF。</li>
-<li>-f 滤除RLF字符，但允许将HRLF字符呈现出来。</li>
-<li>-x 以多个空格字符来表示跳格字符。</li>
-<li><p>-l&lt;缓冲区列数&gt; 预设的内存缓冲区有128列，您可以自行指定缓冲区的大小。</p>
-<p>下面以 man 命令帮助文档为例，讲解col 命令的使用。</p>
+        <h4 id="一、操作系统"><a href="#一、操作系统" class="headerlink" title="一、操作系统"></a>一、操作系统</h4><ul>
+<li><p>操作系统中进程中的线程会共享栈吗？</p>
+<p>一个进程实际上是有多个线程的执行单元组成，每个线程都运行在进程的上下文中，并共享同样的代码和全局数据。</p>
+<p>先来看看栈是从哪里来的：</p>
+<p>虚拟存储器是一个抽象概念，它为每个进程提供了假象，即每个进程都在独占的使用主存。每个进程看到的是一致的存储器，称为虚拟地址空间。下图是 Linux 进程的虚拟地址空间（其他Unix 系统设计类似）：</p>
+<a id="more"></a>
+<p><img src="https://i.loli.net/2019/03/22/5c948bd25a761.png" alt="1120165-20170911080525000-869430973.png"></p>
+<p>我们从最低的地址，逐步向上介绍上面出现的区域名词。</p>
+<p>　　①、程序代码和数据：对于所有进程来说，代码是从同一固定地址开始的，分别为0x08048000（32位）以及0x00400000（64位），紧接着是全局变量相对应的数据位置。</p>
+<p>　　②、堆：代码和数据区后紧随的是运行时堆。代码和数据区是在进程一开始运行时就规定了大小，而当调用malloc和free这样的 C 标准库函数 时，堆可以在运行时动态的扩展和收缩。</p>
+<p>　　③、共享库：存放像C标准库和数据库这样的代码和数据的区域。</p>
+<p>　　④、栈：位于用户虚拟地址空间顶部，编译器用它来实现函数调用，用户栈在程序执行期间可以动态的扩展和收缩。当我们调用一个函数时，栈会增长；从一个函数返回时，栈会收缩。</p>
+<p>　　⑤、内核虚拟存储器：内核总是驻留在内存中，是操作系统的一部分，不允许应用程序读写这个区域的内容或者直接调用内核代码定义的函数。</p>
+<p> 　　关于所有进程代码是从同一固定地址开始的，这里我们做个验证，我们在 Linux 64位系统上，在存放hello.c程序的目录下输入如下命令：运行前面写好的 hello.c 程序，并查看地址信息</p>
+<blockquote>
+<p>可见，位于虚拟地址空间顶部的是用户栈，编译器用它来实现函数调用，用户栈再执行期间可以动态的扩展和伸缩，每次调用一个函数时，栈就会增长，从一个函数返回时，栈就会收缩。</p>
+</blockquote>
+<p>一组并发线程运行在一个进程的上下文中，<strong>所有线程都有它独立的线程上下文，包括线程ID、栈、栈指针、程序计数器、条件码和通用目的寄存器值</strong>，每个线程和其他线程共享进程上下文的其他部分，包括整个用户虚拟地址空间，线程也共享相同的打开文件的集合。</p>
+<p>各自独立的线程栈被保存在虚拟地址空间的栈区域中，并且通常是被相应的线程独立访问的，不过有的时候线程可以读取到另一个线程的栈中的数据，例如一个线程以某种方式得到一个指向其他线程栈的指针。</p>
 </li>
 </ul>
-<p>将man 命令的帮助文档保存为man_help，使用-b 参数过滤所有控制字符。在终端中使用如下命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">man man | col-b &gt; man_help</span><br></pre></td></tr></table></figure>
-<p><strong>3.tail</strong></p>
-<p>tail 命令可用于查看文件的内容，有一个常用的参数 -f 常用于查阅正在改变的日志文件。</p>
-<p>tail -f filename 会把 filename 文件里的最尾部的内容显示在屏幕上，并且不断刷新，只要 filename 更新就可以看到最新的文件内容。</p>
-<p><strong>命令格式：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail [参数] [文件]</span><br></pre></td></tr></table></figure>
-<p><strong>参数：</strong></p>
+<h4 id="二、Java"><a href="#二、Java" class="headerlink" title="二、Java"></a>二、Java</h4><ul>
+<li><p>Executor实现，自己怎么实现</p>
+<blockquote>
+<p>阿里发布的 Java开发手册中强制线程池不允许使用 Executors 去创建，而是通过 ThreadPoolExecutor 的方式，这样的处理方式让写的同学更加明确线程池的运行规则，规避资源耗尽的风险</p>
+</blockquote>
+<p>线程池体系：</p>
+<p><img src="https://i.loli.net/2019/03/22/5c94a57c740d8.png" alt="屏幕快照 2019-03-22 下午5.03.14.png"></p>
+<p>|-Java.util.concurrent.Executor 负责线程的使用与调度的根接口</p>
+<p>|-ExecutorService:Executor的子接口，线程池的主要接口</p>
+<p>|-AbstractExecutorService:实现了ExecutorService接口，基本实现了ExecutorService其中声明的所有方法，另有添加其他方法</p>
+<p>|-ThreadPoolExecutor:继承了AbstractExecutorService，主要的常用实现类</p>
+<p>|-ScheduledExecutorService:继承了ExecutorService，负责线程调度的接口</p>
+<p>|-ScheduledThreadPoolExecutor:继承了ThreadPoolExecutor同时实现了ScheduledExecutorService</p>
+</li>
+<li><p>自己实现线程池可以通过ThreadPollExecutor来创建，重要的是调节传入的参数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">long</span> keepAliveTime,</span></span></span><br><span class="line"><span class="function"><span class="params">                          TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">                          BlockingQueue&lt;Runnable&gt; workQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">                          ThreadFactory threadFactory,</span></span></span><br><span class="line"><span class="function"><span class="params">                          RejectedExecutionHandler handler)</span></span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>-f 循环读取</li>
-<li>-q 不显示处理信息</li>
-<li>-v 显示详细的处理信息</li>
-<li>-c&lt;数目&gt; 显示的字节数</li>
-<li>-n&lt;行数&gt; 显示行数</li>
-<li>–pid=PID 与-f合用,表示在进程ID,PID死掉之后结束.</li>
-<li>-q, –quiet, –silent 从不输出给出文件名的首部</li>
-<li><p>-s, –sleep-interval=S 与-f合用,表示在每次反复的间隔休眠S秒</p>
-<p>要显示 notes.log 文件的最后 10 行，请输入以下命令：</p>
+<li>corePoolSize: 线程池核心池的大小</li>
+<li>maximumPoolSize:线程池的最大线程数</li>
+<li>keepAliveTime ：当线程数大于核心时，此为终止前多余的空闲线程等待新任务的最长时间</li>
+<li>unit： keepAliveTime 的时间单位</li>
+<li>workQueue：用来储存等待执行任务的队列</li>
+<li>threadFactory ： 线程工厂。</li>
+<li>handler ：拒绝策略</li>
+</ul>
+<ol>
+<li><p><strong>线程池大小</strong><br>线程池有两个线程数的设置，一个为核心池线程数，一个为最大线程数。<br>在创建了线程池后，默认情况下，线程池中并没有任何线程，等到有任务来才创建线程去执行任务，除非调用了prestartAllCoreThreads()或者prestartCoreThread()方法<br>当创建的线程数等于 corePoolSize 时，会加入设置的阻塞队列。当队列满时，会创建线程执行任务直到线程池中的数量等于maximumPoolSize。</p>
+</li>
+<li><p><strong>工作队列</strong></p>
+<p>在线程池中，任务请求会在一个由Executor管理的Runnable队列中等待，而不是像线程那样去竞争cpu资源，通过一个Runnable和一个链表节点来表现一个等待中的任务，开销比用线程表示低很多，但如果客户端提交给服务器请求的速率超过了服务器的处理速率，那么仍可能会耗尽资源。</p>
+<p>ThreadPoolExecutor允许提供一个BlockingQueue来保存等待执行的任务，基本任务队列有三种：</p>
+<ul>
+<li>无界队列：newFixedThreadPool和newSingleThreadExecutor默认使用LinkedBlockingQueue，如果所有工作者线程都忙碌，那么任务将在队列中等候，缺点是队列可能无限制增加，造成资源耗尽。</li>
+<li>有界队列：如ArrayBlockingQueue、有界的LinkedBlockingQueue、PriorityBlockingQueue。有界队列有助于避免资源耗尽，但是如果队列满了，新来的任务的处理成为了问题，<strong>饱和策略</strong>可以解决此类问题。</li>
+<li>同步移交（SynchronousQueue）:直接将任务从生产者移交给工作者线程，SynchronousQueue是一种线程之间的移交机制，要将一个元素放入SynchronousQueue，必须有另外一个线程正在等待接受这个元素。如果没有线程正在等待并且线程池当前大小小于最大值，SynchronousQueue将创建一个新线程，否则根据饱和策略，这个任务将被拒绝。newCachedThreadPool工厂方法中使用了SynchronousQueue。</li>
+</ul>
+<blockquote>
+<p>只有当任务相互独立时，为线程池工作队列设置界限才是合理的。若任务之间存在依赖关系，那么有界队列可能导致“饥饿”死锁问题，此时应该使用无界线程池，如newCachedThreadPool.</p>
+</blockquote>
+<p>ArrayBlockingQueue ：一个由数组结构组成的有界阻塞队列。<br>LinkedBlockingQueue ：一个由链表结构组成的有界阻塞队列。<br>PriorityBlockingQueue ：一个支持优先级排序的无界阻塞队列。<br>DelayQueue： 一个使用优先级队列实现的无界阻塞队列。<br>SynchronousQueue： 一个不存储元素的阻塞队列。<br>LinkedTransferQueue： 一个由链表结构组成的无界阻塞队列。</p>
+<p>LinkedBlockingDeque： 一个由链表结构组成的双向阻塞队列</p>
+</li>
+<li><h4 id="拒绝策略策略"><a href="#拒绝策略策略" class="headerlink" title="拒绝策略策略"></a>拒绝策略策略</h4><p>当有界队列被填满后，饱和策略开始发挥作用。ThreadPoolExecutor饱和策略可以通过setRejectedExecutionHandler来修改。（若某个任务被提交到已经关闭的Executor，也会用到饱和策略）。</p>
+<ul>
+<li><strong>中止（Abort）</strong>：默认的饱和策略，该策略将会抛出未受检查的RejectedEcecutionExeption，调用者捕获后可以自行处理</li>
+<li><strong>抛弃（Discard）</strong>：该策略会悄悄抛弃该任务</li>
+<li><strong>抛弃最旧的（Discard-Oldest）</strong>：抛弃下一个将被执行的任务，然后尝试重新提交新任务。</li>
+<li><strong>调用者运行（Caller-Runs）</strong>：实现了一种调节机制，既不会抛弃任务，也不会抛出异常，而是将任务回退到调用者，由调用者执行，从而降低新任务的流量。</li>
+</ul>
+</li>
+</ol>
+<p>说明：Executors 各个方法的弊端：<br>1）newFixedThreadPool 和 newSingleThreadExecutor:<br>主要问题是堆积的请求处理队列可能会耗费非常大的内存，甚至 OOM。<br>2）newCachedThreadPool 和 newScheduledThreadPool:<br>主要问题是线程数最大数是 Integer.MAX_VALUE，可能会创建数量非常多的线程，甚至 OOM。</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail notes.log</span><br></pre></td></tr></table></figure>
-<p>要跟踪名为 notes.log 的文件的增长情况，请输入以下命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail -f notes.log</span><br></pre></td></tr></table></figure>
-<p>此命令显示 notes.log 文件的最后 10 行。当将某些行添加至 notes.log 文件时，tail 命令会继续显示这些行。 显示一直继续，直到您按下（Ctrl-C）组合键停止显示。</p>
-<p>显示文件 notes.log 的内容，从第 20 行至文件末尾:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail +20 notes.log</span><br></pre></td></tr></table></figure>
-<p>显示文件 notes.log 的最后 10 个字符:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail -c 10 notes.log</span><br></pre></td></tr></table></figure>
-<p><strong>4.cat</strong></p>
-<p>cat 命令用于连接文件并打印到标准输出设备上。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat [-AbeEnstTuv] [--help] [--version] fileName</span><br></pre></td></tr></table></figure>
-<h3 id="参数说明："><a href="#参数说明：" class="headerlink" title="参数说明："></a>参数说明：</h3><p><strong>-n 或 –number</strong>：由 1 开始对所有输出的行数编号。</p>
-<p><strong>-b 或 –number-nonblank</strong>：和 -n 相似，只不过对于空白行不编号。</p>
-<p><strong>-s 或 –squeeze-blank</strong>：当遇到有连续两行以上的空白行，就代换为一行的空白行。</p>
-<p><strong>-v 或 –show-nonprinting</strong>：使用 ^ 和 M- 符号，除了 LFD 和 TAB 之外。</p>
-<p><strong>-E 或 –show-ends</strong> : 在每行结束处显示 $。</p>
-<p><strong>-T 或 –show-tabs</strong>: 将 TAB 字符显示为 ^I。</p>
-<p><strong>-e</strong> : 等价于 -vE。</p>
-<p><strong>-A, –show-all</strong>：等价于 -vET。</p>
-<p><strong>-e：</strong>等价于”-vE”选项；</p>
-<p><strong>-t：</strong>等价于”-vT”选项；</p>
-<p><strong>5.Linux查看日志命令</strong></p>
-<p>当日志文件存储日志很大时，我们就不能用vi直接进去查看日志，需要Linux的命令去完成我们的查看任务.</p>
-<ul>
-<li><strong>混合使用命令</strong></li>
+<h4 id="三、大数据组件"><a href="#三、大数据组件" class="headerlink" title="三、大数据组件"></a>三、大数据组件</h4><ul>
+<li><p>Flume与Logstash的区别</p>
+<p><strong>Logstash:</strong> </p>
+<ol>
+<li>插件式组织方式，易于扩展和控制</li>
+<li>数据源多样不仅限于日志文件，数据处理操作更丰富，可自定义（过滤，匹配过滤，转变，解析……）</li>
+<li>可同时监控多个数据源（input插件多样），同时也可将处理过的数据同时有不同多种输出（如stdout到控制台，同时存入elasticsearch）</li>
+<li>安装简单，使用简单，结构也简单，所有操作全在配置文件设定，运行调用配置文件即可</li>
+<li>管道式的dataSource——input plugin——filter plugin——output plugin——dataDestination</li>
+<li>有logstash web界面，可搜索日志</li>
+<li>有一整套的EKL日志追踪技术栈，可收集处理（logstash），存储管理搜索（elasticsearch），图形显示分析（kibana）</li>
+<li>做到更好的实时监控（插件设置时间间隔属性，对监控的数据源检查更新）</li>
+</ol>
+<p><strong>Flume (1.x  flume-ng）</strong></p>
+<p>1.分布式的可靠的可用的系统，高效的从不同数据源收集聚合迁移大量数据到一个集中的数据存储</p>
+<p>2.安装部署比较logstash复杂</p>
+<p>3.同样以配置文件为中心   提供了JavaAPI</p>
+<p>4.是一个完整的基于插件的架构 有独立开发的第三方插件</p>
+<p>5.三层架构：source  channel  sink</p>
+<p>Flume使用基于事务的数据传递方式来保证事件传递的可靠性。Source和Sink被封装进一个事务。事件被存放在Channel中直到该事件被处理，Channel中的事件才会被移除。这是Flume提供的点到点的可靠机制。</p>
+<p>从多级流来看，前一个agent的sink和后一个agent的source同样有它们的事务来保障数据的可靠性。</p>
+<blockquote>
+<p>两者最初的设计目的就不太一样。Flume本身最初设计的目的是为了把数据传入HDFS中（并不是为了采集日志而设计，这和Logstash有根本的区别），所以理所应当侧重于数据的传输，程序员要非常清楚整个数据的路由，并且比Logstash还多了一个可靠性策略，上文中的channel就是用于持久化目的，数据除非确认传输到下一位置了，否则不会删除，这一步是通过事务来控制的，这样的设计使得可靠性非常好。相反，Logstash则明显侧重对数据的预处理，因为日志的字段需要大量的预处理，为解析做铺垫。</p>
+</blockquote>
+</li>
+<li><p>Flume与Kafka的区别</p>
+<p>Flume ：管道 —-个人认为比较适合有多个生产者场景，或者有写入Hbase、HDFS和kafka需求的场景。</p>
+<p>Kafka ：消息队列—–由于Kafka是Pull模式，因此适合有多个消费者的场景。</p>
+</li>
+<li><p>为什么用这样的数据管道</p>
+<p>Spark Streaming+Flume+Kafka是大数据准实时数据采集的最为可靠并且也是最常用的方案</p>
+<p>整个过程就是，Flume会<a href="https://www.baidu.com/s?wd=%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7&amp;tn=24004469_oem_dg&amp;rsv_dl=gh_pl_sl_csd" target="_blank" rel="noopener">实时监控</a>写入日志的磁盘，只要有新的日志写入，Flume就会将日志以消息的形式传递给Kafka，然后Spark Streaming实时消费消息传入ES,</p>
+<p>Kafka是一个消息系统，Flume收集的日志可以移动到Kafka消息队列中，然后就可以被多处消费了，而且可以保证不丢失数据,通过这套架构，收集到的日志可以及时被Flume发现传到Kafka，通过Kafka我们可以把日志用到各个地方，同一份日志可以存入Hdfs中，也可以离线进行分析，还可以实时计算，而且可以保证安全性，基本可以达到实时的要求</p>
+</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">A.  tail web.2016-06-06.log -n 300 -f  </span><br><span class="line">    查看底部即最新300条日志记录，并实时刷新      </span><br><span class="line"></span><br><span class="line">B.  grep &apos;nick&apos; | tail web.2016-04-04.log -C 10   </span><br><span class="line">    查看字符‘nick’前后10条日志记录, 大写C  </span><br><span class="line"></span><br><span class="line">C.  cat -n test.log |tail -n +92|head -n 20  </span><br><span class="line">    tail -n +92表示查询92行之后的日志  </span><br><span class="line">    head -n 20 则表示在前面的查询结果里再查前20条记录</span><br></pre></td></tr></table></figure>
+
       
 
       
@@ -313,7 +339,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
         		</li>
       		
 		</ul>
@@ -332,18 +366,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/07/06/leetcode——Mysql题目/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          leetcode——Mysql题目（一）
-        
-      </div>
-    </a>
   
-  
-    <a href="/2018/07/05/linux常用命令3/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">linux常用命令————前后台进程管理</div>
+    <a href="/2019/02/22/常用设计模式/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">常用设计模式</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -370,7 +395,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#参数说明："><span class="toc-number">1.</span> <span class="toc-text">参数说明：</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#一、操作系统"><span class="toc-number">1.</span> <span class="toc-text">一、操作系统</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二、Java"><span class="toc-number">2.</span> <span class="toc-text">二、Java</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#拒绝策略策略"><span class="toc-number">3.</span> <span class="toc-text">拒绝策略策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#三、大数据组件"><span class="toc-number">4.</span> <span class="toc-text">三、大数据组件</span></a></li></ol>
                     </div>
                 </span>
             </div>

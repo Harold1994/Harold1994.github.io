@@ -625,7 +625,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>​    RDD是Spark最基本也是最根本的数据抽象，RDD提供了一种高度受限的共享内存，即RDD是只读的，并且只能通过其他RDD上的批量操作来创建，以此来实现容错。</p>
+        <p>​    RDD是Spark最基本也是最根本的数据抽象，RDD提供了一种高度受限的共享内存，即<strong>RDD是只读的</strong>，并且只能通过其他RDD上的批量操作来创建，以此来实现容错。</p>
 <p>​    一般来说，分布式数据集的容错性有两种方式：数据检查点和记录数据的更新。对于大规模数据分析，数据检查点操作成本很高：需要通过数据中心的网络连接在机器之前复制庞大的数据集，而网络带宽往往比内存带宽低很多，同时还需要消耗更多的存储资源。<strong>所以Spark选择记录更新的方式</strong>，但是如果更新太多，记录更新成本也不低，因此RDD只支持<strong>粗粒度</strong>转换，即在大量记录上执行的单个操作。将创建RDD的一系列转换记录下来，以便恢复丢失的分区。</p>
         
           <a class="article-more-a" href="/2018/10/02/Spark-2-3-0源码分析——2-RDD实现/#more">more >></a>
@@ -1117,19 +1117,19 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NIO</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NIO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">

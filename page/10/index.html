@@ -71,6 +71,8 @@
 	        
 				<li><a href="/tags/算法">算法</a></li>
 	        
+				<li><a href="/tags/scala">scala</a></li>
+	        
 			</ul>
 		</nav>
 		<nav class="header-smart-menu">
@@ -137,6 +139,8 @@
 			
 				
 			
+				
+			
 			
 			
 			<nav class="header-nav">
@@ -151,23 +155,25 @@
 				<ul style="width: 70%">
 				
 				
-					<li style="width: 11.11111111111111%"><a href="/">主页</a></li>
+					<li style="width: 10%"><a href="/">主页</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/大数据/">大数据</a></li>
+					<li style="width: 10%"><a href="/tags/大数据/">大数据</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/机器学习">机器学习</a></li>
+					<li style="width: 10%"><a href="/tags/机器学习">机器学习</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/Java">Java</a></li>
+					<li style="width: 10%"><a href="/tags/Java">Java</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/Linux">Linux</a></li>
+					<li style="width: 10%"><a href="/tags/Linux">Linux</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/数据库">数据库</a></li>
+					<li style="width: 10%"><a href="/tags/数据库">数据库</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/NoSQL">NoSQL</a></li>
+					<li style="width: 10%"><a href="/tags/NoSQL">NoSQL</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/计算机基础">计算机基础</a></li>
+					<li style="width: 10%"><a href="/tags/计算机基础">计算机基础</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/算法">算法</a></li>
+					<li style="width: 10%"><a href="/tags/算法">算法</a></li>
+		        
+					<li style="width: 10%"><a href="/tags/scala">scala</a></li>
 		        
 				</ul>
 			</nav>
@@ -183,6 +189,90 @@
           </div>
           <div id="js-content" class="content-ll">
             
+  
+    <article id="post-scala面向对象和模式匹配" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/25/scala面向对象和模式匹配/">scala面向对象和模式匹配</a>
+    </h1>
+  
+
+        
+        <a href="/2018/04/25/scala面向对象和模式匹配/" class="archive-article-date">
+  	<time datetime="2018-04-25T14:08:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>1.创建类、属性</strong></p>
+<ul>
+<li><p>scala声明类时不需要加public关键字，默认为public，一个类文件可以声明多个类，用object声明的与class同名的类为class的伴生类</p>
+</li>
+<li><p>属性不需要创建getter和setter，val默认只有get方法，因为他不可变;var有get 和 set 方法</p>
+</li>
+<li><p>用private修饰的属性，该属性属于私有变量，只有本类和伴生对象中才能访问</p>
+</li>
+<li><p>用private[this] 修饰的属性属于对象私有变量，只有本类可访问，伴生对象也无法访问</p>
+        
+          <a class="article-more-a" href="/2018/04/25/scala面向对象和模式匹配/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">scala</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/04/25/scala面向对象和模式匹配/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
   
     <article id="post-Scala常用方法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -702,15 +792,21 @@
     <div class="article-entry" itemprop="articleBody">
       
         <ul>
-<li>在GROUP BY语句后使用WITH ROLLUP，在所有查询结果后会增加一条记录，计算查询出的所有记录的总和</li>
-<li>使用WITH ROLLUP时，不能同时使用ORDER BY子句排序，两者相互排斥</li>
-<li>使用LIMIT限制查询结果的数量，<code>LIMIT [位置偏移量（默认为0），] 行数</code>，偏移量表示从哪一行开始显示</li>
-<li>COUNT(*)计算表中总的行数，不管某列是否有空值，COUNT（字段名）会忽略字段列中的空值</li>
-<li>SUM（）函数计算时会忽略NULL的行</li>
-<li>MAX()和MIN()都不仅可以查找数据类型，还可以用于字符类型</li>
-<li>连接查询条件：两个或多个列表存在相同意义的字段</li>
-<li>在一个连接查询中，如果涉及到的两个表都为一个表，称为自连接查询，自连接是特殊的内连接。两表相同时，用AS取别名防止二义性</li>
-<li>
+<li><p>在GROUP BY语句后使用WITH ROLLUP，在所有查询结果后会增加一条记录，计算查询出的所有记录的总和</p>
+</li>
+<li><p>使用WITH ROLLUP时，不能同时使用ORDER BY子句排序，两者相互排斥</p>
+</li>
+<li><p>使用LIMIT限制查询结果的数量，<code>LIMIT [位置偏移量（默认为0），] 行数</code>，偏移量表示从哪一行开始显示</p>
+</li>
+<li><p>COUNT(*)计算表中总的行数，不管某列是否有空值，COUNT（字段名）会忽略字段列中的空值</p>
+</li>
+<li><p>SUM（）函数计算时会忽略NULL的行</p>
+</li>
+<li><p>MAX()和MIN()都不仅可以查找数据类型，还可以用于字符类型</p>
+</li>
+<li><p>连接查询条件：两个或多个列表存在相同意义的字段</p>
+</li>
+<li><p>在一个连接查询中，如果涉及到的两个表都为一个表，称为自连接查询，自连接是特殊的内连接。两表相同时，用AS取别名防止二义性</p>
         
           <a class="article-more-a" href="/2018/04/04/MySQL查漏补缺（二）/#more">more >></a>
         
@@ -869,10 +965,15 @@
       
         <p>本篇博客记录本人在复习MySQL基本操作过程中碰到的之前忽略或者忘记的知识点</p>
 <ul>
-<li>命令<code>HOW DATABASES</code>后出现的mysql数据库是必需的，它描述用户访问权限</li>
-<li>创建数据库是在系统磁盘上划分一块区域用于数据的存储和管理</li>
-<li><code>show engines</code>查看系统支持的引擎</li>
-<li>InnoDB是事务型数据库的首选引擎，支持事务安全表（ACID），支持行锁定和外键<blockquote>
+<li><p>命令<code>SHOW DATABASES</code>后出现的mysql数据库是必需的，它描述用户访问权限</p>
+</li>
+<li><p>创建数据库是在系统磁盘上划分一块区域用于数据的存储和管理</p>
+</li>
+<li><p><code>show engines</code>查看系统支持的引擎:</p>
+<p>|    引擎    | 说明                                                         | 事务 |  XA  | SavePoint |<br>| :——–: | ———————————————————— | :–: | :–: | :——-: |<br>|  ARCHIVE   | 基本上用于数据归档,压缩比非常的高,适合用来存储历史数据       |  N   |  N   |     N     |<br>| BLACKHOLE  | 任何写入到此引擎的数据均会被丢弃掉, 不做实际存储,Select语句的内容永远是空,用于记录binlog做复制的中继存储 |  N   |  N   |     N     |<br>| MRG_MYISAM |                                                              |  N   |  N   |     N     |<br>|   MyISAM   |                                                              |  N   |  N   |     N     |<br>|   InnoDB   | Supports transactions, row-level locking, and foreign keys   |  Y   |  Y   |     Y     |<br>|   MEMORY   | Hash based, stored in memory, useful for temporary tables    |  N   |  N   |     N     |<br>|    CSV     | CSV storage engine                                           |  N   |  N   |     N     |</p>
+</li>
+<li><p>InnoDB是事务型数据库的首选引擎，支持事务安全表（ACID），支持行锁定和外键</p>
+<blockquote>
 <p>特点：</p>
 <ul>
 <li>InnoDB给MySQL提供了具有提交、回滚、和崩溃恢复能力的事务安全存储引擎</li>
@@ -909,87 +1010,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/04/03/MySQL查漏补缺（一）/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-KMP算法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/29/KMP算法/">KMP算法</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/29/KMP算法/" class="archive-article-date">
-  	<time datetime="2018-03-29T12:28:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在编辑文本程序过程中，经常需要在文本中找到某个模式的所有出现位置。典型情况是，一段正在被编辑的文本构成一个文件，而所要搜寻的模式是用户正在输入的特定的关键字。有效的解决这个问题的算法叫做字符串匹配算法，该算法能极大提高编辑文本程序时的响应效率。</p>
-<p>KMP算法是一种改进的字符串匹配算法，它的关键是利用匹配失败后的信息，尽量减少模式串与主串的匹配次数以达到快速匹配的目的。我们以一道字符串匹配的题目来学习KMP算法。<br>
-        
-          <a class="article-more-a" href="/2018/03/29/KMP算法/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">字符串匹配</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/29/KMP算法/">展开全文 >></a>
         </p>
       
 
@@ -1137,19 +1157,19 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NIO</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NIO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1213,10 +1233,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
@@ -1225,15 +1241,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据库， Hive</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1266,10 +1286,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Mahout</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
               </li>
              
               <li class="article-tag-list-item">

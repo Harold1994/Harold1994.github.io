@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="一、任务执行（Task Execution） 任务通常是一些抽象且离散的工作单元，通过把应用程序的工作分解到多个任务中，可以简化程序的组织结构，提供一种自然的事务边界来优化错误恢复过程，以及提供一种自然的并行工作结构来提升并发性。 1.在线程中执行任务当围绕“任务执行”来设计应用程序时，第一步就是要找到清晰的任务边界。大多数服务器应用程序都以独立的客户请求为边界.将独立的请求作为任务边界，即可以实">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-13T09:22:18.521Z">
+<meta property="og:updated_time" content="2019-03-23T02:24:56.188Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java并发编程——结构化并发应用程序(一)">
 <meta name="twitter:description" content="一、任务执行（Task Execution） 任务通常是一些抽象且离散的工作单元，通过把应用程序的工作分解到多个任务中，可以简化程序的组织结构，提供一种自然的事务边界来优化错误恢复过程，以及提供一种自然的并行工作结构来提升并发性。 1.在线程中执行任务当围绕“任务执行”来设计应用程序时，第一步就是要找到清晰的任务边界。大多数服务器应用程序都以独立的客户请求为边界.将独立的请求作为任务边界，即可以实">
@@ -217,35 +217,37 @@
 <p>任务通常是一些抽象且离散的工作单元，通过把应用程序的工作分解到多个任务中，可以简化程序的组织结构，提供一种自然的事务边界来优化错误恢复过程，以及提供一种自然的并行工作结构来提升并发性。</p>
 <h3 id="1-在线程中执行任务"><a href="#1-在线程中执行任务" class="headerlink" title="1.在线程中执行任务"></a>1.在线程中执行任务</h3><p>当围绕“任务执行”来设计应用程序时，第一步就是要找到清晰的任务边界。大多数服务器应用程序都以<em>独立的客户请求</em>为边界.将独立的请求作为任务边界，即可以实现任务的独立性，又可以实现合理的任务规模。<br><a id="more"></a></p>
 <ul>
-<li>串行的执行任务<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingleThreadWebServer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        ServerSocket socket = <span class="keyword">new</span> ServerSocket(<span class="number">80</span>);</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            Socket conn = socket.accept();</span><br><span class="line">            handleREquest(conn);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li>串行的执行任务<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingleThreadWebServer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        ServerSocket socket = <span class="keyword">new</span> ServerSocket(<span class="number">80</span>);</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            Socket conn = socket.accept();</span><br><span class="line">            handleRequest(conn);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>串行处理机制通常无法提供高吞吐率或快速响应性，每次只能处理一个请求。在Web请求的处理中包含了一组不同的运算与I/O操作。服务器必须处理套接字I/O以读取请求和写回响应，这些操作通常会由于网络拥塞或连通性问题而被阻塞，此外服务器还可能处理文件I/O或者数据库请求,这些操作同样会阻塞。单线程服务器中，阻塞会推迟当前请求的完成时间，还会彻底阻止等待中的请求被处理。如果阻塞时间过长，用户将认为服务器是不可用的，同时服务器的资源利用率非常低，因为线程在等待I/O操作完成时，CPU将处于空闲状态。</p>
 <ul>
 <li><p>显式地为任务创建线程</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadPerTaskWebServer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        ServerSocket socket = <span class="keyword">new</span> ServerSocket(<span class="number">80</span>);</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            <span class="keyword">final</span> Socket connection = socket.accept();</span><br><span class="line">            Runnable task = <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    handleRequest(connection);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            <span class="keyword">new</span> Thread(task).start();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li><p>任务处理过程从主线程分离出来，使得主循环能够更快的等待下一个到来的连接，提高响应性</p>
+</li>
+<li><p>任务可以并行处理，从而同时服务多个请求</p>
+</li>
+<li><p>任务处理代码必须是线程安全的因为当有多个任务时会并发的调用这段代码</p>
+</li>
+</ul>
+</blockquote>
+</li>
+<li><p>无限制创建线程的不足</p>
 </li>
 </ul>
 <blockquote>
-<ul>
-<li>任务处理过程从主线程分离出来，使得主循环能够更快的等待下一个到来的连接，提高响应性</li>
-<li>任务可以并行处理，从而同时服务多个请求</li>
-<li>任务处理代码必须是线程安全的因为当有多个任务时会并发的调用这段代码</li>
-</ul>
-</blockquote>
-<ul>
-<li>无限制创建线程的不足<blockquote>
 <p><em>线程生命周期的开销非常高</em>：线程的创建和销毁并不是没有代价的，平台不同，开销也不同。但线程的创建过程都需要时间，延迟处理的请求，并且需要JVM和操作系统提供一些辅助操作。</p>
 <p><em>资源消耗</em>:活跃的线程会消耗系统资源，尤其是内存。如果可用线程数量多于可用CPU的数量，有些线程将闲置。大量的空闲线程会占用许多内存，给垃圾回收器带来压力，而且大量线程在竞争CPU资源时还将产生其他的性能开销。</p>
 <p><em>稳定性</em>：在可创建线程的数量上存在一個限制，与平台相关，并受JVM的启动参数、Thread构造函数中请求的栈大小以及底层操作系统对线程的限制等约束。破坏了限制可能抛出OutOfMemoryError异常。</p>
 </blockquote>
-</li>
-</ul>
 <p>为每个任务创建一个线程”的问题在于没有限制可创建线程的数量，只限制了远程用户提交HTTP请求的速率。</p>
 <h3 id="2-Executer框架"><a href="#2-Executer框架" class="headerlink" title="2.Executer框架"></a>2.Executer框架</h3><p>线程池简化了线程的管理工作，Executor框架能支持多种不同类型的任务执行策略，提供了一种标准的方法将任务的提交过程与执行过程解耦开来，用Runnable表示任务。Executor的实现还提供了对生命周期的支持，以及统计信息收集，应用程序管理机制和性能监视等机制。<br>Executor基于生产者-消费者模式，提交任务的操作相当于生产者，执行任务的线程相当于消费者。</p>
 <h4 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h4><p>线程池是与工作队列密切相关的，其中在工作队列中保存了所有等待执行的任务。工作者线程（Work Thread）从工作队列中获取一个任务，执行任务，然后返回线程池等待下一个任务。<br>使用线程池的好处：</p>
 <blockquote>
-<p>. 通过重用而不是创建新线程，可以在处理多个请求时分摊在线程创建和销毁过程中产生的巨大开销<br>. 请求到达时，工作线程通常已经存在，不会由于等待创建线程而延迟任务的执行，提高了响应性<br>. 通过适当调整线程池的大小，可以使处理器保持忙碌状态，还可以放置过多线程相互竞争资源而使应用程序耗尽内存或失败</p>
+<p>通过重用而不是创建新线程，可以在处理多个请求时分摊在线程创建和销毁过程中产生的巨大开销<br>请求到达时，工作线程通常已经存在，不会由于等待创建线程而延迟任务的执行，提高了响应性<br>通过适当调整线程池的大小，可以使处理器保持忙碌状态，还可以放置过多线程相互竞争资源而使应用程序耗尽内存或失败</p>
 </blockquote>
 <p>可以通过Executors中的静态工厂方法创建线程池：<br><em>newFixedThreadPool</em>:固定长度的线程池</p>
 <p><em>newCachedThreadPool</em>:可缓存线程池，如果线程池的当前规模超过了处理需求时，将回收空闲的线程，当需求增加时，可以增加新的线程，线程池的规模不存在限制</p>
@@ -266,7 +268,7 @@
 <h4 id="在异构任务并行化中存在的局限"><a href="#在异构任务并行化中存在的局限" class="headerlink" title="在异构任务并行化中存在的局限"></a>在异构任务并行化中存在的局限</h4><p>两个问题：</p>
 <ol>
 <li>将不同类型的任务平均分配给每个线程并不容易，当线程数增加时，如何确保他们相互协作而不是相互妨碍，或者在重新分配任务时并不是容易的问题</li>
-<li>任务的大小可能完全不同，相差太大的话性能提升不多;当有多个线程分解任务时，还需要一定的任务协调开销，为了使任务分解提高性能，这种开销不饿能高于并行实现的提升。</li>
+<li>任务的大小可能完全不同，相差太大的话性能提升不多;当有多个线程分解任务时，还需要一定的任务协调开销，为了使任务分解提高性能，这种开销不可能高于并行实现的提升。</li>
 </ol>
 
       
@@ -479,19 +481,19 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NIO</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NIO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
