@@ -290,7 +290,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h4 id="一-二次排序-secondary-sort-问题的引出"><a href="#一-二次排序-secondary-sort-问题的引出" class="headerlink" title="一. 二次排序(secondary sort)问题的引出"></a>一. 二次排序(secondary sort)问题的引出</h4><p><strong>1. 二次排序</strong>:</p>
+        <h4 id="一、二次排序-secondary-sort-问题的引出"><a href="#一、二次排序-secondary-sort-问题的引出" class="headerlink" title="一、二次排序(secondary sort)问题的引出"></a>一、二次排序(secondary sort)问题的引出</h4><p><strong>1. 二次排序</strong>:</p>
 <p>在reduce阶段对与某个键关联的值排序,又称为键值转换;</p>
 <p><strong>2. MR中的排序:</strong></p>
 <p>MapReduce框架会自动对mapper生成的键排序,说明在启动reducer之前,mapper生成的所有中间键值对必然是<strong>按键有序</strong>的.但是传入reducer的值并不是有序的,他们可能有任意的顺序,要想对reducer中的值进行排序,可以用二次排序设计模式实现.</p>
@@ -622,8 +622,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>  当线程被创建并启动以后，它既不是一启动就进入了执行状态，也不是一直处于执行状态，在线程的生命周期中，它要经过新建（New）、就绪（Runnable）、运</p>
-<p>行（Running）、阻塞（Blocked）和死亡（Dead）五种状态。尤其是当线程启动以后，它不能一直“霸占”着CPU独自运行，所以CPU需要在多条线程之间切换，于是线程状态也会多次在运行、阻塞之间切换。<br>
+        <p>  当线程被创建并启动以后，它既不是一启动就进入了执行状态，也不是一直处于执行状态，在线程的生命周期中，它要经过新建（New）、就绪（Runnable）、运行（Running）、阻塞（Blocked）和死亡（Dead）五种状态。尤其是当线程启动以后，它不能一直“霸占”着CPU独自运行，所以CPU需要在多条线程之间切换，于是线程状态也会多次在运行、阻塞之间切换。<br>
         
           <a class="article-more-a" href="/2018/06/04/线程的生命周期/#more">more >></a>
         

@@ -18,7 +18,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://i.loli.net/2018/10/12/5bbff5af9a77a.png">
 <meta property="og:image" content="https://i.loli.net/2018/10/12/5bbff5cf7abcb.png">
-<meta property="og:updated_time" content="2019-03-23T03:11:14.424Z">
+<meta property="og:updated_time" content="2019-03-23T03:30:29.668Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark_2.3.0源码分析——2_RDD实现">
 <meta name="twitter:description" content="​    RDD是Spark最基本也是最根本的数据抽象，RDD提供了一种高度受限的共享内存，即RDD是只读的，并且只能通过其他RDD上的批量操作来创建，以此来实现容错。 ​    一般来说，分布式数据集的容错性有两种方式：数据检查点和记录数据的更新。对于大规模数据分析，数据检查点操作成本很高：需要通过数据中心的网络连接在机器之前复制庞大的数据集，而网络带宽往往比内存带宽低很多，同时还需要消耗更多的">
@@ -277,18 +277,18 @@
 <p>​    缓存有可能丢失，或者存储在内存中的数据由于内存不足而被删除。为了管理有限的内存资源, 在 RDDs 的层面上采用 LRU （最近最少使用）回收策略. 当一个新的 RDD 分区被计算但是没有足够的内存空间来存储这个分区的数据的时候, 会回收掉最近很少使用的 RDD 的分区数据的占用内存, 如果这个 RDD 和这个新的计算分区的 RDD 时同一个 RDD 的时候, 我们则不对这个分区数据占用的内存做回收. </p>
 <h5 id="4-RDD对-Checkpointing-的支持"><a href="#4-RDD对-Checkpointing-的支持" class="headerlink" title="4.RDD对 Checkpointing 的支持"></a>4.RDD对 Checkpointing 的支持</h5><p>​    虽然我们总是可以使用 RDDs 的血缘关系来恢复失败的 RDDs 的计算, 但是如果这个血缘关系链很长的话, 则恢复是需要耗费不少时间的.因此, 将一些 RDDs 的数据持久化到稳定存储系统中是有必要的，因此Spark又引入了检查点机制。</p>
 <p>​    一般来说, checkpointing 对具有很长的血缘关系链且包含了宽依赖的 RDDs 是非常有用的, 这些场景下, 集群中的某个节点的失败会导致每一个父亲 RDD 的一些数据的丢失, 进而需要重新所有的计算. 与此相反的, 对于存储在稳定存储系统中且是窄依赖的 RDDs , checkpointing 可能一点用都没有. 如果一个节点失败了, 我们可以在其他的节点中并行的重新计算出丢失了数据的分区, 这个成本只是备份整个 RDD 的成本的一点点而已.</p>
-<p>​    Spark 目前提供了一个 checkpointing 的 api （ persist 中的标识为 REPLICATE , 还有 checkpoint()）, 但是需要将哪些数据需要 checkpointing 的决定权留给了用户. </p>
+<p>​    Spark 目前提供了一个 checkpointing 的 API（ persist 中的标识为 REPLICATE , 还有 checkpoint()）, 但是需要将哪些数据需要 checkpointing 的决定权留给了用户. </p>
 <h4 id="二、RDD的转换和DAG的生成"><a href="#二、RDD的转换和DAG的生成" class="headerlink" title="二、RDD的转换和DAG的生成"></a>二、RDD的转换和DAG的生成</h4><p>Spark会根据用户提交的计算逻辑中的RDD的转换和动作来生成RDD之间的依赖关系，同时这个计算链也就生成了逻辑上的DAG。</p>
 <h5 id="1-RDD的依赖关系"><a href="#1-RDD的依赖关系" class="headerlink" title="1. RDD的依赖关系"></a>1. RDD的依赖关系</h5><p>RDD和它依赖的parent RDD的关系有两种不同的类型：</p>
 <ul>
 <li><p>窄依赖：如果RDD与上游RDD分区是一对一的关系，那么RDD和其上游RDD之间的依赖关系属于窄依赖</p>
 </li>
 <li><p>宽依赖：parent RDDs 的一个分区可以被子 RDDs 的多个子分区所依赖</p>
+</li>
+</ul>
 <p><img src="https://i.loli.net/2018/10/12/5bbff5cf7abcb.png" alt="屏幕快照 2018-10-11 下午10.33.52.png"></p>
 <p>以下两个原因使的这种区别很有用：<br>​    第一, 窄依赖可以使得在集群中一个机器节点的执行流计算所有父亲的分区数据, 比如, 我们可以将每一个元素应用了 map 操作后紧接着应用 filter 操作, 与此相反, 宽依赖需要父亲 RDDs 的所有分区数据准备好并且利用类似于 MapReduce 的操作将数据在不同的节点之间进行重新洗牌和网络传输. </p>
 <p>​    第二, 窄依赖从一个失败节点中恢复是非常高效的, 因为只需要重新计算相对应的父亲的分区数据就可以, 而且这个重新计算是在不同的节点进行并行重计算的, 与此相反, 在一个含有宽依赖的血缘关系 RDDs 图中, 一个节点的失败可能导致一些分区数据的丢失, 但是我们需要重新计算父 RDD 的所有分区的数据.</p>
-</li>
-</ul>
 <p>所有的依赖都要继承抽象类Dependency[T]</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Dependency</span>[<span class="type">T</span>] <span class="keyword">extends</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">rdd</span></span>: <span class="type">RDD</span>[<span class="type">T</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>对于窄依赖：</p>

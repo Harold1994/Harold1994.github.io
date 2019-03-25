@@ -549,7 +549,7 @@
       
         <h4 id="三、Hadoop-RPC实现"><a href="#三、Hadoop-RPC实现" class="headerlink" title="三、Hadoop RPC实现"></a>三、Hadoop RPC实现</h4><p>上一篇文章分析了Hadoop RPC框架的RPC、Client类的实现，还有一个Server类用于实现服务器端的功能，本篇文章将详细分析Server类。</p>
 <h5 id="3-Server类实现"><a href="#3-Server类实现" class="headerlink" title="3. Server类实现"></a>3. Server类实现</h5><p>Server类采用了很多技术来提供并发能力，包括线程池、JavaNIO提供的Reactor模式等，其中Reactor模式贯穿了整个Server的设计。</p>
-<h6 id="a-Reactor模式"><a href="#a-Reactor模式" class="headerlink" title="a. Reactor模式"></a>a. Reactor模式</h6><p>reactor设计模式，是一种基于事件驱动的设计模式。处理流程是：应用业务向一个中间人注册一个回调（event handler），当IO就绪后，就这个中间人产生一个事件，并通知此handler进行处理。这里的中间人其实是一个不断等待和循环的线程，他接受所有应用程序的注册，并检查应用程序注册的IO事件是否就绪，如果就绪则通知应用程序进行处理。</p>
+<h6 id="a-Reactor模式"><a href="#a-Reactor模式" class="headerlink" title="a. Reactor模式"></a>a. Reactor模式</h6><p>reactor设计模式，是一种基于事件驱动的设计模式。处理流程是：应用业务向一个中间人注册一个回调（event handler），当IO就绪后，就这个中间人产生一个事件，并通知此handler进行处理。这里的中间人其实是一个不断等待和循环的线程，它接受所有应用程序的注册，并检查应用程序注册的IO事件是否就绪，如果就绪则通知应用程序进行处理。</p>
         
           <a class="article-more-a" href="/2018/12/04/Hadoop源码阅读HadoopRPC三/#more">more >></a>
         

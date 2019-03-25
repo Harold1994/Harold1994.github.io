@@ -8,19 +8,19 @@
   <link rel="dns-prefetch" href="//harold.me">
   <title>数据算法——Hadoop的二次排序解决方案 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一. 二次排序(secondary sort)问题的引出1. 二次排序: 在reduce阶段对与某个键关联的值排序,又称为键值转换; 2. MR中的排序: MapReduce框架会自动对mapper生成的键排序,说明在启动reducer之前,mapper生成的所有中间键值对必然是按键有序的.但是传入reducer的值并不是有序的,他们可能有任意的顺序,要想对reducer中的值进行排序,可以用二次">
+  <meta name="description" content="一、二次排序(secondary sort)问题的引出1. 二次排序: 在reduce阶段对与某个键关联的值排序,又称为键值转换; 2. MR中的排序: MapReduce框架会自动对mapper生成的键排序,说明在启动reducer之前,mapper生成的所有中间键值对必然是按键有序的.但是传入reducer的值并不是有序的,他们可能有任意的顺序,要想对reducer中的值进行排序,可以用二次排">
 <meta name="keywords" content="大数据,Hadoop,机器学习,分布式算法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据算法——Hadoop的二次排序解决方案">
 <meta property="og:url" content="//harold.me/2018/06/04/数据算法-二次排序/index.html">
 <meta property="og:site_name" content="Harold的博客">
-<meta property="og:description" content="一. 二次排序(secondary sort)问题的引出1. 二次排序: 在reduce阶段对与某个键关联的值排序,又称为键值转换; 2. MR中的排序: MapReduce框架会自动对mapper生成的键排序,说明在启动reducer之前,mapper生成的所有中间键值对必然是按键有序的.但是传入reducer的值并不是有序的,他们可能有任意的顺序,要想对reducer中的值进行排序,可以用二次">
+<meta property="og:description" content="一、二次排序(secondary sort)问题的引出1. 二次排序: 在reduce阶段对与某个键关联的值排序,又称为键值转换; 2. MR中的排序: MapReduce框架会自动对mapper生成的键排序,说明在启动reducer之前,mapper生成的所有中间键值对必然是按键有序的.但是传入reducer的值并不是有序的,他们可能有任意的顺序,要想对reducer中的值进行排序,可以用二次排">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://i.loli.net/2018/10/12/5bbff04265a7d.png">
-<meta property="og:updated_time" content="2019-03-14T00:55:59.058Z">
+<meta property="og:updated_time" content="2019-03-24T07:59:05.038Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据算法——Hadoop的二次排序解决方案">
-<meta name="twitter:description" content="一. 二次排序(secondary sort)问题的引出1. 二次排序: 在reduce阶段对与某个键关联的值排序,又称为键值转换; 2. MR中的排序: MapReduce框架会自动对mapper生成的键排序,说明在启动reducer之前,mapper生成的所有中间键值对必然是按键有序的.但是传入reducer的值并不是有序的,他们可能有任意的顺序,要想对reducer中的值进行排序,可以用二次">
+<meta name="twitter:description" content="一、二次排序(secondary sort)问题的引出1. 二次排序: 在reduce阶段对与某个键关联的值排序,又称为键值转换; 2. MR中的排序: MapReduce框架会自动对mapper生成的键排序,说明在启动reducer之前,mapper生成的所有中间键值对必然是按键有序的.但是传入reducer的值并不是有序的,他们可能有任意的顺序,要想对reducer中的值进行排序,可以用二次排">
 <meta name="twitter:image" content="https://i.loli.net/2018/10/12/5bbff04265a7d.png">
   
   
@@ -215,7 +215,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h4 id="一-二次排序-secondary-sort-问题的引出"><a href="#一-二次排序-secondary-sort-问题的引出" class="headerlink" title="一. 二次排序(secondary sort)问题的引出"></a>一. 二次排序(secondary sort)问题的引出</h4><p><strong>1. 二次排序</strong>:</p>
+        <h4 id="一、二次排序-secondary-sort-问题的引出"><a href="#一、二次排序-secondary-sort-问题的引出" class="headerlink" title="一、二次排序(secondary sort)问题的引出"></a>一、二次排序(secondary sort)问题的引出</h4><p><strong>1. 二次排序</strong>:</p>
 <p>在reduce阶段对与某个键关联的值排序,又称为键值转换;</p>
 <p><strong>2. MR中的排序:</strong></p>
 <p>MapReduce框架会自动对mapper生成的键排序,说明在启动reducer之前,mapper生成的所有中间键值对必然是<strong>按键有序</strong>的.但是传入reducer的值并不是有序的,他们可能有任意的顺序,要想对reducer中的值进行排序,可以用二次排序设计模式实现.</p>
@@ -223,7 +223,7 @@
 <p>map(key1,value1)—&gt;list(key2,value2)<br>reduce(list(key2,value2))—&gt;list(key3,value3)<br>list(key2,value2)作为reducer的输入,list(value2)=(V1,V2,V3…,Vn),其本身是无序的.<br>二次排序的目标就是让reducer收到的值有某种顺序.<br><a id="more"></a><br><strong>4. 问题引入</strong></p>
 <p>假如我们有一组温度数据,按照’年\月\日\温度’的格式存储, 我们希望输入每一个年月的温度,并且按照升序排序:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2012-01: 5, 10, 25, 30...</span><br><span class="line">2012-02: 18, 25, 30...</span><br><span class="line">2012-08: 13, 20, 35...</span><br></pre></td></tr></table></figure>
-<h4 id="二-二次排序问题的解决方案"><a href="#二-二次排序问题的解决方案" class="headerlink" title="二. 二次排序问题的解决方案"></a>二. 二次排序问题的解决方案</h4><ul>
+<h4 id="二、二次排序问题的解决方案"><a href="#二、二次排序问题的解决方案" class="headerlink" title="二、二次排序问题的解决方案"></a>二、二次排序问题的解决方案</h4><ul>
 <li>让reducer读取和缓存给定键的所有值,然后对这些值完成in-reducer排序,数据量大时可能导致内存溢出</li>
 <li>使用MapReduce框架对reducer值排序(这样就不需要再对传入reducer的值进行reducer中的排序),这种方法”会<strong>为自然键增加部分或整个值来创建一个组合键以实现排序目标</strong>“,不会造成内存溢出<ul>
 <li>使用键值转换设计模式:构造一组中间键(K, V1),其中V1是次键,K称为自然键,要在reducer键中注入一个值,只需要创建一个组合键.在本例中,V1就是温度数据</li>
@@ -347,7 +347,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#一-二次排序-secondary-sort-问题的引出"><span class="toc-number">1.</span> <span class="toc-text">一. 二次排序(secondary sort)问题的引出</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二-二次排序问题的解决方案"><span class="toc-number">2.</span> <span class="toc-text">二. 二次排序问题的解决方案</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#三、MAPREDUCER-Hadoop的二次排序解决方案"><span class="toc-number">3.</span> <span class="toc-text">三、MAPREDUCER/Hadoop的二次排序解决方案</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#一、二次排序-secondary-sort-问题的引出"><span class="toc-number">1.</span> <span class="toc-text">一、二次排序(secondary sort)问题的引出</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二、二次排序问题的解决方案"><span class="toc-number">2.</span> <span class="toc-text">二、二次排序问题的解决方案</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#三、MAPREDUCER-Hadoop的二次排序解决方案"><span class="toc-number">3.</span> <span class="toc-text">三、MAPREDUCER/Hadoop的二次排序解决方案</span></a></li></ol>
                     </div>
                 </span>
             </div>

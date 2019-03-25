@@ -20,7 +20,7 @@
 <meta property="og:image" content="https://i.loli.net/2018/12/04/5c0693255666c.png">
 <meta property="og:image" content="https://i.loli.net/2018/12/05/5c072dc99cb8c.png">
 <meta property="og:image" content="https://i.loli.net/2019/02/12/5c627b71a8f22.png">
-<meta property="og:updated_time" content="2019-03-11T06:11:22.309Z">
+<meta property="og:updated_time" content="2019-03-24T03:45:58.893Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hadoop源码阅读——Hadoop RPC(三)">
 <meta name="twitter:description" content="三、Hadoop RPC实现上一篇文章分析了Hadoop RPC框架的RPC、Client类的实现，还有一个Server类用于实现服务器端的功能，本篇文章将详细分析Server类。 3. Server类实现Server类采用了很多技术来提供并发能力，包括线程池、JavaNIO提供的Reactor模式等，其中Reactor模式贯穿了整个Server的设计。 a. Reactor模式reactor设计">
@@ -220,7 +220,7 @@
       
         <h4 id="三、Hadoop-RPC实现"><a href="#三、Hadoop-RPC实现" class="headerlink" title="三、Hadoop RPC实现"></a>三、Hadoop RPC实现</h4><p>上一篇文章分析了Hadoop RPC框架的RPC、Client类的实现，还有一个Server类用于实现服务器端的功能，本篇文章将详细分析Server类。</p>
 <h5 id="3-Server类实现"><a href="#3-Server类实现" class="headerlink" title="3. Server类实现"></a>3. Server类实现</h5><p>Server类采用了很多技术来提供并发能力，包括线程池、JavaNIO提供的Reactor模式等，其中Reactor模式贯穿了整个Server的设计。</p>
-<h6 id="a-Reactor模式"><a href="#a-Reactor模式" class="headerlink" title="a. Reactor模式"></a>a. Reactor模式</h6><p>reactor设计模式，是一种基于事件驱动的设计模式。处理流程是：应用业务向一个中间人注册一个回调（event handler），当IO就绪后，就这个中间人产生一个事件，并通知此handler进行处理。这里的中间人其实是一个不断等待和循环的线程，他接受所有应用程序的注册，并检查应用程序注册的IO事件是否就绪，如果就绪则通知应用程序进行处理。</p>
+<h6 id="a-Reactor模式"><a href="#a-Reactor模式" class="headerlink" title="a. Reactor模式"></a>a. Reactor模式</h6><p>reactor设计模式，是一种基于事件驱动的设计模式。处理流程是：应用业务向一个中间人注册一个回调（event handler），当IO就绪后，就这个中间人产生一个事件，并通知此handler进行处理。这里的中间人其实是一个不断等待和循环的线程，它接受所有应用程序的注册，并检查应用程序注册的IO事件是否就绪，如果就绪则通知应用程序进行处理。</p>
 <a id="more"></a> 
 <p>​                            图一：<strong>单线程的基于Reactor模式的网络服务器设计</strong></p>
 <p><img src="https://i.loli.net/2018/12/04/5c0690fd7ae3e.png" alt="5555632-b56f7cfaaccf62c7.png"></p>
@@ -251,8 +251,8 @@
 <p><a href="https://i.loli.net/2019/02/12/5c627b71a8f22.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2019/02/12/5c627b71a8f22.png" alt="屏幕快照 2019-02-12 下午3.53.03.png"></a></p>
 <p>Server类处理RPC请求的流程：</p>
 <ul>
-<li>Linstener线程的selector在ServerSocketChannel上注册OP_ACCEPT事件，并且创建readers数组。每个reader的readSelector此时并不难监听任何Channel</li>
-<li>Client发送Socket连接请求，出发Listener的selector唤醒Listener线程</li>
+<li>Listener线程的selector在ServerSocketChannel上注册OP_ACCEPT事件，并且创建readers数组。每个reader的readSelector此时并不监听任何Channel</li>
+<li>Client发送Socket连接请求，触发Listener的selector唤醒Listener线程</li>
 <li>Listener调用ServerSocketChannel.accept()获得一个新的SocketChannel</li>
 <li>Listener从readers数组中挑选一个线程，并在Reader的readSelector上注册OP_READ事件</li>
 <li>Client发送RPC请求数据包，触发Reader的selector唤醒Reader线程</li>
@@ -260,8 +260,6 @@
 <li>起初，handlers数组中的线程都在callQueue上阻塞，当有Call对象被放入时，其中一个Handler被唤醒，然后根据Call对象的信息调用BlockingService对象的callBlockingMethod()方法，随后Handler尝试将响应写入SocketChannel。</li>
 <li>如果Handler发现无法将响应完全写入SocketChannel，将在Responder的writeSelector上注册OP_WRITE事件。如果一个Call长时间都未被写入，则会被Responder移除。</li>
 </ul>
-<hr>
-<hr>
 <hr>
 <ul>
 <li><p>Listener类</p>

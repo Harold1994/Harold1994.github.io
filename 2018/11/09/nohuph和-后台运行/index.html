@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="1.nohup 用途：不挂断地运行命令。 语法：nohup Command [ Arg … ][ &amp;amp; ] 　　无论是否将 nohup 命令的输出重定向到终端，输出都将附加到当前目录的 nohup.out 文件中。 　　如果当前目录的 nohup.out 文件不可写，输出重定向到 $HOME/nohup.out 文件中。 　　如果没有文件能创建或打开以用于追加，那么 Command 参数指定">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-14T14:51:58.611Z">
+<meta property="og:updated_time" content="2019-03-24T13:31:23.087Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="nohuph和&amp;后台运行">
 <meta name="twitter:description" content="1.nohup 用途：不挂断地运行命令。 语法：nohup Command [ Arg … ][ &amp;amp; ] 　　无论是否将 nohup 命令的输出重定向到终端，输出都将附加到当前目录的 nohup.out 文件中。 　　如果当前目录的 nohup.out 文件不可写，输出重定向到 $HOME/nohup.out 文件中。 　　如果没有文件能创建或打开以用于追加，那么 Command 参数指定">
@@ -229,7 +229,7 @@
 <p>一般两个一起用</p>
 <p>nohup command &amp;</p>
 <p>eg:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`nohup /usr/local/node/bin/node /www/im/chat.js &gt;&gt; /usr/local/node/output.log 2&gt;&amp;1 &amp;`</span><br></pre></td></tr></table></figure>
+<p><code>nohup /usr/local/node/bin/node /www/im/chat.js &gt;&gt; /usr/local/node/output.log 2&gt;&amp;1 &amp;</code></p>
 <p>查看运行的后台进程</p>
 <p>（1）jobs -l</p>
 <p><code>[1]    2229 running    nohup sh storm dev-zookeeper</code></p>

@@ -21,7 +21,7 @@
 <meta property="og:image" content="https://i.loli.net/2019/03/18/5c8f3e66889c9.png">
 <meta property="og:image" content="https://i.loli.net/2019/03/18/5c8f3e66e49ff.png">
 <meta property="og:image" content="https://i.loli.net/2019/03/18/5c8f3e671470b.png">
-<meta property="og:updated_time" content="2019-03-18T06:46:46.699Z">
+<meta property="og:updated_time" content="2019-03-24T07:44:18.131Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="图算法（二）：图的高级问题">
 <meta name="twitter:description" content="关于图的基本概念笔者在之前的博客中已经介绍过，这篇博客介绍图算法比较高级的知识。包括最短路径问题，最小生成子图问题和拓扑排序等问题。 一、最短路径问题​    图的最短路径问题主要分为两类,单源最短路径问题和全对最短路径问题。单源最短路径问题指给点单个源点,求其到所有其它顶点之间的最短距离。而全对最短路径问题指所有顶点之间的最短路径问题。此外对于全对最短路径问题,从渐进意义上来看,目前还没有比最好">
@@ -226,7 +226,7 @@
 <p>对于有向图$G=(V,E)$,权值函数$W: E→R$（即每条边的权值都为一个实数）</p>
 <p><strong>路径：</strong>$p\rightarrow v_1 \rightarrow v_2  …  \rightarrow v_k$ 表示从$v_1$到$v_k$的一条路径，它的权值是：                             $w(p)=\sum_{i}^{k-1}w(v_i,v_{i+1})$</p>
 <p><strong>最短路径：</strong>从u到v的一条路径，使w(p)最小</p>
-<p><strong>最短路径权值：</strong>$\delta(u,v)=min  { w(p)}, p为从u到v的路径 $</p>
+<p><strong>最短路径权值：</strong>$\delta(u,v)=min  { w(p)} $, p为从u到v的路径</p>
 <p><strong>最优子结构性质</strong>：最短路径满足最优子结构性质——最短路径的子路径是最短路径</p>
 <p><strong>负权重的边：</strong>如果从结点s到v的某条路径上存在权重为负值的环路，则定义$\delta(u,v)=-\infin$</p>
 <p><strong>环路：</strong>最短路径也不能包含权值为正值的环路， 因为只要将环路从路径上删除就可以得到一条源节点和终节点与原来路径相同的权重更小的路径。</p>

@@ -18,7 +18,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://i.loli.net/2018/11/15/5bed54fc16112.png">
 <meta property="og:image" content="https://i.loli.net/2018/11/15/5bed6989940d8.png">
-<meta property="og:updated_time" content="2018-11-15T14:51:22.134Z">
+<meta property="og:updated_time" content="2019-03-23T14:37:41.807Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hadoop源码阅读——HDFS">
 <meta name="twitter:description" content="系统架构HDFS是一个主/从结构的分布式系统，拥有一个NameNode和一些DateNode，HDFS中NameNode是Master节点，负责管理文件系统的命名空间，以及数据块到DateNode的映射信息。DateNode一般一个节点一个，负责管理它所在节点上的存储。">
@@ -222,9 +222,9 @@
 <p>数据块是HDFS文件处理的最小单元，为最小化寻址开销，HDFS数据块也更大，默认128MB，数据块以文件形式存储在数据节点的磁盘上。</p>
 <p>NameNode是HDFS中的单一故障点，Hadoop2.X引入了NameNode的HA支持，同一个HDFS集群中会配置两个NameNode节点：二者完全同步。</p>
 <p>NameNode中保存了数据块与DateNode的对应关系，因此当集群中文件过多时，NameNode将成为限制系统横向扩展的瓶颈。因此Hadoop2.X引入了联邦HDFS机制，允许添加NameNode以实现命名空间的扩展，每个NameNode都管理文件系统命名空间中的一部分，是一个独立的命名空间卷，命名空间卷之间相互独立。</p>
-<h5 id="NameNode安全模式"><a href="#NameNode安全模式" class="headerlink" title="NameNode安全模式"></a>NameNode安全模式</h5><p>安全模式是NameNode的一种状态，处于安全模式的NameNode不接受客户端对命名空间的修改操作，整个NameSpace处于只读状态，。同时NameNode不会对DataNode下发任何数据块的复制、删除指令。</p>
+<h5 id="NameNode安全模式"><a href="#NameNode安全模式" class="headerlink" title="NameNode安全模式"></a>NameNode安全模式</h5><p>安全模式是NameNode的一种状态，处于安全模式的NameNode不接受客户端对命名空间的修改操作，整个NameSpace处于只读状态。同时NameNode不会对DataNode下发任何数据块的复制、删除指令。</p>
 <p>刚刚启动的NameNode会直接进入SafeMode，当NameNode中保存的满足最小副本系数的数据块达到一定比例时，NameNode会自动退出安全模式。而对于用户通过dfsAdmin方式触发的安全模式，则只能由管理员手动退出。</p>
-<h5 id="HFDS通信协议"><a href="#HFDS通信协议" class="headerlink" title="HFDS通信协议"></a>HFDS通信协议</h5><p>HDFS节点间的借口主要有两种类型：</p>
+<h5 id="HFDS通信协议"><a href="#HFDS通信协议" class="headerlink" title="HFDS通信协议"></a>HFDS通信协议</h5><p>HDFS节点间的接口主要有两种类型：</p>
 <ul>
 <li>Hadoop RPC接口：HDFS中基于Hadoop RPC框架实现的接口</li>
 <li>流式接口：HDFS中基于TCP或者HTTP实现的接口</li>
@@ -244,7 +244,14 @@
 <p>blockReport()方法只在DataNode启动时以指定间隔执行一次</p>
 </li>
 </ul>
-
+<h5 id="InterDatanodeProtocol"><a href="#InterDatanodeProtocol" class="headerlink" title="InterDatanodeProtocol"></a>InterDatanodeProtocol</h5><p>An inter-datanode protocol for updating generation stamp</p>
+<h5 id="DatanodeLifelineProtocol"><a href="#DatanodeLifelineProtocol" class="headerlink" title="DatanodeLifelineProtocol"></a>DatanodeLifelineProtocol</h5><p>Protocol used by a DataNode to send lifeline messages to a NameNode.</p>
+<h5 id="JournalProtocol"><a href="#JournalProtocol" class="headerlink" title="JournalProtocol"></a>JournalProtocol</h5><p>Protocol used to journal edits to a remote node. Currently,this is used to publish edits from the NameNode to a BackupNode.</p>
+<p>This class is used by both the Namenode (client) and BackupNode (server) to insulate from the protocol serialization.</p>
+<h5 id="NamenodeProtocol"><a href="#NamenodeProtocol" class="headerlink" title="NamenodeProtocol"></a>NamenodeProtocol</h5><p>Protocol that a secondary NameNode uses to communicate with the NameNode.It’s used to get part of the name node state</p>
+<h5 id="ClientProtocol"><a href="#ClientProtocol" class="headerlink" title="ClientProtocol"></a>ClientProtocol</h5><p>ClientProtocol is used by user code via the DistributedFileSystem class to communicate with the NameNode.  User code can manipulate the directory namespace, as well as open/close file streams, etc.</p>
+<h5 id="ClientDatanodeProtocol"><a href="#ClientDatanodeProtocol" class="headerlink" title="ClientDatanodeProtocol"></a>ClientDatanodeProtocol</h5><p> An client-datanode protocol for block recovery，This class is used by both the DFSClient and the DN server side to insulate from the protocol serialization.</p>
+<h5 id="HAServiceProtocol"><a href="#HAServiceProtocol" class="headerlink" title="HAServiceProtocol"></a>HAServiceProtocol</h5>
       
 
       
@@ -322,7 +329,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#系统架构"><span class="toc-number">1.</span> <span class="toc-text">系统架构</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#NameNode安全模式"><span class="toc-number">1.1.</span> <span class="toc-text">NameNode安全模式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#HFDS通信协议"><span class="toc-number">1.2.</span> <span class="toc-text">HFDS通信协议</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#DataNodeProtocal"><span class="toc-number">1.3.</span> <span class="toc-text">DataNodeProtocal</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#DataNode启动相关"><span class="toc-number">1.3.1.</span> <span class="toc-text">DataNode启动相关</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#系统架构"><span class="toc-number">1.</span> <span class="toc-text">系统架构</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#NameNode安全模式"><span class="toc-number">1.1.</span> <span class="toc-text">NameNode安全模式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#HFDS通信协议"><span class="toc-number">1.2.</span> <span class="toc-text">HFDS通信协议</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#DataNodeProtocal"><span class="toc-number">1.3.</span> <span class="toc-text">DataNodeProtocal</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#DataNode启动相关"><span class="toc-number">1.3.1.</span> <span class="toc-text">DataNode启动相关</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#InterDatanodeProtocol"><span class="toc-number">1.4.</span> <span class="toc-text">InterDatanodeProtocol</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#DatanodeLifelineProtocol"><span class="toc-number">1.5.</span> <span class="toc-text">DatanodeLifelineProtocol</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#JournalProtocol"><span class="toc-number">1.6.</span> <span class="toc-text">JournalProtocol</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#NamenodeProtocol"><span class="toc-number">1.7.</span> <span class="toc-text">NamenodeProtocol</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ClientProtocol"><span class="toc-number">1.8.</span> <span class="toc-text">ClientProtocol</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ClientDatanodeProtocol"><span class="toc-number">1.9.</span> <span class="toc-text">ClientDatanodeProtocol</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#HAServiceProtocol"><span class="toc-number">1.10.</span> <span class="toc-text">HAServiceProtocol</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>

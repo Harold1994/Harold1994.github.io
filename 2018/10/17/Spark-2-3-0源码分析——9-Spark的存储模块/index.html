@@ -18,7 +18,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://i.loli.net/2018/10/17/5bc74752b9c18.png">
 <meta property="og:image" content="https://i.loli.net/2018/10/17/5bc730e246458.png">
-<meta property="og:updated_time" content="2018-10-23T03:20:08.177Z">
+<meta property="og:updated_time" content="2019-03-23T11:37:50.016Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark_2.3.0源码分析——9_Spark的存储模块">
 <meta name="twitter:description" content="一、Storage模块1.Storage概述在Spark中存储模块被抽象成Storage，负责管理和实现数据块(Block)的存放。其中存取数据的最小单元是Block，数据由不同的Block组成，所有操作以Block为单位进行。本质上RDD中的Partition与Storage中的Block等价。Storage抽象模块的实现分为两个层次，如图所示：">
@@ -224,9 +224,9 @@
 <li>存储层：否则将数据存储到内存、磁盘或者外存中，有时需要为数据在远程节点上生成副本。</li>
 </ul>
 <p>其他模块若要和Storage通信，需要通过统一的操作类BlockManager来完成</p>
-<h3 id="二、Storage模块的架构"><a href="#二、Storage模块的架构" class="headerlink" title="二、Storage模块的架构"></a>二、Storage模块的架构</h3><h4 id="1-通信层"><a href="#1-通信层" class="headerlink" title="1.通信层"></a>1.通信层</h4><p>在Storage模块中，使用RPC框架进行通信。Storage模块对外提供一个统一的交互类BlockManager。BlockManager在每个结点(Master和Slave端)都有创建。Slave端创建的BlockManager在initialize方法中向Driver端的BlockManagerMasterEndpoint发送注册信息，收到消息后，完成Slave端BlockManager在Driver端的注册。</p>
+<h3 id="二、Storage模块的架构"><a href="#二、Storage模块的架构" class="headerlink" title="二、Storage模块的架构"></a>二、Storage模块的架构</h3><h4 id="1-通信层"><a href="#1-通信层" class="headerlink" title="1.通信层"></a>1.通信层</h4><p>在Storage模块中，使用RPC框架进行通信。Storage模块对外提供一个统一的交互类BlockManager。BlockManager在每个节点(Master和Slave端)都有创建。Slave端创建的BlockManager在initialize方法中向Driver端的BlockManagerMasterEndpoint发送注册信息，收到消息后，完成Slave端BlockManager在Driver端的注册。</p>
 <p><img src="https://i.loli.net/2018/10/17/5bc730e246458.png" alt="屏幕快照 2018-10-17 下午8.53.22.png"></p>
-<p>​    Driver端的BlockManagerMaster拥有所有结点BlockManagerSlaveEndPoint的Ref。Slave端的BlockManagerMaster拥有本结点上所有所有BlockManagerMasterEndPoint的Ref。在Driver和Slave结点上的Executor中都有BlockManager。BlockManager提供了本地和远程不同存储类型(Disk,Memory,ExternalBlockState)存储读取数据的接口。</p>
+<p>​    Driver端的BlockManagerMaster拥有所有节点BlockManagerSlaveEndPoint的Ref。Slave端的BlockManagerMaster拥有本节点上所有所有BlockManagerMasterEndPoint的Ref。在Driver和Slave结点上的Executor中都有BlockManager。BlockManager提供了本地和远程不同存储类型(Disk,Memory,ExternalBlockState)存储读取数据的接口。</p>
 <blockquote>
 <p>Spark2.0移除了ExternalBlockStore相关的API</p>
 </blockquote>
