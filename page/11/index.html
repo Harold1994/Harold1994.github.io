@@ -190,6 +190,102 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-MySQL查漏补缺（一）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/03/MySQL查漏补缺（一）/">MySQL查漏补缺（一）</a>
+    </h1>
+  
+
+        
+        <a href="/2018/04/03/MySQL查漏补缺（一）/" class="archive-article-date">
+  	<time datetime="2018-04-03T06:36:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本篇博客记录本人在复习MySQL基本操作过程中碰到的之前忽略或者忘记的知识点</p>
+<ul>
+<li><p>命令<code>SHOW DATABASES</code>后出现的mysql数据库是必需的，它描述用户访问权限</p>
+</li>
+<li><p>创建数据库是在系统磁盘上划分一块区域用于数据的存储和管理</p>
+</li>
+<li><p><code>show engines</code>查看系统支持的引擎:</p>
+<p>|    引擎    | 说明                                                         | 事务 |  XA  | SavePoint |<br>| :——–: | ———————————————————— | :–: | :–: | :——-: |<br>|  ARCHIVE   | 基本上用于数据归档,压缩比非常的高,适合用来存储历史数据       |  N   |  N   |     N     |<br>| BLACKHOLE  | 任何写入到此引擎的数据均会被丢弃掉, 不做实际存储,Select语句的内容永远是空,用于记录binlog做复制的中继存储 |  N   |  N   |     N     |<br>| MRG_MYISAM |                                                              |  N   |  N   |     N     |<br>|   MyISAM   |                                                              |  N   |  N   |     N     |<br>|   InnoDB   | Supports transactions, row-level locking, and foreign keys   |  Y   |  Y   |     Y     |<br>|   MEMORY   | Hash based, stored in memory, useful for temporary tables    |  N   |  N   |     N     |<br>|    CSV     | CSV storage engine                                           |  N   |  N   |     N     |</p>
+</li>
+<li><p>InnoDB是事务型数据库的首选引擎，支持事务安全表（ACID），支持行锁定和外键</p>
+<blockquote>
+<p>特点：</p>
+<ul>
+<li>InnoDB给MySQL提供了具有提交、回滚、和崩溃恢复能力的事务安全存储引擎</li>
+<li>为处理巨大数据量的最大性能设计，CPU效率高</li>
+<li>完全与MySQL服务器整合</li>
+<li>支持外键完整约束
+        
+          <a class="article-more-a" href="/2018/04/03/MySQL查漏补缺（一）/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/04/03/MySQL查漏补缺（一）/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-KMP算法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -900,6 +996,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Hadoop</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HDFS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">NIO</a>
               </li>
              
@@ -912,11 +1016,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Hadoop</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HDFS</a>
+                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -988,10 +1088,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hive</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
@@ -1032,11 +1128,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
+                <a href="javascript:void(0)" class="js-tag color5">时间序列</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">时间序列</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
               </li>
              
               <li class="article-tag-list-item">
