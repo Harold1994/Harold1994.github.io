@@ -18,7 +18,7 @@ RPC(远程过程调用协议)是一种通过网络调用远程计算服务的协
 
 Hadoop实现了org.apache.hadoop.ipc.Client和org.apache.hadoop.ipc.Server类提供的基于TCP/IP Socket的网络通信功能。客户端使用Client类将序列化的请求发送到远程服务器，服务器通过Server类接受来自客户端的请求。
 
-客户端在发送请求前先将请求序列化，然后调用Client.call()方法发送请求到服务端。
+客户端在发送请求前先将请求**序列化**，然后调用Client.call()方法发送请求到服务端。
 
 ```java
 /** 
@@ -273,7 +273,7 @@ public void rename(String src, String dst, Options.Rename... options)
     ...
 ```
 
-Hadoop2.X引入了HA机制，同一时刻DFSClient只会将ClientProtocol RPC请求发送给集群中的Active NameNode，NameNodeProxiesClient.createProxyWithClientProtocol用于构建支持HA模式的ClientProtocol代理对象，它会根据配置文件判断当前HDFS集群是否处于HA模式，对于处于HA模式的情况，createProxyWithClientProtocol()方法会调用createFailoverProxyProvider()方法创建支持HA模机制的ClientProtocol对象，而对于非HA模式，会调用createNonHAProxyWithClientProtocol()方法创建普通ClientProtocol对象。
+Hadoop2.X引入了HA机制，同一时刻DFSClient只会将ClientProtocol RPC请求发送给集群中的Active NameNode，NameNodeProxiesClient.createProxyWithClientProtocol用于构建支持HA模式的ClientProtocol代理对象，它会根据配置文件判断当前HDFS集群是否处于HA模式，对于处于HA模式的情况，createProxyWithClientProtocol()方法会调用createFailoverProxyProvider()方法创建支持HA机制的ClientProtocol对象，而对于非HA模式，会调用createNonHAProxyWithClientProtocol()方法创建普通ClientProtocol对象。
 
 ```java
 public static ProxyAndInfo<ClientProtocol> createProxyWithClientProtocol(

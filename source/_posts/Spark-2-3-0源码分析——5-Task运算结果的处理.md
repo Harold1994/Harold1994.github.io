@@ -115,7 +115,7 @@ def statusUpdate(tid: Long, state: TaskState, serializedData: ByteBuffer) {
 
 ###### C. org.apache.spark.scheduler.TaskResultGetter#enqueueSuccessfulTask
 
-Executor在将结果会传到Driver时会根据结果的大小设置不同的策略：
+Executor在将结果回传到Driver时会根据结果的大小设置不同的策略：
 
 * 如果结果大于1G，会直接丢弃这个结果
 * 对于“较大”的结果，将其以tid为key存入blockManager，如果结果不大，则直接回传给Driver，这里的回传是直接通过AKKA的消息传递机制。
@@ -320,7 +320,7 @@ private def doOnReceive(event: DAGSchedulerEvent): Unit = event match {
       case FetchFailed(bmAddress, shuffleId, mapId, reduceId, failureMessage) =>
         val failedStage = stageIdToStage(task.stageId)
         val mapStage = shuffleIdToMapStage(shuffleId)
-        //若失败的尝试ID 不是 stage尝试ID，
+        //若失败的尝试ID不是stage尝试ID，
         //则忽略这个失败
         if (failedStage.latestInfo.attemptId != task.stageAttemptId) {
           logInfo(s"Ignoring fetch failure from $task as it's from $failedStage attempt" +

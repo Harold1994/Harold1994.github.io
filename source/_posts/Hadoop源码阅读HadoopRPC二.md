@@ -312,9 +312,7 @@ public synchronized void setRpcResponse(Writable rpcResponse) {
 
 Connection类继承了Thread类，注释上的功能介绍是：
 
-```
-读取响应并通知呼叫者的线程。每个连接都拥有一个连接到远程地址的套接字。呼叫通过此套接字进行多路复用：响应可能无序传递。
-```
+> 读取响应并通知呼叫者的线程。每个连接都拥有一个连接到远程地址的套接字。呼叫通过此套接字进行多路复用：响应可能无序传递。
 
 定义字段如下：
 
@@ -410,7 +408,7 @@ Client.call()方法首先调用getConnection()方法获取一个Connection对象
     }
   ...
       while (true) {
-          // 1. 调用setupConnection()，建立到远程服务器的连接
+        // 1. 调用setupConnection()，建立到远程服务器的连接
         setupConnection(ticket);
         ipcStreams = new IpcStreams(socket, maxResponseLength);
         // 2. 发送连接头域

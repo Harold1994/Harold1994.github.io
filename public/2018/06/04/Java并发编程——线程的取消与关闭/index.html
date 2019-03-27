@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="Java没有提供任何机制来安全的终止线程，但是提供了中断（Interruption），这是一种协作机制，能够使一个线程终止另外一个线程。 一、任务取消 可取消操作：如果外部代码能在某个正常操作完成之前将其置入“完成”状态，称这个任务可取消 取消某个操作的原因：">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-13T09:22:18.521Z">
+<meta property="og:updated_time" content="2019-03-23T02:55:47.194Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java并发编程——线程的取消与关闭">
 <meta name="twitter:description" content="Java没有提供任何机制来安全的终止线程，但是提供了中断（Interruption），这是一种协作机制，能够使一个线程终止另外一个线程。 一、任务取消 可取消操作：如果外部代码能在某个正常操作完成之前将其置入“完成”状态，称这个任务可取消 取消某个操作的原因：">
@@ -75,6 +75,8 @@
 				<li><a href="/tags/计算机基础">计算机基础</a></li>
 	        
 				<li><a href="/tags/算法">算法</a></li>
+	        
+				<li><a href="/tags/scala">scala</a></li>
 	        
 			</ul>
 		</nav>
@@ -142,6 +144,8 @@
 			
 				
 			
+				
+			
 			
 			
 			<nav class="header-nav">
@@ -156,23 +160,25 @@
 				<ul style="width: 70%">
 				
 				
-					<li style="width: 11.11111111111111%"><a href="/">主页</a></li>
+					<li style="width: 10%"><a href="/">主页</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/大数据/">大数据</a></li>
+					<li style="width: 10%"><a href="/tags/大数据/">大数据</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/机器学习">机器学习</a></li>
+					<li style="width: 10%"><a href="/tags/机器学习">机器学习</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/Java">Java</a></li>
+					<li style="width: 10%"><a href="/tags/Java">Java</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/Linux">Linux</a></li>
+					<li style="width: 10%"><a href="/tags/Linux">Linux</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/数据库">数据库</a></li>
+					<li style="width: 10%"><a href="/tags/数据库">数据库</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/NoSQL">NoSQL</a></li>
+					<li style="width: 10%"><a href="/tags/NoSQL">NoSQL</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/计算机基础">计算机基础</a></li>
+					<li style="width: 10%"><a href="/tags/计算机基础">计算机基础</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/算法">算法</a></li>
+					<li style="width: 10%"><a href="/tags/算法">算法</a></li>
+		        
+					<li style="width: 10%"><a href="/tags/scala">scala</a></li>
 		        
 				</ul>
 			</nav>
@@ -258,7 +264,7 @@
 <li>恢复中断状态，从而使调用栈上层代码能够对其进行处理，通过再次调用interrut()方法</li>
 </ul>
 <blockquote>
-<p>只有实现了线程中断策略的代码才可以屏蔽中断请求（catch块中捕获异常却不做处理），在常规的任务和库代码中都不应该屏蔽中断请求‘</p>
+<p>只有实现了线程中断策略的代码才可以屏蔽中断请求（catch块中捕获异常却不做处理），在常规的任务和库代码中都不应该屏蔽中断请求</p>
 </blockquote>
 <p>对于一些不支持取消但仍可以调用可中断阻塞方法的操作，它们必须在循环中调用这些方法。并在发现中断后重新尝试。这种情况下，应该在本地保存中断状态，并在返回前恢复中断状态而不是在捕获InterruptedException时恢复状态，如果过早的设置中断状态，可能会引起无限循环，因为大多数阻塞方法会在入口处检查中断状态，摒弃在发现该状态已被设置时会立即抛出interruptedException.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> harold</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Title</span>: getNextTask</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: 不可取消的任务在退出前恢复中断</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/5/31下午2:10</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> Task <span class="title">getNextTask</span><span class="params">(BlockingQueue&lt;Task&gt; queue)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">boolean</span> interrupted = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> queue.take();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                interrupted = <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (interrupted)</span><br><span class="line">            Thread.currentThread().interrupt();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p><strong>4.通过Future实现取消</strong></p>
@@ -482,19 +488,19 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NIO</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NIO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">

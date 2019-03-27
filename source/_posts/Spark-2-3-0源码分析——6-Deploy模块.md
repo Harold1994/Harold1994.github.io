@@ -239,7 +239,7 @@ Spark先解析外部传进来的参数，然后mergeDefaultSparkProperties将外
 
 该函数主要是负责解析spark-submit命令行参数。主要分成两个部分：
 
-1，spark运行环境参数解析,代表方法是SparkSubmitArguments$handle(opt: String, value: String)，不同的部署模式稍微有些区别。 在这里做一点说明，--conf的配置被写道了sparkProperties这个hashmap里了。
+1，spark运行环境参数解析,代表方法是SparkSubmitArguments$handle(opt: String, value: String)，不同的部署模式稍微有些区别。 在这里做一点说明，--conf的配置被写到了sparkProperties这个hashmap里了。
 
 2，用户类参数解析，代表方法是SparkSubmitArguments$handleExtraArgs(args.subList(idx, args.size()));这个会传给用户类。
 

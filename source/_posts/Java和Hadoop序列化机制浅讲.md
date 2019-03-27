@@ -6,7 +6,7 @@ tags: [Java, Hadoop]
 
 转自：https://blog.csdn.net/zq602316498/article/details/45190175
 
-# Java 和 Hadoop 序列化机制浅讲
+#### Java 和 Hadoop 序列化机制浅讲
 
 序列化  (Serialization)将对象的状态信息转换为可以存储或传输的形式的过程（**字节流**）。在序列化期间，对象将其当前状态写入到临时或持久性存储区。以后，可以通过从存储区中读取或反序列化对象的状态，重新创建该对象。
 
@@ -25,7 +25,7 @@ public interface Serializable {
 
 如果想对某个对象进行序列化的操作，只需要在OutputStream对象上创建一个输出流 ObjectOutputStream 对象，然后调用 writeObject（）。
 
-在序列化过程中，对象的类、类签名、雷瑟所有非暂态和非静态成员变量的值，以及它所有的父类都会被写入。
+在序列化过程中，对象的类、类签名、类似所有非暂态和非静态成员变量的值，以及它所有的父类都会被写入。
 
 ```Java
 Date d = new Date();
@@ -90,7 +90,7 @@ public class StartEndDate implements Writable{
 
  Hadoop 还提供了另外几个重要的接口：
 
-**WritableComparable:**它不仅提供序列化功能，而且还提供比较的功能。这种比较式基于反序列后的对象成员的值，速度较慢。
+**WritableComparable:**它不仅提供序列化功能，而且还提供比较的功能。这种比较式是于反序列后的对象成员的值，速度较慢。
 
 **RawComparator:**由于MapReduce十分依赖基于键的比较排序（自定义键还需要重写hashCode和equals方法），因此提供了一个优化接口   RawComparator。该接口允许直接比较数据流中的记录，无需把数据流反序列化为对象，这样避免了新建对象的额外开销。RawComparator定义如下，compare方法可以从每个字节数组b1和b2中读取给定起始位置(s1和s2)以及长度l1和l2的一个整数直接进行比较。
 
@@ -100,7 +100,7 @@ public interface RawComparator<T> extends Comparator<T> {
 }
 ```
 
-**WritableComparator:** 是 RawComparator 的一个通用实现，提供两个功能：提供了一个 RawComparator的comparea()的默认实现，该默认实现只是反序列化了键然后再比较，没有什么性能优势。其次、充当了  RawComaprator 实例的一个工厂方法。
+**WritableComparator:** 是 RawComparator 的一个通用实现，提供两个功能：提供了一个 RawComparator的compare()的默认实现，该默认实现只是反序列化了键然后再比较，没有什么性能优势。其次、充当了  RawComaprator 实例的一个工厂方法。
 
 当我们要实现自定key排序时（自定义分组），需要指定自己的排序规则。
 

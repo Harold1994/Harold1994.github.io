@@ -77,8 +77,8 @@ case RegisterApplication(description, driver) =>
   }
   ```
 
-  startExecutorsOnWorkers在上一片文章中分析过，不赘述，需要注意的是启动Executors有两种方式：
-  第一种方式是轮流均摊：将应用程序的Executor部署到尽可能多的Executor上，这是默认方式，可以更好的实现数据本地性
+  startExecutorsOnWorkers在上一篇文章中分析过，不赘述，需要注意的是启动Executors有两种方式：
+  第一种方式是轮流均摊：将应用程序的Executor部署到尽可能多的Executor上，这x是默认方式，可以更好的实现数据本地性
   第二种是依次全占：将应用程序的Executor部署到尽可能少的Executor上， 通常用于计算密集型的应用
 
 * org.apache.spark.deploy.master.Master#allocateWorkerResourceToExecutors

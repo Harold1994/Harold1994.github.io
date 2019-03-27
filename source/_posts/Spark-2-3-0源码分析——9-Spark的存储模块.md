@@ -23,11 +23,11 @@ tags: [大数据, Spark]
 
 #### 1.通信层
 
-在Storage模块中，使用RPC框架进行通信。Storage模块对外提供一个统一的交互类BlockManager。BlockManager在每个结点(Master和Slave端)都有创建。Slave端创建的BlockManager在initialize方法中向Driver端的BlockManagerMasterEndpoint发送注册信息，收到消息后，完成Slave端BlockManager在Driver端的注册。
+在Storage模块中，使用RPC框架进行通信。Storage模块对外提供一个统一的交互类BlockManager。BlockManager在每个节点(Master和Slave端)都有创建。Slave端创建的BlockManager在initialize方法中向Driver端的BlockManagerMasterEndpoint发送注册信息，收到消息后，完成Slave端BlockManager在Driver端的注册。
 
 ![屏幕快照 2018-10-17 下午8.53.22.png](https://i.loli.net/2018/10/17/5bc730e246458.png)
 
-​	Driver端的BlockManagerMaster拥有所有结点BlockManagerSlaveEndPoint的Ref。Slave端的BlockManagerMaster拥有本结点上所有所有BlockManagerMasterEndPoint的Ref。在Driver和Slave结点上的Executor中都有BlockManager。BlockManager提供了本地和远程不同存储类型(Disk,Memory,ExternalBlockState)存储读取数据的接口。
+​	Driver端的BlockManagerMaster拥有所有节点BlockManagerSlaveEndPoint的Ref。Slave端的BlockManagerMaster拥有本节点上所有所有BlockManagerMasterEndPoint的Ref。在Driver和Slave结点上的Executor中都有BlockManager。BlockManager提供了本地和远程不同存储类型(Disk,Memory,ExternalBlockState)存储读取数据的接口。
 
 > Spark2.0移除了ExternalBlockStore相关的API
 

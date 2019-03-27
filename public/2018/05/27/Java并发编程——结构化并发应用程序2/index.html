@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="//harold.me">
   <title>Java并发编程——结构化并发应用程序(二) | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="CompletionService：Executor和BlockingQueue若向Executor提交了一组计算任务，并希望在计算技术之后获得结果，有一下两种方法：   保留与任务关联的Future，反复使用get方法，同时将参数timeout指定为0，从而通过轮训判断任务是否完成 使用完成服务（CompletionService）   CompletionService：">
+  <meta name="description" content="CompletionService：Executor和BlockingQueue若向Executor提交了一组计算任务，并希望在计算技术之后获得结果，有一下两种方法：   保留与任务关联的Future，反复使用get方法，同时将参数timeout指定为0，从而通过轮训判断任务是否完成 使用完成服务（CompletionService）   CompletionService：CompletionS">
 <meta name="keywords" content="Java,多线程,并发">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java并发编程——结构化并发应用程序(二)">
 <meta property="og:url" content="//harold.me/2018/05/27/Java并发编程——结构化并发应用程序2/index.html">
 <meta property="og:site_name" content="Harold的博客">
-<meta property="og:description" content="CompletionService：Executor和BlockingQueue若向Executor提交了一组计算任务，并希望在计算技术之后获得结果，有一下两种方法：   保留与任务关联的Future，反复使用get方法，同时将参数timeout指定为0，从而通过轮训判断任务是否完成 使用完成服务（CompletionService）   CompletionService：">
+<meta property="og:description" content="CompletionService：Executor和BlockingQueue若向Executor提交了一组计算任务，并希望在计算技术之后获得结果，有一下两种方法：   保留与任务关联的Future，反复使用get方法，同时将参数timeout指定为0，从而通过轮训判断任务是否完成 使用完成服务（CompletionService）   CompletionService：CompletionS">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-13T09:22:18.521Z">
+<meta property="og:updated_time" content="2019-03-23T02:30:35.754Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java并发编程——结构化并发应用程序(二)">
-<meta name="twitter:description" content="CompletionService：Executor和BlockingQueue若向Executor提交了一组计算任务，并希望在计算技术之后获得结果，有一下两种方法：   保留与任务关联的Future，反复使用get方法，同时将参数timeout指定为0，从而通过轮训判断任务是否完成 使用完成服务（CompletionService）   CompletionService：">
+<meta name="twitter:description" content="CompletionService：Executor和BlockingQueue若向Executor提交了一组计算任务，并希望在计算技术之后获得结果，有一下两种方法：   保留与任务关联的Future，反复使用get方法，同时将参数timeout指定为0，从而通过轮训判断任务是否完成 使用完成服务（CompletionService）   CompletionService：CompletionS">
   
   
     <link rel="icon" href="/favicon.png">
@@ -75,6 +75,8 @@
 				<li><a href="/tags/计算机基础">计算机基础</a></li>
 	        
 				<li><a href="/tags/算法">算法</a></li>
+	        
+				<li><a href="/tags/scala">scala</a></li>
 	        
 			</ul>
 		</nav>
@@ -142,6 +144,8 @@
 			
 				
 			
+				
+			
 			
 			
 			<nav class="header-nav">
@@ -156,23 +160,25 @@
 				<ul style="width: 70%">
 				
 				
-					<li style="width: 11.11111111111111%"><a href="/">主页</a></li>
+					<li style="width: 10%"><a href="/">主页</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/大数据/">大数据</a></li>
+					<li style="width: 10%"><a href="/tags/大数据/">大数据</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/机器学习">机器学习</a></li>
+					<li style="width: 10%"><a href="/tags/机器学习">机器学习</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/Java">Java</a></li>
+					<li style="width: 10%"><a href="/tags/Java">Java</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/Linux">Linux</a></li>
+					<li style="width: 10%"><a href="/tags/Linux">Linux</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/数据库">数据库</a></li>
+					<li style="width: 10%"><a href="/tags/数据库">数据库</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/NoSQL">NoSQL</a></li>
+					<li style="width: 10%"><a href="/tags/NoSQL">NoSQL</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/计算机基础">计算机基础</a></li>
+					<li style="width: 10%"><a href="/tags/计算机基础">计算机基础</a></li>
 		        
-					<li style="width: 11.11111111111111%"><a href="/tags/算法">算法</a></li>
+					<li style="width: 10%"><a href="/tags/算法">算法</a></li>
+		        
+					<li style="width: 10%"><a href="/tags/scala">scala</a></li>
 		        
 				</ul>
 			</nav>
@@ -214,7 +220,7 @@
 <li>使用完成服务（CompletionService）</li>
 </ul>
 </blockquote>
-<p><strong>CompletionService：</strong>                     CompletionService将Executor和BlockingQueue功能结合起来，可以将Callable任务提交给它来执行，然后使用类似队列操作的take和poll等方法获得已经完成的结果，这些结果会<strong>在完成时</strong>被封装为Future。<br><a id="more"></a><br>ExecutorCompletionService实现了CompletionService，并将计算部分委托给了一个Executor。实现方式：在构造函数中创建一个BlockingQueue来保存完成的结果，计算完成时，调用Future-Task中的done方法，当提交某个任务时，该任务首先将包装为一个QueueingFuture，这是FutureTask的一个子类，然后再改写子类的done方法，将结果放入BlockingQueue中。take和poll方法委托给了BlockingQueue，这些方法会在得出结果之前阻塞。</p>
+<p><strong>CompletionService：</strong>CompletionService将Executor和BlockingQueue功能结合起来，可以将Callable任务提交给它来执行，然后使用类似队列操作的take和poll等方法获得已经完成的结果，这些结果会<strong>在完成时</strong>被封装为Future。<br><a id="more"></a><br>ExecutorCompletionService实现了CompletionService，并将计算部分委托给了一个Executor。实现方式：在构造函数中创建一个BlockingQueue来保存完成的结果，计算完成时，调用Future-Task中的done方法，当提交某个任务时，该任务首先将包装为一个QueueingFuture，这是FutureTask的一个子类，然后再改写子类的done方法，将结果放入BlockingQueue中。take和poll方法委托给了BlockingQueue，这些方法会在得出结果之前阻塞。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//ExecutorCompletionService部分源码</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExecutorCompletionService</span>&lt;<span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">CompletionService</span>&lt;<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Executor executor;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AbstractExecutorService aes;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> BlockingQueue&lt;Future&lt;V&gt;&gt; completionQueue;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * FutureTask extension to enqueue upon completion</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">QueueingFuture</span> <span class="keyword">extends</span> <span class="title">FutureTask</span>&lt;<span class="title">Void</span>&gt; </span>&#123;</span><br><span class="line">        QueueingFuture(RunnableFuture&lt;V&gt; task) &#123;</span><br><span class="line">            <span class="keyword">super</span>(task, <span class="keyword">null</span>);</span><br><span class="line">            <span class="keyword">this</span>.task = task;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">done</span><span class="params">()</span> </span>&#123; completionQueue.add(task); &#125;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> Future&lt;V&gt; task;</span><br><span class="line">    &#125;</span><br><span class="line">...</span><br><span class="line"> <span class="function"><span class="keyword">public</span> Future&lt;V&gt; <span class="title">take</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> completionQueue.take();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Future&lt;V&gt; <span class="title">poll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> completionQueue.poll();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Future&lt;V&gt; <span class="title">poll</span><span class="params">(<span class="keyword">long</span> timeout, TimeUnit unit)</span></span></span><br><span class="line"><span class="function">            <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> completionQueue.poll(timeout, unit);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>示例：使用CompletionService实现页面渲染</li>
@@ -224,7 +230,7 @@
 <p>多个ExecutorCompletionService可以共享一个Executor，因此可以创建一个对于特定计算私有，又能共享一个公共Executor的ExecutorCompletionService。</p>
 <h4 id="为任务设置时限"><a href="#为任务设置时限" class="headerlink" title="为任务设置时限"></a>为任务设置时限</h4><p>有时候，如果某个任务无法在指定时间内完成，将不再需要它的结果，此时可以放弃这个任务。在有限时间内执行任务的难点在于：要确保得到答案的时间不会超出限定的时间，或者在限定的时间内无法获得答案。Future.get支持这种需求：当结果可用时，他将立即返回，若在指定时间没有计算出来，将抛出TimeoutException。</p>
 <p>传递给get的timeout参数的计算方式是将指定时限减去当前时间，这可能会得到负数，但java.util.concurrent中所有与时限相关的方法都将视负数为0.</p>
-<p>Future.cancel参数为true表示任务线程可以在啊运行过程中中断。</p>
+<p>Future.cancel参数为true表示任务线程可以在运行过程中中断。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在指定时间内获取广告时间</span></span><br><span class="line">    <span class="function">Page <span class="title">renderPageWithAd</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> endNanos = System.nanoTime() + TIME_BUGET;</span><br><span class="line">        Future&lt;Ad&gt; f = executor.submit(<span class="keyword">new</span> FetchAdTask());</span><br><span class="line">        <span class="comment">//在等待广告时显示页面</span></span><br><span class="line">        Page page = renderPageBody();</span><br><span class="line">        Ad ad;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//只等待指定时间长度</span></span><br><span class="line">            <span class="keyword">long</span> timeLeft = endNanos - System.nanoTime();</span><br><span class="line">            ad = f.get(timeLeft, TimeUnit.NANOSECONDS);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ExecutionException e) &#123;</span><br><span class="line">            ad = DEFAULT_AD;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (TimeoutException e) &#123;</span><br><span class="line">            ad = DEFAULT_AD;</span><br><span class="line">            f.cancel(<span class="keyword">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        page.setAd(ad);</span><br><span class="line">        <span class="keyword">return</span> page;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li><p>invokeAll<br>创建n个线程，将其提交到一个线程池，保留n个Future，并使用现实的get方法通过Future串行的获取每一个结果，这个过程可以通过更简单的invokeAll实现。</p>
@@ -442,19 +448,19 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NIO</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NIO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">

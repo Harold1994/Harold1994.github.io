@@ -18,7 +18,7 @@ HDFS的文件和目录在内存中以树的形式存储，目录树由NameNode�
 
 ##### 1.INode抽象类
 
-INode实现了INodeAttributes接口，接口包括userName、groupName、accessTime等七个字断的get方法，INode由定义了元信息（包括id、name、fullPathName、parent）的get和set接口方法，同时提供了几个基本判断方法：isFile()、isDirectory()、isSynlink()、isRoot()、isReference()
+INode实现了INodeAttributes接口，接口包括userName、groupName、accessTime等七个字段的get方法，INode由定义了元信息（包括id、name、fullPathName、parent）的get和set接口方法，同时提供了几个基本判断方法：isFile()、isDirectory()、isSynlink()、isRoot()、isReference()
 
 INode类的设计采用了模版模式，将userName等字段的定义留给了子类实现。如setUser()方法：
 
@@ -46,13 +46,13 @@ INodeWithAdditionalFields定义了INode中没有定义的id、name、permission�
 
 （1） permission字段
 
-​	permission字断包括三个部分信息：用户信息、用户组信息、权限信息
+​	permission字段包括三个部分信息：用户信息、用户组信息、权限信息
 
 ​	PermissionStatusFormat是用来解析及处理permission字段的工具类。SerialNumberManager类中存放了用户名和用户标识、用户组名和用户组标识的对应关系，因此不必在INode中保存字符串形式的名字。
 
 ```java
 static enum PermissionStatusFormat {
-  MODE(null, 16),// 16个比特存放文件模式表示
+  MODE(null, 16),// 16个比特存放文件模式标识
   GROUP(MODE.BITS, 24), //24个比特存放用户组标识
   USER(GROUP.BITS, 24);// 24个比特存放用户名标识
 
@@ -126,7 +126,7 @@ private long header = 0L;
 private BlockInfo[] blocks;
 ```
 
-内部类INodeFile.HeaderFormat用户处理header字段，BlockInfo类报讯了数据块与文件、数据块与DataNode的对应关系。
+内部类INodeFile.HeaderFormat用户处理header字段，BlockInfo类保存了数据块与文件、数据块与DataNode的对应关系。
 
 ##### 5.INodeReference类
 
@@ -142,7 +142,7 @@ private BlockInfo[] blocks;
 
 上图给出了INodeReference的继承关系图。这里的WithName,WithCount,DstReference都是INodeReference的子类，同时也是INodeReference的内部类。WithName对象用于替代重命名操作前源路径中的INode对象，DstReference对象则用于替代重命名操作后目标路径中的INode对象，WithName和DstReference共同指向了一个WithCount对象，WithCount对象则指向了文件系统目录树中真正的INode对象。
 
-INodeReference是一个抽象类，但是它继承自INode，所以他的子类可以替代文件系统目录中的INodeFile节点，INodeReference定义了referred字段，用以保存当前INodeReference类指向的INode节点。
+INodeReference是一个抽象类，但是它继承自INode，所以它的子类可以替代文件系统目录中的INodeFile节点，INodeReference定义了referred字段，用以保存当前INodeReference类指向的INode节点。
 
 * org.apache.hadoop.hdfs.server.namenode.INodeReference.WithCount#WithCount
 
@@ -306,7 +306,7 @@ The log starts in UNINITIALIZED state upon construction. Once it's initialized, 
 
 * initJournalsForWrite将UNINITIALIZED状态转换为BETWEEN_LOG_SEGMENTS，其间调用了initJournals方法
 
-JournalManager类是负责在特定存储目录上持久化editlog文件的类。他有多个子类，普通文件系统由FileJournalManager管理，NFS、BookKeeper等文件系统有对应的JournalManager子类管理。
+JournalManager类是负责在特定存储目录上持久化editlog文件的类。它有多个子类，普通文件系统由FileJournalManager管理，NFS、BookKeeper等文件系统有对应的JournalManager子类管理。
 
 ```java
 private synchronized void initJournals(List<URI> dirs) {

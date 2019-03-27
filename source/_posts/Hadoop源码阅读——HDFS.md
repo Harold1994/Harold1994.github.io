@@ -20,13 +20,13 @@ NameNode中保存了数据块与DateNode的对应关系，因此当集群中文�
 
 ##### NameNode安全模式
 
-安全模式是NameNode的一种状态，处于安全模式的NameNode不接受客户端对命名空间的修改操作，整个NameSpace处于只读状态，。同时NameNode不会对DataNode下发任何数据块的复制、删除指令。
+安全模式是NameNode的一种状态，处于安全模式的NameNode不接受客户端对命名空间的修改操作，整个NameSpace处于只读状态。同时NameNode不会对DataNode下发任何数据块的复制、删除指令。
 
 刚刚启动的NameNode会直接进入SafeMode，当NameNode中保存的满足最小副本系数的数据块达到一定比例时，NameNode会自动退出安全模式。而对于用户通过dfsAdmin方式触发的安全模式，则只能由管理员手动退出。
 
 ##### HFDS通信协议
 
-HDFS节点间的借口主要有两种类型：
+HDFS节点间的接口主要有两种类型：
 
 - Hadoop RPC接口：HDFS中基于Hadoop RPC框架实现的接口
 - 流式接口：HDFS中基于TCP或者HTTP实现的接口
@@ -51,3 +51,32 @@ DataNodeProtocal定义的方法主要分为三种类型：DataNode启动相关�
 * 成功注册之后，DataNode通过blockReport()汇报本节点存储的所有数据块，NameNode接收到blockReport()请求后，根据上报的数据块存储情况建立数据块与DataNode之间的对应关系。
 
   blockReport()方法只在DataNode启动时以指定间隔执行一次
+
+##### InterDatanodeProtocol
+
+An inter-datanode protocol for updating generation stamp
+
+##### DatanodeLifelineProtocol
+
+Protocol used by a DataNode to send lifeline messages to a NameNode.
+
+##### JournalProtocol
+
+Protocol used to journal edits to a remote node. Currently,this is used to publish edits from the NameNode to a BackupNode.
+
+This class is used by both the Namenode (client) and BackupNode (server) to insulate from the protocol serialization.
+
+##### NamenodeProtocol
+
+Protocol that a secondary NameNode uses to communicate with the NameNode.It's used to get part of the name node state
+
+##### ClientProtocol
+
+ClientProtocol is used by user code via the DistributedFileSystem class to communicate with the NameNode.  User code can manipulate the directory namespace, as well as open/close file streams, etc.
+
+##### ClientDatanodeProtocol
+
+ An client-datanode protocol for block recovery，This class is used by both the DFSClient and the DN server side to insulate from the protocol serialization.
+
+##### HAServiceProtocol
+

@@ -378,7 +378,7 @@ private[this] def initialize(): Unit = {
 
 ​	在基于Sort的Shuffle过程中，sort体现在输出的数据会根据目标的分区Id(即带Shuffle过程的目标RDD中各个分区的Id值)进行排序，然后写入一个单独的Map端输出文件中。相应的，各个分区内部数据并不会再根据Key进行排序。除非调用带排序目的方法，在方法中指定Key值的Ordering实例才会在分区内根据该Ordering实例对数据进行排序。当Map端输出数据超出内存容纳大小时，会将各个排序结果溢出到磁盘上，最后再将这些Spill文件合并到一个最终的文件中。
 
-​	在本博客第二部分Spark Shuffle框架的shuffleManager实例化代码中可以发现,sort与tungsten-sort对应的具体实现子类都是org.apache.spark.shuffle.sort.SortShuffleManager，也就是基于Sort的shuffle实现机制与使用tungsten项目的Shuffle实现机制都是通过SortShuffleManager类来提供接口，两种实现机制的区别在于该类中使用了不同的Shuffle数据写入器。
+​	在本篇博客第二部分Spark Shuffle框架的shuffleManager实例化代码中可以发现,sort与tungsten-sort对应的具体实现子类都是org.apache.spark.shuffle.sort.SortShuffleManager，也就是基于Sort的shuffle实现机制与使用tungsten项目的Shuffle实现机制都是通过SortShuffleManager类来提供接口，两种实现机制的区别在于该类中使用了不同的Shuffle数据写入器。
 
 ​	SortShuffleManager根据内部采用的不同实现细节，对应有两种不同的构建 Map端文件输出的写方式，分为序列化排序方式与反序列化排序方式。
 
@@ -466,7 +466,7 @@ override def getWriter[K, V](
 
 ##### a. BypassMergeSortShuffleWriter
 
-BypassMergeSortShuffleWriter为每个Reduce端的任务构建一个输出文件，将输入的每条记录分别写入各自对应的文件中，并在最后讲这些基于各个分区的文件合并成一个输出文件。这种方式在Reduce端任务较多时不适用，因为会打开太多的文件流和序列化器，因此只有满足如下条件时才可以使用该写入器：
+BypassMergeSortShuffleWriter为每个Reduce端的任务构建一个输出文件，将输入的每条记录分别写入各自对应的文件中，并在最后将这些基于各个分区的文件合并成一个输出文件。**这种方式在Reduce端任务较多时不适用，因为会打开太多的文件流和序列化器**，因此只有满足如下条件时才可以使用该写入器：
 
 * 不能指定Ordering
 * 不能指定聚合器

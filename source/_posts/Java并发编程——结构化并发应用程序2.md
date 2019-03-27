@@ -11,7 +11,7 @@ tags: [Java, 多线程, 并发]
 > - 保留与任务关联的Future，反复使用get方法，同时将参数timeout指定为0，从而通过轮训判断任务是否完成
 > - 使用完成服务（CompletionService）
 
-**CompletionService：**                     CompletionService将Executor和BlockingQueue功能结合起来，可以将Callable任务提交给它来执行，然后使用类似队列操作的take和poll等方法获得已经完成的结果，这些结果会**在完成时**被封装为Future。
+**CompletionService：**CompletionService将Executor和BlockingQueue功能结合起来，可以将Callable任务提交给它来执行，然后使用类似队列操作的take和poll等方法获得已经完成的结果，这些结果会**在完成时**被封装为Future。
 <!-- more--> 
 ExecutorCompletionService实现了CompletionService，并将计算部分委托给了一个Executor。实现方式：在构造函数中创建一个BlockingQueue来保存完成的结果，计算完成时，调用Future-Task中的done方法，当提交某个任务时，该任务首先将包装为一个QueueingFuture，这是FutureTask的一个子类，然后再改写子类的done方法，将结果放入BlockingQueue中。take和poll方法委托给了BlockingQueue，这些方法会在得出结果之前阻塞。
 
@@ -100,7 +100,7 @@ public class Renderer {
 
 传递给get的timeout参数的计算方式是将指定时限减去当前时间，这可能会得到负数，但java.util.concurrent中所有与时限相关的方法都将视负数为0.
 
-Future.cancel参数为true表示任务线程可以在啊运行过程中中断。
+Future.cancel参数为true表示任务线程可以在运行过程中中断。
 
 ```java
 //在指定时间内获取广告时间

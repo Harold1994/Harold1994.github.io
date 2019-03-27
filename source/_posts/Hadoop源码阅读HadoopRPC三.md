@@ -14,7 +14,7 @@ Server类采用了很多技术来提供并发能力，包括线程池、JavaNIO�
 
 ###### a. Reactor模式
 
-reactor设计模式，是一种基于事件驱动的设计模式。处理流程是：应用业务向一个中间人注册一个回调（event handler），当IO就绪后，就这个中间人产生一个事件，并通知此handler进行处理。这里的中间人其实是一个不断等待和循环的线程，他接受所有应用程序的注册，并检查应用程序注册的IO事件是否就绪，如果就绪则通知应用程序进行处理。
+reactor设计模式，是一种基于事件驱动的设计模式。处理流程是：应用业务向一个中间人注册一个回调（event handler），当IO就绪后，就这个中间人产生一个事件，并通知此handler进行处理。这里的中间人其实是一个不断等待和循环的线程，它接受所有应用程序的注册，并检查应用程序注册的IO事件是否就绪，如果就绪则通知应用程序进行处理。
 
 <!-- more--> 
 
@@ -64,8 +64,8 @@ Hadoop Server类是一个典型的多Reactor加多线程的网络服务结构，
 
 Server类处理RPC请求的流程：
 
-* Linstener线程的selector在ServerSocketChannel上注册OP_ACCEPT事件，并且创建readers数组。每个reader的readSelector此时并不难监听任何Channel
-* Client发送Socket连接请求，出发Listener的selector唤醒Listener线程
+* Listener线程的selector在ServerSocketChannel上注册OP_ACCEPT事件，并且创建readers数组。每个reader的readSelector此时并不监听任何Channel
+* Client发送Socket连接请求，触发Listener的selector唤醒Listener线程
 * Listener调用ServerSocketChannel.accept()获得一个新的SocketChannel
 * Listener从readers数组中挑选一个线程，并在Reader的readSelector上注册OP_READ事件
 * Client发送RPC请求数据包，触发Reader的selector唤醒Reader线程
@@ -74,10 +74,6 @@ Server类处理RPC请求的流程：
 * 如果Handler发现无法将响应完全写入SocketChannel，将在Responder的writeSelector上注册OP_WRITE事件。如果一个Call长时间都未被写入，则会被Responder移除。
 
 -------
-
----------
-
-----------
 
 * Listener类
 

@@ -381,7 +381,7 @@ workerUrl.foreach { url =>
 
 #### 2. Master的部署
 
-Spark中的各个组件都是通过脚本启动的，以脚本味切入点分析Master的部署
+Spark中的各个组件都是通过脚本启动的，以脚本为切入点分析Master的部署
 
 ##### A.Master部署的启动脚本
 
@@ -1155,3 +1155,4 @@ val (persistenceEngine_, leaderElectionAgent_) = RECOVERY_MODE match {
 ```
 
 从代码看出有四种RECOVERY_MODE，分别对应ZooKeeper，FILESYSTEM和自定义CUSTOM以及None。
+

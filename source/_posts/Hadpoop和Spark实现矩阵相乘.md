@@ -1,7 +1,7 @@
 ---
 title: Hadpoop和Spark实现矩阵相乘
 date: 2018-07-04 19:31:22
-tags: [Hadoop, Spark]
+tags: [Hadoop, Spark, 大数据]
 ---
 
 矩阵的存储格式如下：
@@ -276,7 +276,7 @@ object MatrixMulSpark {
 
     val dword = wordM.join(wordN)
     dword.collect.foreach(println)
-    val map = dword.valuers.map( x => {
+    val map = dword.values.map( x => {
       (x._1(1) + " " + x._2(2),x._1(3).toDouble * x._2(3).toDouble)
     })
     val reduceS = map.reduceByKey((x,y) => {
