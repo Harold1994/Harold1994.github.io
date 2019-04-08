@@ -46,7 +46,7 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
-			<img src="https://github.com/Harold1994/Harold1994.github.io/blob/master/img/head.png" class="js-avatar">
+			<img src="https://i.loli.net/2019/04/08/5cab6a41c6915.png" class="js-avatar">
 		</a>
 		<hgroup>
 		  <h1 class="header-author"><a href="/">李贺</a></h1>
@@ -116,7 +116,7 @@
 	<div class="intrude-less">
 		<header id="header" class="inner">
 			<div class="profilepic">
-				<img src="https://github.com/Harold1994/Harold1994.github.io/blob/master/img/head.png" class="js-avatar">
+				<img src="https://i.loli.net/2019/04/08/5cab6a41c6915.png" class="js-avatar">
 			</div>
 			<hgroup>
 			  <h1 class="header-author js-header-author">李贺</h1>
@@ -453,6 +453,37 @@
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">BucketizerExample</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> spark = <span class="type">SparkSession</span>.builder()</span><br><span class="line">      .master(<span class="string">"local"</span>)</span><br><span class="line">      .appName(<span class="string">"BucketizerExample"</span>)</span><br><span class="line">      .getOrCreate()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> splits = <span class="type">Array</span>(<span class="type">Double</span>.<span class="type">NegativeInfinity</span>, <span class="number">-0.5</span>, <span class="number">0.0</span>, <span class="number">0.5</span>, <span class="type">Double</span>.<span class="type">PositiveInfinity</span>)</span><br><span class="line">    <span class="keyword">val</span> data = <span class="type">Array</span>(<span class="number">-0.5</span>,<span class="number">-0.3</span>,<span class="number">0.0</span>,<span class="number">0.2</span>,<span class="number">0.8</span>)</span><br><span class="line">    <span class="keyword">val</span> dataFrame = spark.createDataFrame(data.map(<span class="type">Tuple1</span>.apply)).toDF(<span class="string">"features"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> bucketizer = <span class="keyword">new</span> <span class="type">Bucketizer</span>()</span><br><span class="line">      .setInputCol(<span class="string">"features"</span>)</span><br><span class="line">      .setOutputCol(<span class="string">"bucketedFeatures"</span>)</span><br><span class="line">      .setSplits(splits)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> bucketedData = bucketizer.transform(dataFrame)</span><br><span class="line">    bucketedData.show()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="https://i.loli.net/2019/04/08/5cab6202756df.jpeg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="https://i.loli.net/2019/04/08/5cab6266be0b3.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
       
     </div>
     <div class="article-info article-info-index">

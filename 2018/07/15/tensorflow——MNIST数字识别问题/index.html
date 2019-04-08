@@ -48,7 +48,7 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
-			<img src="https://github.com/Harold1994/Harold1994.github.io/blob/master/img/head.png" class="js-avatar">
+			<img src="https://i.loli.net/2019/04/08/5cab6a41c6915.png" class="js-avatar">
 		</a>
 		<hgroup>
 		  <h1 class="header-author"><a href="/">李贺</a></h1>
@@ -118,7 +118,7 @@
 	<div class="intrude-less">
 		<header id="header" class="inner">
 			<div class="profilepic">
-				<img src="https://github.com/Harold1994/Harold1994.github.io/blob/master/img/head.png" class="js-avatar">
+				<img src="https://i.loli.net/2019/04/08/5cab6a41c6915.png" class="js-avatar">
 			</div>
 			<hgroup>
 			  <h1 class="header-author js-header-author">李贺</h1>
@@ -244,6 +244,37 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">v1 = tf.get_variable(<span class="string">"v"</span>,[<span class="number">1</span>])</span><br><span class="line">print(v1.name) <span class="comment">#v:0,v是变量名，0表示这个变量是生成变量这个运算的第一个结果</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.variable_scope(<span class="string">"foo"</span>, reuse=<span class="keyword">True</span>):</span><br><span class="line">    v2 = tf.get_variable(<span class="string">"v"</span>,[<span class="number">1</span>])</span><br><span class="line">    print(v2.name) <span class="comment">#foo/v:0 在/前加了命名空间名称</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.variable_scope(<span class="string">"foo"</span>,reuse=<span class="keyword">True</span>):</span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">"bar"</span>):</span><br><span class="line">        v3 = tf.get_variable(<span class="string">"v"</span>,[<span class="number">1</span>])</span><br><span class="line">        print(v3.name)<span class="comment">#foo/bar/v:0</span></span><br><span class="line">    </span><br><span class="line">    v4 = tf.get_variable(<span class="string">"v"</span>,[<span class="number">1</span>])</span><br><span class="line">    print(v4.name)<span class="comment">#foo/v:0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.variable_scope(<span class="string">""</span>, reuse=<span class="keyword">True</span>):</span><br><span class="line">    <span class="comment">#可以通过带命名空间名称的变量名来获取其他命名空间下的变量</span></span><br><span class="line">    v5 = tf.get_variable(<span class="string">"foo/bar/v"</span>,[<span class="number">1</span>])</span><br><span class="line">    print(v5 == v3)<span class="comment">#True</span></span><br><span class="line">    v6 = tf.get_variable(<span class="string">"foo/v"</span>,[<span class="number">1</span>])</span><br><span class="line">    print(v6 == v4)</span><br></pre></td></tr></table></figure>
       
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="https://i.loli.net/2019/04/08/5cab6202756df.jpeg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="https://i.loli.net/2019/04/08/5cab6266be0b3.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
       
     </div>
     <div class="article-info article-info-index">

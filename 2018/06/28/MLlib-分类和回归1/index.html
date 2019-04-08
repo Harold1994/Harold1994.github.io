@@ -55,7 +55,7 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
-			<img src="https://github.com/Harold1994/Harold1994.github.io/blob/master/img/head.png" class="js-avatar">
+			<img src="https://i.loli.net/2019/04/08/5cab6a41c6915.png" class="js-avatar">
 		</a>
 		<hgroup>
 		  <h1 class="header-author"><a href="/">李贺</a></h1>
@@ -125,7 +125,7 @@
 	<div class="intrude-less">
 		<header id="header" class="inner">
 			<div class="profilepic">
-				<img src="https://github.com/Harold1994/Harold1994.github.io/blob/master/img/head.png" class="js-avatar">
+				<img src="https://i.loli.net/2019/04/08/5cab6a41c6915.png" class="js-avatar">
 			</div>
 			<hgroup>
 			  <h1 class="header-author js-header-author">李贺</h1>
@@ -345,6 +345,37 @@
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">GradientBoostedTreeRegressorExample</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> spark = <span class="type">SparkSession</span>.builder()</span><br><span class="line">      .master(<span class="string">"local"</span>)</span><br><span class="line">      .appName(<span class="string">"DecisionTreeClassificationExample"</span>)</span><br><span class="line">      .getOrCreate()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> data = spark.read.format(<span class="string">"libsvm"</span>).load(<span class="string">"data/mllib/sample_libsvm_data.txt"</span>)</span><br><span class="line">    <span class="keyword">val</span> featureIndexer = <span class="keyword">new</span> <span class="type">VectorIndexer</span>()</span><br><span class="line">      .setInputCol(<span class="string">"features"</span>)</span><br><span class="line">      .setOutputCol(<span class="string">"indexedFeatures"</span>)</span><br><span class="line">      .setMaxCategories(<span class="number">4</span>)</span><br><span class="line">      .fit(data)</span><br><span class="line">    <span class="keyword">val</span> <span class="type">Array</span>(trainingData, testData) = data.randomSplit(<span class="type">Array</span>(<span class="number">0.7</span>, <span class="number">0.3</span>))</span><br><span class="line">    <span class="keyword">val</span> gbt = <span class="keyword">new</span> <span class="type">GBTRegressor</span>()</span><br><span class="line">      .setLabelCol(<span class="string">"label"</span>)</span><br><span class="line">      .setFeaturesCol(<span class="string">"indexedFeatures"</span>)</span><br><span class="line">      .setMaxIter(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> pipeline = <span class="keyword">new</span> <span class="type">Pipeline</span>()</span><br><span class="line">      .setStages(<span class="type">Array</span>(featureIndexer, gbt))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> model = pipeline.fit(trainingData)</span><br><span class="line">    <span class="keyword">val</span> predictions = model.transform(testData)</span><br><span class="line">    predictions.select(<span class="string">"prediction"</span>,<span class="string">"label"</span>, <span class="string">"features"</span>).show(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> evaluator = <span class="keyword">new</span> <span class="type">RegressionEvaluator</span>()</span><br><span class="line">      .setLabelCol(<span class="string">"label"</span>)</span><br><span class="line">      .setPredictionCol(<span class="string">"prediction"</span>)</span><br><span class="line">      .setMetricName(<span class="string">"rmse"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> rmse = evaluator.evaluate(predictions)</span><br><span class="line">    println(<span class="string">"Root Mean Squared Error (RMSE) on test data = "</span> + rmse)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> gbtModel = model.stages(<span class="number">1</span>).asInstanceOf[<span class="type">GBTRegressionModel</span>]</span><br><span class="line">    println(<span class="string">"Learned regression GBT model:\n"</span> + gbtModel.toDebugString)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="https://i.loli.net/2019/04/08/5cab6202756df.jpeg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="https://i.loli.net/2019/04/08/5cab6266be0b3.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
       
     </div>
     <div class="article-info article-info-index">
