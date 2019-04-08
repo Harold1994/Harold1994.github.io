@@ -346,23 +346,35 @@ Candidate候选人: 类似Proposer律师，可以被选为一个新的领导人�
   
 
   
-
   
-  <div id="gitment-ctn"></div> 
-<link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
-<script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<section id="comments" class="comments">
+  <style>
+    .comments{margin:30px;padding:10px;background:#fff}
+    @media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#fff}}
+  </style>
+  <div id="vcomment" class="comment"></div> 
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
 <script>
-var gitment = new Gitment({
-  id: "//harold.me/2018/04/03/《区块链原理、设计与应用》读书摘要/",
-  owner: 'Harold1994',
-  repo: 'harold1994.github.io',
-  oauth: {
-    client_id: 'e848c7aa37bea34ecb78',
-    client_secret: '728460046f53a8478436b6c0d433ba6576214671',
-  },
-})
-gitment.render('gitment-ctn')
+   var notify = 'false' == true ? true : false;
+   var verify = 'false' == true ? true : false;
+    window.onload = function() {
+        new Valine({
+            el: '.comment',
+            notify: notify,
+            verify: verify,
+            app_id: "UStWpMA4TedptWUiEEd48qr5-gzGzoHsz",
+            app_key: "aV4CorLgvH4fmTF2bQ5NzbKp",
+            placeholder: "ヾﾉ≧∀≦)o来啊，快活啊!",
+            avatar:"mm"
+        });
+    }
 </script>
+
+  </section>
+
+
+
   
 
 
