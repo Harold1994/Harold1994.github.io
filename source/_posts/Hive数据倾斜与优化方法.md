@@ -1,5 +1,5 @@
 ---
-title: Hive用户自定义聚合函数(UDAF)和表生成函数(UDTF)
+title: Hive数据倾斜和优化方法
 date: 2019-03-27 21:45:40
 tags: [大数据, Hive]
 ---
@@ -13,13 +13,13 @@ tags: [大数据, Hive]
 
   > 通过设置set hive.auto.convert.join = true,Hive会在必要的时候启动这个优化
 
+<!-- more--> 
+
 * 本地模式
 
   如果Hive的输入数据量非常小，这种情况下，为触发查询任务的时间消耗可能会比实际job执行的时间还要长，对于大多数这种情况，可以通过本地模式在单台机器上处理所有任务
 
   > 通过设置hive.exec.mode.local.auto = true，Hive会在必要的时候启动这个优化
-
-<!-- more--> 
 
 * 并行执行
 
