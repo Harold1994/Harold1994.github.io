@@ -6,19 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//harold.me">
-  <title>Hive用户自定义聚合函数(UDAF)和表生成函数(UDTF) | Harold的博客</title>
+  <title>Hive数据倾斜和优化方法 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="最近面试总被问到Hive调优的问题，在这里专门总结一下： 一、一般优化方式 Map-side JOIN 如果所有表中只有一张表是小表，可以在最大的表通过mapper的时候将小表放如内存中，Hive可以在map端执行连接过程，这是因为Hive可以和内存中的小表逐一匹配，从而省略掉常规连接操作所需要的reduce过程。  通过设置set hive.auto.convert.join = true,Hi">
 <meta name="keywords" content="大数据,Hive">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hive用户自定义聚合函数(UDAF)和表生成函数(UDTF)">
+<meta property="og:title" content="Hive数据倾斜和优化方法">
 <meta property="og:url" content="//harold.me/2019/03/27/Hive数据倾斜与优化方法/index.html">
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="最近面试总被问到Hive调优的问题，在这里专门总结一下： 一、一般优化方式 Map-side JOIN 如果所有表中只有一张表是小表，可以在最大的表通过mapper的时候将小表放如内存中，Hive可以在map端执行连接过程，这是因为Hive可以和内存中的小表逐一匹配，从而省略掉常规连接操作所需要的reduce过程。  通过设置set hive.auto.convert.join = true,Hi">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-27T13:35:47.628Z">
+<meta property="og:updated_time" content="2019-04-09T13:57:21.374Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hive用户自定义聚合函数(UDAF)和表生成函数(UDTF)">
+<meta name="twitter:title" content="Hive数据倾斜和优化方法">
 <meta name="twitter:description" content="最近面试总被问到Hive调优的问题，在这里专门总结一下： 一、一般优化方式 Map-side JOIN 如果所有表中只有一张表是小表，可以在最大的表通过mapper的时候将小表放如内存中，Hive可以在map端执行连接过程，这是因为Hive可以和内存中的小表逐一匹配，从而省略掉常规连接操作所需要的reduce过程。  通过设置set hive.auto.convert.join = true,Hi">
   
   
@@ -200,7 +200,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Hive用户自定义聚合函数(UDAF)和表生成函数(UDTF)
+      Hive数据倾斜和优化方法
     </h1>
   
 
@@ -221,16 +221,17 @@
 <p>通过设置set hive.auto.convert.join = true,Hive会在必要的时候启动这个优化</p>
 </blockquote>
 </li>
+</ul>
+<a id="more"></a> 
+<ul>
 <li><p>本地模式</p>
 <p>如果Hive的输入数据量非常小，这种情况下，为触发查询任务的时间消耗可能会比实际job执行的时间还要长，对于大多数这种情况，可以通过本地模式在单台机器上处理所有任务</p>
 <blockquote>
 <p>通过设置hive.exec.mode.local.auto = true，Hive会在必要的时候启动这个优化</p>
 </blockquote>
 </li>
-</ul>
-<a id="more"></a> 
-<ul>
-<li>并行执行</li>
+<li><p>并行执行</p>
+</li>
 </ul>
 <p>Hive会将一个查询转化为一个或多个阶段，这样的阶段可能是MR阶段、抽样阶段、合并阶段、limit阶段等，默认情况下，Hive一次只会执行一个阶段，不过如果这些阶段并非完全依赖的，就可以并行执行，从而降低执行时间</p>
 <blockquote>
@@ -380,6 +381,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2019/04/20/fink官网学习笔记/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          fink官网学习笔记——基本API概念
+        
+      </div>
+    </a>
   
   
     <a href="/2019/03/23/春招实习遇到的问题/" id="article-nav-older" class="article-nav-link-wrap">
@@ -580,11 +590,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Hadoop</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HDFS</a>
+                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -596,7 +602,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
+                <a href="javascript:void(0)" class="js-tag color2">Hadoop</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HDFS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -712,11 +722,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">时间序列</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
+                <a href="javascript:void(0)" class="js-tag color5">时间序列</a>
               </li>
              
               <li class="article-tag-list-item">
