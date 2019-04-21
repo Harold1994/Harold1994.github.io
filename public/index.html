@@ -190,6 +190,85 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-fink官网学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/20/fink官网学习笔记/">fink官网学习笔记——基本API概念</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/20/fink官网学习笔记/" class="archive-article-date">
+  	<time datetime="2019-04-20T07:15:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>翻译自Flink文档：<a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/api_concepts.html" target="_blank" rel="noopener">https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/api_concepts.html</a></p>
+</blockquote>
+<h4 id="1-Lazy-Evaluation（惰性计算）"><a href="#1-Lazy-Evaluation（惰性计算）" class="headerlink" title="1. Lazy Evaluation（惰性计算）"></a>1. Lazy Evaluation（惰性计算）</h4><p>程序的main方法执行后不久立即执行数据的加载和转换，每个操作被创建后加入执行计划，这些操作只有在execute()被显式调用后才会真正执行。程序被本地执行还是在集群上执行取决于执行环境</p>
+        
+          <a class="article-more-a" href="/2019/04/20/fink官网学习笔记/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/20/fink官网学习笔记/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Hive数据倾斜与优化方法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -954,87 +1033,6 @@
 
 
   
-    <article id="post-AsynchronousFileChannel" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/18/AsynchronousFileChannel/">NIO AsynchronousFileChannel</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/18/AsynchronousFileChannel/" class="archive-article-date">
-  	<time datetime="2018-11-18T12:37:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在Java7中AsynchronousFileChannel被加入到NIO中， The <code>AsynchronousFileChannel</code> makes it possible to read data from, and write data to files asynchronously. </p>
-<h5 id="创建一个AsynchronousFileChannel"><a href="#创建一个AsynchronousFileChannel" class="headerlink" title="创建一个AsynchronousFileChannel"></a>创建一个AsynchronousFileChannel</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Path path = Paths.get(<span class="string">"data/test.txt"</span>);</span><br><span class="line"><span class="comment">// 通过open()方法打开一个AsynchronousFileChannel</span></span><br><span class="line"><span class="comment">// The second parameter is one or more open options which tell the</span></span><br><span class="line"><span class="comment">// AsynchronousFileChannel what operations is to be performed on the underlying file.</span></span><br><span class="line">AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(path, StandardOpenOption.READ);</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2018/11/18/AsynchronousFileChannel/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">NIO</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/18/AsynchronousFileChannel/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1161,15 +1159,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">NIO</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
               </li>
              
               <li class="article-tag-list-item">
