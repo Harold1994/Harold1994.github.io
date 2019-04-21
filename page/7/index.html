@@ -190,6 +190,256 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Hadpoop和Spark实现矩阵相乘" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/04/Hadpoop和Spark实现矩阵相乘/">Hadpoop和Spark实现矩阵相乘</a>
+    </h1>
+  
+
+        
+        <a href="/2018/07/04/Hadpoop和Spark实现矩阵相乘/" class="archive-article-date">
+  	<time datetime="2018-07-04T11:31:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>矩阵的存储格式如下：</p>
+<p>矩阵名 行号 列号 值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">M 0 0 1</span><br><span class="line">M 0 1 0</span><br><span class="line">M 0 2 2</span><br><span class="line">M 1 0 2									 </span><br><span class="line">M 1 1 3                          </span><br><span class="line">M 1 2 1							</span><br><span class="line">N 0 0 1</span><br><span class="line">N 0 1 0</span><br><span class="line">N 1 0 2</span><br><span class="line">N 1 1 3</span><br><span class="line">N 2 0 2</span><br><span class="line">N 2 1 0</span><br></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2018/07/04/Hadpoop和Spark实现矩阵相乘/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/07/04/Hadpoop和Spark实现矩阵相乘/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-图算法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/03/图算法/">图算法</a>
+    </h1>
+  
+
+        
+        <a href="/2018/07/03/图算法/" class="archive-article-date">
+  	<time datetime="2018-07-03T14:43:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>其他基础的数据结构之前都已经线下整理过了,但是图这块出于畏难心理一直没有看,最近面试被问到了,答不上来好尴尬,所以说欠的债总是要还的.</p>
+<p>图的搜索指系统化地跟随图中的边来访问图中每个结点。</p>
+<h4 id="一-图的表示"><a href="#一-图的表示" class="headerlink" title="一.图的表示"></a>一.图的表示</h4><blockquote>
+<p>无向图:图是由一组顶点和一组能够将两个顶点相连的边组成的</p>
+</blockquote>
+<p>一般用0至V-1表示一张含有V个顶点的图中的各个顶点.</p>
+        
+          <a class="article-more-a" href="/2018/07/03/图算法/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/07/03/图算法/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-科赛-大数据挑战赛总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/03/科赛-大数据挑战赛总结/">科赛----大数据挑战赛总结</a>
+    </h1>
+  
+
+        
+        <a href="/2018/07/03/科赛-大数据挑战赛总结/" class="archive-article-date">
+  	<time datetime="2018-07-03T11:53:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这个比赛是我除了kaggle两个练手比赛之外第一次参加的比赛,历时一个月左右,有遗憾也有收获,不过收获总是大于遗憾的,作为第一个从头到尾参与的比赛,从数据集的划分,特征的生成到模型的选取与调优,一点一滴都是收获,最终成绩(初赛B榜)0.81670099,虽然不是特别高,但是思路总是值得记录的.</p>
+<h4 id="一-赛题"><a href="#一-赛题" class="headerlink" title="一. 赛题"></a>一. 赛题</h4><p><strong>赛题描述</strong>:</p>
+<pre><code>本次大赛基于脱敏和采样后的数据信息，预测未来一段时间活跃的用户。参赛队伍需要设计相应的算法进行数据分析和处理，比赛结果按照指定的评价指标使用在线评测数据进行评测和排名，得分最优者获胜。
+</code></pre>
+        
+          <a class="article-more-a" href="/2018/07/03/科赛-大数据挑战赛总结/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/07/03/科赛-大数据挑战赛总结/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-MLlib-模型选择和超参数调优" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -795,287 +1045,9 @@
 
 
   
-    <article id="post-数据算法——移动平均" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/14/数据算法——移动平均/">数据算法——移动平均</a>
-    </h1>
-  
-
-        
-        <a href="/2018/06/14/数据算法——移动平均/" class="archive-article-date">
-  	<time datetime="2018-06-14T03:02:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="一、移动平均的基本概念"><a href="#一、移动平均的基本概念" class="headerlink" title="一、移动平均的基本概念"></a>一、移动平均的基本概念</h4><p>​    时间序列数据表示一个变量在一段时间内的值，可以将时间序列数据形式化表示为三元组序列：(k,t,v)</p>
-<p>这里k是键(如股票代码)，t是时间（小时、分钟或秒），v是关联的值（如一只股票在t的值）。</p>
-<p>​    一般的，只要在一段时间内记录相同的度量值，就会得到时间序列数据。多个连续周期的时间序列数据平均值（按相同时间间隔得到的观察值）称为移动平均。之所以称为“移动”，是因为随着新时间序列数据的到来，要不断重新计算这个平均值，由于会删除最早的值的同时增加最新的值，这个平均值会相应的“移动”。<br>
-        
-          <a class="article-more-a" href="/2018/06/14/数据算法——移动平均/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">分布式算法</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">时间序列</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/06/14/数据算法——移动平均/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-数据算法——Top10列表" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/08/数据算法——Top10列表/">数据算法——Top 10列表</a>
-    </h1>
-  
-
-        
-        <a href="/2018/06/08/数据算法——Top10列表/" class="archive-article-date">
-  	<time datetime="2018-06-08T10:06:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>top10列表问题是一种过滤模式的问题，即需要过滤数据，找出top N列表,本篇博客将分别利用MR和Spark实现top N设计模式。</p>
-<h4 id="一、Top-N设计模式的形式化描述"><a href="#一、Top-N设计模式的形式化描述" class="headerlink" title="一、Top N设计模式的形式化描述"></a>一、Top N设计模式的形式化描述</h4><p>令N是一个整数，而且N&gt;0。令L是一个$List&lt;Tuple2&lt;T,Integer&gt;&gt;​$,其中T可以是任意类型；$L.size() = S,S &gt; N​$,L的元素为：</p>
-<p>​                                $\lbrace (K_i,V_i),1\leq i\leq S\rbrace$</p>
-<p>其中$K_i​$类型为T，$V_i​$为Integer类型（为$K_i​$的频度）。令sort(L)返回已排序的L值，这里使用频度作为键，如下所示：</p>
-<p>​                                $\lbrace (A_j,B_j),1\leq j\leq S,B_1\geq B_2\geq …\geq B_S \rbrace​$</p>
-<p>其中$(A_j,B_j) \in L ​$,则Top N的定义为：</p>
-<p>​                $topN(L) =\lbrace (A_j,B_j),1\leq j\leq N,B_1\geq B_2\geq …\geq B_N \geq …\geq B_s \rbrace​$<br>
-        
-          <a class="article-more-a" href="/2018/06/08/数据算法——Top10列表/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">分布式算法</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/06/08/数据算法——Top10列表/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Java和Hadoop序列化机制浅讲" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/08/Java和Hadoop序列化机制浅讲/">Java和Hadoop序列化机制浅讲</a>
-    </h1>
-  
-
-        
-        <a href="/2018/06/08/Java和Hadoop序列化机制浅讲/" class="archive-article-date">
-  	<time datetime="2018-06-08T07:33:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>转自：<a href="https://blog.csdn.net/zq602316498/article/details/45190175" target="_blank" rel="noopener">https://blog.csdn.net/zq602316498/article/details/45190175</a></p>
-<h4 id="Java-和-Hadoop-序列化机制浅讲"><a href="#Java-和-Hadoop-序列化机制浅讲" class="headerlink" title="Java 和 Hadoop 序列化机制浅讲"></a>Java 和 Hadoop 序列化机制浅讲</h4><p>序列化  (Serialization)将对象的状态信息转换为可以存储或传输的形式的过程（<strong>字节流</strong>）。在序列化期间，对象将其当前状态写入到临时或持久性存储区。以后，可以通过从存储区中读取或反序列化对象的状态，重新创建该对象。</p>
-<p>通常来说有三个用途：</p>
-<ul>
-<li>持久化：对象可以被存储到磁盘上</li>
-<li>通信：对象可以通过网络进行传输</li>
-<li>拷贝、克隆：可以通过将某一对象序列化到内存的缓冲区，然后通过反序列化生成该对象的一个深拷贝（破解单例模式的一种方法）
-        
-          <a class="article-more-a" href="/2018/06/08/Java和Hadoop序列化机制浅讲/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/06/08/Java和Hadoop序列化机制浅讲/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
     </nav>
   
 
@@ -1191,7 +1163,11 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
+                <a href="javascript:void(0)" class="js-tag color4">NIO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1203,11 +1179,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NIO</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1311,15 +1283,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">tensorflow，深度学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Mahout</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">tensorflow，深度学习</a>
               </li>
              
               <li class="article-tag-list-item">
