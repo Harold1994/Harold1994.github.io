@@ -1,7 +1,7 @@
 ---
-title: Flink Streaming中的事件时间和Watermark机制
+title: Flink笔记——Flink Streaming中的事件时间和Watermark机制
 date: 2019-04-21 16:29:30
-tags: 大数据
+tags: [大数据, Flink]
 ---
 
 #### 一、Event Time / Processing Time / Ingestion Time（事件时间、处理时间、摄入时间）

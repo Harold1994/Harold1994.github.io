@@ -1,7 +1,7 @@
 ---
-title: fink官网学习笔记——DataStream API
+title: Flink笔记——DataStream API
 date: 2019-04-20 20:11:17
-tags: 大数据
+tags: [大数据, Flink]
 ---
 
 The data streams are initially created from various sources (e.g., message queues, socket streams, files). Results are returned via sinks, which may for example write the data to files, or to standard output (for example the command line terminal). 
@@ -30,8 +30,9 @@ StreamExecutionEnvironment预定义的源包括：
     > * 如果watchType设置为FileProcessingMode.PROCESS_ONCE，源扫描路径一次并退出，而不等待读者完成读取文件内容。 当然读者将继续阅读，直到读取所有文件内容。 在该点之后关闭源将导致不再有检查点。 这可能会导致节点故障后恢复速度变慢，因为作业将从上一个检查点恢复读取。
 
 * 基于Socket的：
-  * socketTextStream
-
+  
+* socketTextStream
+  
 * 基于容器的：
 
   * fromCollection(Collection) - Creates a data stream from the Java Java.util.Collection. 容器中的所有元素必须具有相同的数据类型
@@ -42,6 +43,7 @@ StreamExecutionEnvironment预定义的源包括：
   * generateSequence(from, to) -  Generates the sequence of numbers in the given interval, in parallel.
 
 * 自定义源：
+  
   * `addSource` -Attach a new source function. For example, to read from Apache Kafka you can use `addSource(new FlinkKafkaConsumer08<>(...))`.
 
 #### 二、DataStream Transformations

@@ -1,7 +1,7 @@
 ---
-title: fink官网学习笔记——基本API概念
+title: Flink笔记——基本API概念
 date: 2019-04-20 15:15:58
-tags: 大数据
+tags: [大数据, Flink]
 ---
 
 > 翻译自Flink文档：https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/api_concepts.html
