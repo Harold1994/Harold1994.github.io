@@ -6,12 +6,12 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//harold.me">
-  <title>Flink Streaming中的事件时间和Watermark机制 | Harold的博客</title>
+  <title>Flink笔记——Flink Streaming中的事件时间和Watermark机制 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="一、Event Time / Processing Time / Ingestion Time（事件时间、处理时间、摄入时间）Flink streaming编程支持几种不同的时间概念：  处理时间： Processing time refers to the system time of the machine that is executing the respective （各自的）opera">
-<meta name="keywords" content="大数据">
+<meta name="keywords" content="大数据,Flink">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Flink Streaming中的事件时间和Watermark机制">
+<meta property="og:title" content="Flink笔记——Flink Streaming中的事件时间和Watermark机制">
 <meta property="og:url" content="//harold.me/2019/04/21/Flink-Streaming中的时间概念/index.html">
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="一、Event Time / Processing Time / Ingestion Time（事件时间、处理时间、摄入时间）Flink streaming编程支持几种不同的时间概念：  处理时间： Processing time refers to the system time of the machine that is executing the respective （各自的）opera">
@@ -20,9 +20,9 @@
 <meta property="og:image" content="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/stream_watermark_in_order.svg">
 <meta property="og:image" content="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/stream_watermark_out_of_order.svg">
 <meta property="og:image" content="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/parallel_streams_watermarks.svg">
-<meta property="og:updated_time" content="2019-04-21T13:47:59.460Z">
+<meta property="og:updated_time" content="2019-05-25T03:09:55.663Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Flink Streaming中的事件时间和Watermark机制">
+<meta name="twitter:title" content="Flink笔记——Flink Streaming中的事件时间和Watermark机制">
 <meta name="twitter:description" content="一、Event Time / Processing Time / Ingestion Time（事件时间、处理时间、摄入时间）Flink streaming编程支持几种不同的时间概念：  处理时间： Processing time refers to the system time of the machine that is executing the respective （各自的）opera">
 <meta name="twitter:image" content="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/times_clocks.svg">
   
@@ -205,7 +205,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Flink Streaming中的事件时间和Watermark机制
+      Flink笔记——Flink Streaming中的事件时间和Watermark机制
     </h1>
   
 
@@ -302,6 +302,10 @@
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
         		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Flink</a>
+        		</li>
       		
 		</ul>
 	</div>
@@ -319,9 +323,18 @@
   
 <nav id="article-nav">
   
+    <a href="/2019/04/25/Flink窗口/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Flink笔记——Window
+        
+      </div>
+    </a>
+  
   
     <a href="/2019/04/20/flink中的DataStream编程接口/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">fink官网学习笔记——DataStream API</div>
+      <div class="article-nav-title">Flink笔记——DataStream API</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -510,6 +523,14 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">NIO</a>
               </li>
              
@@ -518,15 +539,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">区块链</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
+                <a href="javascript:void(0)" class="js-tag color1">Flink</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -546,6 +563,18 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">tensorflow</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
@@ -562,31 +591,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">tensorflow</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Spark</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">MLlib</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -610,6 +619,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
@@ -630,6 +643,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">tensorflow，深度学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
               </li>
              
@@ -638,7 +655,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">tensorflow，深度学习</a>
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
               </li>
              
               <li class="article-tag-list-item">
