@@ -22,6 +22,8 @@ stream
       [.getSideOutput(...)]      <-  optional: "output tag"
 ```
 
+<!-- more-->
+
 **Non-Keyed Windows**
 
 ```
@@ -176,7 +178,7 @@ input
 
 窗口函数负责当窗口准备好后在每个窗口中执行计算。The window function can be one of `ReduceFunction`, `AggregateFunction`, `FoldFunction` or `ProcessWindowFunction`.The first two can be executed more efficiently (see [State Size](https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/stream/operators/windows.html#state size) section) because Flink can incrementally aggregate the elements for each window as they arrive. 其中 ProcessWindowFunction获得一个窗口中所有元素的迭代器和元素所属窗口的元信息。而且ProcessWindowFunction的效率没有其他几个窗口函数的执行效率高，因为Flink只有将所有元素都缓存后才能进行计算。可以通过结合ProcessWindowFunction`with a `ReduceFunction`, `AggregateFunction`, or `FoldFunction，既能增量聚集窗口元素，又能获取额外的窗口元数据。
 
-##### ReduceFunction
+##### 1.ReduceFunction
 
 A `ReduceFunction` specifies how two elements from the input are combined to produce an output element of the same type. Flink uses a `ReduceFunction` to incrementally aggregate the elements of a window.
 
@@ -193,7 +195,7 @@ input
     });
 ```
 
-##### AggregateFunction
+##### 2. AggregateFunction
 
 AggregateFunction是ReduceFunction的泛化版本，它拥有三个类型：输入类型IN，累加器类型ACC和输出类型OUT。输入类型是输入流中元素的类型，AggregateFunction具有将一个输入元素添加到累加器的方法。 该接口还具有用于创建初始累加器的方法，用于将两个累加器合并到一个累加器中以及用于从累加器提取输出（类型OUT）的方法。
 
@@ -222,7 +224,7 @@ public class AverageAggregate implements AggregateFunction<Tuple2<String, Long>,
 }
 ```
 
-##### FoldFunction
+##### 3. FoldFunction
 
 A `FoldFunction` specifies how an input element of the window is combined with an element of the output type. 对于添加到窗口的每个元素和当前输出值，将逐步调用FoldFunction。 第一个元素与输出类型的预定义初始值组合。
 
@@ -239,7 +241,7 @@ input
 
 > `fold()` cannot be used with session windows or other mergeable windows.
 
-##### ProcessWindowFunction
+##### 4.ProcessWindowFunction
 
 ProcessWindowFunction获得一个窗口中全部元素的迭代器和一个可以访问时间和状态信息的Context对象，这使得ProcessWindowFunction更加灵活。灵活性的代价是性能降低和资源消耗， because elements cannot be incrementally aggregated but instead need to be buffered internally until the window is considered ready for processing.
 
@@ -269,7 +271,7 @@ public class MyProcessWindowFunction
 
 > Note that using `ProcessWindowFunction` for simple aggregates such as count is quite inefficient. The next section shows how a `ReduceFunction` or `AggregateFunction` can be combined with a `ProcessWindowFunction` to get both incremental aggregation and the added information of a `ProcessWindowFunction`.
 
-##### 具有增量聚合功能的ProcessWindowFunction
+##### 5.具有增量聚合功能的ProcessWindowFunction
 
 A `ProcessWindowFunction` can be combined with either a `ReduceFunction`, an `AggregateFunction`, or a `FoldFunction` to incrementally aggregate elements as they arrive in the window.当窗口关闭时，将为ProcessWindowFunction提供聚合结果。 这允许它在访问ProcessWindowFunction的附加窗口元信息的同时递增地计算窗口。
 
@@ -357,7 +359,7 @@ private static class MyProcessWindowFunction
 }
 ```
 
-##### 在ProcessWindowFunction中使用窗口状态
+##### 6.在ProcessWindowFunction中使用窗口状态
 
 除了可以访问键控状态，ProcessWindowFunction也可以使用当前处理的窗口独有的状态—— *per-window*state
 
@@ -372,61 +374,3 @@ process()方法中的Context对象上有两种方法可以访问这两种状态�
 
 - `globalState()`, which allows access to keyed state that is not scoped to a window
 - `windowState()`, which allows access to keyed state that is also scoped to the window
-
-#### 六、触发器
-
-A `Trigger` determines when a window (as formed by the *window assigner*) is ready to be processed by the *window function*. 每个WindowAssigner都有一个默认的触发器，也可以使用trigger(...)方法自定义触发器。
-
-The trigger interface has five methods that allow a `Trigger` to react to different events:
-
-- The `onElement()` method is called for each element that is added to a window.
-- The `onEventTime()` method is called when a registered event-time timer fires.
-- The `onProcessingTime()` method is called when a registered processing-time timer fires.
-- The `onMerge()` method is relevant for stateful triggers and merges the states of two triggers when their corresponding windows merge, *e.g.* when using session windows.
-- Finally the `clear()` method performs any action needed upon removal of the corresponding window.
-
-上面方法中的前三个通过返回一个TriggerResult来决定当它们的调用时间发生时该做什么操作，可能的操作包括：
-
-- `CONTINUE`: do nothing,
-- `FIRE`: trigger the computation,
-- `PURGE`: clear the elements in the window, and
-- `FIRE_AND_PURGE`: trigger the computation and clear the elements in the window afterwards.
-
-##### Fire and Purge
-
-一旦Trigger认为窗口可以开始处理数据，他就会返回FIRE或FIRE_AND_PURGE。这是窗口操作符返回当前窗口计算结果的信号。Given a window with a `ProcessWindowFunction` all elements are passed to the `ProcessWindowFunction` (possibly after passing them to an evictor). Windows with `ReduceFunction`, `AggregateFunction`, or `FoldFunction` simply emit their eagerly aggregated result. FIRE保留窗口内容，而FIRE_AND_PURGE会删除其内容。 默认情况下，预定义的触发器只需FIRE而不会清除窗口状态。
-
-> The default trigger of the `GlobalWindow` is the `NeverTrigger` which does never fire. Consequently, you always have to define a custom trigger when using a `GlobalWindow`.
-
-> By specifying a trigger using `trigger()` you are overwriting the default trigger of a `WindowAssigner`.
-
-##### 内置的和常用的Trigger
-
-* EventTimeTrigger根据水印测量的事件时间进度触发。
-* ProcessingTimeTrigger基于处理时间触发
-* CountTrigger当窗口中时间数量超过设定的值时触发
-* PurgingTrigger将另一个触发器作为参数，并将其转换为清除触发器。
-
-#### 七、Evictors
-
-Flink的窗口模型除了可以指定WindowAssigner和触发器外，还可以特别指定一个Evictor（逐出器），使用evictor(…)方法。evictor可以在窗口被触发且函数执行前或者后面移除元素，它有两个方法：
-
-```java
-[1] void evictBefore(Iterable<TimestampedValue<T>> elements, int size, W window, EvictorContext evictorContext);
-[2] void evictAfter(Iterable<TimestampedValue<T>> elements, int size, W window, EvictorContext evictorContext);
-```
-
-The `evictBefore()` contains the eviction logic to be applied before the window function, while the `evictAfter()` contains the one to be applied after the window function. Elements evicted before the application of the window function will not be processed by it.
-
-Flink有三种预定义的逐出器：
-
-* CountEvictor:从窗口保持用户指定数量的元素，并从窗口缓冲区的开头丢弃剩余的元素。
-* DeltaEvictor:用DeltaFunction和阈值，计算窗口缓冲区中最后一个元素与其余每个元素之间的差值，并删除delta大于或等于阈值的值。
-* TimeEvictor：以一个以毫秒为单位的interval作为参数，在一个窗口的所有元素中，找到最大的时间戳作为max_ts，然后移除所有时间戳小于max_ts - interval的元素。
-
-> 默认情况下，所有预定义的逐出器都在窗口函数之前执行它们的逻辑
-
-<u>**Specifying an evictor prevents any pre-aggregation, as all the elements of a window have to be passed to the evictor before applying the computation.**</u>
-
-另外需要注意的是Flink不保证一个窗口中的元素的顺序，这意味着尽管一个逐出器可能从窗口的开始移除元素，但他们并不一定是第一个或最后一个到达的
-

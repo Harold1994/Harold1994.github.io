@@ -1,7 +1,7 @@
 ---
-title: fink官网学习笔记——Java Lambda表达式
+title: Flink笔记——Java Lambda表达式
 date: 2019-04-20 17:28:12
-tags: 大数据
+tags: [大数据, Flink]
 ---
 
 Flink支持对Java API的所有运算符使用lambda表达式，但是，每当lambda表达式使用Java泛型时，需要显式声明类型信息。
