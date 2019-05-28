@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <meta name="baidu-site-verification" content="VMst32xzMo" />
+  <meta name="baidu-site-verification" content="VMst32xzMo">
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="//harold.me">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="dns-prefetch" href="https://harold1994.github.io">
   <title>线程的生命周期 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="当线程被创建并启动以后，它既不是一启动就进入了执行状态，也不是一直处于执行状态，在线程的生命周期中，它要经过新建（New）、就绪（Runnable）、运行（Running）、阻塞（Blocked）和死亡（Dead）五种状态。尤其是当线程启动以后，它不能一直“霸占”着CPU独自运行，所以CPU需要在多条线程之间切换，于是线程状态也会多次在运行、阻塞之间切换。">
 <meta name="keywords" content="Java,多线程,并发">
 <meta property="og:type" content="article">
 <meta property="og:title" content="线程的生命周期">
-<meta property="og:url" content="//harold.me/2018/06/04/线程的生命周期/index.html">
+<meta property="og:url" content="https://harold1994.github.io/2018/06/04/线程的生命周期/index.html">
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="当线程被创建并启动以后，它既不是一启动就进入了执行状态，也不是一直处于执行状态，在线程的生命周期中，它要经过新建（New）、就绪（Runnable）、运行（Running）、阻塞（Blocked）和死亡（Dead）五种状态。尤其是当线程启动以后，它不能一直“霸占”着CPU独自运行，所以CPU需要在多条线程之间切换，于是线程状态也会多次在运行、阻塞之间切换。">
 <meta property="og:locale" content="zh-Hans">
@@ -39,7 +39,7 @@
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -222,7 +222,7 @@
 </ol>
 <p>  当程序使用new关键字创建了一个线程之后，该线程就处于新建状态，此时它和其他Java对象一样，仅仅由Java虚拟机为其分配了内存，并初始化了其成员变量值。此时的线程对象没有表现出任何线程的动态特征，程序也不会执行线程的线程执行体。</p>
 <p>  当线程对象调用了start()方法之后，该线程处于就绪状态，Java虚拟机会为其创建方法调用栈和程序计数器，处于这个状态的线程并没有开始运行，它只是表示该线程可以运行了。至于该线程何时开始运行，取决于JVM里线程调度器的调度。</p>
-<ol>
+<ol start="2">
 <li>运行和阻塞状态</li>
 </ol>
 <p>  如果处于就绪状态的线程获得了CPU，开始执行run方法的线程执行体，则该线程处于运行状态。</p>
@@ -251,7 +251,7 @@
 <p>处于挂起状态的线程被调用了resume恢复方法。</p>
 </blockquote>
 <p><img src="https://i.loli.net/2018/10/12/5bbff40525562.png" alt="屏幕快照 2018-10-12 上午12.09.37.png"></p>
-<ol>
+<ol start="3">
 <li>线程死亡</li>
 </ol>
 <p>线程会以以下三种方式之一结束，结束后就处于死亡状态：</p>
@@ -630,11 +630,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -706,7 +706,7 @@ MathJax.Hub.Queue(function() {
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、请确保node版本大于6.2<br/>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、请确保node版本大于6.2<br>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             3、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:

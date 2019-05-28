@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <meta name="baidu-site-verification" content="VMst32xzMo" />
+  <meta name="baidu-site-verification" content="VMst32xzMo">
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="//harold.me">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="dns-prefetch" href="https://harold1994.github.io">
   <title>Flink笔记——Flink中访问外部数据的异步IO | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="一、异步I/O的需求当与外部系统交互时（例如，当使用存储在数据库中的数据来丰富流事件时），需要注意与外部系统的通信延迟不应当主导流应用程序的工作。 普通的访问外部数据的方式是同步的：例如在一个MapFunction中，发送一个请求到数据库，然后MapFunction一直等待直到收到响应。在大多数情况下，这会造成函数的大量时间都用在等待响应上。">
 <meta name="keywords" content="大数据,Flink">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Flink笔记——Flink中访问外部数据的异步IO">
-<meta property="og:url" content="//harold.me/2019/05/25/Flink中访问外部数据的异步IO/index.html">
+<meta property="og:url" content="https://harold1994.github.io/2019/05/25/Flink中访问外部数据的异步IO/index.html">
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="一、异步I/O的需求当与外部系统交互时（例如，当使用存储在数据库中的数据来丰富流事件时），需要注意与外部系统的通信延迟不应当主导流应用程序的工作。 普通的访问外部数据的方式是同步的：例如在一个MapFunction中，发送一个请求到数据库，然后MapFunction一直等待直到收到响应。在大多数情况下，这会造成函数的大量时间都用在等待响应上。">
 <meta property="og:locale" content="zh-Hans">
@@ -39,7 +39,7 @@
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -220,7 +220,7 @@
 <p>普通的访问外部数据的方式是同步的：例如在一个MapFunction中，发送一个请求到数据库，然后MapFunction一直等待直到收到响应。在大多数情况下，这会造成函数的大量时间都用在等待响应上。</p>
 <a id="more"></a> 
 <p>与数据库的异步交互意味着单个并行函数实例可以同时处理许多请求并同时接收响应。这样，等待的通化市可以发送其他请求和接收响应。 至少，等待时间是在多个请求上摊销的。 这导致大多数情况下流量吞吐量更高。</p>
-<p><img src="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/async_io.svg" alt=""></p>
+<p><img src="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/async_io.svg" alt></p>
 <blockquote>
 <p>注意：</p>
 <p>通过将MapFunction扩展到非常高的并行度来提高吞吐量在某些情况下也是可能的，但通常会产生非常高的资源成本：拥有更多并行MapFunction实例意味着更多任务、线程、Flink内部网络连、到数据库的网络连接，缓冲区和全局内部簿记开销。</p>
@@ -621,11 +621,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -697,7 +697,7 @@ MathJax.Hub.Queue(function() {
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、请确保node版本大于6.2<br/>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、请确保node版本大于6.2<br>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             3、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:

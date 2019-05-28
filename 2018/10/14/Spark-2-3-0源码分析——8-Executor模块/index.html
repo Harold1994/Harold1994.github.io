@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <meta name="baidu-site-verification" content="VMst32xzMo" />
+  <meta name="baidu-site-verification" content="VMst32xzMo">
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="//harold.me">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="dns-prefetch" href="https://harold1994.github.io">
   <title>Spark_2.3.0源码分析——8_Executor模块 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="Executor是Spark中执行任务的进程，它可以被不同的调度模式所调度。Executor中有一个RPC远程过程调用接口，有两种实现，分别是netty和AKKA，默认是Netty框架。 Executor中有一个CachedThreadPool，任务被分发到Executor并以TaskRunner形式运行于线程池的线程中。 一、Executor中创建、分配、启动及异常处理1.Executor的创建">
 <meta name="keywords" content="大数据,Spark">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spark_2.3.0源码分析——8_Executor模块">
-<meta property="og:url" content="//harold.me/2018/10/14/Spark-2-3-0源码分析——8-Executor模块/index.html">
+<meta property="og:url" content="https://harold1994.github.io/2018/10/14/Spark-2-3-0源码分析——8-Executor模块/index.html">
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="Executor是Spark中执行任务的进程，它可以被不同的调度模式所调度。Executor中有一个RPC远程过程调用接口，有两种实现，分别是netty和AKKA，默认是Netty框架。 Executor中有一个CachedThreadPool，任务被分发到Executor并以TaskRunner形式运行于线程池的线程中。 一、Executor中创建、分配、启动及异常处理1.Executor的创建">
 <meta property="og:locale" content="zh-Hans">
@@ -37,7 +37,7 @@
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -254,7 +254,7 @@
 <ul>
 <li><p>org.apache.spark.deploy.SparkSubmit#main</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">  <span class="comment">// Initialize logging if it hasn't been done yet. Keep track of whether logging needs to</span></span><br><span class="line">  <span class="comment">// be reset before the application starts.</span></span><br><span class="line">  <span class="keyword">val</span> uninitLog = initializeLogIfNecessary(<span class="literal">true</span>, silent = <span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 解析参数</span></span><br><span class="line">  <span class="keyword">val</span> appArgs = <span class="keyword">new</span> <span class="type">SparkSubmitArguments</span>(args)</span><br><span class="line">  <span class="keyword">if</span> (appArgs.verbose) &#123;</span><br><span class="line">    <span class="comment">// scalastyle:off println</span></span><br><span class="line">    printStream.println(appArgs)</span><br><span class="line">    <span class="comment">// scalastyle:on println</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 根据三种行为分别处理</span></span><br><span class="line">  appArgs.action <span class="keyword">match</span> &#123;</span><br><span class="line">      <span class="comment">// 提交，调用submit方法</span></span><br><span class="line">    <span class="keyword">case</span> <span class="type">SparkSubmitAction</span>.<span class="type">SUBMIT</span> =&gt; submit(appArgs, uninitLog)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">SparkSubmitAction</span>.<span class="type">KILL</span> =&gt; kill(appArgs)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">SparkSubmitAction</span>.<span class="type">REQUEST_STATUS</span> =&gt; requestStatus(appArgs)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>关于这里设计的代码在之前的博客中有具体分析过，请到<a href="https://harold1994.github.io/2018/10/09/Spark-2-3-0%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E2%80%94%E2%80%946-Deploy%E6%A8%A1%E5%9D%97/" target="_blank" rel="noopener">Spark_2.3.0源码分析——6_Deploy模块源码分析(一)</a>查看。</p>
+<p>关于这里设计的代码在之前的博客中有具体分析过，请到<a href="https://harold1994.github.io/2018/10/09/Spark-2-3-0%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E2%80%94%E2%80%946-Deploy%E6%A8%A1%E5%9D%97/">Spark_2.3.0源码分析——6_Deploy模块源码分析(一)</a>查看。</p>
 <p>在submit()方法中，完成了提交环境的准备工作之后，接下来启动子进程，在Standalone模式下，启动的子进程是o.a.s.deploy.ClientApp，具体执行过程在org.apache.spark.deploy.SparkSubmit#runMain中。</p>
 </li>
 <li><p>org.apache.spark.deploy.SparkSubmit#runMain</p>
@@ -658,11 +658,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -734,7 +734,7 @@ MathJax.Hub.Queue(function() {
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、请确保node版本大于6.2<br/>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、请确保node版本大于6.2<br>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             3、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:

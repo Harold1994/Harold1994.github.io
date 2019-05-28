@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <meta name="baidu-site-verification" content="VMst32xzMo" />
+  <meta name="baidu-site-verification" content="VMst32xzMo">
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="//harold.me">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="dns-prefetch" href="https://harold1994.github.io">
   <title>Flink笔记——Window | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="一、窗口概述窗口是处理无限流的核心，窗口将流划分成有限大小的”桶”，可以在其上进行计算。窗口分为键控和非键控的。 Keyed Windows 123456789stream       .keyBy(...)               &amp;lt;-  keyed versus non-keyed windows       .window(...)              &amp;lt;-  requ">
 <meta name="keywords" content="大数据,Flink">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Flink笔记——Window">
-<meta property="og:url" content="//harold.me/2019/04/25/Flink窗口/index.html">
+<meta property="og:url" content="https://harold1994.github.io/2019/04/25/Flink窗口/index.html">
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="一、窗口概述窗口是处理无限流的核心，窗口将流划分成有限大小的”桶”，可以在其上进行计算。窗口分为键控和非键控的。 Keyed Windows 123456789stream       .keyBy(...)               &amp;lt;-  keyed versus non-keyed windows       .window(...)              &amp;lt;-  requ">
 <meta property="og:locale" content="zh-Hans">
@@ -42,7 +42,7 @@
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -233,22 +233,22 @@
 <p>A <code>WindowAssigner</code> is responsible for assigning each incoming element to one or more windows.Flink预定义了几种最常用的窗口： Tumbling Windows、 <em>sliding windows</em>, <em>session windows</em> and <em>global windows</em>。也可以通过继承WindowAssigner类实现自定义窗口。All built-in window assigners (except the global windows) assign elements to windows based on time, which can either be processing time or event time. </p>
 <p>基于时间的窗口有一个左闭右开的时间戳区间来表述窗口大小。</p>
 <h5 id="1-Tumbling-Windows"><a href="#1-Tumbling-Windows" class="headerlink" title="1. Tumbling Windows"></a>1. Tumbling Windows</h5><p>按照固定的窗口大小分配元素。 Tumbling windows have a fixed size and do not overlap不重叠.</p>
-<p><img src="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/tumbling-windows.svg" alt=""></p>
+<p><img src="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/tumbling-windows.svg" alt></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">DataStream&lt;T&gt; input = ...;</span><br><span class="line"></span><br><span class="line"><span class="comment">// tumbling event-time windows</span></span><br><span class="line">input</span><br><span class="line">    .keyBy(&lt;key selector&gt;)</span><br><span class="line">    .window(TumblingEventTimeWindows.of(Time.seconds(<span class="number">5</span>)))</span><br><span class="line">    .&lt;windowed transformation&gt;(&lt;window function&gt;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// tumbling processing-time windows</span></span><br><span class="line">input</span><br><span class="line">    .keyBy(&lt;key selector&gt;)</span><br><span class="line">    .window(TumblingProcessingTimeWindows.of(Time.seconds(<span class="number">5</span>)))</span><br><span class="line">    .&lt;windowed transformation&gt;(&lt;window function&gt;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// daily tumbling event-time windows offset by -8 hours.</span></span><br><span class="line">input</span><br><span class="line">    .keyBy(&lt;key selector&gt;)</span><br><span class="line">    .window(TumblingEventTimeWindows.of(Time.days(<span class="number">1</span>), Time.hours(-<span class="number">8</span>)))</span><br><span class="line">    .&lt;windowed transformation&gt;(&lt;window function&gt;);</span><br></pre></td></tr></table></figure>
 <p>tumbling window也可以指定一个偏移量offset参数，这样每个窗口不会按照时间单位的整数起始点开始， for example, get <code>1:15:00.000 - 2:14:59.999</code>, <code>2:15:00.000 - 3:14:59.999</code> etc</p>
 <h5 id="2-Sliding-Windows"><a href="#2-Sliding-Windows" class="headerlink" title="2. Sliding Windows"></a>2. Sliding Windows</h5><p>滑动窗口分配器将元素分配给具有固定长度的窗口。它的第一个参数指定了窗口时间大小，另一个参数slide控制滑动窗口开始的频率（类似于Spark Streaming中的两个参数）。因此当slide参数小于窗口大小时滑动窗口是可以重叠的，即一个元素可能分配给多个窗口。</p>
 <p>For example, you could have windows of size 10 minutes that slides by 5 minutes.</p>
 <p>滑动窗口也可以指定一个偏移量。</p>
-<p><img src="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/sliding-windows.svg" alt=""></p>
+<p><img src="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/sliding-windows.svg" alt></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">DataStream&lt;T&gt; input = ...;</span><br><span class="line"></span><br><span class="line"><span class="comment">// sliding event-time windows</span></span><br><span class="line">input</span><br><span class="line">    .keyBy(&lt;key selector&gt;)</span><br><span class="line">    .window(SlidingEventTimeWindows.of(Time.seconds(<span class="number">10</span>), Time.seconds(<span class="number">5</span>)))</span><br><span class="line">    .&lt;windowed transformation&gt;(&lt;window function&gt;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// sliding processing-time windows</span></span><br><span class="line">input</span><br><span class="line">    .keyBy(&lt;key selector&gt;)</span><br><span class="line">    .window(SlidingProcessingTimeWindows.of(Time.seconds(<span class="number">10</span>), Time.seconds(<span class="number">5</span>)))</span><br><span class="line">    .&lt;windowed transformation&gt;(&lt;window function&gt;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// sliding processing-time windows offset by -8 hours</span></span><br><span class="line">input</span><br><span class="line">    .keyBy(&lt;key selector&gt;)</span><br><span class="line">    .window(SlidingProcessingTimeWindows.of(Time.hours(<span class="number">12</span>), Time.hours(<span class="number">1</span>), Time.hours(-<span class="number">8</span>)))</span><br><span class="line">    .&lt;windowed transformation&gt;(&lt;window function&gt;);</span><br></pre></td></tr></table></figure>
 <h5 id="3-Session-Windows"><a href="#3-Session-Windows" class="headerlink" title="3. Session Windows"></a>3. Session Windows</h5><p>会话窗口通过活动的会话将元素聚集起来，相较前面两个窗口，它并不会重叠也没有一个固定的开端和结尾。当窗口一段时间接收不到数据时它就会关闭。A session window assigner can be configured with either a static <em>session gap</em> or with a <em>session gap extractor</em> function which defines how long the period of inactivity is.  When this period expires, the current session closes and subsequent elements are assigned to a new session window.</p>
-<p><img src="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/session-windows.svg" alt=""></p>
+<p><img src="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/session-windows.svg" alt></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">DataStream&lt;T&gt; input = ...;</span><br><span class="line"></span><br><span class="line"><span class="comment">// event-time session windows with static gap</span></span><br><span class="line">input</span><br><span class="line">    .keyBy(&lt;key selector&gt;)</span><br><span class="line">    .window(EventTimeSessionWindows.withGap(Time.minutes(<span class="number">10</span>)))</span><br><span class="line">    .&lt;windowed transformation&gt;(&lt;window function&gt;);</span><br><span class="line">    </span><br><span class="line"><span class="comment">// event-time session windows with dynamic gap</span></span><br><span class="line">input</span><br><span class="line">    .keyBy(&lt;key selector&gt;)</span><br><span class="line">    .window(EventTimeSessionWindows.withDynamicGap((element) -&gt; &#123;</span><br><span class="line">        <span class="comment">// determine and return session gap</span></span><br><span class="line">    &#125;))</span><br><span class="line">    .&lt;windowed transformation&gt;(&lt;window function&gt;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// processing-time session windows with static gap</span></span><br><span class="line">input</span><br><span class="line">    .keyBy(&lt;key selector&gt;)</span><br><span class="line">    .window(ProcessingTimeSessionWindows.withGap(Time.minutes(<span class="number">10</span>)))</span><br><span class="line">    .&lt;windowed transformation&gt;(&lt;window function&gt;);</span><br><span class="line">    </span><br><span class="line"><span class="comment">// processing-time session windows with dynamic gap</span></span><br><span class="line">input</span><br><span class="line">    .keyBy(&lt;key selector&gt;)</span><br><span class="line">    .window(ProcessingTimeSessionWindows.withDynamicGap((element) -&gt; &#123;</span><br><span class="line">        <span class="comment">// determine and return session gap</span></span><br><span class="line">    &#125;))</span><br><span class="line">    .&lt;windowed transformation&gt;(&lt;window function&gt;);</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>在会话窗口内部，算子为每一个到来的记录创建一个窗口，然后将窗口合并在一起，如果他们之间的间隔比设置的gap小。</p>
 </blockquote>
 <h5 id="4-Global-Windows"><a href="#4-Global-Windows" class="headerlink" title="4. Global Windows"></a>4. Global Windows</h5><p>全局窗口将所有包含同一个key的元素分配到一个全局的窗口。这个窗口必须配合一个trigger一起使用，否则不会进行任何计算，因为全局窗口没有一个自然的终结点来让我们进行聚合计算。</p>
-<p><img src="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/non-windowed.svg" alt=""></p>
+<p><img src="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/non-windowed.svg" alt></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DataStream&lt;T&gt; input = ...;</span><br><span class="line"></span><br><span class="line">input</span><br><span class="line">    .keyBy(&lt;key selector&gt;)</span><br><span class="line">    .window(GlobalWindows.create())</span><br><span class="line">    .&lt;windowed transformation&gt;(&lt;window function&gt;);</span><br></pre></td></tr></table></figure>
 <h4 id="五、窗口函数"><a href="#五、窗口函数" class="headerlink" title="五、窗口函数"></a>五、窗口函数</h4><p>窗口函数负责当窗口准备好后在每个窗口中执行计算。The window function can be one of <code>ReduceFunction</code>, <code>AggregateFunction</code>, <code>FoldFunction</code> or <code>ProcessWindowFunction</code>.The first two can be executed more efficiently (see <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/stream/operators/windows.html#state size" target="_blank" rel="noopener">State Size</a> section) because Flink can incrementally aggregate the elements for each window as they arrive. 其中 ProcessWindowFunction获得一个窗口中所有元素的迭代器和元素所属窗口的元信息。而且ProcessWindowFunction的效率没有其他几个窗口函数的执行效率高，因为Flink只有将所有元素都缓存后才能进行计算。可以通过结合ProcessWindowFunction<code>with a</code>ReduceFunction<code>,</code>AggregateFunction<code>, or</code>FoldFunction，既能增量聚集窗口元素，又能获取额外的窗口元数据。</p>
 <h5 id="1-ReduceFunction"><a href="#1-ReduceFunction" class="headerlink" title="1.ReduceFunction"></a>1.ReduceFunction</h5><p>A <code>ReduceFunction</code> specifies how two elements from the input are combined to produce an output element of the same type. Flink uses a <code>ReduceFunction</code> to incrementally aggregate the elements of a window.</p>
@@ -643,11 +643,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -719,7 +719,7 @@ MathJax.Hub.Queue(function() {
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、请确保node版本大于6.2<br/>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、请确保node版本大于6.2<br>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             3、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:

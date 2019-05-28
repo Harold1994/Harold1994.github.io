@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <meta name="baidu-site-verification" content="VMst32xzMo" />
+  <meta name="baidu-site-verification" content="VMst32xzMo">
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="//harold.me">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="dns-prefetch" href="https://harold1994.github.io">
   <title>tensorflow入门 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="一、Tensorflow计算模型——计算图计算图是Tensorflow中最基本的一个概念，Tensorflow中所有计算都会被转化为计算图上的结点。Tensor就是张量，在tensorflow中可以理解为多维数组，Flow是“流”，体现了Tensorflow的计算模型，flow表达了张量之间通过计算相互转化的过程。Tensorflow是一个通过计算图的形式来表达计算的编程系统，它的每个计算都是计算">
 <meta name="keywords" content="机器学习,tensorflow,深度学习">
 <meta property="og:type" content="article">
 <meta property="og:title" content="tensorflow入门">
-<meta property="og:url" content="//harold.me/2018/07/08/tensorflow————计算图/index.html">
+<meta property="og:url" content="https://harold1994.github.io/2018/07/08/tensorflow————计算图/index.html">
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="一、Tensorflow计算模型——计算图计算图是Tensorflow中最基本的一个概念，Tensorflow中所有计算都会被转化为计算图上的结点。Tensor就是张量，在tensorflow中可以理解为多维数组，Flow是“流”，体现了Tensorflow的计算模型，flow表达了张量之间通过计算相互转化的过程。Tensorflow是一个通过计算图的形式来表达计算的编程系统，它的每个计算都是计算">
 <meta property="og:locale" content="zh-Hans">
@@ -42,7 +42,7 @@
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -297,7 +297,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">config = tf.ConfigProto(allow_soft_placement = <span class="keyword">True</span>,<span class="comment">#当某些运算无法被GPU支持时，自动调整到cpu</span></span><br><span class="line">                       log_device_placement = <span class="keyword">True</span>)<span class="comment">#日志中记录每个节点被安排在那个设备上</span></span><br><span class="line">sess1 = tf.InteractiveSession(config=config)</span><br><span class="line">sess2 = tf.Session(config=config)</span><br></pre></td></tr></table></figure>
 <h4 id="四、Tensorflow实现神经网络"><a href="#四、Tensorflow实现神经网络" class="headerlink" title="四、Tensorflow实现神经网络"></a>四、Tensorflow实现神经网络</h4><p>在Tensorflow中，变量的作用就是保存和更新神经网络中的参数，Tensorflow变量需要赋初始值，在神经网络中，给参数赋予随机初始值最常见，所以一般使用随机数给Tensorflow中变量初始化。</p>
 <p><code>weighTensorflow = tf.Variable(tf.random_normal([2,3], stddev = 2))</code>会产生一个2*3的随机数矩阵，矩阵元素均值为0，标准差为2，random_normal还可以通过参数mean指定平均数，在没指定时默认为零。通过满足正态分布的随机数来初始化神经网络中的参数是一个很常用的方法，还有一些其他随机数生成器：</p>
-<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-7-8/22556167.jpg" alt=""></p>
+<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-7-8/22556167.jpg" alt></p>
 <p>Tensorflow也支持通过常熟来初始化一个变量：</p>
 <table>
 <thead>
@@ -330,14 +330,14 @@
 </tbody>
 </table>
 <p>神经网络的前向传播：</p>
-<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-7-9/34664713.jpg" alt=""></p>
-<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-7-9/39006147.jpg" alt=""></p>
+<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-7-9/34664713.jpg" alt></p>
+<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-7-9/39006147.jpg" alt></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="comment">#声明变量，通过seed设定随机数种子</span></span><br><span class="line">w1 = tf.Variable(tf.random_normal([<span class="number">2</span>,<span class="number">3</span>], stddev=<span class="number">1</span>, seed=<span class="number">1</span>))</span><br><span class="line">w2 = tf.Variable(tf.random_normal([<span class="number">3</span>,<span class="number">1</span>], stddev=<span class="number">1</span>, seed=<span class="number">1</span>))</span><br><span class="line"><span class="comment">#将输入特征向量定义为常量，这里x是一个1*2的矩阵</span></span><br><span class="line">x = tf.constant([[<span class="number">0.7</span>,<span class="number">0.9</span>]])</span><br><span class="line"><span class="comment">#通过前向算法，计算矩阵乘法</span></span><br><span class="line">a = tf.matmul(x,w1)</span><br><span class="line">y = tf.matmul(a,w2)</span><br><span class="line"></span><br><span class="line">sess = tf.Session()</span><br><span class="line"><span class="comment">#初始化变量的两种方式</span></span><br><span class="line"><span class="comment">#1.分开挨个初始化</span></span><br><span class="line"><span class="comment"># sess.run(w1.initializer)</span></span><br><span class="line"><span class="comment"># sess.run(w2.initializer)</span></span><br><span class="line"><span class="comment">#2.一次性初始化所有变量tf.global_variables_initializer</span></span><br><span class="line">init_op = sess.run(tf.global_variables_initializer())</span><br><span class="line">sess.run(y)</span><br><span class="line"></span><br><span class="line">print(sess.run(y))</span><br><span class="line">sess.close()</span><br></pre></td></tr></table></figure>
 <p>上述代码实现了神经网络的前向传播过程,在计算y之前，需运行w1.initializer和w2.initializer给变量赋值，虽然直接调用变量的初始化过程是一个可行方案，但是当变量数目增多时，或者变量之间存在依赖关系时，单个调用就比较麻烦。因此可以使用tf.global_variables_initializer一次性初始化所有变量。</p>
 <p>Tensorflow中所有变量都会被自动加入GraphKeys.VARIABLES集合，当构建机器学习模型时，可以通过变量声明函数中的trainable参数来区分需要优化的参数（比如神经网络中的参数）和其他参数（如迭代的轮数），如果声明trainable为True,变量会被加入GraphKeys.TRAINABLE_VARIABLES集合，可以通过tf.trainable_variable函数得到需要优化的参数。 Tensorflow中提供的神经网络优化算法会将GraphKeys.TRAINABLE_VARIABLES集合中的变量作为默认的优化对象。</p>
 <p><strong>维度</strong>和<strong>类型</strong>也是变量的两个重要属性，变量类型不可改变，维度在运行中可改变，通过设置参数validate_shape=False。</p>
 <p>在神经网络优化算法中，最常用的是反向传播法（bp）,流程图如下：</p>
-<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-7-9/44477907.jpg" alt=""></p>
+<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-7-9/44477907.jpg" alt></p>
 <p>​    每次迭代开始前要先选取一小部分训练数据，这一小部分叫一个batch,如果每轮迭代选取的数据都要通过常量来表示，那么Tensorflow的计算图会太大，因为每生成一个常量，Tensorflow都会在计算图中增加一个节点。为此，Tensorflow提供了placeholder机制用于提供输入数据，相当于定义了一个位置，这个位置中的数据在程序运行时再指定。在定义placeholder时，这个位置上的数据类型需要指定，且不可改变。</p>
 <p>​    在得到一个batch的前向传播结果之后，需要定义一个损失函数来刻画当前的预测值和真实值之间的差距，然后通过反向传播算法来调整网络参数的取值使差距缩小。</p>
 <p>例子：利用神经网络解决二分类问题</p>
@@ -715,11 +715,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -791,7 +791,7 @@ MathJax.Hub.Queue(function() {
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、请确保node版本大于6.2<br/>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、请确保node版本大于6.2<br>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             3、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:

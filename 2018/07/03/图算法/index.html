@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <meta name="baidu-site-verification" content="VMst32xzMo" />
+  <meta name="baidu-site-verification" content="VMst32xzMo">
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="//harold.me">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="dns-prefetch" href="https://harold1994.github.io">
   <title>图算法 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="其他基础的数据结构之前都已经线下整理过了,但是图这块出于畏难心理一直没有看,最近面试被问到了,答不上来好尴尬,所以说欠的债总是要还的. 图的搜索指系统化地跟随图中的边来访问图中每个结点。 一.图的表示 无向图:图是由一组顶点和一组能够将两个顶点相连的边组成的  一般用0至V-1表示一张含有V个顶点的图中的各个顶点.">
 <meta name="keywords" content="算法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="图算法">
-<meta property="og:url" content="//harold.me/2018/07/03/图算法/index.html">
+<meta property="og:url" content="https://harold1994.github.io/2018/07/03/图算法/index.html">
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="其他基础的数据结构之前都已经线下整理过了,但是图这块出于畏难心理一直没有看,最近面试被问到了,答不上来好尴尬,所以说欠的债总是要还的. 图的搜索指系统化地跟随图中的边来访问图中每个结点。 一.图的表示 无向图:图是由一组顶点和一组能够将两个顶点相连的边组成的  一般用0至V-1表示一张含有V个顶点的图中的各个顶点.">
 <meta property="og:locale" content="zh-Hans">
@@ -42,7 +42,7 @@
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -281,7 +281,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BroadFirstSearch</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span>[] marked;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] edgeTo;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> s;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BroadFirstSearch</span><span class="params">(Graph G, <span class="keyword">int</span> s)</span> </span>&#123;</span><br><span class="line">        marked = <span class="keyword">new</span> <span class="keyword">boolean</span>[G.V()];</span><br><span class="line">        <span class="keyword">this</span>.edgeTo = <span class="keyword">new</span> <span class="keyword">int</span>[G.V()];</span><br><span class="line">        <span class="keyword">this</span>.s = s;</span><br><span class="line">        BFS(G, s);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">BFS</span><span class="params">(Graph G, <span class="keyword">int</span> s)</span> </span>&#123;</span><br><span class="line">        Deque&lt;Integer&gt; deque = <span class="keyword">new</span> ArrayDeque&lt;&gt;();</span><br><span class="line">        marked[s] = <span class="keyword">true</span>;</span><br><span class="line">        deque.addFirst(s);</span><br><span class="line">        <span class="keyword">while</span> (!deque.isEmpty()) &#123;</span><br><span class="line">            s = deque.removeLast();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> temp : G.adj(s))&#123;</span><br><span class="line">                <span class="keyword">if</span> (!marked[temp]) &#123;</span><br><span class="line">                    deque.push(temp);</span><br><span class="line">                    marked[temp] = <span class="keyword">true</span>;</span><br><span class="line">                    edgeTo[temp] = s;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasPathTo</span><span class="params">(<span class="keyword">int</span> v)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> marked[v];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">pathTo</span><span class="params">(<span class="keyword">int</span> v)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!hasPathTo(v)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        v = edgeTo[v];</span><br><span class="line">        <span class="keyword">while</span> (v != s) &#123;</span><br><span class="line">            list.add(v);</span><br><span class="line">            v = edgeTo[v];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>2.2 无向图的深度优先搜索</strong></p>
 <p>下面以”无向图”为例，来对深度优先搜索进行演示。</p>
-<p><img src="https://raw.githubusercontent.com/wangkuiwu/datastructs_and_algorithm/master/pictures/graph/iterator/02.jpg" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/wangkuiwu/datastructs_and_algorithm/master/pictures/graph/iterator/02.jpg" alt></p>
 <p>对上面的图G1进行深度优先遍历，从顶点A开始。</p>
 <p><strong>第1步</strong>：访问A。<br><strong>第2步</strong>：访问(A的邻接点)C。<br>在第1步访问A之后，接下来应该访问的是A的邻接点，即”C,D,F”中的一个。但在本文的实现中，顶点ABCDEFG是按照顺序存储，C在”D和F”的前面，因此，先访问C。<br><strong>第3步</strong>：访问(C的邻接点)B。<br>在第2步访问C之后，接下来应该访问C的邻接点，即”B和D”中一个(A已经被访问过，就不算在内)。而由于B在D之前，先访问B。<br><strong>第4步</strong>：访问(C的邻接点)D。<br>在第3步访问了C的邻接点B之后，B没有未被访问的邻接点；因此，返回到访问C的另一个邻接点D。<br><strong>第5步</strong>：访问(A的邻接点)F。<br>前面已经访问了A，并且访问完了”A的邻接点B的所有邻接点(包括递归的邻接点在内)”；因此，此时返回到访问A的另一个邻接点F。<br><strong>第6步</strong>：访问(F的邻接点)G。<br><strong>第7步</strong>：访问(G的邻接点)E。</p>
 <p>因此访问顺序是：A -&gt; C -&gt; B -&gt; D -&gt; F -&gt; G -&gt; E</p>
@@ -644,11 +644,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -720,7 +720,7 @@ MathJax.Hub.Queue(function() {
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、请确保node版本大于6.2<br/>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、请确保node版本大于6.2<br>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             3、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:

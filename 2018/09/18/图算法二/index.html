@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <meta name="baidu-site-verification" content="VMst32xzMo" />
+  <meta name="baidu-site-verification" content="VMst32xzMo">
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="//harold.me">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="dns-prefetch" href="https://harold1994.github.io">
   <title>图算法（二）：图的高级问题 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="关于图的基本概念笔者在之前的博客中已经介绍过，这篇博客介绍图算法比较高级的知识。包括最短路径问题，最小生成子图问题和拓扑排序等问题。 一、最短路径问题​    图的最短路径问题主要分为两类,单源最短路径问题和全对最短路径问题。单源最短路径问题指给点单个源点,求其到所有其它顶点之间的最短距离。而全对最短路径问题指所有顶点之间的最短路径问题。此外对于全对最短路径问题,从渐进意义上来看,目前还没有比最好">
 <meta name="keywords" content="算法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="图算法（二）：图的高级问题">
-<meta property="og:url" content="//harold.me/2018/09/18/图算法二/index.html">
+<meta property="og:url" content="https://harold1994.github.io/2018/09/18/图算法二/index.html">
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="关于图的基本概念笔者在之前的博客中已经介绍过，这篇博客介绍图算法比较高级的知识。包括最短路径问题，最小生成子图问题和拓扑排序等问题。 一、最短路径问题​    图的最短路径问题主要分为两类,单源最短路径问题和全对最短路径问题。单源最短路径问题指给点单个源点,求其到所有其它顶点之间的最短距离。而全对最短路径问题指所有顶点之间的最短路径问题。此外对于全对最短路径问题,从渐进意义上来看,目前还没有比最好">
 <meta property="og:locale" content="zh-Hans">
@@ -43,7 +43,7 @@
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -220,7 +220,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>关于图的基本概念笔者在之前的<a href="https://harold1994.github.io/2018/07/03/图算法/" target="_blank" rel="noopener">博客</a>中已经介绍过，这篇博客介绍图算法比较高级的知识。包括最短路径问题，最小生成子图问题和拓扑排序等问题。</p>
+        <p>关于图的基本概念笔者在之前的<a href="https://harold1994.github.io/2018/07/03/图算法/">博客</a>中已经介绍过，这篇博客介绍图算法比较高级的知识。包括最短路径问题，最小生成子图问题和拓扑排序等问题。</p>
 <h4 id="一、最短路径问题"><a href="#一、最短路径问题" class="headerlink" title="一、最短路径问题"></a>一、最短路径问题</h4><p>​    图的最短路径问题主要分为两类,单源最短路径问题和全对最短路径问题。单源最短路径问题指给点单个源点,求其到所有其它顶点之间的最短距离。而全对最短路径问题指所有顶点之间的最短路径问题。此外对于全对最短路径问题,从渐进意义上来看,目前还没有比最好的单源算法更快的算法来解决这一问题。</p>
 <a id="more"></a>     
 <p>先解决一些基本概念的问题：</p>
@@ -249,7 +249,7 @@
 <li><p>算法的思路</p>
 <p>Dijkstra算法采用的是一种<strong>贪心</strong>的策略，声明一个数组dis来保存源点到各个顶点的最短距离和一个保存已经找到了最短路径的顶点的集合：T，初始时，原点 s 的路径权重被赋为 0 （dis[s] = 0）。若对于顶点 s 存在能直接到达的边（s,m），则把dis[m]设为w（s, m）,同时把所有其他（s不能直接到达的）顶点的路径长度设为无穷大。初始时，集合T只有顶点s。<br>然后，从dis数组选择最小值，则该值就是源点s到该值对应的顶点的最短路径，并且把该点加入到T中，OK，此时完成一个顶点，<br>然后，我们需要看看新加入的顶点是否可以到达其他顶点并且看看通过该顶点到达其他点的路径长度是否比源点直接到达短，如果是，那么就替换这些顶点在dis中的值。<br>然后，又从dis中找出最小值，重复上述动作，直到T中包含了图的所有顶点。</p>
 <p>我们用一个例子来具体说明迪杰斯特拉算法的流程。</p>
-<p><img src="https://subetter.com/images/figures/20180330_01.png" alt=""></p>
+<p><img src="https://subetter.com/images/figures/20180330_01.png" alt></p>
 <p>定义源点为0，<code>dist[i]</code>为源点0到顶点i的最短路径。其过程描述如下：</p>
 <p>| 步骤  | dist[1] | dist[2] | dist[3] | dist[4] | 已找到的集合   |<br>| —– | ——- | ——- | ——- | ——- | ————– |<br>| 第1步 | 8       | 1       | 2       | +∞      | { 2 }          |<br>| 第2步 | 8       | ×       | 2       | 4       | { 2, 3 }       |<br>| 第3步 | 5       | ×       | ×       | 4       | { 2, 3, 4 }    |<br>| 第4步 | 5       | ×       | ×       | ×       | { 2, 3, 4, 1 } |<br>| 第5步 | ×       | ×       | ×       | ×       | { 2, 3, 4, 1 } |</p>
 <p>第1步：从源点0开始，找到与其邻接的点：1，2，3，更新<code>dist[]</code>数组，因0不与4邻接，故<code>dist[4]</code>为正无穷。在<code>dist[]</code>中找到最小值，其顶点为2，即此时已找到0到2的最短路。</p>
@@ -258,7 +258,7 @@
 <p>第4步：从4开始，继续更新<code>dist[]</code>数组：4与1不邻接，不更新。在<code>dist[]</code>中找到最小值，其顶点为1，即此时又找到0到1的最短路。</p>
 <p>第5步：所有点都已找到，停止。</p>
 <p>对于上述步骤，你可能存在以下的疑问：</p>
-<p><img src="https://subetter.com/images/figures/20180330_02.png" alt=""></p>
+<p><img src="https://subetter.com/images/figures/20180330_02.png" alt></p>
 <p>若A作为源点，与其邻接的只有B，C，D三点，其<code>dist[]</code>最小时顶点为C，即就可以确定<code>A→C</code>为A到C的最短路。但是我们存在疑问的是：<strong>是否还存在另一条路径使A到C的距离更小？</strong> 用反证法证明。</p>
 <p>假设存在如上图的红色虚线路径，使<code>A→D→C</code>的距离更小，那么<code>A→D</code>作为<code>A→D→C</code>的子路径，其距离也比<code>A→C</code>小，这与前面所述“<code>dist[]</code>最小时顶点为C”矛盾，故假设不成立。因此这个疑问不存在。</p>
 <p>根据上面的证明，我们可以推断出，<strong>Dijkstra每次循环都可以确定一个顶点的最短路径，故程序需要循环n-1次。</strong></p>
@@ -288,7 +288,7 @@
 </ol>
 <p>​        之所以需要第三部分的原因，是因为，如果存在从源点可达的权为负的回路。则因为无法收敛而导致不能求出最短路径。 </p>
 <p>例如，下面的有向图 G 中包含 5 个顶点和 8 条边。假设源点 为 A。初始化 distSet 所有距离为 INFI，源点 A 为 0。</p>
-<p><img src="https://i.loli.net/2019/03/18/5c8f3e66889c9.png" alt=""></p>
+<p><img src="https://i.loli.net/2019/03/18/5c8f3e66889c9.png" alt></p>
 <p>由于图中有 5 个顶点，按照步骤 1 需要遍历 4 次，第一次遍历的结果如下。</p>
 <p><img src="https://i.loli.net/2019/03/18/5c8f3e66e49ff.png" alt="2.png"></p>
 <p>第二次遍历的结果如下。</p>
@@ -683,11 +683,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -759,7 +759,7 @@ MathJax.Hub.Queue(function() {
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、请确保node版本大于6.2<br/>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、请确保node版本大于6.2<br>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             3、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:

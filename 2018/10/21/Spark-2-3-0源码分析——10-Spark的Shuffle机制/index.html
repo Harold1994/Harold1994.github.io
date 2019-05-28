@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <meta name="baidu-site-verification" content="VMst32xzMo" />
+  <meta name="baidu-site-verification" content="VMst32xzMo">
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="//harold.me">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="dns-prefetch" href="https://harold1994.github.io">
   <title>Spark_2.3.0源码分析——10_Spark的Shuffle机制 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="一、Hadoop MapReduce框架中的shuffle框架 Map阶段负责准备数据，Reduce阶段则读取Map阶段所准备的数据，然后做进一步处理。即Map阶段实现Shuffle过程中的数据持久化，而Reduce阶段实现Shuffle过程中的数据读取。">
 <meta name="keywords" content="大数据,Spark">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spark_2.3.0源码分析——10_Spark的Shuffle机制">
-<meta property="og:url" content="//harold.me/2018/10/21/Spark-2-3-0源码分析——10-Spark的Shuffle机制/index.html">
+<meta property="og:url" content="https://harold1994.github.io/2018/10/21/Spark-2-3-0源码分析——10-Spark的Shuffle机制/index.html">
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="一、Hadoop MapReduce框架中的shuffle框架 Map阶段负责准备数据，Reduce阶段则读取Map阶段所准备的数据，然后做进一步处理。即Map阶段实现Shuffle过程中的数据持久化，而Reduce阶段实现Shuffle过程中的数据读取。">
 <meta property="og:locale" content="zh-Hans">
@@ -39,7 +39,7 @@
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -421,7 +421,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、Hadoop-MapReduce框架中的shuffle框架"><span class="toc-number">1.</span> <span class="toc-text">一、Hadoop MapReduce框架中的shuffle框架</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、Spark-Shuffle框架"><span class="toc-number">2.</span> <span class="toc-text">二、Spark Shuffle框架</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-ShuffleManager代码"><span class="toc-number">2.1.</span> <span class="toc-text">1. ShuffleManager代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-ShuffleHandle"><span class="toc-number">2.2.</span> <span class="toc-text">2. ShuffleHandle</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-ShuffleWriter"><span class="toc-number">2.3.</span> <span class="toc-text">3. ShuffleWriter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-ShuffleReader"><span class="toc-number">2.4.</span> <span class="toc-text">4. ShuffleReader</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-ShuffleBlockResolver"><span class="toc-number">2.5.</span> <span class="toc-text">5. ShuffleBlockResolver</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、Shuffle的注册"><span class="toc-number">3.</span> <span class="toc-text">三、Shuffle的注册</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#四、Shuffle读写数据"><span class="toc-number">4.</span> <span class="toc-text">四、Shuffle读写数据</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-Shuffle写数据源码"><span class="toc-number">4.0.1.</span> <span class="toc-text">1. Shuffle写数据源码</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-Shuffle读数据源码"><span class="toc-number">4.0.2.</span> <span class="toc-text">2. Shuffle读数据源码</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#五、-基于Sort的Shuffle"><span class="toc-number">5.</span> <span class="toc-text">五、 基于Sort的Shuffle</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-基于Sort的Shuffle内核"><span class="toc-number">5.1.</span> <span class="toc-text">1. 基于Sort的Shuffle内核</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-基于Sort的Shuffle写数据的源代码分析"><span class="toc-number">5.2.</span> <span class="toc-text">2. 基于Sort的Shuffle写数据的源代码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#a-BypassMergeSortShuffleWriter"><span class="toc-number">5.2.1.</span> <span class="toc-text">a. BypassMergeSortShuffleWriter</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#b-SortShuffleWriter"><span class="toc-number">5.2.2.</span> <span class="toc-text">b. SortShuffleWriter</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#六、基于Tungsten的Shuffle"><span class="toc-number">6.</span> <span class="toc-text">六、基于Tungsten的Shuffle</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-基于Tungsten的Shuffle内核"><span class="toc-number">6.1.</span> <span class="toc-text">1.基于Tungsten的Shuffle内核</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-基于Tungsten的Shuffle写数据源码分析"><span class="toc-number">6.2.</span> <span class="toc-text">2.基于Tungsten的Shuffle写数据源码分析</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、Hadoop-MapReduce框架中的shuffle框架"><span class="toc-number">1.</span> <span class="toc-text">一、Hadoop MapReduce框架中的shuffle框架</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、Spark-Shuffle框架"><span class="toc-number">2.</span> <span class="toc-text">二、Spark Shuffle框架</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-ShuffleManager代码"><span class="toc-number">2.1.</span> <span class="toc-text">1. ShuffleManager代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-ShuffleHandle"><span class="toc-number">2.2.</span> <span class="toc-text">2. ShuffleHandle</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-ShuffleWriter"><span class="toc-number">2.3.</span> <span class="toc-text">3. ShuffleWriter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-ShuffleReader"><span class="toc-number">2.4.</span> <span class="toc-text">4. ShuffleReader</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-ShuffleBlockResolver"><span class="toc-number">2.5.</span> <span class="toc-text">5. ShuffleBlockResolver</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、Shuffle的注册"><span class="toc-number">3.</span> <span class="toc-text">三、Shuffle的注册</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#四、Shuffle读写数据"><span class="toc-number">4.</span> <span class="toc-text">四、Shuffle读写数据</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-Shuffle写数据源码"><span class="toc-number">4.0.1.</span> <span class="toc-text">1. Shuffle写数据源码</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-Shuffle读数据源码"><span class="toc-number">4.0.2.</span> <span class="toc-text">2. Shuffle读数据源码</span></a></li></ol></li></ol><li class="toc-item toc-level-3"><a class="toc-link" href="#五、-基于Sort的Shuffle"><span class="toc-number">5.</span> <span class="toc-text">五、 基于Sort的Shuffle</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-基于Sort的Shuffle内核"><span class="toc-number">5.1.</span> <span class="toc-text">1. 基于Sort的Shuffle内核</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-基于Sort的Shuffle写数据的源代码分析"><span class="toc-number">5.2.</span> <span class="toc-text">2. 基于Sort的Shuffle写数据的源代码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#a-BypassMergeSortShuffleWriter"><span class="toc-number">5.2.1.</span> <span class="toc-text">a. BypassMergeSortShuffleWriter</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#b-SortShuffleWriter"><span class="toc-number">5.2.2.</span> <span class="toc-text">b. SortShuffleWriter</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#六、基于Tungsten的Shuffle"><span class="toc-number">6.</span> <span class="toc-text">六、基于Tungsten的Shuffle</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-基于Tungsten的Shuffle内核"><span class="toc-number">6.1.</span> <span class="toc-text">1.基于Tungsten的Shuffle内核</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-基于Tungsten的Shuffle写数据源码分析"><span class="toc-number">6.2.</span> <span class="toc-text">2.基于Tungsten的Shuffle写数据源码分析</span></a></li></ol></li>
                     </div>
                 </span>
             </div>
@@ -679,11 +679,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -755,7 +755,7 @@ MathJax.Hub.Queue(function() {
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、请确保node版本大于6.2<br/>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、请确保node版本大于6.2<br>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             3、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:

@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <meta name="baidu-site-verification" content="VMst32xzMo" />
+  <meta name="baidu-site-verification" content="VMst32xzMo">
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="//harold.me">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="dns-prefetch" href="https://harold1994.github.io">
   <title>hexo系列问题之我们换了电脑怎么办 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="问题我们如果换了电脑怎么办？我们把hexo文件从一个电脑cope到另外一个电脑吗?答案肯定不是这样的，因为这里面有好多依赖包，好几万个文件呢，这样显然不合理 解决方案我们初步的解决方案是把我们的文件提交到git上，利用git来管理它，我是这样解决的： 在现有的XXX.github.io项目上创建一个分支来管理">
 <meta name="keywords" content="随笔">
 <meta property="og:type" content="article">
 <meta property="og:title" content="hexo系列问题之我们换了电脑怎么办">
-<meta property="og:url" content="//harold.me/2018/06/04/hexo系列问题之我们换了电脑怎么办/index.html">
+<meta property="og:url" content="https://harold1994.github.io/2018/06/04/hexo系列问题之我们换了电脑怎么办/index.html">
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="问题我们如果换了电脑怎么办？我们把hexo文件从一个电脑cope到另外一个电脑吗?答案肯定不是这样的，因为这里面有好多依赖包，好几万个文件呢，这样显然不合理 解决方案我们初步的解决方案是把我们的文件提交到git上，利用git来管理它，我是这样解决的： 在现有的XXX.github.io项目上创建一个分支来管理">
 <meta property="og:locale" content="zh-Hans">
@@ -37,7 +37,7 @@
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -220,31 +220,31 @@
 <li>克隆gitHub上的XXX.github.io项目的文件到本地 </li>
 </ol>
 <p>git clone <a href="https://github.com/yourname/xxx.github.io.git" target="_blank" rel="noopener">https://github.com/yourname/xxx.github.io.git</a> </p>
-<ol>
+<ol start="2">
 <li>删除文件夹里除了.git的其他所有文件 </li>
 <li>把hexo项目文件下的所有文件全部复制过来 </li>
 <li>里面应该有一个叫.gitignore的文件，如果没有就输入 touch .gitignore，创建一个 </li>
 <li>.gitignore文件里应该是这些内容 </li>
 </ol>
 <p>.DS_Store<br>Thumbs.db<br>db.json<br><em>.log<br>node_modules/<br>public/<br>.deploy</em>/ </p>
-<ol>
+<ol start="6">
 <li>创建一个叫hexo的分支并切换到这个分支上 </li>
 </ol>
 <p>git checkout -b hexo </p>
-<ol>
+<ol start="7">
 <li>提交复制过来的文件到暂存区 </li>
 </ol>
 <p>git add –all </p>
-<ol>
+<ol start="8">
 <li>提交 </li>
 </ol>
 <p>git commit -m “新建分支资源文件” </p>
-<ol>
+<ol start="9">
 <li>推送分支到github </li>
 </ol>
 <p>git push –set-upstream origin hexo </p>
 <p>到这一步我们就基本上搞定了，以后再跟新了博客就直接 git push就可以了，hexo的操作跟以前一样不变。 </p>
-<ol>
+<ol start="10">
 <li><p>今后无论什么时候想要在其他电脑上面用hexo写博客，就直接把创建的分支克隆下来，npm install安装依赖之后就可以用了。<br>克隆分支的操作<br>git clone -b hexo <a href="https://github.com/yourname/xxx.github.io.git" target="_blank" rel="noopener">https://github.com/yourname/xxx.github.io.git</a> </p>
 </li>
 <li><p>因为上面创建的是一个名字叫hexo的分支，所以这里-b后面的是hexo，再把后面的gitHub的地址换成你自己的hexo博客的地址就可以了。 </p>
@@ -610,11 +610,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -686,7 +686,7 @@ MathJax.Hub.Queue(function() {
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、请确保node版本大于6.2<br/>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、请确保node版本大于6.2<br>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             3、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:

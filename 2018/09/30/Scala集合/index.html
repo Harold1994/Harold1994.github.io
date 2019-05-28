@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <meta name="baidu-site-verification" content="VMst32xzMo" />
+  <meta name="baidu-site-verification" content="VMst32xzMo">
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="//harold.me">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="dns-prefetch" href="https://harold1994.github.io">
   <title>Scala查漏补缺——集合 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="Cons操作符：Scala支持使用cons(construct)操作构建列表，使用Nil作为基础，使用右结合的cons操作符::绑定元素，就可以构建一个链表。 12345678scala&amp;gt; val numbers = 1 :: 2 :: 3 :: Nilnumbers: List[Int] = List(1, 2, 3)scala&amp;gt; val first = Nil.::(1)firs">
 <meta name="keywords" content="scala">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Scala查漏补缺——集合">
-<meta property="og:url" content="//harold.me/2018/09/30/Scala集合/index.html">
+<meta property="og:url" content="https://harold1994.github.io/2018/09/30/Scala集合/index.html">
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="Cons操作符：Scala支持使用cons(construct)操作构建列表，使用Nil作为基础，使用右结合的cons操作符::绑定元素，就可以构建一个链表。 12345678scala&amp;gt; val numbers = 1 :: 2 :: 3 :: Nilnumbers: List[Int] = List(1, 2, 3)scala&amp;gt; val first = Nil.::(1)firs">
 <meta property="og:locale" content="zh-Hans">
@@ -39,7 +39,7 @@
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -229,7 +229,7 @@
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; <span class="keyword">val</span> l = <span class="type">List</span>.newBuilder[<span class="type">Int</span>]</span><br><span class="line">l: scala.collection.mutable.<span class="type">Builder</span>[<span class="type">Int</span>,<span class="type">List</span>[<span class="type">Int</span>]] = <span class="type">ListBuffer</span>()</span><br><span class="line"></span><br><span class="line">scala&gt; l += <span class="number">1</span></span><br><span class="line">res2: l.<span class="keyword">type</span> = <span class="type">ListBuffer</span>(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">scala&gt; l ++= <span class="type">List</span>(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>)</span><br><span class="line">res3: l.<span class="keyword">type</span> = <span class="type">ListBuffer</span>(<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line"></span><br><span class="line">scala&gt; l.result</span><br><span class="line">res4: <span class="type">List</span>[<span class="type">Int</span>] = <span class="type">List</span>(<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>序列集合层次体系</p>
-<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-9-30/99927396.jpg" alt=""></p>
+<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-9-30/99927396.jpg" alt></p>
 <ul>
 <li>Vector类型以一个Array提供后备存储，可以根据索引直接访问Vector中的项。而要访问一个List中的第n个元素，则需要从头到尾访问n-1步</li>
 <li>Stream类型集合在访问元素时完成构建</li>
@@ -632,11 +632,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -708,7 +708,7 @@ MathJax.Hub.Queue(function() {
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、请确保node版本大于6.2<br/>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、请确保node版本大于6.2<br>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             3、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:

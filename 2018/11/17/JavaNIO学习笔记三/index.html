@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <meta name="baidu-site-verification" content="VMst32xzMo" />
+  <meta name="baidu-site-verification" content="VMst32xzMo">
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="//harold.me">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="dns-prefetch" href="https://harold1994.github.io">
   <title>JavaNIO 学习笔记三 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="九、ServerSocketChannel NIO ServerSocketChannel 的作用等价于于ServerSocket，作为Socket的服务端等待客户端连接。 123456789101112131415161718// Opening a ServerSocketChannelServerSocketChannel ssc = ServerSocketChannel.open();s">
 <meta name="keywords" content="NIO,Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JavaNIO 学习笔记三">
-<meta property="og:url" content="//harold.me/2018/11/17/JavaNIO学习笔记三/index.html">
+<meta property="og:url" content="https://harold1994.github.io/2018/11/17/JavaNIO学习笔记三/index.html">
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="九、ServerSocketChannel NIO ServerSocketChannel 的作用等价于于ServerSocket，作为Socket的服务端等待客户端连接。 123456789101112131415161718// Opening a ServerSocketChannelServerSocketChannel ssc = ServerSocketChannel.open();s">
 <meta property="og:locale" content="zh-Hans">
@@ -43,7 +43,7 @@
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -407,7 +407,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#九、ServerSocketChannel"><span class="toc-number">1.</span> <span class="toc-text">九、ServerSocketChannel</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#非阻塞模式"><span class="toc-number">1.1.</span> <span class="toc-text">非阻塞模式</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#十、非阻塞式服务器"><span class="toc-number">2.</span> <span class="toc-text">十、非阻塞式服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#非阻塞IO管道"><span class="toc-number">2.1.</span> <span class="toc-text">非阻塞IO管道</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Non-blocking对比Blocking-IO-Pipelines"><span class="toc-number">2.2.</span> <span class="toc-text">Non-blocking对比Blocking IO Pipelines</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#阻塞式管道"><span class="toc-number">2.2.1.</span> <span class="toc-text">阻塞式管道</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#基础非阻塞式IO管道设计"><span class="toc-number">2.2.2.</span> <span class="toc-text">基础非阻塞式IO管道设计</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#十一、DatagramChannel"><span class="toc-number">3.</span> <span class="toc-text">十一、DatagramChannel</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#接收数据"><span class="toc-number">3.0.1.</span> <span class="toc-text">接收数据</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#发送数据"><span class="toc-number">3.0.2.</span> <span class="toc-text">发送数据</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#十二、NIO-Pipe"><span class="toc-number">4.</span> <span class="toc-text">十二、NIO Pipe</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#十三、NIO对比IO"><span class="toc-number">5.</span> <span class="toc-text">十三、NIO对比IO</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#NIO和IO的主要区别"><span class="toc-number">5.1.</span> <span class="toc-text">NIO和IO的主要区别</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#面向流和面向缓冲"><span class="toc-number">5.2.</span> <span class="toc-text">面向流和面向缓冲</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#阻塞与非阻塞"><span class="toc-number">5.3.</span> <span class="toc-text">阻塞与非阻塞</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#选择器"><span class="toc-number">5.4.</span> <span class="toc-text">选择器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#用来处理数据的线程数"><span class="toc-number">5.5.</span> <span class="toc-text">用来处理数据的线程数</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NIO-Path"><span class="toc-number">6.</span> <span class="toc-text">NIO Path</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#创建Path实例"><span class="toc-number">6.1.</span> <span class="toc-text">创建Path实例</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NIO-File"><span class="toc-number">7.</span> <span class="toc-text">NIO File</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#九、ServerSocketChannel"><span class="toc-number">1.</span> <span class="toc-text">九、ServerSocketChannel</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#非阻塞模式"><span class="toc-number">1.1.</span> <span class="toc-text">非阻塞模式</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#十、非阻塞式服务器"><span class="toc-number">2.</span> <span class="toc-text">十、非阻塞式服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#非阻塞IO管道"><span class="toc-number">2.1.</span> <span class="toc-text">非阻塞IO管道</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Non-blocking对比Blocking-IO-Pipelines"><span class="toc-number">2.2.</span> <span class="toc-text">Non-blocking对比Blocking IO Pipelines</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#阻塞式管道"><span class="toc-number">2.2.1.</span> <span class="toc-text">阻塞式管道</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#基础非阻塞式IO管道设计"><span class="toc-number">2.2.2.</span> <span class="toc-text">基础非阻塞式IO管道设计</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#十一、DatagramChannel"><span class="toc-number">3.</span> <span class="toc-text">十一、DatagramChannel</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#接收数据"><span class="toc-number">3.0.1.</span> <span class="toc-text">接收数据</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#发送数据"><span class="toc-number">3.0.2.</span> <span class="toc-text">发送数据</span></a></li></ol></li></ol><li class="toc-item toc-level-4"><a class="toc-link" href="#十二、NIO-Pipe"><span class="toc-number">4.</span> <span class="toc-text">十二、NIO Pipe</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#十三、NIO对比IO"><span class="toc-number">5.</span> <span class="toc-text">十三、NIO对比IO</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#NIO和IO的主要区别"><span class="toc-number">5.1.</span> <span class="toc-text">NIO和IO的主要区别</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#面向流和面向缓冲"><span class="toc-number">5.2.</span> <span class="toc-text">面向流和面向缓冲</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#阻塞与非阻塞"><span class="toc-number">5.3.</span> <span class="toc-text">阻塞与非阻塞</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#选择器"><span class="toc-number">5.4.</span> <span class="toc-text">选择器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#用来处理数据的线程数"><span class="toc-number">5.5.</span> <span class="toc-text">用来处理数据的线程数</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NIO-Path"><span class="toc-number">6.</span> <span class="toc-text">NIO Path</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#创建Path实例"><span class="toc-number">6.1.</span> <span class="toc-text">创建Path实例</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NIO-File"><span class="toc-number">7.</span> <span class="toc-text">NIO File</span></a></li>
                     </div>
                 </span>
             </div>
@@ -665,11 +665,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -741,7 +741,7 @@ MathJax.Hub.Queue(function() {
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、请确保node版本大于6.2<br/>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、请确保node版本大于6.2<br>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             3、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:

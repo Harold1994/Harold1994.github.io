@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <meta name="baidu-site-verification" content="VMst32xzMo" />
+  <meta name="baidu-site-verification" content="VMst32xzMo">
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="//harold.me">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="dns-prefetch" href="https://harold1994.github.io">
   <title>Spark_2.3.0源码分析——6_Deploy模块源码分析(一) | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="Spark的部署方式有以下几种：  Standalone Mesos YARN Local KUBERNETES">
 <meta name="keywords" content="大数据,Spark">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spark_2.3.0源码分析——6_Deploy模块源码分析(一)">
-<meta property="og:url" content="//harold.me/2018/10/09/Spark-2-3-0源码分析——6-Deploy模块/index.html">
+<meta property="og:url" content="https://harold1994.github.io/2018/10/09/Spark-2-3-0源码分析——6-Deploy模块/index.html">
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="Spark的部署方式有以下几种：  Standalone Mesos YARN Local KUBERNETES">
 <meta property="og:locale" content="zh-Hans">
@@ -39,7 +39,7 @@
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -480,7 +480,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#一、应用程序的部署脚本"><span class="toc-number">1.</span> <span class="toc-text">一、应用程序的部署脚本</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1-spark-shell"><span class="toc-number">1.0.1.</span> <span class="toc-text">1.spark-shell</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-pyspark"><span class="toc-number">1.0.2.</span> <span class="toc-text">2.pyspark</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-spark-submit"><span class="toc-number">1.0.3.</span> <span class="toc-text">3.spark-submit</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#4-spark-class"><span class="toc-number">1.0.4.</span> <span class="toc-text">4.spark-class</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二、应用程序部署代码"><span class="toc-number">2.</span> <span class="toc-text">二、应用程序部署代码</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-org-apache-spark-launcher-Main"><span class="toc-number">2.1.</span> <span class="toc-text">1.org.apache.spark.launcher.Main</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-org-apache-spark-deploy-SparkSubmit-main"><span class="toc-number">2.2.</span> <span class="toc-text">2.org.apache.spark.deploy.SparkSubmit#main</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#a-解析参数"><span class="toc-number">2.2.1.</span> <span class="toc-text">a.解析参数</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#b-命令提交"><span class="toc-number">2.2.2.</span> <span class="toc-text">b.命令提交</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#c-prepareSubmitEnvironment方法分析"><span class="toc-number">2.2.3.</span> <span class="toc-text">c.prepareSubmitEnvironment方法分析</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-SparkContext分析"><span class="toc-number">2.3.</span> <span class="toc-text">3.SparkContext分析</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#三、Local与Local-Cluster部署"><span class="toc-number">3.</span> <span class="toc-text">三、Local与Local-Cluster部署</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#一、应用程序的部署脚本"><span class="toc-number">1.</span> <span class="toc-text">一、应用程序的部署脚本</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1-spark-shell"><span class="toc-number">1.0.1.</span> <span class="toc-text">1.spark-shell</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-pyspark"><span class="toc-number">1.0.2.</span> <span class="toc-text">2.pyspark</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-spark-submit"><span class="toc-number">1.0.3.</span> <span class="toc-text">3.spark-submit</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#4-spark-class"><span class="toc-number">1.0.4.</span> <span class="toc-text">4.spark-class</span></a></li></ol></li></ol><li class="toc-item toc-level-4"><a class="toc-link" href="#二、应用程序部署代码"><span class="toc-number">2.</span> <span class="toc-text">二、应用程序部署代码</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-org-apache-spark-launcher-Main"><span class="toc-number">2.1.</span> <span class="toc-text">1.org.apache.spark.launcher.Main</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-org-apache-spark-deploy-SparkSubmit-main"><span class="toc-number">2.2.</span> <span class="toc-text">2.org.apache.spark.deploy.SparkSubmit#main</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#a-解析参数"><span class="toc-number">2.2.1.</span> <span class="toc-text">a.解析参数</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#b-命令提交"><span class="toc-number">2.2.2.</span> <span class="toc-text">b.命令提交</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#c-prepareSubmitEnvironment方法分析"><span class="toc-number">2.2.3.</span> <span class="toc-text">c.prepareSubmitEnvironment方法分析</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-SparkContext分析"><span class="toc-number">2.3.</span> <span class="toc-text">3.SparkContext分析</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#三、Local与Local-Cluster部署"><span class="toc-number">3.</span> <span class="toc-text">三、Local与Local-Cluster部署</span></a></li>
                     </div>
                 </span>
             </div>
@@ -738,11 +738,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -814,7 +814,7 @@ MathJax.Hub.Queue(function() {
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、请确保node版本大于6.2<br/>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、请确保node版本大于6.2<br>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             3、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:
