@@ -191,6 +191,88 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Spark-2-3-0源码分析——8-Executor模块" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/14/Spark-2-3-0源码分析——8-Executor模块/">Spark_2.3.0源码分析——8_Executor模块</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/14/Spark-2-3-0源码分析——8-Executor模块/" class="archive-article-date">
+  	<time datetime="2018-10-14T02:15:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Executor是Spark中执行任务的进程，它可以被不同的调度模式所调度。Executor中有一个RPC远程过程调用接口，有两种实现，分别是netty和AKKA，默认是Netty框架。</p>
+<p>Executor中有一个CachedThreadPool，任务被分发到Executor并以TaskRunner形式运行于线程池的线程中。</p>
+<h3 id="一、Executor中创建、分配、启动及异常处理"><a href="#一、Executor中创建、分配、启动及异常处理" class="headerlink" title="一、Executor中创建、分配、启动及异常处理"></a>一、Executor中创建、分配、启动及异常处理</h3><h4 id="1-Executor的创建"><a href="#1-Executor的创建" class="headerlink" title="1.Executor的创建"></a>1.Executor的创建</h4><p>以standAlone调度模式为例，SparkContext启动之后，StandaloneSchedulerBackend会构建一个作为应用程序客户端的AppClient实例，AppClient中有一个内部类ClientEndpoint，其通过RPC机制和Master通信。在EndPoint的onStart方法中，会通过registerWithMaster向Master发送RegisterApplication请求，Master收到请求后，会先通过registerApplication完成信息登记，之后调用schedule方法，在Worker上启动Executor。</p>
+        
+          <a class="article-more-a" href="/2018/10/14/Spark-2-3-0源码分析——8-Executor模块/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/14/Spark-2-3-0源码分析——8-Executor模块/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Spark-2-3-0源码分析——7-Deploy模块源码分析二" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -927,82 +1009,6 @@
 
 
   
-    <article id="post-Scala查漏补缺——对象、Case类和Trait" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/01/Scala查漏补缺——对象、Case类和Trait/">Scala查漏补缺——对象、Case类和Trait</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/01/Scala查漏补缺——对象、Case类和Trait/" class="archive-article-date">
-  	<time datetime="2018-10-01T13:32:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="一、对象"><a href="#一、对象" class="headerlink" title="一、对象"></a>一、对象</h4><p>​    对象(object)是一个类类型，只能有不超过1个实例，在面向对象设计中称为一个<strong>单例</strong>，对象不适用new创建的，只需要按名直接访问。对象会在首次访问时在当前JVM中自动实例化，也即在第一次访问它之前，对象并不会实例化。<br>​    Scala中的对象提供了类似Java中“静态”和“全局”的功能，不过将它们与可实例化的类解耦合。对象和类没有完全解耦合，对象可以扩展另一个类，从而在一个全局实例中使用它的字段和方法。</p>
-        
-          <a class="article-more-a" href="/2018/10/01/Scala查漏补缺——对象、Case类和Trait/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Scala</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/01/Scala查漏补缺——对象、Case类和Trait/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -1161,19 +1167,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">并发</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">算法</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">并发</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1245,15 +1251,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">tensorflow，深度学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Mahout</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">tensorflow，深度学习</a>
               </li>
              
               <li class="article-tag-list-item">
