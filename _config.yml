@@ -12,7 +12,7 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: //harold.me
+url: https://harold1994.github.io/
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -86,6 +86,12 @@ deploy:
   repository: https://github.com/Harold1994/Harold1994.github.io.git #部署的仓库的SSH
   branch: master #部署分支， 一般使用master主分支
   message: update #默认类型
+  
+# 自动生成sitemap
+sitemap: 
+  path: sitemap.xml
+baidusitemap: 
+  path: baidusitemap.xml
 
 jsonContent:
     meta: false

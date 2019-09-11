@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
+  <meta name="baidu-site-verification" content="VMst32xzMo">
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="//harold.me">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="dns-prefetch" href="https://harold1994.github.io">
   <title>MLlib----协同过滤算法 | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="协同过滤算法是最常用的推荐算法,主要有两种形式:基于用户和基于物品的推荐算法. ALS(alternate least square)是交替最小二乘法的简称,也是MLlib的基础推荐算法. 一. 协同过滤 协同过滤算法是一种基于群体用户或物品的典型推荐算法,主要有两种:   通过考察具有相同爱好的用户对相同物品的评分标准进行计算 考察具有相同特质的物品从而推荐给选择了某件物品的用户">
 <meta name="keywords" content="机器学习,MLlib,协同过滤,ALS算法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MLlib----协同过滤算法">
-<meta property="og:url" content="//harold.me/2018/05/06/MLlib-协同过滤算法/index.html">
+<meta property="og:url" content="https://harold1994.github.io/2018/05/06/MLlib-协同过滤算法/index.html">
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="协同过滤算法是最常用的推荐算法,主要有两种形式:基于用户和基于物品的推荐算法. ALS(alternate least square)是交替最小二乘法的简称,也是MLlib的基础推荐算法. 一. 协同过滤 协同过滤算法是一种基于群体用户或物品的典型推荐算法,主要有两种:   通过考察具有相同爱好的用户对相同物品的评分标准进行计算 考察具有相同特质的物品从而推荐给选择了某件物品的用户">
 <meta property="og:locale" content="zh-Hans">
@@ -45,7 +46,7 @@
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -255,7 +256,7 @@
 </ol>
 <p><img src="https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=ff93f325064f78f0940692a118586130/e850352ac65c1038573da3b3b7119313b07e897b.jpg" alt="img"></p>
 <p>计算公式:   <img src="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D187/sign=50b538a78244ebf869716037eef8d736/0df431adcbef760970e3983b2bdda3cc7dd99ead.jpg" alt="img">      余弦值大小在[-1,1],值大小与夹角成正比</p>
-<ol>
+<ol start="3">
 <li><p>欧式距离相似度与余弦相似度比较 </p>
 <p>欧式相似度以目标绝对距离作为衡量标准,余弦相似度以目标差异大小作为衡量标准.一般来说,欧氏相似度用来表现不同目标的绝对差异性,分析目标之间的相似度与差异情况.余弦相似度更多的从目标的方向趋势上区分,而随特定坐标数字不敏感.</p>
 </li>
@@ -282,7 +283,7 @@
 <p>假设我们有一批用户数据，其中包含m个User和n个Item，则我们定义Rating矩阵，其中的元素表示第u个User对第i个Item的评分。</p>
 <p>在实际使用中，由于n和m的数量都十分巨大，因此R矩阵的规模很容易就会突破1亿项。这时候，传统的矩阵分解方法对于这么大的数据量已经是很难处理了。</p>
 <p>另一方面，一个用户也不可能给所有商品评分，因此，Rating矩阵注定是个稀疏矩阵。矩阵中所缺失的评分，又叫做missing item。</p>
-<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-6-18/62022843.jpg" alt=""></p>
+<p><img src="http://p5s7d12ls.bkt.clouddn.com/18-6-18/62022843.jpg" alt></p>
 <p>针对这样的特点，我们可以假设用户和商品之间存在若干关联维度（比如用户年龄、性别、受教育程度和商品的外观、价格等），我们只需要将R矩阵投射到这些维度上即可。</p>
 <p>如下图，对于一个R（观众对电影的一个评价矩阵）可以分解为U（观众的特征矩阵）和V（电影的特征矩阵）</p>
 <p><img src="https://img-blog.csdn.net/20160523103701786" alt="img"></p>
@@ -624,11 +625,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Flink</a>
+                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
+                <a href="javascript:void(0)" class="js-tag color1">Flink</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -656,6 +657,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
@@ -665,14 +674,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -704,11 +705,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -780,7 +781,7 @@ MathJax.Hub.Queue(function() {
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、请确保node版本大于6.2<br/>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、请确保node版本大于6.2<br>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             3、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:

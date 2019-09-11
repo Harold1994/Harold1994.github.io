@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
+  <meta name="baidu-site-verification" content="VMst32xzMo">
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="//harold.me">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="dns-prefetch" href="https://harold1994.github.io">
   <title>关于Crunch | Harold的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="本篇文章主要来自&amp;lt;&amp;lt;Hadoop权威指南&amp;gt;&amp;gt;Crunch部分学习笔记  Crunch是用来写MapReduce管线的高层API,它注重程序员友好的JAVA类型和旧式的纯JAVA对象,还有一组丰富的数据变换操作和多级管线.因为Crunch位于上层,故Crunch管线是高度可组合的,可以把常用功能提取到库中给其他程序重用.Crunch不依赖于MapReduce,也可以用Spa">
 <meta name="keywords" content="大数据,Hadoop,Crunch">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于Crunch">
-<meta property="og:url" content="//harold.me/2018/03/21/关于Crunch/index.html">
+<meta property="og:url" content="https://harold1994.github.io/2018/03/21/关于Crunch/index.html">
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="本篇文章主要来自&amp;lt;&amp;lt;Hadoop权威指南&amp;gt;&amp;gt;Crunch部分学习笔记  Crunch是用来写MapReduce管线的高层API,它注重程序员友好的JAVA类型和旧式的纯JAVA对象,还有一组丰富的数据变换操作和多级管线.因为Crunch位于上层,故Crunch管线是高度可组合的,可以把常用功能提取到库中给其他程序重用.Crunch不依赖于MapReduce,也可以用Spa">
 <meta property="og:locale" content="zh-Hans">
@@ -38,7 +39,7 @@
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -311,7 +312,7 @@
 <h2 id="管线执行"><a href="#管线执行" class="headerlink" title="管线执行"></a>管线执行</h2><p>管线构建期间,Crunch会建立一个内部执行计划,每个计划都是由PCollection操作构成的一个有向无环图,每个计划内的PCollection都与产生它的操作之间存在引用关系,另外,每个PCollection都有一个内部状态,用于记录他是否已被物化.<br><strong>运行管线</strong><br>调用Pipeline.run()可以显式执行管线操作,步骤:<br>优化处理,将执行计划分为若干阶段 –&gt; 执行优化计划中的各阶段,使得到的PCololection物化(此时可能会得到中间文件) –&gt; 向调用者返回PipelineResult对象,包含每个阶段的信息以及管线是否成功.<br>clean()清除物化PCollection时创建的临时中间文件.<br>done() = 先run()后clean()<br>runAsync()是run()的配对方法,它在管线启动后立刻返回,返回类型是PipelineExecution,它实现了Future&lt; PiplineResult &gt;.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pipeline.writeTextFile(table, tmpDir.getFileName(<span class="string">"output"</span>));</span><br><span class="line">PipelineExecution execution = pipeline.runAsync();</span><br><span class="line">PipelineResult result = execution.get();</span><br><span class="line">assertTrue(result.succeeded());</span><br></pre></td></tr></table></figure></p>
 <p><strong>停止管线</strong><br>为了正确停止管线,需要异步启动该管线,以保留对PipelineExecution对象的引用.<br><code>PipelineExecution execution = pipeline.runAsync();</code><br>这种情况调用kill()方法并等待其完成即可关闭管线.这样管线在此之前运行在这个集群上的所有作业都将被杀死<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">execution.kill();</span><br><span class="line">execution.waitUntilDone();</span><br></pre></td></tr></table></figure></p>
 <p><strong>查看Crunch计划</strong><br>通过 PipelineExecution.getPlanDotFile()可以获得一个以字符串形式表现的管线操作图的DOT文件.<br>另一种在隐式运行的管线中获取操作图的方式是将DOT文件的表示存储在作业配置中,一边在管线执行完后检查.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">PCollection&lt;String&gt; lines = pipeline.readTextFile(inputPath);</span><br><span class="line">PCollection&lt;String&gt; lower = lines.parallelDo(<span class="string">"lower"</span>, <span class="keyword">new</span> ToLowerFn(), strings());</span><br><span class="line">PTable&lt;String, Long&gt; counts = lower.count();</span><br><span class="line">PTable&lt;Long, String&gt; inverseCounts = counts.parallelDo(<span class="string">"inverse"</span>, <span class="keyword">new</span> InversePairFn&lt;String, Long&gt;(), tableOf(longs(), strings()));</span><br><span class="line">PTable&lt;Long, Integer&gt; hist = inverseCounts.groupByKey().mapValues(<span class="string">"count values"</span>, <span class="keyword">new</span> CountValuesFn&lt;String&gt;(), ints());</span><br><span class="line">hist.write(To.textFile(outputPath), Target.WriteMode.OVERWRITE);</span><br><span class="line">PipelineExecution execution = pipeline.runAsync();</span><br><span class="line">String dot = execution.getPlanDotFile();</span><br><span class="line">Files.write(dot, dotFile(), Charsets.UTF_8);</span><br><span class="line">execution.waitUntilDone();</span><br><span class="line">pipeline.done();</span><br></pre></td></tr></table></figure></p>
-<p>用命令<code>dot -Tpng -O *.dot</code>将.dot文件转换为.png文件<br><img src="http://p5s7d12ls.bkt.clouddn.com/18-3-21/79771268.jpg" alt=""></p>
+<p>用命令<code>dot -Tpng -O *.dot</code>将.dot文件转换为.png文件<br><img src="http://p5s7d12ls.bkt.clouddn.com/18-3-21/79771268.jpg" alt></p>
 <p>每个GBK操作将作为MapReduce的混洗步骤实现.</p>
 
       
@@ -600,11 +601,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Flink</a>
+                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">区块链</a>
+                <a href="javascript:void(0)" class="js-tag color1">Flink</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -632,6 +633,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
@@ -641,14 +650,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -680,11 +681,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -756,7 +757,7 @@ MathJax.Hub.Queue(function() {
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、请确保node版本大于6.2<br/>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、请确保node版本大于6.2<br>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             3、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:
