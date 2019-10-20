@@ -22,7 +22,7 @@ StreamExecutionEnvironment预定义的源包括：
 
   * `readFile(fileInputFormat, path, watchType, interval, pathFilter, typeInfo) `- This is the method called internally by the two previous ones. It reads files in the `path` based on the given `fileInputFormat`. Depending on the provided `watchType`, this source may periodically monitor (every `interval` ms) the path for new data (`FileProcessingMode.PROCESS_CONTINUOUSLY`), or process once the data currently in the path and exit (`FileProcessingMode.PROCESS_ONCE`). Using the `pathFilter`, the user can further exclude files from being processed.
 
-    > 在底层系统中，Flink将文件读取过程分割成两个子任务，分别叫做**目录监控**和**数据读取**，每个任务由独立的实体实现。目录监控是由一个单线程任务执行，而数据读取是由多个任务并发执行。其中，读取任务的并发度与job的并发度相同。单个监视任务的作用是扫描目录（定期或仅一次，具体取决于watchType），找到要处理的文件，将它们分成splits，并将这些splits分配给下游读取器。读取器将读取实际数据的人。 每个split仅由一个读取器读取，读取器可以逐个读取多个splits。
+    > 在底层系统中，Flink将文件读取过程分割成两个子任务，分别叫做**目录监控**和**数据读取**，每个任务由独立的实体实现。目录监控是由一个单线程任务执行，而数据读取是由多个任务并发执行。其中，读取任务的并发度与job的并发度相同。单个监视任务的作用是扫描目录（定期或仅一次，具体取决于watchType），找到要处理的文件，将它们分成splits，并将这些splits分配给下游读取器。读取器将读取实际数据。 每个split仅由一个读取器读取，读取器可以逐个读取多个splits。
 
     > 值得注意的是：
     >
@@ -31,7 +31,7 @@ StreamExecutionEnvironment预定义的源包括：
 
 * 基于Socket的：
   
-* socketTextStream
+  * socketTextStream
   
 * 基于容器的：
 
@@ -99,15 +99,15 @@ ExecutionConfig executionConfig = env.getConfig();
 
 ExecutionConfig有如下配置选项：
 
-* `enableClosureCleaner()` / `disableClosureCleaner()`.默认情况下闭包清理器是启用的。 闭包清理器删除Flink程序中匿名函数的不需要的对外围类引用。 禁用闭包清除器后，可能会发生匿名用户函数引用不可序列化的外围类。 这将导致序列化器出现异常。
+* `enableClosureCleaner()` / `disableClosureCleaner()`.默认情况下闭包清理器是启用的。 闭包清理器删除Flink程序中匿名函数中的不必要的对外部类引用。 禁用闭包清除器后，可能会发生匿名用户函数引用不可序列化的外围类。 这将导致序列化器出现异常。
 
 * `getParallelism()` / `setParallelism(int parallelism)` Set the default parallelism for the job.
 * `getMaxParallelism()` / `setMaxParallelism(int parallelism)` Set the default maximum parallelism for the job.此设置确定最大并行度并指定动态缩放的上限。
 * `getExecutionMode()` / `setExecutionMode()`默认执行模式是PIPELINED。执行模式定义数据交换是以批处理还是以流水线方式执行。
-* `enableForceKryo()` / **disableForceKryo.** Kryo不是默认的序列化工具，需要手工设置
-* `enableForceAvro()` / **disableForceAvro().**
-* `enableObjectReuse()` / **disableObjectReuse().**默认情况下。Flink中的对象是不可重用的，允许崇勇对象可能会有更好的性能。不过当操作的用户代码功能不知道此行为时，可能会导致错误。
-* **enableSysoutLogging()** / `disableSysoutLogging()`.JobManager默认会将状态更新输出到标准输出，这个设置可以去取消输出日志
+* `enableForceKryo()` / `disableForceKryo()` Kryo不是默认的序列化工具，需要手工设置
+* `enableForceAvro()` / `disableForceAvro()`.
+* `enableObjectReuse()` / `disableObjectReuse()`.默认情况下。Flink中的对象是不可重用的，允许重用对象可能会有更好的性能。不过当操作的用户代码功能不知道此行为时，可能会导致错误。
+* `enableSysoutLogging()` / `disableSysoutLogging()`.JobManager默认会将状态更新输出到标准输出，这个设置可以取消输出日志
 * `getGlobalJobParameters()` / `setGlobalJobParameters()`.This method allows users to set custom objects as a global configuration for the job. Since the `ExecutionConfig` is accessible in all user defined functions, this is an easy method for making configuration globally available in a job.
 
 * `addDefaultKryoSerializer(Class<?> type, Serializer<?> serializer)` Register a Kryo serializer instance for the given `type`.
@@ -122,7 +122,7 @@ ExecutionConfig有如下配置选项：
 
 ##### 控制延迟
 
-默认情况下。为了防止网络拥塞，数据元素并不是在网络中一个接一个的被转换，而是被缓存了起来。缓存的大小(在多台机器中传输)可以通过配置文件设置。尽管配置缓存可以优化吞吐量，但是当输入流不够快时，可能导致延迟问题。为了控制延迟和吞吐量的平衡，可以在执行环境或独立操作符中配置`env.setBufferTimeout(timeoutMillis)`来设置缓存等待填满的最大等待时间。超时之后，就算缓存未满也会将数据元素发送出去，默认超市时间设置为100ms。
+默认情况下。为了防止网络拥塞，数据元素并不是在网络中一个接一个的被转换，而是被缓存了起来。缓存的大小(在多台机器中传输)可以通过配置文件设置。尽管配置缓存可以优化吞吐量，但是当输入流不够快时，可能导致延迟问题。为了控制延迟和吞吐量的平衡，可以在执行环境或独立操作符中配置`env.setBufferTimeout(timeoutMillis)`来设置缓存等待填满的最大等待时间。超时之后，就算缓存未满也会将数据元素发送出去，默认超时时间设置为100ms。
 
 使用方式：
 

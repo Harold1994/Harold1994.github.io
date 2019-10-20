@@ -94,7 +94,7 @@ KeyedStream<WC> keyed = words
 
 #### 3.指定转换函数
 
-大多数转换擦欧哦需要用户自定义函数，以下是几种实例：
+大多数转换需要用户自定义函数，以下是几种实例：
 
 ##### 实现接口
 
@@ -161,7 +161,7 @@ Flink对DataSet或DataStream中可以包含的元素类型设置了一些限制�
 
 需要注意的有：
 
-* 对于POJO数据类型，POJO的泪必须是public的，必须要有一个无参构造器，类中的所有变量必须是public的或者可以通过getter和setter访问到，类中变量的类型必须是Flink支持的数据类型。
+* 对于POJO数据类型，POJO的类必须是public的，必须要有一个无参构造器，类中的所有变量必须是public的或者可以通过getter和setter访问到，类中变量的类型必须是Flink支持的数据类型。
 * 对于Regular Classes，要求类中的字段可序列化，Flink支持大多数Java和Scala类，所有未标识为POJO类型的类（请参阅上面的POJO要求）都由Flink作为常规类类型处理。 Flink将这些数据类型视为黑盒子，并且无法访问其内容（例如，用类中的字段用于有效排序）。使用序列化框架Kryo对常规类型进行序列化和反序列化。
 
 * Value类型是实现了org.apache.flinktypes.Value接口的数据类型，通过read和write方法，它可以手动描述其序列化和反序列化。当传统的序列化工具比较低效时就可以使用Value类型的数据。Flink内置了预先定义好的Value数据类供使用，包括ByteValue`, `ShortValue`, `IntValue`, `LongValue`, `FloatValue`, `DoubleValue`, `StringValue`, `CharValue`, `BooleanValue，这些Value类型充当基本数据类型的可变变体：它们的值可以更改，允许程序员重用对象并减轻垃圾收集器的压力。
@@ -185,7 +185,7 @@ ResultTypeQueryable接口可以通过输入格式和函数实现，以明确告�
 
 Flink内置累加器：
 
-* IntCounter LongCounter DoubleCounte
+* IntCounter LongCounter DoubleCounter
 * Histogram（直方图）:A histogram implementation for a discrete(分散的) number of bins. Internally it is just a map from Integer to Integer. You can use this to compute distributions of values, e.g. the distribution of words-per-line for a word count program.
 
 使用方法：
