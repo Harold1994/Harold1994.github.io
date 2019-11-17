@@ -17,7 +17,7 @@
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="六、触发器A Trigger determines when a window (as formed by the window assigner) is ready to be processed by the window function. 每个WindowAssigner都有一个默认的触发器，也可以使用trigger(…)方法自定义触发器。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-26T07:37:15.610Z">
+<meta property="og:updated_time" content="2019-10-21T08:54:35.915Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Flink笔记——Window（续）">
 <meta name="twitter:description" content="六、触发器A Trigger determines when a window (as formed by the window assigner) is ready to be processed by the window function. 每个WindowAssigner都有一个默认的触发器，也可以使用trigger(…)方法自定义触发器。">
@@ -228,7 +228,7 @@
 <ul>
 <li><code>CONTINUE</code>: do nothing,</li>
 <li><code>FIRE</code>: trigger the computation,</li>
-<li><code>PURGE</code>: clear the elements in the window, and</li>
+<li><code>PURGE</code>: clear the elements in the window</li>
 <li><code>FIRE_AND_PURGE</code>: trigger the computation and clear the elements in the window afterwards.</li>
 </ul>
 <h5 id="Fire-and-Purge"><a href="#Fire-and-Purge" class="headerlink" title="Fire and Purge"></a>Fire and Purge</h5><p>一旦Trigger认为窗口可以开始处理数据，他就会返回FIRE或FIRE_AND_PURGE。这是窗口操作符返回当前窗口计算结果的信号。Given a window with a <code>ProcessWindowFunction</code> all elements are passed to the <code>ProcessWindowFunction</code> (possibly after passing them to an evictor). Windows with <code>ReduceFunction</code>, <code>AggregateFunction</code>, or <code>FoldFunction</code> simply emit their eagerly aggregated result. FIRE保留窗口内容，而FIRE_AND_PURGE会删除其内容。 默认情况下，预定义的触发器只需FIRE而不会清除窗口状态。</p>
@@ -265,7 +265,7 @@
 <p>You first need to specify that you want to get late data using <code>sideOutputLateData(OutputTag)</code> on the windowed stream. Then, you can get the side-output stream on the result of the windowed operation:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> OutputTag&lt;T&gt; lateOutputTag = <span class="keyword">new</span> OutputTag&lt;T&gt;(<span class="string">"late-data"</span>)&#123;&#125;;</span><br><span class="line"></span><br><span class="line">DataStream&lt;T&gt; input = ...;</span><br><span class="line"></span><br><span class="line">SingleOutputStreamOperator&lt;T&gt; result = input</span><br><span class="line">    .keyBy(&lt;key selector&gt;)</span><br><span class="line">    .window(&lt;window assigner&gt;)</span><br><span class="line">    .allowedLateness(&lt;time&gt;)</span><br><span class="line">    .sideOutputLateData(lateOutputTag)</span><br><span class="line">    .&lt;windowed transformation&gt;(&lt;window function&gt;);</span><br><span class="line"></span><br><span class="line">DataStream&lt;T&gt; lateStream = result.getSideOutput(lateOutputTag);</span><br></pre></td></tr></table></figure>
 <h5 id="Late-elements-considerations"><a href="#Late-elements-considerations" class="headerlink" title="Late elements considerations"></a>Late elements considerations</h5><p>When specifying an allowed lateness greater than 0, the window along with its content is kept after the watermark passes the end of the window. In these cases, when a late but not dropped element arrives, it could trigger another firing for the window. These firings are called <code>late firings</code>, as they are triggered by late events and in contrast to the <code>main firing</code> which is the first firing of the window. In case of session windows, late firings can further lead to merging of windows, as they may “bridge” the gap between two pre-existing, unmerged windows.</p>
-<p><strong>Attention</strong> You should be aware that the elements emitted by a late firing should be treated as updated results of a previous computation, i.e., your data stream will contain multiple results for the same computation. Depending on your application, you need to take these duplicated results into account or deduplicate them.</p>
+<p><strong>Attention：</strong> You should be aware that the elements emitted by a late firing should be treated as updated results of a previous computation, i.e., your data stream will contain multiple results for the same computation. Depending on your application, you need to take these duplicated results into account or deduplicate them.</p>
 <h4 id="九、窗口结果"><a href="#九、窗口结果" class="headerlink" title="九、窗口结果"></a>九、窗口结果</h4><p>窗口操作的结果同样是DataStream，关于窗口操作的信息不会保留在结果元素中，因此如果要保留有关窗口的元信息，则必须在ProcessWindowFunction的结果元素中手动编码该信息。结果元素上仅有的相关信息是元素时间戳。在处理时间窗口中，它被设置为被允许的最大时间，即 <em>end timestamp - 1</em>，因为窗口的end timestamp 是独有的。对于事件时间窗口来说，时间戳和水印与窗口的交互方式联合起来使得能够以相同的窗口大小进行连续的窗口操作。</p>
 <h5 id="水印和窗口的交互"><a href="#水印和窗口的交互" class="headerlink" title="水印和窗口的交互"></a>水印和窗口的交互</h5><p>When watermarks arrive at the window operator this triggers two things:</p>
 <ul>
@@ -582,19 +582,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">并发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -702,11 +702,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
+                <a href="javascript:void(0)" class="js-tag color2">Crunch</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Crunch</a>
+                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
               </li>
             
             <div class="clearfix"></div>

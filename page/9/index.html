@@ -191,6 +191,92 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Java和Hadoop序列化机制浅讲" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/08/Java和Hadoop序列化机制浅讲/">Java和Hadoop序列化机制浅讲</a>
+    </h1>
+  
+
+        
+        <a href="/2018/06/08/Java和Hadoop序列化机制浅讲/" class="archive-article-date">
+  	<time datetime="2018-06-08T07:33:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>转自：<a href="https://blog.csdn.net/zq602316498/article/details/45190175" target="_blank" rel="noopener">https://blog.csdn.net/zq602316498/article/details/45190175</a></p>
+<h4 id="Java-和-Hadoop-序列化机制浅讲"><a href="#Java-和-Hadoop-序列化机制浅讲" class="headerlink" title="Java 和 Hadoop 序列化机制浅讲"></a>Java 和 Hadoop 序列化机制浅讲</h4><p>序列化  (Serialization)将对象的状态信息转换为可以存储或传输的形式的过程（<strong>字节流</strong>）。在序列化期间，对象将其当前状态写入到临时或持久性存储区。以后，可以通过从存储区中读取或反序列化对象的状态，重新创建该对象。</p>
+<p>通常来说有三个用途：</p>
+<ul>
+<li>持久化：对象可以被存储到磁盘上</li>
+<li>通信：对象可以通过网络进行传输</li>
+<li>拷贝、克隆：可以通过将某一对象序列化到内存的缓冲区，然后通过反序列化生成该对象的一个深拷贝（破解单例模式的一种方法）
+        
+          <a class="article-more-a" href="/2018/06/08/Java和Hadoop序列化机制浅讲/#more">more >></a>
+        
+      
+
+      
+    </li></ul></div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/06/08/Java和Hadoop序列化机制浅讲/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-数据算法——二次排序：详细示例" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -960,92 +1046,6 @@
 
 
   
-    <article id="post-Java并发编程——线程池的使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/04/Java并发编程——线程池的使用/">Java并发编程——线程池的使用</a>
-    </h1>
-  
-
-        
-        <a href="/2018/06/04/Java并发编程——线程池的使用/" class="archive-article-date">
-  	<time datetime="2018-06-03T16:07:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="一、在任务与执行策略之间的隐性耦合"><a href="#一、在任务与执行策略之间的隐性耦合" class="headerlink" title="一、在任务与执行策略之间的隐性耦合"></a>一、在任务与执行策略之间的隐性耦合</h4><p>Executor框架可以将任务的提交与任务的执行策略解耦开来，虽然Executor框架为制定和修改执行策略都提供了相当大的灵活性，但并非所有任务都适用于所有执行策略，有些类型的任务需要明确指定执行策略：</p>
-<ul>
-<li>依赖性任务： 在线程池中执行独立的任务时，可以随意的改变线程池的大小和配置，这只会影响其执行性能。但是若提交到线程池的任务依赖于其他的任务，那么就隐含的给执行策略带来了约束。
-        
-          <a class="article-more-a" href="/2018/06/04/Java并发编程——线程池的使用/#more">more >></a>
-        
-      
-
-      
-    </li></ul></div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">多线程</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">并发</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/06/04/Java并发编程——线程池的使用/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/8/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/10/">Next &raquo;</a>
@@ -1204,19 +1204,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">并发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1324,11 +1324,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
+                <a href="javascript:void(0)" class="js-tag color2">Crunch</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Crunch</a>
+                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
               </li>
             
             <div class="clearfix"></div>

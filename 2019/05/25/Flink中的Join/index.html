@@ -21,7 +21,7 @@
 <meta property="og:image" content="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/sliding-window-join.svg">
 <meta property="og:image" content="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/session-window-join.svg">
 <meta property="og:image" content="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/interval-join.svg">
-<meta property="og:updated_time" content="2019-05-25T08:25:41.183Z">
+<meta property="og:updated_time" content="2019-10-21T09:09:15.987Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Flink笔记——Flink中的JOIN连接">
 <meta name="twitter:description" content="一、窗口连接窗口连接连接位于同一个窗口中的具有相同key值的两个流。可以使用窗口分配器定义这些窗口，并对来自两个流的元素进行评估。 来自双方的元素被传递给一个用户自定义的JoinFunction或者FlatJoinFunction，这两个函数可以发射出符合join规范的结果值。">
@@ -226,7 +226,7 @@
 <p>需要注意的是：</p>
 <ul>
 <li>两个流中的join类似于inner-join，意味着只有两个流中都有彼此对应的元素才会被join</li>
-<li>那些被join的元素将的时间戳中是他们所位于的相应窗口中的最大时间戳。 例如，以[5,10）作为其边界的窗口将导致连接的元素具有9作为其时间戳。</li>
+<li>那些被join的元素的时间戳将是它们所位于的相应窗口中的最大时间戳。 例如，以[5,10）作为其边界的窗口将导致连接的元素以9作为其时间戳。</li>
 </ul>
 <h5 id="1-Tumbling-Window-join"><a href="#1-Tumbling-Window-join" class="headerlink" title="1.Tumbling Window join"></a>1.Tumbling Window join</h5><p>When performing a tumbling window join, all elements with a common key and a common tumbling window are joined as pairwise combinations and passed on to a <code>JoinFunction</code> or <code>FlatJoinFunction</code>. Because this behaves like an inner join, elements of one stream that do not have elements from another stream in their tumbling window are not emitted!</p>
 <p><img src="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/tumbling-window-join.svg" alt></p>
@@ -239,7 +239,7 @@
 <h5 id="3-会话窗口连接"><a href="#3-会话窗口连接" class="headerlink" title="3.会话窗口连接"></a>3.会话窗口连接</h5><p>When performing a session window join, all elements with the same key that when <em>“combined”</em> fulfill the session criteria are joined in pairwise combinations and passed on to the <code>JoinFunction</code> or <code>FlatJoinFunction</code>. Again this performs an inner join, so if there is a session window that only contains elements from one stream, no output will be emitted!</p>
 <p><img src="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/session-window-join.svg" alt></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.flink.api.java.functions.KeySelector;</span><br><span class="line"><span class="keyword">import</span> org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;</span><br><span class="line"><span class="keyword">import</span> org.apache.flink.streaming.api.windowing.time.Time;</span><br><span class="line"> </span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">DataStream&lt;Integer&gt; orangeStream = ...</span><br><span class="line">DataStream&lt;Integer&gt; greenStream = ...</span><br><span class="line"></span><br><span class="line">orangeStream.join(greenStream)</span><br><span class="line">    .where(&lt;KeySelector&gt;)</span><br><span class="line">    .equalTo(&lt;KeySelector&gt;)</span><br><span class="line">    .window(EventTimeSessionWindows.withGap(Time.milliseconds(<span class="number">1</span>)))</span><br><span class="line">    .apply (<span class="keyword">new</span> JoinFunction&lt;Integer, Integer, String&gt; ()&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">join</span><span class="params">(Integer first, Integer second)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> first + <span class="string">","</span> + second;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
-<h5 id="4-间隔连接"><a href="#4-间隔连接" class="headerlink" title="4.间隔连接"></a>4.间隔连接</h5><p>interval join 连接具有相同key值的两个流（A和B）,要求B流中的值的时间戳在A的元素的时间戳前后相对时间间隔内。用公式表达为：<code>b.timestamp ∈ [a.timestamp + lowerBound; a.timestamp + upperBound]</code> 或者<code>a.timestamp + lowerBound &lt;= b.timestamp &lt;= a.timestamp + upperBound</code></p>
+<h5 id="4-间隔连接"><a href="#4-间隔连接" class="headerlink" title="4.间隔连接"></a>4.间隔连接</h5><p>interval join 连接具有相同key值的两个流（A和B）,要求B流中的值的时间戳在A的元素的时间戳前后相对时间间隔内。用公式表达为：<code>b.timestamp ∈ [a.timestamp + lowerBound, a.timestamp + upperBound]</code> 或者<code>a.timestamp + lowerBound &lt;= b.timestamp &lt;= a.timestamp + upperBound</code></p>
 <p>时间上界和下界都可以为正值或负值，只要下界永远比上界小即可，interval join 目前只执行inner join。</p>
 <p>当一对元素被传递给ProcessJoinFunction，它们将会被分配两者之间较大的时间戳，时间戳可以通过ProcessJoinFunction.Context来访问。</p>
 <p><img src="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/interval-join.svg" alt></p>
@@ -552,19 +552,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">并发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -672,11 +672,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
+                <a href="javascript:void(0)" class="js-tag color2">Crunch</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Crunch</a>
+                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
               </li>
             
             <div class="clearfix"></div>

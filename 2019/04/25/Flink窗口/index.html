@@ -21,7 +21,7 @@
 <meta property="og:image" content="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/sliding-windows.svg">
 <meta property="og:image" content="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/session-windows.svg">
 <meta property="og:image" content="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/non-windowed.svg">
-<meta property="og:updated_time" content="2019-05-25T07:28:01.899Z">
+<meta property="og:updated_time" content="2019-10-21T08:13:39.870Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Flink笔记——Window">
 <meta name="twitter:description" content="一、窗口概述窗口是处理无限流的核心，窗口将流划分成有限大小的”桶”，可以在其上进行计算。窗口分为键控和非键控的。 Keyed Windows 123456789stream       .keyBy(...)               &amp;lt;-  keyed versus non-keyed windows       .window(...)              &amp;lt;-  requ">
@@ -221,14 +221,14 @@
       
         <h4 id="一、窗口概述"><a href="#一、窗口概述" class="headerlink" title="一、窗口概述"></a>一、窗口概述</h4><p>窗口是处理无限流的核心，窗口将流划分成有限大小的”桶”，可以在其上进行计算。窗口分为键控和非键控的。</p>
 <p><strong>Keyed Windows</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">stream</span><br><span class="line">       .keyBy(...)               &lt;-  keyed versus non-keyed windows</span><br><span class="line">       .window(...)              &lt;-  required: &quot;assigner&quot;</span><br><span class="line">      [.trigger(...)]            &lt;-  optional: &quot;trigger&quot; (else default trigger)</span><br><span class="line">      [.evictor(...)]            &lt;-  optional: &quot;evictor&quot; (else no evictor)</span><br><span class="line">      [.allowedLateness(...)]    &lt;-  optional: &quot;lateness&quot; (else zero)</span><br><span class="line">      [.sideOutputLateData(...)] &lt;-  optional: &quot;output tag&quot; (else no side output for late data)</span><br><span class="line">       .reduce/aggregate/fold/apply()      &lt;-  required: &quot;function&quot;</span><br><span class="line">      [.getSideOutput(...)]      &lt;-  optional: &quot;output tag&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">stream</span><br><span class="line">       .keyBy(...)               &lt;-  keyed versus non-keyed windows</span><br><span class="line">       .window(...)              &lt;-  required: <span class="string">"assigner"</span></span><br><span class="line">      [.trigger(...)]            &lt;-  optional: <span class="string">"trigger"</span> (<span class="keyword">else</span> <span class="keyword">default</span> trigger)</span><br><span class="line">      [.evictor(...)]            &lt;-  optional: <span class="string">"evictor"</span> (<span class="keyword">else</span> no evictor)</span><br><span class="line">      [.allowedLateness(...)]    &lt;-  optional: <span class="string">"lateness"</span> (<span class="keyword">else</span> zero)</span><br><span class="line">      [.sideOutputLateData(...)] &lt;-  optional: <span class="string">"output tag"</span> (<span class="keyword">else</span> no side output <span class="keyword">for</span> late data)</span><br><span class="line">       .reduce/aggregate/fold/apply()      &lt;-  required: <span class="string">"function"</span></span><br><span class="line">      [.getSideOutput(...)]      &lt;-  optional: <span class="string">"output tag"</span></span><br></pre></td></tr></table></figure>
 <a id="more"></a>
 <p><strong>Non-Keyed Windows</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">stream</span><br><span class="line">       .windowAll(...)           &lt;-  required: &quot;assigner&quot;</span><br><span class="line">      [.trigger(...)]            &lt;-  optional: &quot;trigger&quot; (else default trigger)</span><br><span class="line">      [.evictor(...)]            &lt;-  optional: &quot;evictor&quot; (else no evictor)</span><br><span class="line">      [.allowedLateness(...)]    &lt;-  optional: &quot;lateness&quot; (else zero)</span><br><span class="line">      [.sideOutputLateData(...)] &lt;-  optional: &quot;output tag&quot; (else no side output for late data)</span><br><span class="line">       .reduce/aggregate/fold/apply()      &lt;-  required: &quot;function&quot;</span><br><span class="line">      [.getSideOutput(...)]      &lt;-  optional: &quot;output tag&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">stream</span><br><span class="line">       .windowAll(...)           &lt;-  required: <span class="string">"assigner"</span></span><br><span class="line">      [.trigger(...)]            &lt;-  optional: <span class="string">"trigger"</span> (<span class="keyword">else</span> <span class="keyword">default</span> trigger)</span><br><span class="line">      [.evictor(...)]            &lt;-  optional: <span class="string">"evictor"</span> (<span class="keyword">else</span> no evictor)</span><br><span class="line">      [.allowedLateness(...)]    &lt;-  optional: <span class="string">"lateness"</span> (<span class="keyword">else</span> zero)</span><br><span class="line">      [.sideOutputLateData(...)] &lt;-  optional: <span class="string">"output tag"</span> (<span class="keyword">else</span> no side output <span class="keyword">for</span> late data)</span><br><span class="line">       .reduce/aggregate/fold/apply()      &lt;-  required: <span class="string">"function"</span></span><br><span class="line">      [.getSideOutput(...)]      &lt;-  optional: <span class="string">"output tag"</span></span><br></pre></td></tr></table></figure>
 <h4 id="二、窗口生命周期"><a href="#二、窗口生命周期" class="headerlink" title="二、窗口生命周期"></a>二、窗口生命周期</h4><p>In a nutshell, a window is <strong>created</strong> as soon as the first element that should belong to this window arrives, and the window is <strong>completely removed</strong> when the time (event or processing time) passes its end timestamp plus the user-specified <code>allowed lateness</code> (see <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/stream/operators/windows.html#allowed-lateness" target="_blank" rel="noopener">Allowed Lateness</a>). Flink保证只删除基于时间的窗口，而不会删除类似全局窗口的其他窗口。</p>
 <p>另外，每个窗口都有一个触发器Trigger和一个函数function (<code>ProcessWindowFunction</code>, <code>ReduceFunction</code>,<code>AggregateFunction</code> or <code>FoldFunction</code>)，这个函数对窗口内的数据进行计算。Trigger指明了函数可以开始计算的条件，A triggering policy might be something like “when the number of elements in the window is more than 4”, or “when the watermark passes the end of the window”。</p>
 <h4 id="三、键控和非键控的窗口"><a href="#三、键控和非键控的窗口" class="headerlink" title="三、键控和非键控的窗口"></a>三、键控和非键控的窗口</h4><p>在定义窗口之前，使用Keyby()将会将无限的流分割为逻辑上按键分隔的流。不使用Keyby()会产生一个非键控的流。键控的流允许窗口操作在多个task中并行的计算，因为每个逻辑上的键控流可以被独立的处理。同一个键下的所有元素与将被发送到相同的并行任务。</p>
-<p>至于非键控流，并行度为1。</p>
+<p><strong>至于非键控流，并行度为1。</strong></p>
 <h4 id="四、窗口分配器"><a href="#四、窗口分配器" class="headerlink" title="四、窗口分配器"></a>四、窗口分配器</h4><p> The window assigner defines how elements are assigned to windows. This is done by specifying the <code>WindowAssigner</code> of your choice in the <code>window(...)</code> (for <em>keyed</em>streams) or the <code>windowAll()</code> (for <em>non-keyed</em> streams) call.</p>
 <p>A <code>WindowAssigner</code> is responsible for assigning each incoming element to one or more windows.Flink预定义了几种最常用的窗口： Tumbling Windows、 <em>sliding windows</em>, <em>session windows</em> and <em>global windows</em>。也可以通过继承WindowAssigner类实现自定义窗口。All built-in window assigners (except the global windows) assign elements to windows based on time, which can either be processing time or event time. </p>
 <p>基于时间的窗口有一个左闭右开的时间戳区间来表述窗口大小。</p>
@@ -250,7 +250,7 @@
 <h5 id="4-Global-Windows"><a href="#4-Global-Windows" class="headerlink" title="4. Global Windows"></a>4. Global Windows</h5><p>全局窗口将所有包含同一个key的元素分配到一个全局的窗口。这个窗口必须配合一个trigger一起使用，否则不会进行任何计算，因为全局窗口没有一个自然的终结点来让我们进行聚合计算。</p>
 <p><img src="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/non-windowed.svg" alt></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DataStream&lt;T&gt; input = ...;</span><br><span class="line"></span><br><span class="line">input</span><br><span class="line">    .keyBy(&lt;key selector&gt;)</span><br><span class="line">    .window(GlobalWindows.create())</span><br><span class="line">    .&lt;windowed transformation&gt;(&lt;window function&gt;);</span><br></pre></td></tr></table></figure>
-<h4 id="五、窗口函数"><a href="#五、窗口函数" class="headerlink" title="五、窗口函数"></a>五、窗口函数</h4><p>窗口函数负责当窗口准备好后在每个窗口中执行计算。The window function can be one of <code>ReduceFunction</code>, <code>AggregateFunction</code>, <code>FoldFunction</code> or <code>ProcessWindowFunction</code>.The first two can be executed more efficiently (see <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/stream/operators/windows.html#state size" target="_blank" rel="noopener">State Size</a> section) because Flink can incrementally aggregate the elements for each window as they arrive. 其中 ProcessWindowFunction获得一个窗口中所有元素的迭代器和元素所属窗口的元信息。而且ProcessWindowFunction的效率没有其他几个窗口函数的执行效率高，因为Flink只有将所有元素都缓存后才能进行计算。可以通过结合ProcessWindowFunction<code>with a</code>ReduceFunction<code>,</code>AggregateFunction<code>, or</code>FoldFunction，既能增量聚集窗口元素，又能获取额外的窗口元数据。</p>
+<h4 id="五、窗口函数"><a href="#五、窗口函数" class="headerlink" title="五、窗口函数"></a>五、窗口函数</h4><p>窗口函数负责当窗口准备好后在每个窗口中执行计算。The window function can be one of <code>ReduceFunction</code>, <code>AggregateFunction</code>, <code>FoldFunction</code> or <code>ProcessWindowFunction</code>.The first two can be executed more efficiently (see <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/stream/operators/windows.html#state size" target="_blank" rel="noopener">State Size</a> section) because Flink can incrementally aggregate the elements for each window as they arrive. 其中 ProcessWindowFunction获得一个窗口中所有元素的迭代器和元素所属窗口的元信息。而且ProcessWindowFunction的效率没有其他几个窗口函数的执行效率高，因为Flink只有将所有元素都缓存后才能进行计算。可以通过结合ProcessWindowFunction和ReduceFunction，AggregateFunction或者FoldFunction，既能增量聚集窗口元素，又能获取额外的窗口元数据。</p>
 <h5 id="1-ReduceFunction"><a href="#1-ReduceFunction" class="headerlink" title="1.ReduceFunction"></a>1.ReduceFunction</h5><p>A <code>ReduceFunction</code> specifies how two elements from the input are combined to produce an output element of the same type. Flink uses a <code>ReduceFunction</code> to incrementally aggregate the elements of a window.</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">DataStream&lt;Tuple2&lt;String, Long&gt;&gt; input = ...;</span><br><span class="line"></span><br><span class="line">input</span><br><span class="line">    .keyBy(&lt;key selector&gt;)</span><br><span class="line">    .window(&lt;window assigner&gt;)</span><br><span class="line">    .reduce(<span class="keyword">new</span> ReduceFunction&lt;Tuple2&lt;String, Long&gt;&gt; &#123;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> Tuple2&lt;String, Long&gt; <span class="title">reduce</span><span class="params">(Tuple2&lt;String, Long&gt; v1, Tuple2&lt;String, Long&gt; v2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;&gt;(v1.f0, v1.f1 + v2.f1);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
 <h5 id="2-AggregateFunction"><a href="#2-AggregateFunction" class="headerlink" title="2. AggregateFunction"></a>2. AggregateFunction</h5><p>AggregateFunction是ReduceFunction的泛化版本，它拥有三个类型：输入类型IN，累加器类型ACC和输出类型OUT。输入类型是输入流中元素的类型，AggregateFunction具有将一个输入元素添加到累加器的方法。 该接口还具有用于创建初始累加器的方法，用于将两个累加器合并到一个累加器中以及用于从累加器提取输出（类型OUT）的方法。</p>
@@ -587,19 +587,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">并发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -707,11 +707,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
+                <a href="javascript:void(0)" class="js-tag color2">Crunch</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Crunch</a>
+                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
               </li>
             
             <div class="clearfix"></div>

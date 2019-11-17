@@ -18,7 +18,7 @@
 <meta property="og:description" content="一、异步I/O的需求当与外部系统交互时（例如，当使用存储在数据库中的数据来丰富流事件时），需要注意与外部系统的通信延迟不应当主导流应用程序的工作。 普通的访问外部数据的方式是同步的：例如在一个MapFunction中，发送一个请求到数据库，然后MapFunction一直等待直到收到响应。在大多数情况下，这会造成函数的大量时间都用在等待响应上。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/async_io.svg">
-<meta property="og:updated_time" content="2019-05-25T11:28:36.750Z">
+<meta property="og:updated_time" content="2019-10-21T13:20:00.553Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Flink笔记——Flink中访问外部数据的异步IO">
 <meta name="twitter:description" content="一、异步I/O的需求当与外部系统交互时（例如，当使用存储在数据库中的数据来丰富流事件时），需要注意与外部系统的通信延迟不应当主导流应用程序的工作。 普通的访问外部数据的方式是同步的：例如在一个MapFunction中，发送一个请求到数据库，然后MapFunction一直等待直到收到响应。在大多数情况下，这会造成函数的大量时间都用在等待响应上。">
@@ -219,7 +219,7 @@
         <h4 id="一、异步I-O的需求"><a href="#一、异步I-O的需求" class="headerlink" title="一、异步I/O的需求"></a>一、异步I/O的需求</h4><p>当与外部系统交互时（例如，当使用存储在数据库中的数据来丰富流事件时），需要注意与外部系统的通信延迟不应当主导流应用程序的工作。</p>
 <p>普通的访问外部数据的方式是同步的：例如在一个MapFunction中，发送一个请求到数据库，然后MapFunction一直等待直到收到响应。在大多数情况下，这会造成函数的大量时间都用在等待响应上。</p>
 <a id="more"></a> 
-<p>与数据库的异步交互意味着单个并行函数实例可以同时处理许多请求并同时接收响应。这样，等待的通化市可以发送其他请求和接收响应。 至少，等待时间是在多个请求上摊销的。 这导致大多数情况下流量吞吐量更高。</p>
+<p>与数据库的异步交互意味着单个并行函数实例可以同时处理许多请求并同时接收响应。这样，等待的时候可以发送其他请求和接收响应。 至少，等待时间是在多个请求上摊销的。 这导致大多数情况下流量吞吐量更高。</p>
 <p><img src="https://ci.apache.org/projects/flink/flink-docs-release-1.8/fig/async_io.svg" alt></p>
 <blockquote>
 <p>注意：</p>
@@ -565,19 +565,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">并发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -685,11 +685,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
+                <a href="javascript:void(0)" class="js-tag color2">Crunch</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Crunch</a>
+                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
               </li>
             
             <div class="clearfix"></div>

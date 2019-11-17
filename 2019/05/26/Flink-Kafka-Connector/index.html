@@ -17,7 +17,7 @@
 <meta property="og:site_name" content="Harold的博客">
 <meta property="og:description" content="一、Kafka ConnectorFlink provides special Kafka Connectors for reading and writing data from/to Kafka topics. The Flink Kafka Consumer integrates with Flink’s checkpointing mechanism to provide exactly-">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-26T07:33:09.158Z">
+<meta property="og:updated_time" content="2019-10-22T02:50:04.025Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Flink笔记——Kafka Connector">
 <meta name="twitter:description" content="一、Kafka ConnectorFlink provides special Kafka Connectors for reading and writing data from/to Kafka topics. The Flink Kafka Consumer integrates with Flink’s checkpointing mechanism to provide exactly-">
@@ -226,7 +226,7 @@
 <li><code>AvroDeserializationSchema</code> which reads data serialized with Avro format using a statically provided schema. It can infer the schema from Avro generated classes (<code>AvroDeserializationSchema.forSpecific(...)</code>) or it can work with <code>GenericRecords</code>with a manually provided schema (with <code>AvroDeserializationSchema.forGeneric(...)</code>). This deserialization schema expects that the serialized records DO NOT contain embedded schema.</li>
 </ul>
 <p>当遇到因任何原因无法反序列化的损坏消息时，有两个选项 - 从deserialize（…）方法抛出异常会导致作业失败并重新启动，或者返回null以允许Flink Kafka 消费者默默地跳过损坏的消息。 请注意，由于使用者的容错能力（请参阅下面的部分以获取更多详细信息），在损坏的消息上失败作业将使消费者尝试再次反序列化消息。 因此，如果反序列化仍然失败，则消费者将在该损坏的消息上进入不间断重启和失败循环。</p>
-<h5 id="2-Kafka-消费者其实位置配置"><a href="#2-Kafka-消费者其实位置配置" class="headerlink" title="2.Kafka 消费者其实位置配置"></a>2.Kafka 消费者其实位置配置</h5><p>The Flink Kafka Consumer allows configuring how the start position for Kafka partitions are determined.</p>
+<h5 id="2-Kafka-消费者起始位置配置"><a href="#2-Kafka-消费者起始位置配置" class="headerlink" title="2.Kafka 消费者起始位置配置"></a>2.Kafka 消费者起始位置配置</h5><p>The Flink Kafka Consumer allows configuring how the start position for Kafka partitions are determined.</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line"></span><br><span class="line">FlinkKafkaConsumer08&lt;String&gt; myConsumer = <span class="keyword">new</span> FlinkKafkaConsumer08&lt;&gt;(...);</span><br><span class="line">myConsumer.setStartFromEarliest();     <span class="comment">// start from the earliest record possible</span></span><br><span class="line">myConsumer.setStartFromLatest();       <span class="comment">// start from the latest record</span></span><br><span class="line">myConsumer.setStartFromTimestamp(...); <span class="comment">// start from specified epoch timestamp (milliseconds)</span></span><br><span class="line">myConsumer.setStartFromGroupOffsets(); <span class="comment">// the default behaviour</span></span><br><span class="line"></span><br><span class="line">DataStream&lt;String&gt; stream = env.addSource(myConsumer);</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 <p>其中：</p>
 <ul>
@@ -234,7 +234,7 @@
 <li><code>setStartFromEarliest()</code> / <code>setStartFromLatest()</code>: Start from the earliest / latest record. Under these modes, committed offsets in Kafka will be ignored and not used as starting positions.</li>
 <li><code>setStartFromTimestamp(long)</code>: 从指定的时间戳开始。 对于每个分区，时间戳大于或等于指定时间戳的记录将用作起始位置。 如果分区的最新记录早于时间戳，则只会从最新记录中读取分区。 在此模式下，Kafka中的已提交偏移将被忽略，不会用作起始位置。</li>
 </ul>
-<p>用户甚至可以精确的指明Consumer在没每个分区从哪个offset开始读起：</p>
+<p>用户甚至可以精确的指明Consumer在每个分区从哪个offset开始读起：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;KafkaTopicPartition, Long&gt; specificStartOffsets = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">specificStartOffsets.put(<span class="keyword">new</span> KafkaTopicPartition(<span class="string">"myTopic"</span>, <span class="number">0</span>), <span class="number">23L</span>);</span><br><span class="line">specificStartOffsets.put(<span class="keyword">new</span> KafkaTopicPartition(<span class="string">"myTopic"</span>, <span class="number">1</span>), <span class="number">31L</span>);</span><br><span class="line">specificStartOffsets.put(<span class="keyword">new</span> KafkaTopicPartition(<span class="string">"myTopic"</span>, <span class="number">2</span>), <span class="number">43L</span>);</span><br><span class="line"></span><br><span class="line">myConsumer.setStartFromSpecificOffsets(specificStartOffsets);</span><br></pre></td></tr></table></figure>
 <p>The above example configures the consumer to start from the specified offsets for partitions 0, 1, and 2 of topic <code>myTopic</code>. The offset values should be the next record that the consumer should read for each partition. Note that if the consumer needs to read a partition which does not have a specified offset within the provided offsets map, it will fallback to the default group offsets behaviour (i.e. <code>setStartFromGroupOffsets()</code>) for that particular partition.</p>
 <p>请注意，当作业从故障中自动恢复或使用保存点手动恢复时，这些起始位置配置方法不会影响起始位置。 在恢复时，每个Kafka分区的起始位置由存储在保存点或检查点中的偏移量确定（有关检查点的信息，请参阅下一节，以便为消费者启用容错功能）。</p>
@@ -411,7 +411,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#一、Kafka-Connector"><span class="toc-number">1.</span> <span class="toc-text">一、Kafka Connector</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-反序列化模式"><span class="toc-number">1.1.</span> <span class="toc-text">1.反序列化模式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-Kafka-消费者其实位置配置"><span class="toc-number">1.2.</span> <span class="toc-text">2.Kafka 消费者其实位置配置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-Kafka消费者和容错"><span class="toc-number">1.3.</span> <span class="toc-text">3.Kafka消费者和容错</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-Kafka消费者主题和分区发现"><span class="toc-number">1.4.</span> <span class="toc-text">4.Kafka消费者主题和分区发现</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#a-分区发现"><span class="toc-number">1.4.1.</span> <span class="toc-text">a.分区发现</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#b-主题发现"><span class="toc-number">1.4.2.</span> <span class="toc-text">b.主题发现</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5-Kafka-Consumer提交偏移量的设置"><span class="toc-number">1.5.</span> <span class="toc-text">5.Kafka Consumer提交偏移量的设置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-Kafka-Consumers-and-Timestamp-Extraction-Watermark-Emission"><span class="toc-number">1.6.</span> <span class="toc-text">6.Kafka Consumers and Timestamp Extraction/Watermark Emission</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二、Kafka-Producer"><span class="toc-number">2.</span> <span class="toc-text">二、Kafka Producer</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-生产者分区方案"><span class="toc-number">2.1.</span> <span class="toc-text">1.生产者分区方案</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-Kafka-生产者和容错性"><span class="toc-number">2.2.</span> <span class="toc-text">2.Kafka 生产者和容错性</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Kafka-0-8"><span class="toc-number">2.2.1.</span> <span class="toc-text">Kafka 0.8</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Kafka-0-9-and-0-10"><span class="toc-number">2.2.2.</span> <span class="toc-text">Kafka 0.9 and 0.10</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Kafka-0-11-and-newer"><span class="toc-number">2.2.3.</span> <span class="toc-text">Kafka 0.11 and newer</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#一、Kafka-Connector"><span class="toc-number">1.</span> <span class="toc-text">一、Kafka Connector</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-反序列化模式"><span class="toc-number">1.1.</span> <span class="toc-text">1.反序列化模式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-Kafka-消费者起始位置配置"><span class="toc-number">1.2.</span> <span class="toc-text">2.Kafka 消费者起始位置配置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-Kafka消费者和容错"><span class="toc-number">1.3.</span> <span class="toc-text">3.Kafka消费者和容错</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-Kafka消费者主题和分区发现"><span class="toc-number">1.4.</span> <span class="toc-text">4.Kafka消费者主题和分区发现</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#a-分区发现"><span class="toc-number">1.4.1.</span> <span class="toc-text">a.分区发现</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#b-主题发现"><span class="toc-number">1.4.2.</span> <span class="toc-text">b.主题发现</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5-Kafka-Consumer提交偏移量的设置"><span class="toc-number">1.5.</span> <span class="toc-text">5.Kafka Consumer提交偏移量的设置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-Kafka-Consumers-and-Timestamp-Extraction-Watermark-Emission"><span class="toc-number">1.6.</span> <span class="toc-text">6.Kafka Consumers and Timestamp Extraction/Watermark Emission</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二、Kafka-Producer"><span class="toc-number">2.</span> <span class="toc-text">二、Kafka Producer</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-生产者分区方案"><span class="toc-number">2.1.</span> <span class="toc-text">1.生产者分区方案</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-Kafka-生产者和容错性"><span class="toc-number">2.2.</span> <span class="toc-text">2.Kafka 生产者和容错性</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Kafka-0-8"><span class="toc-number">2.2.1.</span> <span class="toc-text">Kafka 0.8</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Kafka-0-9-and-0-10"><span class="toc-number">2.2.2.</span> <span class="toc-text">Kafka 0.9 and 0.10</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Kafka-0-11-and-newer"><span class="toc-number">2.2.3.</span> <span class="toc-text">Kafka 0.11 and newer</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -613,19 +613,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">并发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">字符串匹配</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -733,11 +733,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
+                <a href="javascript:void(0)" class="js-tag color2">Crunch</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Crunch</a>
+                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
               </li>
             
             <div class="clearfix"></div>
